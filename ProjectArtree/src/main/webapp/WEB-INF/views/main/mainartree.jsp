@@ -138,10 +138,9 @@
         });
 
     </script>
+   
     
-    <body>
-    
-	    <section class="slide-wrapper">
+	    <div class="slide-wrapper">
 		    <div class="container">
 		        <div id="myCarousel" class="carousel slide">
 		            <!-- Indicators -->
@@ -190,6 +189,5 @@
 		            </div>
 		        </div>
 		    </div>
-		</section>
+		</div>
 	
-	</body>
