@@ -11,5 +11,9 @@ public class MainController {
 		return "main/samplecontent.tiles";
 	}
 	
+	@RequestMapping(value="/mainartree.at")
+	public String mainartree() {
+		return "main/mainartree.tiles";
+	}
 	
 }
