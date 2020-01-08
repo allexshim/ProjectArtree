@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 public class BoardController {
 
-	@RequestMapping(value="/reviewList.artree")
+	@RequestMapping(value="/reviewList.at")
 	public String reviewList(HttpServletRequest request) {
 		
 		// 아래는 페이지 바 샘플인데 여유 되면 진행합니다...
@@ -75,20 +75,20 @@ public class BoardController {
 	} // end of reviewList --------------------------------------------
 	
 	
-	@RequestMapping(value="/reviewDetail.artree")
+	@RequestMapping(value="/reviewDetail.at")
 	public String reviewDetail(HttpServletRequest request) {
 		
 		return "board/review/reviewDetail.tiles";
 	} // end of reviewList --------------------------------------------
 	
 	
-	@RequestMapping(value="/previewList.artree")
+	@RequestMapping(value="/previewList.at")
 	public String previewList(HttpServletRequest request) {
 		
 		return "board/preview/previewList.tiles";
 	} // end of previewList -------------------------------------------
 	
-	@RequestMapping(value="/communityList.artree")
+	@RequestMapping(value="/communityList.at")
 	public String communityList(HttpServletRequest request) {
 		
 		return "board/community/communityList.tiles";
