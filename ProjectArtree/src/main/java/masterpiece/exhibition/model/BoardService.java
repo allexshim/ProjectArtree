@@ -1,5 +1,9 @@
 package masterpiece.exhibition.model;
 
-public class BoardService implements InterBoardService {
+import org.springframework.stereotype.Service;
 
+@Service
+public class BoardService implements InterBoardService {
+	
+	
 }
