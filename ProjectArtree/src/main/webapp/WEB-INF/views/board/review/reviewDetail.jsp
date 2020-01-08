@@ -66,8 +66,12 @@
 		overflow: hidden; /* div밖으로 이미지가 넘칠 때 해결 방법! 기억해둘것! */
 	}
 	
+	table#detailTable tr td {
+		font-size : 12pt;
+	}
+	
 	table#detailTable tr td:first-child {
-		width : 80px;
+		width : 20px;
 		font-weight: bold;
 	}
 	
@@ -111,12 +115,12 @@
 		$(".prev").click(function(){
 			//window.location.href="/artree/board/review/search.artree?;
 			
-		} // 이전글 클릭시 이벤트 -------------
+		}) // 이전글 클릭시 이벤트 -------------
 		
 		$(".next").click(function(){
 			
 			
-		} // 다음글 클릭시 이벤트 --------------
+		}) // 다음글 클릭시 이벤트 --------------
 		
 	}); // end of $(document).ready -------------------------------------
 
@@ -131,7 +135,7 @@
 		</div>
 		
 		<div id="myPoster" align="center">
-			<img src="<%= ctxPath %>/resources/images/exhibition_Temp/poster1.JPG" />
+			<img src="<%= ctxPath %>/resources/images/exhibition/poster1.JPG" />
 		</div>
 		
 		<div id="detailContents">

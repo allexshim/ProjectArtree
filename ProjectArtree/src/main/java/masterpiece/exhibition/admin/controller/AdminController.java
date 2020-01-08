@@ -1,5 +1,7 @@
 package masterpiece.exhibition.admin.controller;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -22,6 +24,14 @@ public class AdminController {
 	public String resisterformList() {
 		
 		return "exhibitions/adminRegisterFormList.tiles";
+	}
+	
+	@RequestMapping(value="/registerformDetail.at")
+	public String registerformDetail(HttpServletRequest request) {
+		
+		String no = request.getParameter("no"); // 목록에서 넘겨준 글번호를 받아옵니다.
+		
+		return "exhibitions/adminregisterformDetail.tiles";
 	}
 	
 }
