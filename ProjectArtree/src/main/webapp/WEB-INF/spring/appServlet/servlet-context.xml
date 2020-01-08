@@ -58,5 +58,12 @@
 	
 	<context:component-scan base-package="masterpiece.exhibition.*" />
 	
+	  <!--  === AOP 관련 어노테이션 동작이 가능하도록 설정해주는 것. 추가한것 === -->	
+	<aop:aspectj-autoproxy /> <!-- 추가 -->
+	             
+	<aop:config proxy-target-class="true">
+	  <aop:pointcut id="controllerOperation" expression="execution(public * masterpiece.exhibition..*Controller.*(..))" />
+    </aop:config>
+	
 	
 </beans:beans>

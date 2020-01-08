@@ -44,4 +44,10 @@
 		<filter-name>encodingFilter</filter-name>
 		<url-pattern>*</url-pattern> <!-- 모든 url에 해당 filter를 적용한다. -->
 	</filter-mapping>
+	
+	<!-- 시작 웹 페이지 등록하기  -->
+	<welcome-file-list>
+		<welcome-file>mainartree.at</welcome-file>
+	</welcome-file-list>
+	
 </web-app>
