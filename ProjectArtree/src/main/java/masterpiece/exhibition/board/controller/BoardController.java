@@ -1,4 +1,4 @@
-package masterpiece.exhibition.controller;
+package masterpiece.exhibition.board.controller;
 
 import javax.servlet.http.HttpServletRequest;
 
