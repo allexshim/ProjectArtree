@@ -9,8 +9,13 @@ public class AdminController {
 	@RequestMapping(value="/admin.at")
 	public String admin() {
 		
+		return "admin/admin-main.tiles";
+	}
+	
+	@RequestMapping(value="/members.at")
+	public String members() {
 		
-		return "admin/practice.tiles";
+		return "admin/members.tiles";
 	}
 	
 }
