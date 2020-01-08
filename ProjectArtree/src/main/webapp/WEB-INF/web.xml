@@ -27,7 +27,7 @@
 		
 	<servlet-mapping>
 		<servlet-name>appServlet</servlet-name>
-		<url-pattern>*.artree</url-pattern>
+		<url-pattern>*.at</url-pattern>
 	</servlet-mapping>
 
 	<!-- POST 방식으로 요청 시 데이터 인코딩 처리(UTF-8)를 위한 필터 추가 -->
