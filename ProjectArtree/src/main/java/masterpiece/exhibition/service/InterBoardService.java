@@ -1,4 +1,4 @@
-package masterpiece.exhibition.model;
+package masterpiece.exhibition.service;
 
 public interface InterBoardService {
 
