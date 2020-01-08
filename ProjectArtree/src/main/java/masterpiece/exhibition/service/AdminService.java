@@ -1,7 +1,9 @@
-package masterpiece.exhibition.model;
+package masterpiece.exhibition.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import masterpiece.exhibition.model.InterAdminDAO;
 
 @Service
 public class AdminService implements InterAdminService {

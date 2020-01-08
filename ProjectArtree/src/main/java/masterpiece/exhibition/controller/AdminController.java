@@ -18,4 +18,10 @@ public class AdminController {
 		return "admin/members.tiles";
 	}
 	
+	@RequestMapping(value="/registerformList.at")
+	public String resisterformList() {
+		
+		return "exhibitions/adminRegisterFormList.tiles";
+	}
+	
 }
