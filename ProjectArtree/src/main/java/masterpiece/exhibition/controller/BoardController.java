@@ -94,6 +94,10 @@ public class BoardController {
 		return "board/community/communityList.tiles";
 	} // end of communityList -------------------------------------------
 	
-	
+	@RequestMapping(value="/addEvent.at")
+	public String addEvent() {
+		
+		return "board/events/addEvent.tiles";
+	}
 	
 }
