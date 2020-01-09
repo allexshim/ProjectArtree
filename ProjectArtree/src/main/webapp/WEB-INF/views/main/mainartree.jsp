@@ -1,20 +1,16 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 
- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
- 
 
     <style type="text/css">
-
-        html, body {
+    
+     html, body {
             width: 100%;
             height: 100%;
             background-color: #fff;
         }
-
-        .carousel-inner, .carousel, .item, .container, .fill {
+    
+        .carousel-inner, .carousel, .item, .main-container, .fill {
             height: 100%;
             width: 100%;
             background-position: center center;
@@ -25,7 +21,7 @@
             display: inline;
         }
 
-        .slide-wrapper .container {
+        .slide-wrapper .main-container {
             padding: 0px;
         }
 
@@ -141,7 +137,7 @@
    
     
 	    <div class="slide-wrapper">
-		    <div class="container">
+		    <div class="main-container">
 		        <div id="myCarousel" class="carousel slide">
 		            <!-- Indicators -->
 		            <ol class="carousel-indicators">
