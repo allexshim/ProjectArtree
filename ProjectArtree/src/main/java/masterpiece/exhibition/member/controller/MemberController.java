@@ -32,4 +32,10 @@ public class MemberController {
 		return "member/login/passwordFind.tiles";
 	} // end of passwordFind --------------------------------------------
 	
+	@RequestMapping(value="/mypage.at")
+	public String mypage(HttpServletRequest request) {
+		
+		return "member/mypage/mypage.tiles";
+	} // end of mypage --------------------------------------------
+	
 }
