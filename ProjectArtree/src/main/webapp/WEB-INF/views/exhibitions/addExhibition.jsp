@@ -137,8 +137,20 @@
 	}
 	
 	div#myImages .thumbNail {
-		padding : 15px;
+		border-radius: 10px;
+		width:200px;
+		height:200px; 
 	}
+	
+	div.thumbNail-wrap {
+		display : inline-block;
+		border: solid 1px lightgray;
+		border-radius: 10px;
+		height: 200px;
+		width: 200px;
+		overflow: hidden;
+	}
+	
 	
 	div#myImages div#bigImage {
 		padding-top : 20px;
@@ -178,10 +190,6 @@
 	
 	.Title_Area .titleContact {
 		color : gray;
-	}
-	
-	div#detailContainer input {
-		
 	}
 	
 	div#detailContainer input, div#detailContainer textarea {
@@ -235,13 +243,26 @@
 	
 	#poster-input {
 		text-align: center;
+		width : 200px !important;
+		border : none !important;
+	}
+	
+	.image-input:hover {
+		cursor: pointer;
+	}
+	
+	.image-input {
+		text-align: center;
+		width : 200px !important;
+		border : none !important;
+		padding-top:3px;
 	}
 	
 </style>
 
 <script type="text/javascript">
 	$(document).ready(function(){ 
-		
+
 		// datePicker
 		$("#startDate").datepicker();
 		$("#endDate").datepicker();
@@ -250,24 +271,115 @@
 		$(".ui-datepicker").css('border','none');
 		$(".ui-state-active").css('background','#ccb3ff');
 		
+		// 상단 대표 포스터
+		$("#poster-input").on("change", handleImgFileSelect);
 		
-		// 각각 화살표 클릭하면 해당 방향의 
+		// 하단 작품 전경
+		$(".image-input").on("change", handleSubImgFileSelect);
+		
+		// 각각 화살표 클릭하면 해당 방향의 이미지로 변경된다.
 		$("div#myImages div#bigImage .fa-angle-left").click(function(){
-			// console.log("left");
+			 console.log("left");
+			var src = $("div#bigImage img").attr("src");
+			$(".thumbNail").each(function(){
+
+				if($(this).attr("src")==src && ($(this).prev().attr("src") !=null || $(this).prev().attr("src") != undefined  ) ){
+					src = $(this).prev().attr("src");
+					$("div#bigImage img").attr("src",src);
+					
+				} else if($(this).attr("src")==src){ // 현재 이미지가 가장 첫번째 이미지였을 경우
+					src = $("#myImages > div:nth-child(2) > div:nth-child(3) > img").attr("src");
+					
+					$("div#bigImage img").attr("src",src);
+				}
+			}); 
+			
 		});
 		
+		// 각각 화살표 클릭하면 해당 방향의 이미지로 변경된다.
 		$("div#myImages div#bigImage .fa-angle-right").click(function(){
-			// console.log("right");
+			 console.log("right");
+			var src = $("div#bigImage img").attr("src");
+			$(".thumbNail").each(function(){
+				
+				if($(this).attr("src")==src && ($(this).next().attr("src") !=null || $(this).next().attr("src") != undefined  ) ){
+					src = $(this).next().attr("src");
+					$("div#bigImage img").attr("src",src);
+					
+				} else if($(this).attr("src")==src) { // 현재 이미지가 가장 마지막 이미지였을 경우
+					src = $("#myImages > div:nth-child(2) > div:nth-child(1) > img").attr("src");
+					$("div#bigImage img").attr("src",src);
+
+				}
+			});
 		});
-		
-		// open 버튼을 클릭한다면 해당 전시회를 '전시중' 상태로 변경한다.
-		$("div#openBtn").click(function(){
-			var exhibitionCode = "${exhibitionCode}"; // 상세 페이지로 넘어올때 해당 전시회의 전시회 코드를 함께 넘긴다.
-			window.location.href="/artree/*.at?exhibitionCode="+exhibitionCode;	
-		}); // end of $("div#openBtn").click -----------------------------
-		
 		
 	}); // --------------------------------------------------------------
+	
+function handleImgFileSelect(e) {
+		
+		let files = e.target.files;
+		let filesArr = Array.prototype.slice.call(files);
+		
+		filesArr.forEach(function(f) {
+			
+			if(!f.type.match("image.*")) {
+				alert("확장자는 이미지 확장자만 가능합니다.");
+				return;
+			}
+			
+			sel_file = f;
+			
+			let reader = new FileReader();
+			reader.onload = function(e) {
+				$("#poster").attr("src", e.target.result);
+			}
+			reader.readAsDataURL(f);
+		});
+	} // end of function handleImgFileSelect
+	
+
+function handleSubImgFileSelect(e) {
+	
+	let files = e.target.files;
+	let filesArr = Array.prototype.slice.call(files);
+	
+	filesArr.forEach(function(f) {
+		
+		if(!f.type.match("image.*")) {
+			alert("확장자는 이미지 확장자만 가능합니다.");
+			return;
+		}
+		
+		sel_file = f;
+		
+		let reader = new FileReader();
+		reader.onload = function(e) {
+			$("div#bigImage img#bigImage").attr("src", e.target.result);
+			handleThumbNailImages(e.target.result);			
+		}
+		reader.readAsDataURL(f);
+	});
+} // end of function handleSubImgFileSelect
+
+function handleThumbNailImages(img){
+	let bool = false;
+	$(".thumbNail").each(function(){
+		if($(this).attr("src") == ""){
+			$(this).attr("src", img);
+			bool = true;
+			return false;
+		}
+	});
+	if(!bool){
+		// 모든 칸이 차 있다면 가장 마지막 썸네일 자리에 새 이미지를 교체해서 넣는다.
+		$("#myImages > img:nth-child(4)").attr("src",img);
+	}
+	
+	
+} // end of handleThumbNailImages
+
+	
 </script>
 
 </head>
@@ -354,15 +466,7 @@
 		<div id="myPoster" align="center">
 			<h2 style="font-weight:bold">포스터</h2>
 			<div id="poster-wrap">
-									
-			<%-- <c:if test="${ eventImg == null }"> --%>
-			<!-- <span id="poster-explain">클릭해서 포스터를 등록해주세요.<br/>전시회 대표 포스터와 동일합니다.</span> -->
-			<%-- </c:if> --%>
-			<!-- </input> -->
 				<img id="poster" style="border: none;"/>
-				<c:if test="${ eventImg != null }">
-					<input type="text" />
-				</c:if>
 			</div>
 			
 			<div align="center" style="margin: 0 auto;">
@@ -371,34 +475,46 @@
 		</div>
 		
 		<div id="myImages" align="center">
-			<h2 style="font-weight:bold">작품전경</h2> <!--  썸네일 아직 안배워서 일단 이렇게 처리 -->
-			<img class="thumbNail" width="200px" height="200px" src="<%= ctxPath %>/resources/images/exhibition/poster1.JPG" />
-			<img class="thumbNail" width="200px" height="200px" src="<%= ctxPath %>/resources/images/exhibition/poster1.JPG" />
-			<img class="thumbNail" width="200px" height="200px" src="<%= ctxPath %>/resources/images/exhibition/poster1.JPG" />
+			<h2 style="font-weight:bold">작품전경</h2> 
 			
+			<!--  썸네일 아직 안배워서 일단 이렇게 처리 -->
+			<div style="width:700px; height:200px; overflow:hidden;">
+				<div class="thumbNail-wrap"><img class="thumbNail" src="" alt="" style="border:none;"/></div>
+				<div class="thumbNail-wrap"><img class="thumbNail" src="" alt="" style="border:none;"/></div>
+				<div class="thumbNail-wrap"><img class="thumbNail" src="" alt="" style="border:none;"/></div>
+			</div>
 			<div id="bigImage" align="center">
 				<i class='fa fa-angle-left arrow' style='font-size:60px; font-weight:bold;'></i>
-				<img class="bigImage" width="400px" height="400px" src="<%= ctxPath %>/resources/images/exhibition/poster1.JPG" />
+				
+				<div id="image-wrap" style="display:inline-block; width:500px; height:450px;" align="center">
+					<img id="bigImage"  width="400px" height="400px" style="border: none;"/>
+				</div>
+				
 				<i class='fa fa-angle-right arrow' style='font-size:60px; font-weight:bold;'></i>
 			</div>	
+			
+			<div align="center" style="margin: 0 auto;">
+				<input type="file" class="image-input" />
+				<input type="file" class="image-input" />
+				<input type="file" class="image-input" />
+			</div>
 		</div>
 		
 		<div id="extraInfo">
 			<table id="extraInfoTable">
 				<tr>
 					<td>분야</td>
-					<td>설치미술</td>
+					<td><input type="text" name="category" id="category" /></td>
 				<tr>
 				<tr>
 					<td>태그</td>
 					<td>
-						<span>모던한</span>,
-						<span>현대적인</span>
+						<span><input type="text" name="tag" class="tag" /></span>
 					</td>
 				<tr>
 			</table>
 			<div id="openBtn" align="center">
-				<img id="openBtn" src="<%= ctxPath %>/resources/images/board/openDisplyBtn.JPG" />
+				<img id="openBtn" src="<%= ctxPath %>/resources/images/board/applyBtn.JPG" />
 			</div>
 		</div>
 	
