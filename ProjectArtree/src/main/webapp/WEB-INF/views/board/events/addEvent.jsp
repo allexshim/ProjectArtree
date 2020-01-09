@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<% String ctxPath = request.getContextPath(); %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -38,15 +39,16 @@
 	
 </style>
 
-  <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-  <link rel="stylesheet" href="/resources/demos/style.css">
-  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-  
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script src="<%= ctxPath %>/resources/jquery-ui-1.11.4.custom/datepicker-ko.js"></script>
+
 <script type="text/javascript">
 	
 	$("#datepicker1").datepicker();
 	$("#datepicker2").datepicker();
+	
 	
 </script>
 
@@ -70,8 +72,8 @@
 						<form action="addEventFrm">
 							
 							<div>
-								<label class="labels">이벤트명</label>
-								<input type="text" placeholder="이벤트명을 입력해주세요" />
+								<label class="labels" for="eventName">이벤트명</label>
+								<input type="text" placeholder="이벤트명을 입력해주세요" id="eventName" />
 							</div>
 							
 							<div>
@@ -81,8 +83,8 @@
 							</div>
 							
 							<div>
-								<label class="labels">이벤트내용</label>
-								<input type="text" placeholder="이벤트내용을 입력해주세요" />
+								<label class="labels" for="eventContent">이벤트내용</label>
+								<input type="text" placeholder="이벤트내용을 입력해주세요" id="eventContent" />
 							</div>
 							
 						</form>

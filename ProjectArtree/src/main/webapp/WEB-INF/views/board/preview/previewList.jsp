@@ -36,6 +36,10 @@
 		padding-left : 60px;
 	}
 	
+	div#topText span {
+		font-size : 15pt;
+	}
+	
 	div#topText > h1 {
 		font-size: 50px;
 	}
@@ -175,7 +179,7 @@
 				return;
 			}
 			
-			window.location.href="/artree/board/preview/search.artree?searchCondition="+searchCondition+"&searchWord="+searchWord;
+			window.location.href="**h.at?searchCondition="+searchCondition+"&searchWord="+searchWord;
 
 		}); // end of $("#searchicon").click()
 		

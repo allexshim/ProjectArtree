@@ -35,10 +35,32 @@
 		padding-left : 60px;
 	}
 	
+	div#topText span {
+		font-size : 15pt;
+	}
+	
 	div#topText > h1 {
 		font-size: 50px;
 	}
+
+	/* == 전시 상태별 선택 부분 == */
+	div#eachStatus {
+		padding-top : 40px;
+		padding-left : 60px;
+		font-size: 16pt;
+		cursor : pointer;
+	}
+
+	div#eachStatus .displayStatus {
+		padding-right : 20px;
+		color : gray;
+	}
 	
+	div#eachStatus .currentStatus {
+		color : black !important;
+		font-weight: bold !important;
+	}
+
 	/* == 테이블 부분 == */
 	div#contentContainer {
 		padding-top : 100px;
@@ -51,6 +73,7 @@
 	}
 
 	div#contentContainer table td {
+		font-size: 14pt;
 		padding-top : 10px;
 		padding-bottom : 10px; 
 	}
@@ -79,6 +102,10 @@
 	div#contentContainer table thead td:nth-child(4), div#contentContainer table tbody td:nth-child(4) {
 		width : 20%;
 		text-align: center;
+	}
+
+	div#contentContainer table tbody td:nth-child(2) {
+		cursor : pointer;
 	}
 
 	div#contentContainer table thead td {
@@ -125,29 +152,35 @@
 <script src="<%= ctxPath%>/resources/js/jquery-3.3.1.min.js"></script>
 <script type="text/javascript">
 	$(document).ready(function(){ 
+	
+		var status = "${status}";
+		// 검색 조회 버튼을 눌러서 새로고침 된 경우 클릭한 버튼을 검정색, bold로 보이게 함
+		if(status != null && status != ""){
+			$(".displayStatus").each(function(){
+				if(status == $(this).text()){
+					$(".displayStatus").removeClass("currentStatus");
+					$(this).addClass("currentStatus");
+				}
+			});			
+		} // end of if ------------------------------------------
 		
-		// 검색하기 버튼 클릭
-		$("#searchicon").click(function(){
+		// 전시 상태별 조회 버튼 클릭
+		$(".displayStatus").click(function(){
 			
-			// 유효성 검사
-			var searchCondition = $("#searchCondition").val().trim();
-			var searchWord = $("#searchWord").val().trim();
+			var status = $(this).text(); // 전체, 검토 대기중, 전시중, 전시 종료
 			
-			if( searchCondition == "" ){
-				alert("검색 조건을 선택하세요.");
-				return;
-			}
+			window.location.href="/artree/*.at?status="+status;
 			
-			else if( searchWord == "" ){
-				alert("검색어를 입력하세요.");
-				$("#searchWord").focus();
-				return;
-			}
-			
-			/*임의 링크로 설정*/
-			window.location.href="/artree/registerformList.at?searchCondition="+searchCondition+"&searchWord="+searchWord;
+		}); // end of $(".displayStatus").click -------------
+		
+		
+		// 각 글제목을 클릭하면 상세 페이지로 이동
+		$("div#contentContainer table tbody td:nth-child(2)").click(function(){
+			var no = $(this).prev().text(); // 클릭한 글번호를 받아온다.
 
-		}); // end of $("#searchicon").click()
+			window.location.href="/artree/registerformDetail.at?no="+no;
+			
+		}); // end of $("div#contentContainer table tbody td:nth-child(2)").click
 		
 	});
 
@@ -160,17 +193,17 @@
 		</div>
 
 		<div id="topText">
-			<span style="text-align:center">ADMIN ONLY</span>
+			<span>ADMIN ONLY</span>
 			<h1 style="margin:0;">Registeration</h1>
 		</div>
 		
 		<div id="eachStatus">
-			<span>전체</span>
-			<span>검토 대기중</span>
-			<span>전시중</span>
-			<span>전시종료</span>
+			<span class="displayStatus currentStatus">전체</span>
+			<span class="displayStatus">검토 대기중</span>
+			<span class="displayStatus">전시중</span>
+			<span class="displayStatus">전시종료</span>
 		</div>
-		
+
 		<div id="contentContainer">
 			<table id="registerFormContents">
 				<thead>
