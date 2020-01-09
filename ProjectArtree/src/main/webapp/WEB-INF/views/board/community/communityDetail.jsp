@@ -131,7 +131,7 @@
 		
 		// 글목록으로 돌아가기
 		$("#toListBtn").click(function(){
-			window.location.href="/artree/reviewList.at";
+			window.location.href="/artree/communityList.at";
 		});
 		
 	}); // end of $(document).ready -------------------------------------
@@ -143,7 +143,7 @@
 	<div id="detailContainer">
 		<div class="Title_Area">
 			<span class="st">Membership</span>
-			<span class="lt">Review</span>
+			<span class="lt">Community</span>
 		</div>
 		
 		<div id="myPoster" align="center">

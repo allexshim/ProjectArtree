@@ -88,11 +88,25 @@ public class BoardController {
 		return "board/preview/previewList.tiles";
 	} // end of previewList -------------------------------------------
 	
+	@RequestMapping(value="/previewDetail.at")
+	public String previewDetail(HttpServletRequest request) {
+		
+		return "board/preview/previewDetail.tiles";
+	} // end of previewList -------------------------------------------
+	
+	
 	@RequestMapping(value="/communityList.at")
 	public String communityList(HttpServletRequest request) {
 		
 		return "board/community/communityList.tiles";
 	} // end of communityList -------------------------------------------
+	
+	@RequestMapping(value="/communityDetail.at")
+	public String communityDetail(HttpServletRequest request) {
+		
+		return "board/community/communityDetail.tiles";
+	} // end of communityList -------------------------------------------
+	
 	
 	@RequestMapping(value="/addEvent.at")
 	public String addEvent() {

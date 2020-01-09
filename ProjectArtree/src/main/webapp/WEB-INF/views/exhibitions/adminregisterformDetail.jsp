@@ -61,18 +61,22 @@
 		padding-top : 15px;
 	}
 	
-	div#detailContents {
+	div#detailContents, div#extraInfo {
 		width: 80%;
 		margin: 0 auto;
 		padding-top : 20px;
 		padding-bottom: 20px;
 		overflow: hidden; /* div밖으로 이미지가 넘칠 때 해결 방법! 기억해둘것! */
-		font-size :
 	}
 	
-	table#detailTable tr td {
-		padding-top : 2px;
-		padding-bottom :2px;
+	table#detailTable, table#extraInfoTable {
+		width : 95%;
+		margin : 0 auto;
+	}
+	
+	table#detailTable tr td, table#extraInfoTable tr td{
+		padding-top : 4px;
+		padding-bottom :4px;
 		font-size : 12pt;
 	}
 	
@@ -85,14 +89,16 @@
 		content: "";
 	  	display: block;
 		width : 80%;		
-		padding-top : 20px;
 		border-bottom : solid 2px lightgray;
 	}
 	
 	div#myPoster, div#myImages {
-		padding-top : 10px;
 		overflow : hidden;
 		font-weight: bold;
+	}
+	
+	div#myImages {
+		padding-top : 10px;
 	}
 	
 	div#myImages h2 {
@@ -109,6 +115,34 @@
 		border-bottom : solid 2px lightgray;
 	}
 	
+	div#myImages .thumbNail {
+		padding : 15px;
+	}
+	
+	div#myImages div#bigImage {
+		padding-top : 20px;
+	}
+	
+	div#myImages div#bigImage .bigImage {
+		margin-left : 50px;
+		margin-right : 50px;
+	}
+	
+	div#myImages div#bigImage .arrow {
+		cursor : pointer;
+	}
+	
+	table#extraInfoTable tr td:first-child {
+		width : 80px;
+		font-weight: bold;
+	}
+	
+	div#openBtn {
+		padding-top : 20px;
+		padding-bottom : 20px;
+		overflow : hidden;
+		cursor : pointer;
+	}
 	
 </style>
 
@@ -116,9 +150,23 @@
 <script type="text/javascript">
 	$(document).ready(function(){ 
 		
+		// 각각 화살표 클릭하면 해당 방향의 
+		$("div#myImages div#bigImage .fa-angle-left").click(function(){
+			// console.log("left");
+		});
+		
+		$("div#myImages div#bigImage .fa-angle-right").click(function(){
+			// console.log("right");
+		});
+		
+		// open 버튼을 클릭한다면 해당 전시회를 '전시중' 상태로 변경한다.
+		$("div#openBtn").click(function(){
+			var exhibitionCode = "${exhibitionCode}"; // 상세 페이지로 넘어올때 해당 전시회의 전시회 코드를 함께 넘긴다.
+			window.location.href="/artree/*.at?exhibitionCode="+exhibitionCode;	
+		}); // end of $("div#openBtn").click -----------------------------
 		
 		
-	})
+	}); // --------------------------------------------------------------
 </script>
 
 </head>
@@ -199,11 +247,34 @@
 		
 		<div id="myImages" align="center">
 			<h2>작품전경</h2> <!--  썸네일 아직 안배워서 일단 이렇게 처리 -->
-			<img width="200px" height="200px" src="<%= ctxPath %>/resources/images/exhibition/poster1.JPG" />
-			<img width="200px" height="200px" src="<%= ctxPath %>/resources/images/exhibition/poster1.JPG" />
-			<img width="200px" height="200px" src="<%= ctxPath %>/resources/images/exhibition/poster1.JPG" />
-		
+			<img class="thumbNail" width="200px" height="200px" src="<%= ctxPath %>/resources/images/exhibition/poster1.JPG" />
+			<img class="thumbNail" width="200px" height="200px" src="<%= ctxPath %>/resources/images/exhibition/poster1.JPG" />
+			<img class="thumbNail" width="200px" height="200px" src="<%= ctxPath %>/resources/images/exhibition/poster1.JPG" />
 			
+			<div id="bigImage" align="center">
+				<i class='fa fa-angle-left arrow' style='font-size:60px; font-weight:bold;'></i>
+				<img class="bigImage" width="400px" height="400px" src="<%= ctxPath %>/resources/images/exhibition/poster1.JPG" />
+				<i class='fa fa-angle-right arrow' style='font-size:60px; font-weight:bold;'></i>
+			</div>	
+		</div>
+		
+		<div id="extraInfo">
+			<table id="extraInfoTable">
+				<tr>
+					<td>분야</td>
+					<td>설치미술</td>
+				<tr>
+				<tr>
+					<td>태그</td>
+					<td>
+						<span>모던한</span>,
+						<span>현대적인</span>
+					</td>
+				<tr>
+			</table>
+			<div id="openBtn" align="center">
+				<img id="openBtn" src="<%= ctxPath %>/resources/images/board/openDisplyBtn.JPG" />
+			</div>
 		</div>
 	
 	</div>
