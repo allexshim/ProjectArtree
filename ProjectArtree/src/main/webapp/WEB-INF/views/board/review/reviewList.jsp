@@ -162,6 +162,12 @@
 	.pagination a:hover, .pagination span:hover {
 	   text-decoration: underline;
 	}
+	
+	div#goWrite {
+		float : right;
+		padding-right : 7%;
+		cursor : pointer;
+	}
 		
 	
 </style>
@@ -206,6 +212,11 @@
 			// 글번호를 넘긴다.
 			var no = $(this).prev().prev().text();
 			window.location.href="/artree/reviewDetail.at?no="+no;	
+		});
+		
+		// 글쓰기 페이지로 가기
+		$("div#goWrite").click(function(){
+			window.location.href="/artree/addReview.at";	
 		});
 		
 	});
@@ -326,6 +337,10 @@
 		<!-- 페이지 바 여유되면 넣겠습니다........ㅠㅠㅠㅠㅠㅠㅠㅠㅠ-->
 		<div class="pagination" align="center">
 		<%-- 	${pageBar} --%>
+		</div>
+		
+		<div id="goWrite">
+			<img src="<%= ctxPath %>/resources/images/board/writeBtn.JPG" />
 		</div>
 		
 	</div>

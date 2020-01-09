@@ -49,6 +49,11 @@
 		padding-top : 10px;
 	}
 	
+	div#myPoster img {
+		border-radius: 15px;
+		box-shadow: 5px 5px 5px grey;
+	}
+	
 	div#myPoster:after {
 		content: "";
 	  	display: block;
@@ -63,6 +68,15 @@
 		padding-bottom: 20px;
 		border-bottom : solid 2px lightgray;
 		overflow: hidden; /* div밖으로 이미지가 넘칠 때 해결 방법! 기억해둘것! */
+	}
+	
+	div#detailContents h3 {
+		padding-left : 2.5%;
+	}
+	
+	table#detailTable {
+		width: 95%;
+		margin: 0 auto;
 	}
 	
 	table#detailTable tr td {
@@ -82,6 +96,7 @@
 
 	div#myBtns {
 		float : right;
+		padding-right : 22px;
 	}
 	
 	div#myBtns img {

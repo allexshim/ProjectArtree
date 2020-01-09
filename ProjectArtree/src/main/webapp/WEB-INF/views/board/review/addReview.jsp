@@ -49,11 +49,6 @@
 		padding-top : 10px;
 	}
 	
-	div#myPoster img {
-		border-radius: 15px;
-		box-shadow: 5px 5px 5px grey;
-	}
-	
 	div#myPoster:after {
 		content: "";
 	  	display: block;
@@ -79,18 +74,24 @@
 		margin: 0 auto;
 	}
 	
-	
 	table#detailTable tr td {
 		font-size : 12pt;
+		padding-top : 10px;
+		padding-bottom : 10px;
 	}
 	
 	table#detailTable tr td:first-child {
-		width : 20px;
+		width : 80px;
 		font-weight: bold;
 	}
 	
-	table#detailTable > tbody > tr:nth-child(7) > td {
+	table#detailTable tr td:nth-child(2) input {
 		width : 100%;
+		border : 1px solid lightgray;
+	}
+	
+	table#detailTable > tbody > tr:nth-child(8) > td {
+		/* width : 100%; */
 		font-weight: normal;
 		padding-top : 20px;
 	}
@@ -127,7 +128,7 @@
 		cursor : pointer;
 	}
 	
-	div#detailContainer input {
+	div#detailContainer input, div#detailContainer textarea {
 		border-radius: 5px;
 	}
 	
@@ -151,7 +152,33 @@
 		
 		// 글목록으로 돌아가기
 		$("#toListBtn").click(function(){
-			window.location.href="/artree/previewList.at";
+			window.location.href="/artree/reviewList.at";
+		});
+		
+		$("#registerBtn").click(function(){
+			// 유효성 검사
+			var name = $("#name").val().trim();
+			var title = $("#title").val().trim();
+			var contents = $("#contents").val().trim();
+			
+			if(name == ""){
+				alert("전시회 이름을 입력하세요!");
+				$("#name").focus();
+			} 
+			else if(title == ""){
+				alert("글 제목을 입력하세요!");
+				$("#title").focus();
+			} 
+			else if(contents == ""){
+				alert("내용을 입력하세요!");
+				$("#contents").focus();
+			} 
+			else {
+				var frm = document.addReview;
+				frm.method = "GET";
+				frm.action = "*.at";
+				frm.submit();
+			}
 		});
 		
 	}); // end of $(document).ready -------------------------------------
@@ -163,7 +190,7 @@
 	<div id="detailContainer">
 		<div class="Title_Area">
 			<span class="st">Membership</span>
-			<span class="lt">Preview</span>
+			<span class="lt">Review</span>
 		</div>
 		
 		<div id="myPoster" align="center">
@@ -171,48 +198,35 @@
 		</div>
 		
 		<div id="detailContents">
-
-			<h3>예술섬의 사색 Ⅰ : 이배경 작가전</h3>
+		<form name="addReview">
 			<table id="detailTable">
 				<tr>
+					<td>전시회명</td>
+					<td><input id="name" name="name" type="text" placeholder="전시회 이름을 입력해주세요."/></td>
+				<tr>
+			
+				<tr>
 					<td>제목</td>
-					<td>예술섬의 사색을 보고온 리뷰글</td>
+					<td><input id="title" name="title" type="text" placeholder="제목을 입력해주세요."/></td>
 				<tr>
 				<tr>
 					<td>작성자</td>
-					<td>심예은</td>
+					<td>심예은</td> <!-- $ {loginuser.getUserName} -->
 				<tr>
 				<tr>
 					<td>작성일자</td>
 					<td>2020-01-07 21:21</td>
 				<tr>
 				<tr>
-					<td colspan="2">글내용글내용글내용글내용글내용글내용글내용글내용글내용
-									글내용글내용글내용글내용글내용글내용글내용글내용글내용
-									글내용글내용글내용글내용
-									글내용글내용글내용
-									글내용글내용
-									글내용글내용글내용글내용글내용글내용글내용글내용글내용
-									글내용글내용글내용글내용글내용글내용글내용글내용글내용
-									글내용글내용글내용글내용
-									글내용글내용글내용
-									글내용글내용글내용글내용글내용글내용글내용글내용글내용글내용글내용
-									글내용글내용글내용글내용글내용글내용글내용글내용글내용
-									글내용글내용글내용글내용
-									글내용글내용글내용
-									글내용글내용
-									글내용글내용글내용글내용글내용글내용글내용글내용글내용
-									글내용글내용글내용글내용글내용글내용글내용글내용글내용
-									글내용글내용글내용글내용
-									글내용글내용글내용
-									글내용글내용
+					<td colspan="2">
+						<textarea id="contents" name="contents" style="resize:none; border:solid 1px lightgray" rows="10" cols="120">
+						</textarea>
 					</td>
 				<tr>
 			</table>
-	
+	</form>
 			<div id="myBtns">
-				<img id="modifyBtn" src="<%= ctxPath %>/resources/images/board/modifyBtn.JPG" />
-				<img id="deleteBtn" src="<%= ctxPath %>/resources/images/board/deleteBtn.JPG" />
+				<img id="registerBtn" src="<%= ctxPath %>/resources/images/board/registerBtn.JPG" />
 			</div>
 		</div>
 		
