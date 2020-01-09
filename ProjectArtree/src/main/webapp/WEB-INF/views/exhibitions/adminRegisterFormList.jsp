@@ -30,13 +30,14 @@
 	
 	div#topText {
 		padding-top : 610px;
-		width : 100px;
-		text-align: center;
+		width : 200px;
 		padding-left : 60px;
 	}
 	
 	div#topText span {
-		font-size : 15pt;
+		font-size : 13pt;
+		text-align : left;
+		margin-left : 8px;
 	}
 	
 	div#topText > h1 {
