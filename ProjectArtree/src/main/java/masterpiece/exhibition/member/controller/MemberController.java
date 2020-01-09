@@ -20,6 +20,12 @@ public class MemberController {
 		return "member/login/idFind.tiles";
 	} // end of idFind --------------------------------------------
 	
+	@RequestMapping(value="/idFindEnd.at")
+	public String idFindEnd(HttpServletRequest request) {
+		
+		return "member/login/idFindEnd.tiles";
+	} // end of idFind --------------------------------------------
+	
 	@RequestMapping(value="/passwordFind.at")
 	public String passwordFind(HttpServletRequest request) {
 		

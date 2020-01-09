@@ -250,7 +250,7 @@ span#allCheck_txt {
 
 <script type="text/javascript" src="<%= ctxPath%>/resources/js/jquery-3.3.1.min.js"></script>
 
-<script>
+<script type="text/javascript">
 	$(function() {
 		
 		/* 로그인 제이쿼리 */
@@ -423,19 +423,19 @@ span#allCheck_txt {
 	};  */
 	
 	/* 로그인 스크립트 */
-	function layer_open() {
-		$(".layer").css("display", "");
-		var temp = $("#layer");
+	function layer_open(el) {
+		$("."+el).css("display", "");
+		var temp = $('#' + el);
 		var bg = temp.prev().hasClass('bg');
 		if(bg){
-			$(".layer").fadeIn(); 
+			$('.'+el).fadeIn(); 
 		} 
 		
-		$(".layer .bg").click(function(e){	//배경을 클릭하면 레이어를 사라지게 하는 이벤트 핸들러
+		$('.'+el+' .bg').click(function(e){	//배경을 클릭하면 레이어를 사라지게 하는 이벤트 핸들러
 			
-			$(".layer").fadeOut();
-			e.preventDefault();
-		
+				$('.'+el).fadeOut();
+				e.preventDefault();
+			
 		});
 	}
 	
@@ -574,7 +574,7 @@ span#allCheck_txt {
 		
 		<%-- 로그인 버튼 --%>
 		<br/>
-		<a href="javascript:layer_open()" id="login_main_btn">로그인</a>
+		<a href="javascript:layer_open('layer')" id="login_main_btn" class="login_btn">로그인</a>
 		</div>
 	
 	
