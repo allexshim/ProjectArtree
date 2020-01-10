@@ -12,7 +12,6 @@
 <style type="text/css">
 /* sidebar */
 .sidenav {
-  margin-left: 10px;
   height: 100%;
   width: 10%;
   position: fixed;

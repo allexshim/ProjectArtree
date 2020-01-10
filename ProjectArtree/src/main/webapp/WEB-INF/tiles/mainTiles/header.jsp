@@ -8,12 +8,11 @@
 <style type="text/css">
 /* header */
 .topnav {
-  position: fixed;
+  
   z-index: 2;
   display: inline-block;
   overflow-x: hidden;
   overflow-y: hidden;
-  background-color: #333;
   text-align: center;
   width: 100%;
   height: 50px;
