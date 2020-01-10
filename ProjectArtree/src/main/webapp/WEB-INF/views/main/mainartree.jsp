@@ -7,7 +7,7 @@
      html, body {
             width: 100%;
             height: 100%;
-            background-color: #fff;
+            
         }
     
         .carousel-inner, .carousel, .item, .main-container, .fill {
@@ -138,8 +138,7 @@
     
 	    <div class="slide-wrapper">
 		    <div class="main-container">
-		        <div id="myCarousel" class="carousel slide">
-		            <!-- Indicators -->
+		        <div id="myCarousel" class="carousel slide">		            <!-- Indicators -->
 		            <ol class="carousel-indicators">
 		                <li data-target="#myCarousel" data-slide-to="0" class="active list-text">main</li>
 		                <li data-target="#myCarousel" data-slide-to="1" class="list-text">notice</li>
@@ -156,26 +155,24 @@
 			                
 							
 		                    <div class="fill"
-		                         style="margin-top:0; background-color: blue; background-image:"></div>
+		                         style="margin-top:0; background-image:"></div>
 		                </div>
 		                <div class="item">
 		                
 			                
 							
 		                    <div class="fill"
-		                         style="background-color:orange;"></div>
-		                </div>
-		                <div class="item">
-		                	
-		                	
-		                	
-		                    <div class="fill"
-		                         style="background-color:yellow;"></div>
+		                         style=""></div>
 		                </div>
 		                <div class="item">
 		                	
 		                    <div class="fill"
-		                         style="background-color:green;"></div>
+		                         style=""></div>
+		                </div>
+		                <div class="item">
+		                	
+		                    <div class="fill"
+		                         style=""></div>
 		                         
 	                        <div class="footer">
 							  <p>Footer</p>
