@@ -101,6 +101,16 @@
 		font-weight: bold;
 	}
 	
+	/*가격 버튼*/
+	div#priceArea {
+		vertical-align: bottom;
+		border-bottom : solid 1px gray;
+	}
+	
+	div#priceArea input {
+		border : 0 !important;
+	}
+	
 	div#myPoster:before {
 		content: "";
 	  	display: block;
@@ -276,47 +286,74 @@
 		
 		// 하단 작품 전경
 		$(".image-input").on("change", handleSubImgFileSelect);
-		
-		// 각각 화살표 클릭하면 해당 방향의 이미지로 변경된다.
-		$("div#myImages div#bigImage .fa-angle-left").click(function(){
-			 console.log("left");
-			var src = $("div#bigImage img").attr("src");
-			$(".thumbNail").each(function(){
 
-				if($(this).attr("src")==src && ($(this).prev().attr("src") !=null || $(this).prev().attr("src") != undefined  ) ){
-					src = $(this).prev().attr("src");
-					$("div#bigImage img").attr("src",src);
-					
-				} else if($(this).attr("src")==src){ // 현재 이미지가 가장 첫번째 이미지였을 경우
-					src = $("#myImages > div:nth-child(2) > div:nth-child(3) > img").attr("src");
-					
-					$("div#bigImage img").attr("src",src);
-				}
-			}); 
+		// 가격 정보 입력 버튼 --------------------------------------------
+		$(".freeBtn").on("click", function(){
 			
+			// 반대 버튼이 눌려있다면
+			if($(".priceBtn").hasClass("clicked") ){
+				$(".priceBtn").attr("src", "<%= ctxPath %>/resources/images/board/button_price.PNG");
+				$("#priceArea").hide();
+				$(".priceBtn").removeClass("clicked");
+			} 
+			if($(this).hasClass("clicked")){
+				$(this).removeClass("clicked");
+				$(this).attr("src", "<%= ctxPath %>/resources/images/board/button_free.PNG");
+			}	
+			else {
+				$(this).addClass("clicked");
+				$(this).attr("src", "<%= ctxPath %>/resources/images/board/button_free_afterClick.PNG");
+			}
 		});
 		
-		// 각각 화살표 클릭하면 해당 방향의 이미지로 변경된다.
-		$("div#myImages div#bigImage .fa-angle-right").click(function(){
-			 console.log("right");
-			var src = $("div#bigImage img").attr("src");
-			$(".thumbNail").each(function(){
-				
-				if($(this).attr("src")==src && ($(this).next().attr("src") !=null || $(this).next().attr("src") != undefined  ) ){
-					src = $(this).next().attr("src");
-					$("div#bigImage img").attr("src",src);
-					
-				} else if($(this).attr("src")==src) { // 현재 이미지가 가장 마지막 이미지였을 경우
-					src = $("#myImages > div:nth-child(2) > div:nth-child(1) > img").attr("src");
-					$("div#bigImage img").attr("src",src);
-
-				}
-			});
+		$(".priceBtn").on("click", function(){
+			if($(".freeBtn").hasClass("clicked") ){
+				$(".freeBtn").attr("src", "<%= ctxPath %>/resources/images/board/button_free.PNG");
+				$(".freeBtn").removeClass("clicked");
+			} 
+			if($(this).hasClass("clicked")){
+				$(this).removeClass("clicked");
+				$(this).attr("src", "<%= ctxPath %>/resources/images/board/button_price.PNG");
+				$("#priceArea").hide();
+			}	
+			else {
+				$(this).addClass("clicked");
+				$(this).attr("src", "<%= ctxPath %>/resources/images/board/button_price_afterClick.PNG");
+				$("#priceArea").show().css('display','inline-block');
+			}
 		});
+		// 가격 정보 입력 버튼 끝 --------------------------------------------
+		
+		
+		/* --------- 유효성 검사 ---------------------------------------- */
+		$("#openBtn").click(function(){
+			var frm = document.addExhibitionFrm;
+			
+			/* frm.inputName.value */
+			/* frm.exhibitionTitle
+			frm.author
+			frm.authorInfo
+			frm.exhibitionInfo
+			frm.gallery
+			frm.startDate
+			frm.endDate
+			frm.email
+			frm.tel
+			frm.price
+			frm.poster-input
+			frm.image-input1
+			frm.image-input2
+			frm.image-input3 */
+			
+			frm.method = "POST";
+			frm.action = "*.at";
+			frm.submit();
+		});
+		/* --------- 유효성 검사 끝--------------------------------------- */
 		
 	}); // --------------------------------------------------------------
 	
-function handleImgFileSelect(e) {
+	function handleImgFileSelect(e) {
 		
 		let files = e.target.files;
 		let filesArr = Array.prototype.slice.call(files);
@@ -339,51 +376,51 @@ function handleImgFileSelect(e) {
 	} // end of function handleImgFileSelect
 	
 
-function handleSubImgFileSelect(e) {
+	function handleSubImgFileSelect(e) {
 	
-	let files = e.target.files;
-	let filesArr = Array.prototype.slice.call(files);
-	
-	filesArr.forEach(function(f) {
+		let files = e.target.files;
+		let filesArr = Array.prototype.slice.call(files);
 		
-		if(!f.type.match("image.*")) {
-			alert("확장자는 이미지 확장자만 가능합니다.");
-			return;
-		}
-		
-		sel_file = f;
-		
-		let reader = new FileReader();
-		reader.onload = function(e) {
-			$("div#bigImage img#bigImage").attr("src", e.target.result);
-			handleThumbNailImages(e.target.result);			
-		}
-		reader.readAsDataURL(f);
-	});
-} // end of function handleSubImgFileSelect
+		filesArr.forEach(function(f) {
 
-function handleThumbNailImages(img){
-	let bool = false;
-	$(".thumbNail").each(function(){
-		if($(this).attr("src") == ""){
-			$(this).attr("src", img);
-			bool = true;
-			return false;
-		}
-	});
-	if(!bool){
-		// 모든 칸이 차 있다면 가장 마지막 썸네일 자리에 새 이미지를 교체해서 넣는다.
-		$("#myImages > img:nth-child(4)").attr("src",img);
-	}
-	
-	
-} // end of handleThumbNailImages
+			if(!f.type.match("image.*")) {
+				alert("확장자는 이미지 확장자만 가능합니다.");
+				return;
+			}
 
-	
+			sel_file = f;
+			
+			let reader = new FileReader();
+			reader.onload = function(e) {
+				$("div#bigImage img#bigImage").attr("src", e.target.result);
+				handleThumbNailImages(e.target.result);	
+			}
+			reader.readAsDataURL(f);
+		});
+	} // end of function handleSubImgFileSelect
+
+	function handleThumbNailImages(img){
+
+		let bool = false;
+		$(".thumbNail").each(function(){
+			if($(this).attr("src") == ""){
+				$(this).attr("src", img);
+				bool = true;
+				return false;
+			}
+		});
+		if(!bool){
+			// 모든 칸이 차 있다면 가장 마지막 썸네일 자리에 새 이미지를 교체해서 넣는다.
+			$("#myImages > img:nth-child(4)").attr("src",img);
+		}
+		
+	} // end of handleThumbNailImages
+
 </script>
 
 </head>
 <body>
+	<form name="addExhibitionFrm">
 	<div id="detailContainer">
 		<div class="Title_Area">
 			<span class="st">Exhibition</span>
@@ -455,9 +492,12 @@ function handleThumbNailImages(img){
 				<tr>
 					<td>입장료</td>
 					<td>
-					
-					<input style="width:100px;" type="text" name="price" id="price" />원
-					
+						<img class="freeBtn" src="<%= ctxPath %>/resources/images/board/button_free.PNG" alt=""/>
+						<img class="priceBtn" src="<%= ctxPath %>/resources/images/board/button_price.PNG" alt=""/>
+						
+						<div id="priceArea" style="display:none;">
+							<input style="width:100px;" type="text" name="price" id="price" value="" placeholder="가격" />
+						</div>
 					</td>
 				<tr>
 			</table>
@@ -470,7 +510,7 @@ function handleThumbNailImages(img){
 			</div>
 			
 			<div align="center" style="margin: 0 auto;">
-				<input type="file" id="poster-input" />
+				<input type="file" id="poster-input" name="poster-input" />
 			</div>
 		</div>
 		
@@ -494,9 +534,9 @@ function handleThumbNailImages(img){
 			</div>	
 			
 			<div align="center" style="margin: 0 auto;">
-				<input type="file" class="image-input" />
-				<input type="file" class="image-input" />
-				<input type="file" class="image-input" />
+				<input type="file" class="image-input" name="image-input1" />
+				<input type="file" class="image-input" name="image-input2" />
+				<input type="file" class="image-input" name="image-input3" />
 			</div>
 		</div>
 		
@@ -519,5 +559,6 @@ function handleThumbNailImages(img){
 		</div>
 	
 	</div>
+	</form>
 </body>
 </html>
