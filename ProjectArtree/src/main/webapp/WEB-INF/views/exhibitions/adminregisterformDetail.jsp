@@ -10,17 +10,17 @@
 
 <html>
 <head>
-<meta charset="UTF-8">
+<script src="<%= ctxPath%>/resources/js/jquery-3.3.1.min.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 
+<meta charset="UTF-8">
 <style type="text/css">
 @import url(//fonts.googleapis.com/earlyaccess/notosanskr.css);
 
 	body {
 		font-family: 'Noto Sans Kr', sans-serif;
-	}
-	
-	div#detailContainer {
-		
 	}
 	
 	#detailContainer {	
@@ -120,21 +120,33 @@
 		border-bottom : solid 2px lightgray;
 	}
 	
-	div#myImages .thumbNail {
-		padding : 15px;
+	img.thumbNail {
+		border-radius: 15px;
 	}
 	
 	div#myImages div#bigImage {
 		padding-top : 20px;
 	}
-	
-	div#myImages div#bigImage .bigImage {
-		margin-left : 50px;
-		margin-right : 50px;
-	}
-	
+
 	div#myImages div#bigImage .arrow {
 		cursor : pointer;
+		font-size:60px; 
+		font-weight:bold; 
+		color : black;
+		text-decoration: none;
+	}
+	
+	div#myImages div#bigImage a {
+		vertical-align: middle;
+	}
+	
+	.item > img  {
+		width : 400px;
+		height : 400px !important;
+	}
+	
+	.item {
+		display : inline-block;
 	}
 	
 	table#extraInfoTable tr td:first-child {
@@ -151,19 +163,21 @@
 	
 </style>
 
-<script src="<%= ctxPath%>/resources/js/jquery-3.3.1.min.js"></script>
+
 <script type="text/javascript">
 	$(document).ready(function(){ 
 		
-		// 각각 화살표 클릭하면 해당 방향의 
-		$("div#myImages div#bigImage .fa-angle-left").click(function(){
-			// console.log("left");
-		});
+		 $("#myCarousel").carousel({interval: false});
 		
-		$("div#myImages div#bigImage .fa-angle-right").click(function(){
-			// console.log("right");
-		});
-		
+		 // Enable Carousel Controls
+		  $(".left").click(function(){
+		    $("#myCarousel").carousel("prev");
+		  });
+		  $(".right").click(function(){
+		    $("#myCarousel").carousel("next");
+		  });
+		 
+		 
 		// open 버튼을 클릭한다면 해당 전시회를 '전시중' 상태로 변경한다.
 		$("div#openBtn").click(function(){
 			var exhibitionCode = "${exhibitionCode}"; // 상세 페이지로 넘어올때 해당 전시회의 전시회 코드를 함께 넘긴다.
@@ -252,17 +266,34 @@
 		
 		<div id="myImages" align="center">
 			<h2>작품전경</h2> <!--  썸네일 아직 안배워서 일단 이렇게 처리 -->
-			<img class="thumbNail" width="200px" height="200px" src="<%= ctxPath %>/resources/images/exhibition/poster1.JPG" />
-			<img class="thumbNail" width="200px" height="200px" src="<%= ctxPath %>/resources/images/exhibition/poster1.JPG" />
-			<img class="thumbNail" width="200px" height="200px" src="<%= ctxPath %>/resources/images/exhibition/poster1.JPG" />
+			<div>
+				<img class="thumbNail" width="200px" height="200px" src="<%= ctxPath %>/resources/images/exhibition/poster1.JPG" />
+				<img class="thumbNail" width="200px" height="200px" src="<%= ctxPath %>/resources/images/exhibition/poster2.JPG" />
+				<img class="thumbNail" width="200px" height="200px" src="<%= ctxPath %>/resources/images/exhibition/poster2.JPG" />
+			</div>
 			
-			<div id="bigImage" align="center">
-				<i class='fa fa-angle-left arrow' style='font-size:60px; font-weight:bold;'></i>
-				<img class="bigImage" width="400px" height="400px" src="<%= ctxPath %>/resources/images/exhibition/poster1.JPG" />
-				<i class='fa fa-angle-right arrow' style='font-size:60px; font-weight:bold;'></i>
-			</div>	
+		<div id="myCarousel" class="carousel slide"  style="display:inline-block; overflow:hidden;">
+			<div id="bigImage" align="center" style="display:inline-block; vertical-align: middle;">
+			<a class="left" style="display:inline-block;">
+				<i class='fa fa-angle-left arrow'></i>
+			</a>
+			<div class="carousel-inner" role="listbox" style="display:inline-block; width: 500px; overflow:hidden; vertical-align: middle;">
+			    <div class="item active">
+			      <img src="<%= ctxPath %>/resources/images/exhibition/poster1.JPG" alt="" width="400px" height="400px">
+			    </div>
+			    <div class="item">
+			      <img src="<%= ctxPath %>/resources/images/exhibition/poster2.JPG" alt="" width="400px" height="400px">
+			    </div>
+			    <div class="item">
+			      <img src="<%= ctxPath %>/resources/images/exhibition/poster2.JPG" alt="" width="400px" height="400px">
+			    </div>
+			  </div>
+				
+				<a class="right" style="display:inline-block;">
+					<i class='fa fa-angle-right arrow'></i>
+				</a>
+			</div>
 		</div>
-		
 		<div id="extraInfo">
 			<table id="extraInfoTable">
 				<tr>

@@ -5,10 +5,9 @@
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
-<%--
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+<%
+	String ctxPath = request.getContextPath();
+%>
 
 <style type="text/css">
 /* sidebar */
@@ -91,13 +90,23 @@ a:hover + p.arrow_box {
 </style>
 
 <div class="sidenav" >
-  <a href="#about" style="margin-top: 150%;">About</a><p class="arrow_box" style="color: white; text-align: center;">About</p>
+  <a href="#" style="margin-top: 150%;">
+  	<img alt="검색" src="<%= ctxPath %>/resources/images/main/mainside-search.png" />
+  </a>
+  <p class="arrow_box" style="color: white; text-align: center;">Search</p>
   
-  <a href="#services">Services</a><p class="arrow_box" style="color: white; text-align: center;">Services</p>
-  
-  <a href="#clients">Clients</a><p class="arrow_box" style="color: white; text-align: center;">Clients</p>
-  
-  <a href="#contact">Contact</a><p class="arrow_box" style="color: white; text-align: center;">Contact</p>
+  <a href="#">
+  	<img alt="티켓" src="<%= ctxPath %>/resources/images/main/mainside-ticket.png" />
+  </a>
+  <p class="arrow_box" style="color: white; text-align: center;">Buy a Tickets</p>
+  	
+  <a href="#">
+  	<img alt="채팅" src="<%= ctxPath %>/resources/images/main/mainside-chat.png" />
+  </a>
+  <p class="arrow_box" style="color: white; text-align: center;">Chat</p>
+  	
+  <a href="#">
+  </a>
+  <p class="arrow_box" style="color: white; text-align: center;">Chat</p>
   
 </div>
---%>

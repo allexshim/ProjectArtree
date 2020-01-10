@@ -1,7 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
+<%
+	String ctxPath = request.getContextPath();
+%>
     <style type="text/css">
     
      html, body {
@@ -84,6 +88,17 @@
 			margin: 20px;
 		}
 		
+		.footer	{
+		   z-index: 2;
+		   position: fixed;
+		   left: 0;
+		   bottom: 0;
+		   width: 100%;
+		   color: white;
+		   text-align: center;
+		
+		}
+		
 	</style>
 	
 	<script type="text/javascript">
@@ -93,9 +108,7 @@
             $myCarousel.carousel({
                 interval: false
             });
-            
            
-            
             // scroll slides on mouse scroll
             $myCarousel.bind('mousewheel DOMMouseScroll', function (e) {
                 var getActiveIdx = $myCarousel.find(".carousel-inner>.item.active").index();
@@ -151,30 +164,36 @@
 		
 		            <div class="carousel-inner">
 		                <div class="item active">
+		                	
+		                	<div class="fill" style="margin-top:0; background-image: url('<%= ctxPath%>/resources/images/main/mainImg.jpg')">
+		                	
+		                	</div>
 		                
-			                
-							
-		                    <div class="fill"
-		                         style="margin-top:0; background-image:"></div>
 		                </div>
+		                
 		                <div class="item">
+		            		
+		                    <div class="fill" style="">
+		                    
+		                    </div>
 		                
-			                
-							
-		                    <div class="fill"
-		                         style=""></div>
 		                </div>
+		                
 		                <div class="item">
 		                	
-		                    <div class="fill"
-		                         style=""></div>
+		                    <div class="fill" style="">
+		                    
+		                    </div>
+		                
 		                </div>
+		                
 		                <div class="item">
 		                	
-		                    <div class="fill"
-		                         style=""></div>
+		                    <div class="fill" style="">
+		                    
+		                    </div>
 		                         
-	                        <div class="footer">
+	                       <div class="footer">
 							  <p>Footer</p>
 							</div>
 		                </div>

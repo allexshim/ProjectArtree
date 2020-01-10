@@ -2,13 +2,8 @@
 	pageEncoding="UTF-8"%>
 
 <%
-	String cxtpath = request.getContextPath();
+	String ctxpath = request.getContextPath();
 %>
-
-<%--
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
 
 <style type="text/css">
 /* header */
@@ -49,10 +44,10 @@
 
 <div class="topnav" style="margin-bottom: 0;">
   <a class="logo">arTree</a>
-  <a class="active header-nav" href="#">Home</a>
-  <a class="header-nav" href="#">News</a>
-  <a class="header-nav" href="#">Contact</a>
-  <a class="header-nav" href="#">About</a>
+  <a class="active header-nav" href="#">GALLARY</a>
+  <a class="header-nav" href="#">EXHIBITION</a>
+  <a class="header-nav" href="#">ABOUT ARTREE</a>
+  <a class="header-nav" href="#">SERVICE</a>
+  <a class="header-nav" href="#">MY</a>
 </div>
 
---%>
