@@ -8,11 +8,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 public class SearchController {
 
-	@RequestMapping(value="/searchBylocation.at")
+	@RequestMapping(value="/search.at")
 	public String searchBylocation(HttpServletRequest request) {
 		
-		
-		return "search/searchBylocation.tiles";
+		return "search/search.tiles";
 	} // end of reviewList --------------------------------------------
 	
 
