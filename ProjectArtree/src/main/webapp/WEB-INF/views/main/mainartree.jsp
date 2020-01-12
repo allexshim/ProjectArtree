@@ -99,6 +99,42 @@
 		
 		}
 		
+		.main-logo {
+		  color: white;
+		  text-decoration: bold;
+		  padding : 5%;
+		  position: absolute;
+		  left: 25%;
+		  top: 30%;
+		  width: 50%;
+		  height: 30%;
+		  text-align: center;
+		  font-size: 50px;
+		}
+		
+		.main-search {
+		  background-color: black;
+		  padding : 5%;
+		  position: absolute;
+		  left: 25%;
+		  top: 60%;
+		  width: 50%;
+		  height: 30%;
+		  text-align: center;
+		  font-size: 18px;
+		}
+		
+		.search-input {
+			display: inline-block;
+			width: 100%;
+			height: 50px; 
+		}
+		
+		.inputdiv {
+			margin-top: -10px;
+		}
+		
+		
 	</style>
 	
 	<script type="text/javascript">
@@ -114,18 +150,52 @@
                 var getActiveIdx = $myCarousel.find(".carousel-inner>.item.active").index();
                 if (e.originalEvent.wheelDelta > 0 || e.originalEvent.detail < 0) {
                     if (getActiveIdx === 0){
+                    	$("#myheader").css("display", "none");
                     	return;
                     	}
+                    else {
+                    	$("#myheader").css("display", "block");
+                    }
                     $(this).carousel('prev');
                     
                 } else {
                     if (getActiveIdx === 3){
+                    	$("#myheader").css("display", "block");
                     	return;
                     	}
+                    if (getActiveIdx === 2){
+                    	$("#myheader").css("display", "block");
+                    	
+                    	}
+                    if (getActiveIdx === 1){
+                    	$("#myheader").css("display", "block");
+                    	
+                    	}
+                    if (getActiveIdx === 0){
+                    	$("#myheader").css("display", "none");
+                    	
+                    	}
+                    if (getActiveIdx === -1){
+                    	$("#myheader").css("display", "none");
+                    	
+                    	}
+                    
                     $(this).carousel('next');
                 }
             });
-
+            
+            var getActiveIdx = $myCarousel.find(".carousel-inner>.item.active").index();
+            if (getActiveIdx === 0){
+            	$("#myheader").css("display", "none");
+            	
+            	}
+            
+            else {
+            	$("#myheader").css("display", "block");
+            	
+            	}
+            
+/* 
             //scroll slides on swipe for touch enabled devices
 
             $("#myCarousel").on("touchstart", function (event) {
@@ -143,7 +213,7 @@
                     $(this).off("touchmove");
                 });
             });
-
+*/
         });
 
     </script>
@@ -166,7 +236,18 @@
 		                <div class="item active">
 		                	
 		                	<div class="fill" style="margin-top:0; background-image: url('<%= ctxPath%>/resources/images/main/mainImg.jpg')">
-		                	
+		                		
+		                		<div class="main-logo">
+		                			arTree
+		                		</div>
+		                		
+		                		<div class="main-search">
+		                			<div class="inputdiv">
+										<input class="search-input"/>
+										<input class="search-input"/>										   			
+		                			</div>
+		                		</div>
+		                		
 		                	</div>
 		                
 		                </div>

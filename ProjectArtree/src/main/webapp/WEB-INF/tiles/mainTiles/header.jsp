@@ -2,7 +2,7 @@
 	pageEncoding="UTF-8"%>
 
 <%
-	String ctxpath = request.getContextPath();
+	String ctxPath = request.getContextPath();
 %>
 
 <style type="text/css">
@@ -20,11 +20,11 @@
 
 .topnav a.header-nav {
   text-align: center;
-  margin: 30px;
+  margin: 20px;
   padding: 14px 16px;
   text-decoration: none;
   font-size: 25px;
-  color: white;
+  color: black;
 }
 
 .topnav a.logo {
