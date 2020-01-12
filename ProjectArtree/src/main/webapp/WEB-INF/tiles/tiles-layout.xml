@@ -13,7 +13,7 @@
 		<put-attribute name="header" value="/WEB-INF/tiles/mainTiles/header.jsp" />
 		<put-attribute name="content" value="" /> <!--  content는 페이지마다 바뀌므로 value는 그때그때 지정한다. -->
 		<put-attribute name="sideinfo" value="/WEB-INF/tiles/mainTiles/sideinfo.jsp" />
-		<put-attribute name="footer" value="/WEB-INF/tiles/mainTiles/footer.jsp" />
+	<!-- 	<put-attribute name="footer" value="/WEB-INF/tiles/mainTiles/footer.jsp" />		  -->
 	</definition>
 	
 	<definition name="*.maintiles" extends="tiles-Mainlayout">

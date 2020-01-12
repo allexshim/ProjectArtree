@@ -40,10 +40,11 @@
 		<div id="mysideinfo">
 			<tiles:insertAttribute name="sideinfo" />
 		</div>
-		
+	<%-- 	
 		<div id="myfooter">
 			<tiles:insertAttribute name="footer" />
 		</div>
+		 --%>
 	</div>
 </body>
 </html>

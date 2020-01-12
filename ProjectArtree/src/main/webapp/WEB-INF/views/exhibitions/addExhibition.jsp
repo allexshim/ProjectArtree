@@ -247,11 +247,11 @@
 		top: 45%;
 	}
 	
-	#poster-input:hover {
+	#posterInput:hover {
 		cursor: pointer;
 	}
 	
-	#poster-input {
+	#posterInput {
 		text-align: center;
 		width : 200px !important;
 		border : none !important;
@@ -282,7 +282,7 @@
 		$(".ui-state-active").css('background','#ccb3ff');
 		
 		// 상단 대표 포스터
-		$("#poster-input").on("change", handleImgFileSelect);
+		$("#posterInput").on("change", handleImgFileSelect);
 		
 		// 하단 작품 전경
 		$(".image-input").on("change", handleSubImgFileSelect);
@@ -303,6 +303,7 @@
 			else {
 				$(this).addClass("clicked");
 				$(this).attr("src", "<%= ctxPath %>/resources/images/board/button_free_afterClick.PNG");
+				$("#price").val("0");
 			}
 		});
 		
@@ -327,27 +328,104 @@
 		
 		/* --------- 유효성 검사 ---------------------------------------- */
 		$("#openBtn").click(function(){
-			var frm = document.addExhibitionFrm;
+			let frm = document.addExhibitionFrm;
+			/* 
+
+			let author = frm.author.value;
+			let authorInfo = frm.authorInfo.value;
+			let gallery = frm.gallery.value;
+			let startDate = frm.startDate.value;
+			let endDate = frm.endDate.value;
+			let email = frm.email.value;
+			let price = frm.price.value;
+			let posterInput = frm.posterInput.value;
+			let imageInput1 = frm.imageInput1.value;
+			let imageInput2 = frm.imageInput2.value;
+			let imageInput3 = frm.imageInput3.value;
+			let tel = frm.tel.value; */
 			
-			/* frm.inputName.value */
-			/* frm.exhibitionTitle
-			frm.author
-			frm.authorInfo
-			frm.exhibitionInfo
-			frm.gallery
-			frm.startDate
-			frm.endDate
-			frm.email
-			frm.tel
-			frm.price
-			frm.poster-input
-			frm.image-input1
-			frm.image-input2
-			frm.image-input3 */
+			if($("#applierName").val().trim()==""){
+				alert("신청자 이름을 입력하세요.");
+				$(this).focus();
+			} 
+			else if($("#exhibitionTitle").val().trim()==""){
+				alert("전시회 이름을 입력하세요.");
+				$(this).focus();
+			} 
+			else if($("#author").val().trim()==""){
+				alert("작가 이름을 입력하세요.");
+				$(this).focus();
+			}
+			else if($("#authorInfo").val().trim()==""){
+				alert("작가 정보를 입력하세요.");
+				$(this).focus();
+			}
+			else if($("#gallery").val().trim()==""){
+				alert("전시관 정보를 입력하세요.");
+				$(this).focus();
+			}
+			else if($("#startDate").val().trim()==""){
+				alert("시작 날짜를 입력하세요.");
+				$(this).focus();
+			}
+			else if($("#endDate").val().trim()==""){
+				alert("종료 날짜를 입력하세요.");
+				$(this).focus();
+			}
+			else if($("#openTime").val().trim()==""){
+				alert("운영 시간을 입력하세요.");
+				$(this).focus();
+			}
+			else if($("#closeTime").val().trim()==""){
+				alert("운영 시간을 입력하세요.");
+				$(this).focus();
+			}
+			else if($("#email").val().trim()==""){
+				alert("이메일 주소를 입력하세요.");
+				$(this).focus();
+			}
+			else if($("#tel").val().trim()==""){
+				alert("연락처를 입력하세요.");
+				$(this).focus();
+			}
+			else if($("#price").val().trim()==""){
+				alert("가격 정보를 입력하세요.");
+				$(this).focus();
+			}
+			else if($("#posterInput").val()==""){
+				alert("대표 포스터를 입력하세요.");
+				$(this).focus();
+			}
+			else if($("#imageInput1").val()==""){
+				alert("첫번째 이미지를 입력하세요.");
+				$(this).focus();
+			}
+			else if($("#imageInput2").val()==""){
+				alert("두번째 이미지를 입력하세요.");
+				$(this).focus();
+			}
+			else if($("#imageInput3").val()==""){
+				alert("세번째 이미지를 입력하세요.");
+				$(this).focus();
+			}
+			else if($("#imageInput3").val()==""){
+				alert("세번째 이미지를 입력하세요.");
+				$(this).focus();
+			}
+			else if($("#category").val()==""){
+				alert("분야를 입력하세요.");
+				$(this).focus();
+			}
+			else if($("#tag").val()==""){
+				alert("태그를 입력하세요.");
+				$(this).focus();
+			}
+			else {
+				frm.method = "POST";
+				frm.action = "*.at";
+				frm.submit();
+			}
 			
-			frm.method = "POST";
-			frm.action = "*.at";
-			frm.submit();
 		});
 		/* --------- 유효성 검사 끝--------------------------------------- */
 		
@@ -439,7 +517,7 @@
 			<table id="detailTable">
 				<tr>
 					<td>신청자 이름</td>
-					<td>심예은</td> <!-- ${session.loginuser.username} -->
+					<td><input type="text" name="applierName" id="applierName" value="심예은" /></td> <!-- ${session.loginuser.username} -->
 				<tr>
 				<tr>
 					<td>전시회명</td>
@@ -510,7 +588,7 @@
 			</div>
 			
 			<div align="center" style="margin: 0 auto;">
-				<input type="file" id="poster-input" name="poster-input" />
+				<input type="file" id="posterInput" name="posterInput" />
 			</div>
 		</div>
 		
@@ -534,9 +612,9 @@
 			</div>	
 			
 			<div align="center" style="margin: 0 auto;">
-				<input type="file" class="image-input" name="image-input1" />
-				<input type="file" class="image-input" name="image-input2" />
-				<input type="file" class="image-input" name="image-input3" />
+				<input type="file" class="image-input" name="imageInput1" id="imageInput1" />
+				<input type="file" class="image-input" name="imageInput2" id="imageInput2" />
+				<input type="file" class="image-input" name="imageInput3" id="imageInput3" />
 			</div>
 		</div>
 		

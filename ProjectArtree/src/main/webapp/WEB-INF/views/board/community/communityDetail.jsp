@@ -131,6 +131,58 @@
 		border-radius: 5px;
 	}
 	
+	/* 댓글 부분 */
+	div#myComments {
+		width : 88%;
+		padding-left : 165px;
+		padding-top : 20px;
+	}
+	
+	div#myComments img {
+		padding : 10px;
+		padding-bottom : 0;
+	}
+	
+	.commentWriter {
+		width:120px; 
+		font-weight:bold;
+		font-size : 12pt;
+	}
+	
+	.commentContents {
+		padding-bottom : 10px;
+	}
+	
+	/* 새 댓글 작성하기 */
+	form#newComment {
+		overflow:hidden;
+	}
+	
+	input#commentWriter {
+		border:none;
+		width:120px; 
+		font-weight:bold;
+		font-size : 12pt;
+		padding-bottom : 5px;
+	}
+	
+	textarea#commentContents {
+		resize : none;
+		border-radius: 5px;
+		width : 100%;
+	}
+	
+	img#addComment {
+		padding-top : 5px;
+		padding-right : 0px;
+		float : right;
+		cursor : pointer;
+	}
+	
+	#commentModifyBtn, #commentDeleteBtn {
+		cursor : pointer;
+	}
+	
 </style>
 
 <script src="<%= ctxPath%>/resources/js/jquery-3.3.1.min.js"></script>
@@ -153,6 +205,36 @@
 		$("#toListBtn").click(function(){
 			window.location.href="/artree/communityList.at";
 		});
+		
+		// 댓글 ------------------------------------------------
+		
+		// 댓글 수정, 삭제하기
+		$("#commentModifyBtn").click(function(){
+			var commentNo = $(this).next().next().text();
+			window.location.href="*.at?commentNo="+commentNo;
+		});
+		
+		$("#commentDeleteBtn").click(function(){
+			var commentNo = $(this).next().text();
+			window.location.href="*.at?commentNo="+commentNo;
+		});
+
+		// 새 댓글 등록하기
+		$("img#addComment").click(function(){
+			
+			if($("#commentContents").val().trim() == ""){
+				alert("댓글 내용을 입력하세요!");
+				$("#commentContents").focus();
+			}
+			else {
+				var frm = document.newComment;
+				frm.method = "POST";
+				frm.action = "*.at";
+				frm.submit();
+			}
+			
+		});
+		//----------------------------------------------------
 		
 	}); // end of $(document).ready -------------------------------------
 
@@ -214,6 +296,56 @@
 				<img id="modifyBtn" src="<%= ctxPath %>/resources/images/board/modifyBtn.JPG" />
 				<img id="deleteBtn" src="<%= ctxPath %>/resources/images/board/deleteBtn.JPG" />
 			</div>
+		</div>
+		
+		<div id="myComments">
+			<table>
+			<!--  이 부분이 c:foreach로 묶이게 됩니다. -->
+				<tr>
+					<td class="commentWriter">댓글작성자이름</td>
+					<td class="commentWriteDate">댓글작성일자</td>
+				</tr>
+				<tr>
+					<td class="commentContents" colspan="2">
+						댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용
+						댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용
+						<%-- <c:if test="${댓글작성자아이디 == 현재로그인한회원 아이디 }"> --%>
+						<div align="right">
+							<img id="commentModifyBtn" src="<%= ctxPath %>/resources/images/board/modifyBtn.JPG" />
+							<img id="commentDeleteBtn" src="<%= ctxPath %>/resources/images/board/deleteBtn.JPG" />
+							<span class="commentNo" style="display:none">댓글번호</span>
+						</div>
+						<%-- </c:if> --%>
+					</td>
+				</tr>
+			<!--  이 부분이 c:foreach로 묶이게 됩니다. -->	
+				<tr>
+					<td class="commentWriter">댓글작성자이름</td>
+					<td class="commentWriteDate">댓글작성일자</td>
+				</tr>
+				<tr>
+					<td class="commentContents" colspan="2">
+						댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용
+						댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용
+					</td>
+				</tr>
+				<tr>
+					<td class="commentWriter">댓글작성자이름</td>
+					<td class="commentWriteDate">댓글작성일자</td>
+				</tr>
+				<tr>
+					<td class="commentContents" colspan="2">
+						댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용
+						댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용
+					</td>
+				</tr>
+			</table>
+			
+			<form id="newComment" name="newComment">
+				<input id="commentWriter" name="commentWriter" type="text" value="심예은" readonly="readonly"/><br/>
+				<textarea id="commentContents" name="commentContents" placeholder="댓글 내용을 입력하세요."></textarea>
+				<img id="addComment" src="<%= ctxPath %>/resources/images/board/registerBtn.JPG" />
+			</form>
 		</div>
 		
 		<div id="preNext">
