@@ -124,6 +124,12 @@ public class BoardController {
 		return "board/community/addCommunity.tiles";
 	} // end of addCommunity --------------------------------------------
 	
+	
+	@RequestMapping(value="/eventList.at")
+	public String eventList() {
+		return "board/events/eventList.tiles";
+	}
+	
 	@RequestMapping(value="/addEvent.at")
 	public String addEvent() {
 		
@@ -135,5 +141,7 @@ public class BoardController {
 	public String addExhibition() {
 		return "exhibitions/addExhibition.tiles";
 	}
+	
+
 	
 }
