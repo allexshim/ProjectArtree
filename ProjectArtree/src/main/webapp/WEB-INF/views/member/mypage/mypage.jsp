@@ -103,6 +103,10 @@
 	ul.collect_list li {
 		display: inline-block;
 	}
+	
+	div.list_div img {
+		width: 249px;
+	}
 
 	/* 전시 클립 */
 	div.tab_nav {
@@ -193,6 +197,8 @@
 			$(this).removeClass("on");
 			$("#myArtmap").addClass("on");
 		});
+		
+		if()
 	});
 </script>
 
@@ -256,7 +262,7 @@
 						</li>
 						<li>
 							<div class="list_div">
-								<img src="http://app.art-map.co.kr/upload/work/artmap_20191018_95021230.jpg" style="width: 249px"/>
+								<img src="http://app.art-map.co.kr/upload/work/artmap_20191018_95021230.jpg" />
 								<div class="list_desc">
 									<h4>무제</h4>
 									<span class="artist">임봉재</span>
@@ -267,7 +273,7 @@
 						</li>
 						<li>
 							<div class="list_div">
-								<img src="http://app.art-map.co.kr/upload/work/artmap_20191018_95021230.jpg" style="width: 249px"/>
+								<img src="http://app.art-map.co.kr/upload/work/artmap_20191018_95021230.jpg"/>
 								<div class="list_desc">
 									<h4>무제</h4>
 									<span class="artist">임봉재</span>
@@ -278,7 +284,7 @@
 						</li>
 						<li>
 							<div class="list_div">
-								<img src="http://app.art-map.co.kr/upload/work/artmap_20191018_95021230.jpg" style="width: 249px"/>
+								<img src="http://app.art-map.co.kr/upload/work/artmap_20191018_95021230.jpg"/>
 								<div class="list_desc">
 									<h4>무제</h4>
 									<span class="artist">임봉재</span>
@@ -289,7 +295,7 @@
 						</li>
 						<li>
 							<div class="list_div">
-								<img src="http://app.art-map.co.kr/upload/work/artmap_20191018_95021230.jpg" style="width: 249px"/>
+								<img src="http://app.art-map.co.kr/upload/work/artmap_20191018_95021230.jpg"/>
 								<div class="list_desc">
 									<h4>무제</h4>
 									<span class="artist">임봉재</span>
@@ -300,7 +306,7 @@
 						</li>
 						<li>
 							<div class="list_div">
-								<img src="http://app.art-map.co.kr/upload/work/artmap_20191018_95021230.jpg" style="width: 249px"/>
+								<img src="http://app.art-map.co.kr/upload/work/artmap_20191018_95021230.jpg"/>
 								<div class="list_desc">
 									<h4>무제</h4>
 									<span class="artist">임봉재</span>
@@ -329,7 +335,7 @@
 						</colgroup>
 						<tr>
 							<td>
-								<img src="http://app.art-map.co.kr/upload/exhibition/artmap_20200106_104227138.jpg" style="width: 160px; height: 160px;"/>
+								<img src="http://app.art-map.co.kr/upload/exhibition/artmap_20200106_104227138.jpg"/>
 							</td>
 							<td>
 								<span>MIMESIS AP3: Picturesque City</span>
@@ -351,7 +357,7 @@
 				<ul>
 					<li>
 						<div class="artist_list">
-							<img src="http://app.art-map.co.kr/upload/author/artmap_20191105_131226254.jpg" style="width: 406px; height: 279px"/>
+							<img src="http://app.art-map.co.kr/upload/author/artmap_20191105_131226254.jpg"/>
 							<span>공성훈</span>
 						</div>
 					</li>
