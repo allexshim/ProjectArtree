@@ -18,13 +18,15 @@
 		font-family: 'Noto Sans Kr', sans-serif;
 	}
 	
-	#registerFormContainer {
-		padding-bottom : 100px;
+	#statisticsContainer {
+		margin: 0 0 20vh 0;
+		width: 100%;
+		padding: 0;
 	}
 	
 	img#boardtop {
 		position : absolute;
-		width : 100%;
+		width : 96vw;
 		height : 540px;
 	}
 	
@@ -49,40 +51,31 @@
 		padding-top : 40px;
 		padding-left : 60px;
 		font-size: 16pt;
-		cursor : pointer;
 	}
 
 	div#eachStatus .displayStatus {
-		padding-right : 20px;
+		margin-right : 20px;
 		color : gray;
+		padding : 5px;
 	}
 	
 	div#eachStatus .currentStatus {
 		color : black !important;
 		font-weight: bold !important;
 	}
-
-	/* == 테이블 부분 == */
-	div#contentContainer {
-		padding-top : 100px;
-	}
 	
-	table#registerFormContents {
-		width : 90%;
+	.displayStatus:hover {
+		cursor: pointer;
+		text-decoration: none;
+		box-shadow: 3px 3px 3px 3px grey;
+		border-radius: 10px;
+	}
+
+	/* == 내용물 부분 == */
+	#contentContainer {
+		padding-top : 100px;
+		width : 60%;
 		margin : 0 auto;
-		border-collapse: collapse;
-	}
-
-	div#contentContainer table td {
-		font-size: 14pt;
-		padding-top : 10px;
-		padding-bottom : 10px; 
-	}
-
-	div#contentContainer table thead tr {
-		font-size: 16pt;
-		font-weight:bold;
-		border-bottom : solid 2px lightgray;
 	}
 	
 	div#contentContainer table thead td:first-child, div#contentContainer table tbody td:first-child {
@@ -114,39 +107,16 @@
 		padding-bottom : 10px; 
 	}
 	
-	/* == 페이징 바 == */
-	.pageNumber {
-		font-size:16px; 
-		font-weight:bold;
+	/* == 통계 영역 == */
+	#statistics-area {
+		height: 60vh;
+		border: 2px solid red;
 	}
 	
-	.pagination {
-	  display: block;
+	#table-area {
+		border: 2px solid navy;
+		height: 50vh;
 	}
-	
-	.pagination a {
-	  color: black;
-	  padding: 3px 10px;
-	  text-decoration: none;
-	  cursor : pointer;
-	  margin : 0 10px;
-	}
-		
-	.pagination span.active {
-	 	border : solid 2px black;
-	 	color: black;
-		padding: 3px 10px;
-		text-decoration: none;
-		cursor : pointer;
-		margin : 0 10px;
-		font-size: 16px; 
-		font-weight: bold;  
-	}
-		
-	.pagination a:hover, .pagination span:hover {
-	   text-decoration: underline;
-	}
-		
 	
 </style>
 
@@ -154,43 +124,15 @@
 <script type="text/javascript">
 	$(document).ready(function(){ 
 	
-		var status = "${status}";
-		// 검색 조회 버튼을 눌러서 새로고침 된 경우 클릭한 버튼을 검정색, bold로 보이게 함
-		if(status != null && status != ""){
-			$(".displayStatus").each(function(){
-				if(status == $(this).text()){
-					$(".displayStatus").removeClass("currentStatus");
-					$(this).addClass("currentStatus");
-				}
-			});			
-		} // end of if ------------------------------------------
-		
-		// 전시 상태별 조회 버튼 클릭
-		$(".displayStatus").click(function(){
-			
-			var status = $(this).text(); // 전체, 검토 대기중, 전시중, 전시 종료
-			
-			window.location.href="/artree/*.at?status="+status;
-			
-		}); // end of $(".displayStatus").click -------------
-		
-		
-		// 각 글제목을 클릭하면 상세 페이지로 이동
-		$("div#contentContainer table tbody td:nth-child(2)").click(function(){
-			var no = $(this).prev().text(); // 클릭한 글번호를 받아온다.
-
-			window.location.href="/artree/registerformDetail.at?no="+no;
-			
-		}); // end of $("div#contentContainer table tbody td:nth-child(2)").click
 		
 	});
 
 </script>
 </head>
 <body>
-	<div id="registerFormContainer">
+	<div id="statisticsContainer" class="container">
 		<div id="imgcontainer">	
-	  		<img id="boardtop" src="<%= ctxPath %>/resources/images/board/boardImage4.jpg" />
+	  		<img id="boardtop" src="<%= ctxPath %>/resources/images/admin/statistics.jpg" />
 		</div>
 
 		<div id="topText">
@@ -199,19 +141,37 @@
 		</div>
 		
 		<div id="eachStatus">
-			<span class="displayStatus">매출</span>
-			<span class="displayStatus">예매율</span>
-			<span class="displayStatus">성별 통계</span>
-			<span class="displayStatus">선호 장르</span>
-			<span class="displayStatus currentStatus">선호 태그</span>
+			<a class="displayStatus" href="/artree/bySales.at">매출</a>
+			<a class="displayStatus" href="/artree/byTicketingRate.at">예매율</a>
+			<a class="displayStatus" href="/artree/byGender.at">성별 통계</a>
+			<a class="displayStatus" href="/artree/byGenre.at">선호 장르</a>
+			<a class="displayStatus currentStatus" href="/artree/byTags.at">선호 태그</a>
 		</div>
 
 		<div id="contentContainer">
 			
+			<div id="statistics-area">
+				<%-- 통계차트 여기다 넣으시면 됩니다 --%>
+			</div>
 			
+			<div id="table-area">
+				
+				<%-- 차트에 대한 데이터 테이블은 이곳에 넣으세요 !! --%>
+				
+				<table class="table">
+					<thead>
+					
+					</thead>
+					
+					<tbody>
+					
+					</tbody>
+				</table>
+				
+			</div>
 			
 		</div>
-
+			
 	</div>
 
 </body>
