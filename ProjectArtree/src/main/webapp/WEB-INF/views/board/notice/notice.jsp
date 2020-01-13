@@ -16,7 +16,6 @@
 
 	body {
 		font-family: 'Noto Sans Kr', sans-serif;
-		padding-left : 60px;
 	}
 	
 	#reviewContainer {
@@ -236,7 +235,7 @@
 				 <i class="arrow fas fa-chevron-down"></i>
 				 <span class="noticeNo" style="display:none;">"$ {noticeNo}"</span>
 				 </span>
-				<div class="noticeContent">
+				<div class="noticeContent" style="width:80%;">
 					공지사항에 대한 자세한 설명을 볼수있습니다. 공지사항에 대한 자세한 설명을 볼수있습니다. 공지사항에 대한 자세한 설명을 볼수있습니다.
 					공지사항에 대한 자세한 설명을 볼수있습니다. 공지사항에 대한 자세한 설명을 볼수있습니다.
 					공지사항에 대한 자세한 설명을 볼수있습니다.공지사항에 대한 자세한 설명을 볼수있습니다.공지사항에 대한 자세한 설명을 볼수있습니다.
