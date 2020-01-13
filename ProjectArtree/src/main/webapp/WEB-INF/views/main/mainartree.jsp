@@ -138,6 +138,7 @@
 		
 		/* header */
 		.topnav {
+		  border-bottom: solid 2px #f2f2f2;
 		  margin-top: 10px;
 		  z-index: 2;
 		  display: inline-block;
@@ -275,6 +276,21 @@
 		    height: 500px;
 		}
 		
+		#slide2 {
+		    position:relative;
+		    width: 800px;
+		    height: 500px;
+		    overflow:hidden;
+		}
+		#slide2 > div {
+		    position:absolute;
+		    top:0;
+		    left:0;
+		    width:100%;
+		    height:100%;
+		    height: 500px;
+		}
+		
 		.explain {
 			 font-size: 24pt; 
 			 position: absolute; 
@@ -308,7 +324,7 @@
 		.exhibitions-title {
 			height: 30px;
 			font-size: 18pt;
-			text-align: center;
+			
 		}
 		
 		.exhibitions-img {
@@ -316,6 +332,15 @@
 			
 		}
 		
+		
+		.notice {
+			
+		    left: 20%;
+		    
+			top: 5%;
+			width: 1200px;
+			height: 660px;
+		}
 	</style>
 	
 	<script type="text/javascript">
@@ -356,7 +381,7 @@
                     .end()
                     .appendTo('#slide');
             },3000);
-
+    
             
         });
 
@@ -388,8 +413,8 @@
 		                		
 		                <div class="main-search">
 		                			<div class="inputdiv">
-										<input class="search-input" placeholder="전시회 이름으로 검색";/>
-										<input class="search-input" placeholder="지역별 전시회 검색";/>										   			
+										<input class="search-input" placeholder="전시회 이름으로 검색"/>
+										<input class="search-input" placeholder="지역별 전시회 검색"/>										   			
 		                			</div>
 		                </div>
 		                		
@@ -436,7 +461,7 @@
 							  <p class="arrow_box" style="color: white; text-align: center;">Location</p>
 							  
 							</div>
-		                    <div class="fill" style="">
+		                    <div class="fill" >
 		                    	<div class="best">지금 핫한 전시회</div>
 		                    	<div class="imgfadein">
 								    <div id="slide">
@@ -446,7 +471,7 @@
 												제목 내용
 											</div>
 								       </div>
-								       
+
 								        <div>
 								        	<img style="width: 400px; height: 500px;" src="<%= ctxPath %>/resources/images/exhibition/poster2.JPG" alt="" />
 								        	<div class="explain">
@@ -519,30 +544,24 @@
 							</div>
 		                    <div class="fill" style="">
 		                    	<div class="exhibitions">
-		                    		<div style="flex:1; width: 30%; height: 100%;" class="endexpected-exh">
-		                    			<div class="exhibitions-title">
+		                    		<div style="flex:1; width: 50%; height: 100%;" class="endexpected-exh">
+		                    			<div class="exhibitions-title" style="text-align: left;">
 		                    				종료예정 전시회
 		                    			</div>
 		                    			<div class="exhibitions-img">
-		                    				<img src="<%= ctxPath %>/resources/images/exhibition/poster3.JPG" />
+		                    				<img style="width: 400px; height: 500px;" src="<%= ctxPath %>/resources/images/exhibition/poster3.JPG" />
 		                    			</div>
 		                    		</div>
-		                    		<div style="flex:1; width: 33%; height: 100%;" class="new-exh">
-		                    			<div class="exhibitions-title">
-		                    				신규 전시회
+		                    		<div style="flex:1; width: 50%; height: 100%;" class="new-exh">
+		                    			
+		                    			<div >
+		                    				<img style="width: 400px; height: 500px; margin-top: 0;" src="<%= ctxPath %>/resources/images/exhibition/poster3.JPG" />
 		                    			</div>
-		                    			<div class="exhibitions-img">
-		                    				<img src="<%= ctxPath %>/resources/images/exhibition/poster3.JPG" />
-		                    			</div>
-		                    		</div>
-		                    		<div style="flex:1; width: 30%; height: 100%;" class="soon-exh">
-		                    			<div class="exhibitions-title">
-		                    				오픈예정 전시회
-		                    			</div>
-		                    			<div class="exhibitions-img">
-		                    				<img src="<%= ctxPath %>/resources/images/exhibition/poster3.JPG" />
+		                    			<div class="exhibitions-title" style="margin-top: 30px; text-align: right;">
+		                    				신규 전시회 
 		                    			</div>
 		                    		</div>
+		                    		
 		                    	</div>
 		                    </div>
 		                
@@ -589,7 +608,9 @@
 							  
 							</div>
 		                    <div class="fill" style="">
-		                    
+		                    	<div class="notice">
+		                    		
+		                    	</div>
 		                    </div>
 		                         
 	                       <div class="footer">
