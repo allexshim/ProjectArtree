@@ -203,7 +203,13 @@
 
 		}); // end of $("#searchicon").click()
 		
-		
+		// 각 글제목을 클릭하면 상세 페이지로 이동
+		$("div#contentContainer table tbody td:nth-child(2)").click(function(){
+			var no = $(this).prev().text(); // 클릭한 글번호를 받아온다.
+
+			window.location.href="/artree/memberInfo.at?no="+no;
+			
+		}); // end of $("div#contentContainer table tbody td:nth-child(2)").click
 		
 	});
 
@@ -308,10 +314,9 @@
 			</table>
 		</div>
 
-		<div>
-			<button type="button" id="morebtn">MORE</button>
-		</div>
-		
+		<%-- 페이지바 --%>
+		<div></div>
+
 	</div>
 
 </body>
