@@ -38,4 +38,16 @@ public class MemberController {
 		return "member/mypage/mypage.tiles";
 	} // end of mypage --------------------------------------------
 	
+	@RequestMapping(value="/mypage_order.at")
+	public String mypage_order(HttpServletRequest request) {
+		
+		return "member/mypage/mypage_order.tiles";
+	} // end of mypage_order --------------------------------------------
+	
+	@RequestMapping(value="/mypage_set.at")
+	public String mypage_set(HttpServletRequest request) {
+		
+		return "member/mypage/mypage_set.tiles";
+	} // end of mypage_set --------------------------------------------
+	
 }

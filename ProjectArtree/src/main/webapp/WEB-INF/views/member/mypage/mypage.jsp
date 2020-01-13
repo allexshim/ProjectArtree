@@ -118,8 +118,18 @@
 		padding: 11px 0 20px 0;
 	}
 	
-	table.tab_tbl span {
+	table.tab_tbl {
+		width: 100%;
+	}
+	
+	div.tbl_div span {
 		display: block;
+	}
+	
+	div.tbl_div img {
+		width: 160px;
+		height: 160px;
+		margin: 15px;
 	}
 	
 	
@@ -134,6 +144,8 @@
 	
 	div.artist_list img {
 		margin-bottom: 20px;
+		width: 406px;
+		height: 279px;
 	}
 	
 	/* 선호 전시회 */
@@ -197,9 +209,16 @@
 			$(this).removeClass("on");
 			$("#myArtmap").addClass("on");
 		});
-		
-		if()
+	
 	});
+	
+	// 가고싶어요 다녀왔어요 변경
+	function tab_nav(n){
+		$(".tab_nav").removeClass("on");
+		$(".tbl_div").css("display", "none");
+		$("#tab_nav"+n).addClass("on");
+		$("#tab_wrap"+n).css("display", "");
+	}
 </script>
 
 <body>
@@ -207,9 +226,9 @@
 	<div class="myPage_header">
 		<h1 class="header_name">사용자 이름</h1>
 		<nav class="myPage_tabs">
-			<a href="#" class="tab on" id="myArtmap">My Artmap</a>
-			<a href="#" class="tab">주문내역</a>
-			<a href="#" class="tab">설정</a>
+			<a href="/artree/mypage.at" class="tab on" id="myArtmap">My Artmap</a>
+			<a href="/artree/mypage_order.at" class="tab">주문내역</a>
+			<a href="/artree/mypage_set.at" class="tab">설정</a>
 			<div class="tab_last"></div>
 		</nav>
 	</div>
@@ -244,7 +263,7 @@
 			</div>
 		</div>
 		
-		<div class="conts">
+	<!-- 	<div class="conts">
 			<div class="collection">
 				<h2>작품컬렉션</h2>
 				<div class="collect_div">
@@ -318,20 +337,20 @@
 					</ul>
 				</div>
 			</div>
-		</div>
+		</div> -->
 		
-		<div class="conts">
+		<div class="conts" style="padding: 0px;">
 			<div class="clip">
 				<h2>전시클립</h2>
-				<div class="tab_nav on" onClick="tab_nav('1')">가고싶어요 (1)</div>
+				<div class="tab_nav on" onClick="tab_nav('1')" id="tab_nav1">가고싶어요 (1)</div>
 				<!-- select count -->
-				<div class="tab_nav" onClick="tab_nav('2')">다녀왔어요 (1)</div>
-				<div class="tbl_div">
+				<div class="tab_nav" onClick="tab_nav('2')" id="tab_nav2">다녀왔어요 (1)</div>
+				<div class="tbl_div" id="tab_wrap1">
 					<table class="tab_tbl">
 						<colgroup>
 							<col style="width: 10%"/>
-							<col style="width: 50%"/>
-							<col style="width: 40%"/>
+							<col style="width: 65%"/>
+							<col style="width: 25%"/>
 						</colgroup>
 						<tr>
 							<td>
@@ -341,6 +360,29 @@
 								<span>MIMESIS AP3: Picturesque City</span>
 								<span>미메시스아트뮤지엄/경기</span>
 								<span>2019.11.28 - 2020.01.27</span>
+							</td>
+							<td>
+								<span>전시중</span>
+							</td>
+						</tr>
+					</table>
+				</div>
+				
+				<div class="tbl_div" id="tab_wrap2" style="display: none;">
+					<table class="tab_tbl">
+						<colgroup>
+							<col style="width: 10%"/>
+							<col style="width: 65%"/>
+							<col style="width: 25%"/>
+						</colgroup>
+						<tr>
+							<td>
+								<img src="http://app.art-map.co.kr/upload/exhibition/artmap_20191017_95348991.jpg"/>
+							</td>
+							<td>
+								<span>알폰스 무하 Alphonse Mucha</span>
+								<span>마이아트뮤지엄/서울</span>
+								<span>2019-10-24 - 2020-03-01</span>
 							</td>
 							<td>
 								<span>전시중</span>
