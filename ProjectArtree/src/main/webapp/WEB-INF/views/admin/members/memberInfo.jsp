@@ -26,7 +26,7 @@
 	
 	img#boardtop {
 		position : absolute;
-		width : 100%;
+		width : 96vw;
 		height : 540px;
 	}
 	
@@ -127,6 +127,7 @@
 <script type="text/javascript">
 
 	$(document).ready(function(){ 
+		
 		
 		
 	});
