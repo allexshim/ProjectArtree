@@ -10,17 +10,17 @@
 
 <html>
 <head>
-<meta charset="UTF-8">
+<script src="<%= ctxPath%>/resources/js/jquery-3.3.1.min.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 
+<meta charset="UTF-8">
 <style type="text/css">
 @import url(//fonts.googleapis.com/earlyaccess/notosanskr.css);
 
 	body {
 		font-family: 'Noto Sans Kr', sans-serif;
-	}
-	
-	div#detailContainer {
-		
 	}
 	
 	#detailContainer {	
@@ -61,18 +61,22 @@
 		padding-top : 15px;
 	}
 	
-	div#detailContents {
+	div#detailContents, div#extraInfo {
 		width: 80%;
 		margin: 0 auto;
 		padding-top : 20px;
 		padding-bottom: 20px;
 		overflow: hidden; /* div밖으로 이미지가 넘칠 때 해결 방법! 기억해둘것! */
-		font-size :
 	}
 	
-	table#detailTable tr td {
-		padding-top : 2px;
-		padding-bottom :2px;
+	table#detailTable, table#extraInfoTable {
+		width : 95%;
+		margin : 0 auto;
+	}
+	
+	table#detailTable tr td, table#extraInfoTable tr td{
+		padding-top : 4px;
+		padding-bottom :4px;
 		font-size : 12pt;
 	}
 	
@@ -85,14 +89,21 @@
 		content: "";
 	  	display: block;
 		width : 80%;		
-		padding-top : 20px;
 		border-bottom : solid 2px lightgray;
 	}
 	
+	div#myPoster img, div#bigImage img {
+		border-radius: 15px;
+		box-shadow: 5px 5px 5px grey;
+	}
+	
 	div#myPoster, div#myImages {
-		padding-top : 10px;
 		overflow : hidden;
 		font-weight: bold;
+	}
+	
+	div#myImages {
+		padding-top : 10px;
 	}
 	
 	div#myImages h2 {
@@ -109,16 +120,72 @@
 		border-bottom : solid 2px lightgray;
 	}
 	
+	img.thumbNail {
+		border-radius: 15px;
+	}
+	
+	div#myImages div#bigImage {
+		padding-top : 20px;
+	}
+
+	div#myImages div#bigImage .arrow {
+		cursor : pointer;
+		font-size:60px; 
+		font-weight:bold; 
+		color : black;
+		text-decoration: none;
+	}
+	
+	div#myImages div#bigImage a {
+		vertical-align: middle;
+	}
+	
+	.item > img  {
+		width : 400px;
+		height : 400px !important;
+	}
+	
+	.item {
+		display : inline-block;
+	}
+	
+	table#extraInfoTable tr td:first-child {
+		width : 80px;
+		font-weight: bold;
+	}
+	
+	div#openBtn {
+		padding-top : 20px;
+		padding-bottom : 20px;
+		overflow : hidden;
+		cursor : pointer;
+	}
 	
 </style>
 
-<script src="<%= ctxPath%>/resources/js/jquery-3.3.1.min.js"></script>
+
 <script type="text/javascript">
 	$(document).ready(function(){ 
 		
+		 $("#myCarousel").carousel({interval: false});
+		
+		 // Enable Carousel Controls
+		  $(".left").click(function(){
+		    $("#myCarousel").carousel("prev");
+		  });
+		  $(".right").click(function(){
+		    $("#myCarousel").carousel("next");
+		  });
+		 
+		 
+		// open 버튼을 클릭한다면 해당 전시회를 '전시중' 상태로 변경한다.
+		$("div#openBtn").click(function(){
+			var exhibitionCode = "${exhibitionCode}"; // 상세 페이지로 넘어올때 해당 전시회의 전시회 코드를 함께 넘긴다.
+			window.location.href="/artree/*.at?exhibitionCode="+exhibitionCode;	
+		}); // end of $("div#openBtn").click -----------------------------
 		
 		
-	})
+	}); // --------------------------------------------------------------
 </script>
 
 </head>
@@ -199,11 +266,51 @@
 		
 		<div id="myImages" align="center">
 			<h2>작품전경</h2> <!--  썸네일 아직 안배워서 일단 이렇게 처리 -->
-			<img width="200px" height="200px" src="<%= ctxPath %>/resources/images/exhibition/poster1.JPG" />
-			<img width="200px" height="200px" src="<%= ctxPath %>/resources/images/exhibition/poster1.JPG" />
-			<img width="200px" height="200px" src="<%= ctxPath %>/resources/images/exhibition/poster1.JPG" />
-		
+			<div>
+				<img class="thumbNail" width="200px" height="200px" src="<%= ctxPath %>/resources/images/exhibition/poster1.JPG" />
+				<img class="thumbNail" width="200px" height="200px" src="<%= ctxPath %>/resources/images/exhibition/poster2.JPG" />
+				<img class="thumbNail" width="200px" height="200px" src="<%= ctxPath %>/resources/images/exhibition/poster2.JPG" />
+			</div>
 			
+		<div id="myCarousel" class="carousel slide"  style="display:inline-block; overflow:hidden;">
+			<div id="bigImage" align="center" style="display:inline-block; vertical-align: middle;">
+			<a class="left" style="display:inline-block;">
+				<i class='fa fa-angle-left arrow'></i>
+			</a>
+			<div class="carousel-inner" role="listbox" style="display:inline-block; width: 500px; overflow:hidden; vertical-align: middle;">
+			    <div class="item active">
+			      <img src="<%= ctxPath %>/resources/images/exhibition/poster1.JPG" alt="" width="400px" height="400px">
+			    </div>
+			    <div class="item">
+			      <img src="<%= ctxPath %>/resources/images/exhibition/poster2.JPG" alt="" width="400px" height="400px">
+			    </div>
+			    <div class="item">
+			      <img src="<%= ctxPath %>/resources/images/exhibition/poster2.JPG" alt="" width="400px" height="400px">
+			    </div>
+			  </div>
+				
+				<a class="right" style="display:inline-block;">
+					<i class='fa fa-angle-right arrow'></i>
+				</a>
+			</div>
+		</div>
+		<div id="extraInfo">
+			<table id="extraInfoTable">
+				<tr>
+					<td>분야</td>
+					<td>설치미술</td>
+				<tr>
+				<tr>
+					<td>태그</td>
+					<td>
+						<span>모던한</span>,
+						<span>현대적인</span>
+					</td>
+				<tr>
+			</table>
+			<div id="openBtn" align="center">
+				<img id="openBtn" src="<%= ctxPath %>/resources/images/board/openDisplyBtn.JPG" />
+			</div>
 		</div>
 	
 	</div>

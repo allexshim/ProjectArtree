@@ -3,7 +3,6 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%
 	String ctxPath = request.getContextPath();
-	// /startSpring
 %>
 
 <!DOCTYPE html>
@@ -19,7 +18,7 @@
 		font-family: 'Noto Sans Kr', sans-serif;
 	}
 	
-	#previewContents {
+	#communityContainer {
 		padding-bottom : 100px;
 	}
 	
@@ -79,13 +78,14 @@
 	
 	/* == 테이블 부분 == */
 	
-	table#previewContents {
+	table#communityContents {
 		width : 90%;
 		margin : 0 auto;
 		border-collapse: collapse;
 	}
 
 	div#contentContainer table td {
+		font-size: 14pt;
 		padding-top : 10px;
 		padding-bottom : 10px; 
 	}
@@ -102,17 +102,26 @@
 	}
 	
 	div#contentContainer table thead td:nth-child(2), div#contentContainer table tbody td:nth-child(2) {
-		width : 40%;
+		width : 35%;
 		text-align: center;
 	}
 	
 	div#contentContainer table thead td:nth-child(3), div#contentContainer table tbody td:nth-child(3) {
-		width : 40%;
+		width : 25%;
 		text-align: center;
 	}
 	
+	div#contentContainer table tbody td:nth-child(2), div#contentContainer table tbody td:nth-child(3) {
+		cursor: pointer;
+	}
+
 	div#contentContainer table thead td:nth-child(4), div#contentContainer table tbody td:nth-child(4) {
 		width : 10%;
+		text-align: center;
+	}
+	
+	div#contentContainer table thead td:nth-child(5), div#contentContainer table tbody td:nth-child(5) {
+		width : 5%;
 		text-align: center;
 	}
 
@@ -153,7 +162,12 @@
 	.pagination a:hover, .pagination span:hover {
 	   text-decoration: underline;
 	}
-		
+	
+	div#goWrite {
+		float : right;
+		padding-right : 7%;
+		cursor : pointer;
+	}
 	
 </style>
 
@@ -183,14 +197,35 @@
 
 		}); // end of $("#searchicon").click()
 		
+		
+		// 리스트의 전시회 이름을 클릭하면 전시회 상세페이지로 이동한다.
+		$("div#contentContainer table tbody td:nth-child(2)").click(function(){
+			
+			var exhibitionCode = "${exhibitionCode}";
+			// 페이지로 들어올 때 전시회 코드도 같이 받아와서, 클릭한 전시회 코드를 넘겨줍니다.
+			window.location.href="/artree/*.at?exhibitionCode="+exhibitionCode;	
+		});
+		
+		// 리스트의 리뷰 제목을 클릭하면 리뷰 상세페이지로 이동한다.
+		$("div#contentContainer table tbody td:nth-child(3)").click(function(){
+			// 글번호를 넘긴다.
+			var no = $(this).prev().prev().text();
+			window.location.href="/artree/communityDetail.at?no="+no;	
+		});
+		
+		// 글쓰기 페이지로 가기
+		$("div#goWrite").click(function(){
+			window.location.href="/artree/addCommunity.at";	
+		});
+		
 	});
 
 </script>
 </head>
 <body>
-	<div id="previewContents">
+	<div id="communityContainer">
 		<div id="imgcontainer">	
-	  		<img id="boardtop" src="<%= ctxPath %>/resources/images/board/boardImage3.jpg" />
+	  		<img id="boardtop" src="<%= ctxPath %>/resources/images/board/boardImage1.jpg" />
 		</div>
 
 		<div id="topText">
@@ -211,12 +246,13 @@
 		</div>
 		
 		<div id="contentContainer">
-			<table id="previewContents">
+			<table id="communityContents">
 				<thead>
 					<tr>
 						<td>No.</td>
 						<td>Exhibition</td>
 						<td>Title</td>
+						<td>WriteDay</td>
 						<td>Read</td>
 					</tr>	
 				</thead>
@@ -225,61 +261,71 @@
 					<tr>
 						<td>1</td>
 						<td>국립현대미술관 50주년 기념전 《광장: 미술과 사회 1900-2019》개최</td>
-						<td>무료 티켓 3장 양도합니다.</td>
+						<td>리뷰제목리뷰제목리뷰제목리목</td>
+						<td>2020-01-10 22:10</td>
 						<td>5</td>
 					</tr>
 					<tr>
 						<td>2</td>
 						<td>국립현대미술관 50주년 기념전</td>
-						<td>1월 30일 공연 같이 가실 분 구합니다.</td>
+						<td>리뷰제목리뷰제목리뷰제목</td>
+						<td>2020-01-10 22:10</td>
 						<td>5</td>
 					</tr>
 					<tr>
 						<td>3</td>
 						<td>가나아트 컬렉션 상설전 시대유감 時代遺憾 </td>
-						<td>20일 티켓 2장 판매합니다.</td>
+						<td>리뷰제목리뷰제목리뷰제목제목리뷰제</td>
+						<td>2020-01-10 22:10</td>
 						<td>5</td>
 					</tr>
 					<tr>
 						<td>4</td>
 						<td>국립현대미술관 50주년 기념전</td>
-						<td>양도게시판양도게시판양도게시판양도게시판</td>
+						<td>리뷰제목리뷰제목리뷰제목</td>
+						<td>2020-01-10 22:10</td>
 						<td>5</td>
 					</tr>
 					<tr>
 						<td>5</td>
 						<td>국립현대미술관 50주년 기념전</td>
-						<td>도게시판양도게시판양도게시판양도게시판</td>
+						<td>리뷰제목리뷰제목리뷰제목</td>
+						<td>2020-01-10 22:10</td>
 						<td>5</td>
 					</tr>
 					<tr>
 						<td>6</td>
 						<td>국립현대미술관 50주년 기념전</td>
-						<td>도게시판양도게시판양도게시판양도게시판</td>
+						<td>리뷰제목리뷰제목리뷰제목</td>
+						<td>2020-01-10 22:10</td>
 						<td>5</td>
 					</tr>
 					<tr>
 						<td>7</td>
 						<td>국립현대미술관 50주년 기념전</td>
-						<td>도게시판양도게시판양도게시판양도게시판</td>
+						<td>리뷰제목리뷰제목리뷰제목</td>
+						<td>2020-01-10 22:10</td>
 						<td>5</td>
 					</tr>
 					<tr>
 						<td>8</td>
 						<td>국립현대미술관 50주년 기념전</td>
-						<td>도게시판양도게시판양도게시판양도게시판</td>
+						<td>리뷰제목리뷰제목리뷰제목</td>
+						<td>2020-01-10 22:10</td>
 						<td>5</td>
 					</tr>
 					<tr>
 						<td>9</td>
 						<td>국립현대미술관 50주년 기념전</td>
-						<td>도게시판양도게시판양도게시판양도게시판</td>
+						<td>리뷰제목리뷰제목리뷰제목</td>
+						<td>2020-01-10 22:10</td>
 						<td>5</td>
 					</tr>
 					<tr>
 						<td>10</td>
 						<td>국립현대미술관 50주년 기념전</td>
-						<td>도게시판양도게시판양도게시판양도게시판</td>
+						<td>리뷰제목리뷰제목리뷰제목</td>
+						<td>2020-01-10 22:10</td>
 						<td>5</td>
 					</tr>
 				</tbody>
@@ -290,6 +336,10 @@
 		<!-- 페이지 바 여유되면 넣겠습니다........ㅠㅠㅠㅠㅠㅠㅠㅠㅠ-->
 		<div class="pagination" align="center">
 		<%-- 	${pageBar} --%>
+		</div>
+		
+		<div id="goWrite">
+			<img src="<%= ctxPath %>/resources/images/board/writeBtn.JPG" />
 		</div>
 		
 	</div>

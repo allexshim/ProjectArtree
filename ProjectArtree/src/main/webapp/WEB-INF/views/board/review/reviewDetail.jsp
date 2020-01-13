@@ -8,7 +8,6 @@
 <!DOCTYPE html>
 <html>
 <head>
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 <meta charset="UTF-8">
 
 <style type="text/css">
@@ -50,6 +49,11 @@
 		padding-top : 10px;
 	}
 	
+	div#myPoster img {
+		border-radius: 15px;
+		box-shadow: 5px 5px 5px grey;
+	}
+	
 	div#myPoster:after {
 		content: "";
 	  	display: block;
@@ -64,6 +68,15 @@
 		padding-bottom: 20px;
 		border-bottom : solid 2px lightgray;
 		overflow: hidden; /* div밖으로 이미지가 넘칠 때 해결 방법! 기억해둘것! */
+	}
+	
+	div#detailContents h3 {
+		padding-left : 2.5%;
+	}
+	
+	table#detailTable {
+		width: 95%;
+		margin: 0 auto;
 	}
 	
 	table#detailTable tr td {
@@ -83,6 +96,7 @@
 
 	div#myBtns {
 		float : right;
+		padding-right : 22px;
 	}
 	
 	div#myBtns img {
@@ -105,6 +119,64 @@
 		cursor : pointer;
 	}
 	
+	div#toListBtn {
+		padding-top : 20px;
+		padding-bottom : 20px;
+		overflow : hidden;
+		cursor : pointer;
+	}
+	
+	/* 댓글 부분 */
+	div#myComments {
+		width : 88%;
+		padding-left : 165px;
+		padding-top : 20px;
+	}
+	
+	div#myComments img {
+		padding : 10px;
+		padding-bottom : 0;
+	}
+	
+	.commentWriter {
+		width:120px; 
+		font-weight:bold;
+		font-size : 12pt;
+	}
+	
+	.commentContents {
+		padding-bottom : 10px;
+	}
+	
+	/* 새 댓글 작성하기 */
+	form#newComment {
+		overflow:hidden;
+	}
+	
+	input#commentWriter {
+		border:none;
+		width:120px; 
+		font-weight:bold;
+		font-size : 12pt;
+		padding-bottom : 5px;
+	}
+	
+	textarea#commentContents {
+		resize : none;
+		border-radius: 5px;
+		width : 100%;
+	}
+	
+	img#addComment {
+		padding-top : 5px;
+		padding-right : 0px;
+		float : right;
+		cursor : pointer;
+	}
+	
+	#commentModifyBtn, #commentDeleteBtn {
+		cursor : pointer;
+	}
 	
 </style>
 
@@ -112,15 +184,52 @@
 <script type="text/javascript">
 	$(document).ready(function(){ 
 		
+		// 이전글 클릭시 이벤트
 		$(".prev").click(function(){
-			//window.location.href="/artree/board/review/search.artree?;
 			
 		}) // 이전글 클릭시 이벤트 -------------
 		
+		
+		// 다음글 클릭시 이벤트
 		$(".next").click(function(){
 			
 			
 		}) // 다음글 클릭시 이벤트 --------------
+		
+		// 글목록으로 돌아가기
+		$("#toListBtn").click(function(){
+			window.location.href="/artree/reviewList.at";
+		});
+		
+// 댓글 ------------------------------------------------
+		
+		// 댓글 수정, 삭제하기
+		$("#commentModifyBtn").click(function(){
+			var commentNo = $(this).next().next().text();
+			window.location.href="*.at?commentNo="+commentNo;
+		});
+		
+		$("#commentDeleteBtn").click(function(){
+			var commentNo = $(this).next().text();
+			window.location.href="*.at?commentNo="+commentNo;
+		});
+
+		// 새 댓글 등록하기
+		$("img#addComment").click(function(){
+			
+			if($("#commentContents").val().trim() == ""){
+				alert("댓글 내용을 입력하세요!");
+				$("#commentContents").focus();
+			}
+			else {
+				var frm = document.newComment;
+				frm.method = "POST";
+				frm.action = "*.at";
+				frm.submit();
+			}
+			
+		});
+		//----------------------------------------------------
 		
 	}); // end of $(document).ready -------------------------------------
 
@@ -184,6 +293,56 @@
 			</div>
 		</div>
 		
+		<div id="myComments">
+			<table>
+			<!--  이 부분이 c:foreach로 묶이게 됩니다. -->
+				<tr>
+					<td class="commentWriter">댓글작성자이름</td>
+					<td class="commentWriteDate">댓글작성일자</td>
+				</tr>
+				<tr>
+					<td class="commentContents" colspan="2">
+						댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용
+						댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용
+						<%-- <c:if test="${댓글작성자아이디 == 현재로그인한회원 아이디 }"> --%>
+						<div align="right">
+							<img id="commentModifyBtn" src="<%= ctxPath %>/resources/images/board/modifyBtn.JPG" />
+							<img id="commentDeleteBtn" src="<%= ctxPath %>/resources/images/board/deleteBtn.JPG" />
+							<span class="commentNo" style="display:none">댓글번호</span>
+						</div>
+						<%-- </c:if> --%>
+					</td>
+				</tr>
+			<!--  이 부분이 c:foreach로 묶이게 됩니다. -->	
+				<tr>
+					<td class="commentWriter">댓글작성자이름</td>
+					<td class="commentWriteDate">댓글작성일자</td>
+				</tr>
+				<tr>
+					<td class="commentContents" colspan="2">
+						댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용
+						댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용
+					</td>
+				</tr>
+				<tr>
+					<td class="commentWriter">댓글작성자이름</td>
+					<td class="commentWriteDate">댓글작성일자</td>
+				</tr>
+				<tr>
+					<td class="commentContents" colspan="2">
+						댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용
+						댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용
+					</td>
+				</tr>
+			</table>
+			
+			<form id="newComment" name="newComment">
+				<input id="commentWriter" name="commentWriter" type="text" value="심예은" readonly="readonly"/><br/>
+				<textarea id="commentContents" name="commentContents" placeholder="댓글 내용을 입력하세요."></textarea>
+				<img id="addComment" src="<%= ctxPath %>/resources/images/board/registerBtn.JPG" />
+			</form>
+		</div>
+		
 		<div id="preNext">
 			<table>
 				<tr>
@@ -197,6 +356,9 @@
 					<td class="next">다음글제목다음글제목다음글제목다음글제목다음글제목다음글제목</td>
 				</tr>
 			</table>
+		</div>
+		<div id="toListBtn" align="center">
+			<img id="toListBtn" src="<%= ctxPath %>/resources/images/board/toListBtn.JPG" />
 		</div>
 	</div>
 </body>

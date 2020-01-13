@@ -1,13 +1,17 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
+<%
+	String ctxPath = request.getContextPath();
+%>
     <style type="text/css">
     
      html, body {
             width: 100%;
             height: 100%;
-            background-color: #fff;
+            
         }
     
         .carousel-inner, .carousel, .item, .main-container, .fill {
@@ -84,6 +88,53 @@
 			margin: 20px;
 		}
 		
+		.footer	{
+		   z-index: 2;
+		   position: fixed;
+		   left: 0;
+		   bottom: 0;
+		   width: 100%;
+		   color: white;
+		   text-align: center;
+		
+		}
+		
+		.main-logo {
+		  color: white;
+		  text-decoration: bold;
+		  padding : 5%;
+		  position: absolute;
+		  left: 25%;
+		  top: 30%;
+		  width: 50%;
+		  height: 30%;
+		  text-align: center;
+		  font-size: 50px;
+		}
+		
+		.main-search {
+		  background-color: black;
+		  padding : 5%;
+		  position: absolute;
+		  left: 25%;
+		  top: 60%;
+		  width: 50%;
+		  height: 30%;
+		  text-align: center;
+		  font-size: 18px;
+		}
+		
+		.search-input {
+			display: inline-block;
+			width: 100%;
+			height: 50px; 
+		}
+		
+		.inputdiv {
+			margin-top: -10px;
+		}
+		
+		
 	</style>
 	
 	<script type="text/javascript">
@@ -93,26 +144,58 @@
             $myCarousel.carousel({
                 interval: false
             });
-            
            
-            
             // scroll slides on mouse scroll
             $myCarousel.bind('mousewheel DOMMouseScroll', function (e) {
                 var getActiveIdx = $myCarousel.find(".carousel-inner>.item.active").index();
                 if (e.originalEvent.wheelDelta > 0 || e.originalEvent.detail < 0) {
                     if (getActiveIdx === 0){
+                    	$("#myheader").css("display", "none");
                     	return;
                     	}
+                    else {
+                    	$("#myheader").css("display", "block");
+                    }
                     $(this).carousel('prev');
                     
                 } else {
                     if (getActiveIdx === 3){
+                    	$("#myheader").css("display", "block");
                     	return;
                     	}
+                    if (getActiveIdx === 2){
+                    	$("#myheader").css("display", "block");
+                    	
+                    	}
+                    if (getActiveIdx === 1){
+                    	$("#myheader").css("display", "block");
+                    	
+                    	}
+                    if (getActiveIdx === 0){
+                    	$("#myheader").css("display", "none");
+                    	
+                    	}
+                    if (getActiveIdx === -1){
+                    	$("#myheader").css("display", "none");
+                    	
+                    	}
+                    
                     $(this).carousel('next');
                 }
             });
-
+            
+            var getActiveIdx = $myCarousel.find(".carousel-inner>.item.active").index();
+            if (getActiveIdx === 0){
+            	$("#myheader").css("display", "none");
+            	
+            	}
+            
+            else {
+            	$("#myheader").css("display", "block");
+            	
+            	}
+            
+/* 
             //scroll slides on swipe for touch enabled devices
 
             $("#myCarousel").on("touchstart", function (event) {
@@ -130,7 +213,7 @@
                     $(this).off("touchmove");
                 });
             });
-
+*/
         });
 
     </script>
@@ -138,8 +221,7 @@
     
 	    <div class="slide-wrapper">
 		    <div class="main-container">
-		        <div id="myCarousel" class="carousel slide">
-		            <!-- Indicators -->
+		        <div id="myCarousel" class="carousel slide">		            <!-- Indicators -->
 		            <ol class="carousel-indicators">
 		                <li data-target="#myCarousel" data-slide-to="0" class="active list-text">main</li>
 		                <li data-target="#myCarousel" data-slide-to="1" class="list-text">notice</li>
@@ -152,32 +234,47 @@
 		
 		            <div class="carousel-inner">
 		                <div class="item active">
+		                	
+		                	<div class="fill" style="margin-top:0; background-image: url('<%= ctxPath%>/resources/images/main/mainImg.jpg')">
+		                		
+		                		<div class="main-logo">
+		                			arTree
+		                		</div>
+		                		
+		                		<div class="main-search">
+		                			<div class="inputdiv">
+										<input class="search-input"/>
+										<input class="search-input"/>										   			
+		                			</div>
+		                		</div>
+		                		
+		                	</div>
 		                
-			                
-							
-		                    <div class="fill"
-		                         style="margin-top:0; background-color: blue; background-image:"></div>
 		                </div>
-		                <div class="item">
 		                
-			                
-							
-		                    <div class="fill"
-		                         style="background-color:orange;"></div>
+		                <div class="item">
+		            		
+		                    <div class="fill" style="">
+		                    
+		                    </div>
+		                
 		                </div>
+		                
 		                <div class="item">
 		                	
-		                	
-		                	
-		                    <div class="fill"
-		                         style="background-color:yellow;"></div>
+		                    <div class="fill" style="">
+		                    
+		                    </div>
+		                
 		                </div>
+		                
 		                <div class="item">
 		                	
-		                    <div class="fill"
-		                         style="background-color:green;"></div>
+		                    <div class="fill" style="">
+		                    
+		                    </div>
 		                         
-	                        <div class="footer">
+	                       <div class="footer">
 							  <p>Footer</p>
 							</div>
 		                </div>

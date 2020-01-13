@@ -13,7 +13,7 @@ public class MainController {
 	
 	@RequestMapping(value="/mainartree.at")
 	public String mainartree() {
-		return "main/mainartree.tiles";
+		return "main/mainartree.maintiles";
 	}
 	
 }
