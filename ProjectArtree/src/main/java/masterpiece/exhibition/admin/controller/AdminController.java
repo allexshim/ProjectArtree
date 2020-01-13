@@ -17,7 +17,12 @@ public class AdminController {
 	@RequestMapping(value="/members.at")
 	public String members() {
 		
-		return "admin/members.tiles";
+		return "admin/members/members.tiles";
+	}
+	
+	@RequestMapping(value="/memberInfo.at")
+	public String memberInfo() {
+		return "admin/members/memberInfo.tiles";
 	}
 	
 	@RequestMapping(value="/registerformList.at")
