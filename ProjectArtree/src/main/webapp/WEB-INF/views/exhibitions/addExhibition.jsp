@@ -623,7 +623,8 @@
 				<tr>
 					<td>분야</td>
 					<td>
-						<select id="category" name="category">
+						<select id="category" name="category" >
+							<option value=""></option>
 							<option value="media">미디어</option>
 							<option value="design">디자인</option>
 							<option value="drawing">회화</option>
