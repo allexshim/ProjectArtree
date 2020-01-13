@@ -622,7 +622,17 @@
 			<table id="extraInfoTable">
 				<tr>
 					<td>분야</td>
-					<td><input type="text" name="category" id="category" /></td>
+					<td>
+						<select id="category" name="category">
+							<option value="media">미디어</option>
+							<option value="design">디자인</option>
+							<option value="drawing">회화</option>
+							<option value="picture">사진</option>
+							<option value="sculpture">조각</option>
+							<option value="installation">설치미술</option>
+							<option value="crafts">공예</option>
+						</select>
+					</td>
 				<tr>
 				<tr>
 					<td>태그</td>
