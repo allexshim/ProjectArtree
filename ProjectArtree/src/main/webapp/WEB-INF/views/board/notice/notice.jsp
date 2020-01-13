@@ -16,7 +16,6 @@
 
 	body {
 		font-family: 'Noto Sans Kr', sans-serif;
-		padding-left : 60px;
 	}
 	
 	#reviewContainer {
@@ -31,8 +30,8 @@
 	
 	div#topText {
 		padding-top : 610px;
-		width : 100px;
-		text-align: center;
+		width : 500px;
+		text-align: left;
 		padding-left : 60px;
 	}
 	
@@ -42,6 +41,19 @@
 	
 	div#topText > h1 {
 		font-size: 50px;
+	}
+	
+	div#topText > h4 {
+		display : inline-block;
+		margin-right : 30px;
+		padding-top : 20px;
+		font-weight : bold;
+		color : gray;
+		cursor : pointer;
+	} 
+	
+	div#topText .current {
+		color : black;
 	}
 	
 	/* 공지 추가, 삭제 버튼 */	
@@ -83,10 +95,10 @@
 	#addBtn {
 		cursor : pointer;
 	}
-	
+
 	/* 공지 내용 */
 	div#noticeList {
-		padding-top : 60px;
+		padding-top : 40px;
 		padding-left : 60px;
 		padding-bottom : 100px;
 	}
@@ -115,6 +127,19 @@
 		$(".noticeContent").hide();
 		$("#addNoticeContainer").hide();
 		$("#backNotice").hide();
+		
+		// 공지사항/자주묻는 질문 버튼 hover 효과
+		$("div#topText > h4").hover(function(){
+			$(this).css('opacity','0.8');
+		}, function(){
+			$(this).css('opacity','1.0');
+		});
+		
+		// 공지사항/자주묻는 질문 버튼 선택 
+		$("div#topText > h4").click(function(){
+			$("div#topText > h4").removeClass("current");
+			$(this).addClass("current");
+		});
 		
 		// 공지 추가/삭제 버튼 hover 효과
 		$("div#btns img").hover(function(){
@@ -208,6 +233,8 @@
 		<div id="topText">
 			<span style="text-align:center">Membership</span>
 			<h1 style="margin:0;">Notice</h1>
+			<h4 class="current">공지사항</h4>
+			<h4>자주 묻는 질문</h4>
 		</div>
 		
 		<div id="btns" align="right">
@@ -236,7 +263,7 @@
 				 <i class="arrow fas fa-chevron-down"></i>
 				 <span class="noticeNo" style="display:none;">"$ {noticeNo}"</span>
 				 </span>
-				<div class="noticeContent">
+				<div class="noticeContent" style="width:80%;">
 					공지사항에 대한 자세한 설명을 볼수있습니다. 공지사항에 대한 자세한 설명을 볼수있습니다. 공지사항에 대한 자세한 설명을 볼수있습니다.
 					공지사항에 대한 자세한 설명을 볼수있습니다. 공지사항에 대한 자세한 설명을 볼수있습니다.
 					공지사항에 대한 자세한 설명을 볼수있습니다.공지사항에 대한 자세한 설명을 볼수있습니다.공지사항에 대한 자세한 설명을 볼수있습니다.

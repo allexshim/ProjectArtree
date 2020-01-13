@@ -42,6 +42,10 @@
 ////////////////////////////////// flip card CSS //////////////////////////////////
 
 */
+#members, #exhibitions, #statistics {
+	cursor: pointer;
+}
+
 .flip-card {
   background-color: transparent;
   width: 100%;
@@ -95,6 +99,32 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+<script type="text/javascript">
+	
+	$(document).ready(function(){
+		
+		$("#members").click(function(){
+			
+			window.location.href="/artree/members.at";
+			
+		});
+		
+		$("#exhibitions").click(function(){
+				
+			window.location.href="/artree/registerformList.at";
+			
+		});
+			
+		$("#statistics").click(function(){
+			
+			window.location.href="/artree/bySales.at"
+			
+		});
+		
+	});
+	
+</script>
 
 </head>
 <body>

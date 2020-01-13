@@ -154,7 +154,7 @@
 		font-weight: bold;
 	}
 	
-	div#openBtn {
+	#openBtn {
 		padding-top : 20px;
 		padding-bottom : 20px;
 		overflow : hidden;
@@ -179,10 +179,10 @@
 		 
 		 
 		// open 버튼을 클릭한다면 해당 전시회를 '전시중' 상태로 변경한다.
-		$("div#openBtn").click(function(){
+		$("#openBtn").click(function(){
 			var exhibitionCode = "${exhibitionCode}"; // 상세 페이지로 넘어올때 해당 전시회의 전시회 코드를 함께 넘긴다.
 			window.location.href="/artree/*.at?exhibitionCode="+exhibitionCode;	
-		}); // end of $("div#openBtn").click -----------------------------
+		}); // end of $("#openBtn").click -----------------------------
 		
 		
 	}); // --------------------------------------------------------------
@@ -308,7 +308,7 @@
 					</td>
 				<tr>
 			</table>
-			<div id="openBtn" align="center">
+			<div align="center">
 				<img id="openBtn" src="<%= ctxPath %>/resources/images/board/openDisplyBtn.JPG" />
 			</div>
 		</div>

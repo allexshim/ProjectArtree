@@ -45,7 +45,6 @@
 		display : inline-block;
 		width : 45%;
 		height : 800px;
-		border : solid 1px red;
 		overflow:auto;
 	}
 	
@@ -69,12 +68,15 @@
 	#exhibitionList::-webkit-scrollbar-thumb:hover {
 	  background: #555; 
 	}
+
 	/* 스크롤 바 custom --------------------------------------------------*/
 	
 	#exhibitionList img {
 		width : 200px;
 		height : 250px;
-		padding : 0;
+		padding : 13px;
+		padding-top:10px;
+		vertical-align: top;
 	}
 	
 	.infoContainer {
@@ -82,6 +84,15 @@
 		padding-top : 10px;
 		width : 200px;
 		height : 250px;
+	}
+	
+	.singleExhibition {
+		vertical-align: middle;
+	}
+	
+	.singleExhibition .title {
+		font-size : 12pt;
+		font-weight : bold;
 	}
 	
 	/* 검색조건 선택 ------------------------------------------------------*/
@@ -110,6 +121,85 @@
 		height : 800px;
 	}
 	
+	/* 달력 ------------------------------------------------*/
+	div#date {
+		display : none;
+		padding-left : 30px;
+		padding-top : 100px;
+		margin : 0 auto;
+		vertical-align: top;
+	}
+	
+	#testDatepicker > div {
+		width : 500px;
+		height : 550px;
+	}
+	
+	#testDatepicker tr {
+		font-size : 16pt;
+		padding-top : 10px;
+		padding-bottom : 10px;
+	}
+
+	#testDatepicker .ui-datepicker-title {
+		font-size : 18pt;
+	}
+	
+	/* 달력 끝 ------------------------------------------------*/
+	
+	/* 테마 차트 ------------------------------------------------ */
+	div#theme {
+		display : none;
+		vertical-align: top;
+		margin : 0 auto;
+		padding-left : 30px;
+	}
+	
+	div#theme > themeContainer {
+		display : inline-block;
+	}
+	
+	.highcharts-figure, .highcharts-data-table table {
+	    min-width: 320px; 
+	    max-width: 800px;
+	    margin: 1em auto;
+	}
+
+	.highcharts-data-table table {
+		font-family: Verdana, sans-serif;
+		border-collapse: collapse;
+		border: 1px solid #EBEBEB;
+		margin: 10px auto;
+		text-align: center;
+		width: 100%;
+		max-width: 500px;
+	}
+	
+	.highcharts-data-table caption {
+	    padding: 1em 0;
+	    font-size: 1.2em;
+	    color: #555;
+	}
+	
+	.highcharts-data-table th {
+		font-weight: 600;
+	    padding: 0.5em;
+	}
+	
+	.highcharts-data-table td, .highcharts-data-table th, .highcharts-data-table caption {
+	    padding: 0.5em;
+	}
+	
+	.highcharts-data-table thead tr, .highcharts-data-table tr:nth-child(even) {
+	    background: #f8f8f8;
+	}
+	
+	.highcharts-data-table tr:hover {
+	    background: #f1f7ff;
+	}
+	
+/* --------------- 테마 차트 ------------------------------------------------- */
+
 </style>
 
 <%-- EXHIBITION LIST SCRIPT START --%>
@@ -118,18 +208,84 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
+<!-- word cloud chart 관련 -->
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/wordcloud.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
+<script src="https://code.highcharts.com/modules/export-data.js"></script>
+<script src="https://code.highcharts.com/modules/accessibility.js"></script>
+
+<link rel="stylesheet" type="text/css" href="<%=ctxPath%>/resources/jquery-ui-1.12.1.custom/jquery-ui.css" />
+<script type="text/javascript" src="<%=ctxPath%>/resources/jquery-ui-1.12.1.custom/jquery-ui.js"></script>
 <script type="text/javascript">
 
 	$(document).ready(function(){
-
+		
+		$("#testDatepicker").datepicker({			
+			dayNamesMin : ['월','화','수','목','금','토','일'],			
+			monthNames: ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월']
+		});	
+		
+		// 화면이 로딩되면 지역별로 전시회 리스트를 가져오는 ajax function을 실행시킨다.
+		// getListByLocation();
+		
+		// 지역별별 검색 클릭
+		$(".byLocation").click(function(){
+			$(".condition").each(function(){
+				$(this).removeClass("currentCondition");
+			});
+			$(this).addClass("currentCondition");
+			getListByLocation();
+		});
+		
+		// 날짜별 검색 클릭
+		$(".byDate").click(function(){
+			$(".condition").each(function(){
+				$(this).removeClass("currentCondition");
+			});
+			$(this).addClass("currentCondition");
+			getListByDate();
+		});
+		
+		// 테마별 검색 클릭
+		$(".byTheme").click(function(){
+			$(".condition").each(function(){
+				$(this).removeClass("currentCondition");
+			});
+			$(this).addClass("currentCondition");
+			getListByTheme();
+		});
 		
 	}); // end of document.ready -----------------------------------------------
 	
-	<!--  나중에 exhDetail함수에 전시회 코드를 parameter로 넣습니다. -->
+	// 지역별로 리스트를 가져오는 함수
+	function getListByLocation(){
+		$("#date").css('display','none');
+		$("#theme").css('display','none');
+		$("#map").css('display','inline-block');
+		// ajax.........
+	}; //----------------------------------------
+	
+	// 날짜별로 리스트를 가져오는 함수
+	function getListByDate(){
+		$("#map").css('display','none');
+		$("#theme").css('display','none');
+		$("#date").css('display','inline-block');
+		// ajax....
+	} //----------------------------------------
+	
+	// 테마별로 리스트를 가져오는 함수
+	function getListByTheme(){
+		$("#map").css('display','none');
+		$("#date").css('display','none');
+		$("#theme").css('display','inline-block');
+		// ajax ........
+	} //----------------------------------------
+	
+	// 나중에 exhDetail함수에 전시회 코드를 parameter로 넣습니다.
 	function exhDetail(){ // .at?code=code 와 같이 전송해서 해당 이벤트의 전시회 상세페이지로 이동합니다.
 		location.href="<%= ctxPath%>/exhDetail.at";
 	}
-
 </script>
 
 <div id="container_exhibition">
@@ -139,9 +295,9 @@
 	</div>
 	
 	<div id="searchCondition" align="center">
-		<span class="currentCondition">지역별</span>
-		<span>날짜별</span>
-		<span>테마별</span>
+		<span class="condition byLocation currentCondition">지역별</span>
+		<span class="condition byDate">날짜별</span>
+		<span class="condition byTheme">테마별</span>
 	</div>
 	
 	<div id="exhibitionList">
@@ -156,7 +312,7 @@
 		<div class="singleExhibition">
 			<img src="<%= ctxPath%>/resources/images/exhibition/artmap_20200102_9426350.jpg" />
 			<span class="infoContainer">
-				<span class="title">박기훈 초대전 : 공존 (共存)박기훈 초대전 : 공존 (共存박기훈 초대전 : 공존 (共存)박기훈 초대전 : 공존 (共存</span><br/><br/>
+				<span class="title">박기훈 초대전 : 공존 (共存)</span><br/><br/>
 				<span class="gallery">갤러리화이트원/서울</span><br/><br/>
 				<span class="period">2020.01.15 - 2020.02.12</span><br/>
 			</span>
@@ -172,7 +328,7 @@
 		<div class="singleExhibition">
 			<img src="<%= ctxPath%>/resources/images/exhibition/artmap_20200102_9426350.jpg" />
 			<span class="infoContainer">
-				<span class="title">박기훈 초대전 : 공존 (共存)박기훈 초대전 : 공존 (共存박기훈 초대전 : 공존 (共存)박기훈 초대전 : 공존 (共存</span><br/><br/>
+				<span class="title">박기훈 초대전 : 공존 (共存)</span><br/><br/>
 				<span class="gallery">갤러리화이트원/서울</span><br/><br/>
 				<span class="period">2020.01.15 - 2020.02.12</span><br/>
 			</span>
@@ -180,7 +336,7 @@
 		<div class="singleExhibition">
 			<img src="<%= ctxPath%>/resources/images/exhibition/artmap_20200102_9426350.jpg" />
 			<span class="infoContainer">
-				<span class="title">박기훈 초대전 : 공존 (共存)박기훈 초대전 : 공존 (共存박기훈 초대전 : 공존 (共存)박기훈 초대전 : 공존 (共存</span><br/><br/>
+				<span class="title">박기훈 초대전 : 공존 (共存)</span><br/><br/>
 				<span class="gallery">갤러리화이트원/서울</span><br/><br/>
 				<span class="period">2020.01.15 - 2020.02.12</span><br/>
 			</span>
@@ -196,6 +352,13 @@
 	</div>	
 	
 	<div id="map"></div>
+	<div id="date">
+		<div id="testDatepicker"></div>									
+	</div>
+	<div id="theme">
+		<div id="themeContainer"></div>
+	</div>
+		
 </div>
 
 <!-- 카카오 지도 API -->
@@ -233,4 +396,54 @@
         clusterer.addMarkers(markers); 
     });*/
 	/* ----------------------- 카카오 지도 API -----------------------------*/
+	
+	/* ----------- 테마별 word chart --------------------------------------------*/
+	
+	// 아래 text는 샘플 텍스트이므로 추후 수정
+	var text = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean bibendum erat ac justo sollicitudin, quis lacinia ligula fringilla. Pellentesque hendrerit, nisi vitae posuere condimentum, lectus urna accumsan libero, rutrum commodo mi lacus pretium erat. Phasellus pretium ultrices mi sed semper. Praesent ut tristique magna. Donec nisl tellus, sagittis ut tempus sit amet, consectetur eget erat. Sed ornare gravida lacinia. Curabitur iaculis metus purus, eget pretium est laoreet ut. Quisque tristique augue ac eros malesuada, vitae facilisis mauris sollicitudin. Mauris ac molestie nulla, vitae facilisis quam. Curabitur placerat ornare sem, in mattis purus posuere eget. Praesent non condimentum odio. Nunc aliquet, odio nec auctor congue, sapien justo dictum massa, nec fermentum massa sapien non tellus. Praesent luctus eros et nunc pretium hendrerit. In consequat et eros nec interdum. Ut neque dui, maximus id elit ac, consequat pretium tellus. Nullam vel accumsan lorem.';
+	var lines = text.split(/[,\. ]+/g),
+	    data = Highcharts.reduce(lines, function (arr, word) {
+	        var obj = Highcharts.find(arr, function (obj) {
+	            return obj.name === word;
+	        });
+	        if (obj) {
+	            obj.weight += 1;
+	        } else {
+	            obj = {
+	                name: word,
+	                weight: 1
+	            };
+	            arr.push(obj);
+	        }
+	        return arr;
+	    }, []);
+	
+	/*
+	data ~ 예시 배열 : 아래같은 데이터 배열을 ajax로 들고와서 아래 data에 넣어주면 될듯!
+	0: {name: "Lorem", weight: 1}
+	1: {name: "ipsum", weight: 1}
+	*/
+	
+	Highcharts.chart('themeContainer', {
+	    accessibility: {
+	        screenReaderSection: {
+	            beforeChartFormat: ''
+	        }
+	    },
+	    chart: {
+	        type: 'String',
+	        width: 500,
+	        height: 800,
+	    },
+	    series: [{
+	        type: 'wordcloud',
+	        data: data,
+	        name: 'Occurrences'
+	    }],
+	    title: {
+	        text: ''
+	    }
+	});
+	
+	/* ------------------------------------------------------------------------ */
 </script>
