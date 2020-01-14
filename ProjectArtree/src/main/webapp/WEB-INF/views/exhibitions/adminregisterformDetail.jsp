@@ -150,8 +150,12 @@
 	}
 	
 	table#extraInfoTable tr td:first-child {
-		width : 80px;
+		width : 160px;
 		font-weight: bold;
+	}
+	
+	#extraInfoTable > tbody > tr > td:nth-child(2) {
+		font-weight: normal;
 	}
 	
 	#openBtn {
@@ -296,6 +300,42 @@
 		</div>
 		<div id="extraInfo">
 			<table id="extraInfoTable">
+				<tr><!-- 이미지 1타이틀 부터 기타 관람 제한까지는 null값이 허용됩니다. 이 경우 null이면 '없음'으로 표기 -->
+					<td>이미지 1 타이틀</td>
+					<td>타이틀타이틀타이틀타이틀타이틀타이틀</td>
+				</tr>
+				<tr>
+					<td>이미지 1 설명</td>
+					<td>설명설명설명설명설명설명설명ㅍㅍㅍ설명</td>
+				</tr>
+				<tr>
+					<td>이미지 2 타이틀</td>
+					<td>타이틀타이틀타이틀타이틀타이틀타이틀</td>
+				</tr>
+				<tr>
+					<td>이미지 2 설명</td>
+					<td>설명설명설명설명설명설명설명ㅍㅍㅍ설명</td>
+				</tr>
+				<tr>
+					<td>이미지 3 타이틀</td>
+					<td>타이틀타이틀타이틀타이틀타이틀타이틀</td>
+				</tr>
+				<tr>
+					<td>이미지 3 설명</td>
+					<td>설명설명설명설명설명설명설명</td>
+				</tr>
+				<tr>
+					<td>식음료 반입 가능 여부</td>
+					<td>병에 든 음료만 가능</td>
+				</tr>
+				<tr>
+					<td>촬영 가능 여부</td>
+					<td>DSLR 카메라 반입 불가</td>
+				</tr>
+				<tr>
+					<td>기타 관람 제한 사항</td>
+					<td>유모차 반입 불가</td>
+				</tr>
 				<tr>
 					<td>분야</td>
 					<td>설치미술</td>

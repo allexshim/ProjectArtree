@@ -93,7 +93,7 @@
 	}
 	
 	table#detailTable tr td:first-child {
-		width : 100px;
+		width : 160px;
 		font-weight: bold;
 	}
 	
@@ -116,7 +116,7 @@
 	
 	div#myPoster img, div#bigImage img {
 		border-radius: 15px;
-		box-shadow: 5px 5px 5px grey;
+		/* box-shadow: 5px 5px 5px grey; */
 	}
 	
 	div#myPoster, div#myImages {
@@ -161,11 +161,6 @@
 		padding-top : 20px;
 	}
 	
-	div#myImages div#bigImage .active {
-		margin-left : 50px;
-		margin-right : 50px;
-	}
-	
 	div#myImages div#bigImage .arrow {
 		cursor : pointer;
 		font-size:60px; 
@@ -180,7 +175,7 @@
 	}
 	
 	table#extraInfoTable tr td:first-child {
-		width : 80px;
+		width : 170px;
 		font-weight: bold;
 	}
 	
@@ -290,9 +285,46 @@
 		padding-top:3px;
 	}
 	
+	#image-wrap > div.item.active > img {
+		height : 100%;
+		width : 100%;
+	}
+	
+	#image-wrap > div.item.active {
+		height : 100%;
+		width : 100%;
+	}
+	
+	/* 관련 정보 부분 */
+	.extraInfo {
+		width : 100%;
+	}
+	
 	/* 태그 등록 부분 */
 	div#selectTag {
 		display : none;
+		width : 80%;
+		margin : 0 auto;
+		border-collapse: collapse;
+		margin-left : 200px;
+		border : solid 1px gray;
+		border-top : solid 3px black;
+		text-align: center;
+		border-radius: 5px;
+	}
+	
+	div#selectTag > div {
+		display : inline-block;
+		/* border : solid 1px black; */
+		padding : 0;
+		margin-left: 20px;
+		border-collapse: collapse;
+		width : 20%;
+		padding-bottom : 20px;
+	}
+	
+	div#selectTag > div > span {
+		font-size : 10pt;
 	}
 	
 </style>
@@ -367,6 +399,16 @@
 		/* 태그 input에 focus했을때 태그 선택 div 보이게 함*/
 		$("input#tag").focus(function(){
 			$("div#selectTag").css('display','inline-block');
+		});
+		
+		// 각 태그 키워드 클릭
+		$("div#selectTag > div > span").click(function(){
+			var val = $("input#tag").val();
+			
+			var str = (val=="")?"":",";
+			
+			$("input#tag").val(val+str+$(this).text());
+			$(this).css({'border':'solid 1px black', 'border-radius':'10px'})
 		});
 
 		/* --------- 유효성 검사 ---------------------------------------- */
@@ -647,13 +689,13 @@
 					
 					<div id="image-wrap" class="carousel-inner" role="listbox" align="center">
 					    <div class="item active">
-					      <img src="" alt="" width="400px" height="400px">
+					      <img src="" alt="">
 					    </div>
 					    <div class="item">
-					      <img src="" alt="" width="400px" height="400px">
+					      <img src="" alt="">
 					    </div>
 					    <div class="item">
-					      <img src="" alt="" width="400px" height="400px">
+					      <img src="" alt="">
 					    </div>
 				 	</div>
 
@@ -673,6 +715,42 @@
 		
 		<div id="extraInfo">
 			<table id="extraInfoTable">
+				<tr>
+					<td>이미지 1 타이틀</td>
+					<td><input type="text" class="extraInfo" name="image1title" id="image1title" /></td>
+				</tr>
+				<tr>
+					<td>이미지 1 설명</td>
+					<td><input type="text" class="extraInfo" name="image1info" id="image1info" /></td>
+				</tr>
+				<tr>
+					<td>이미지 2 타이틀</td>
+					<td><input type="text" class="extraInfo" name="image2title" id="image2title" /></td>
+				</tr>
+				<tr>
+					<td>이미지 2 설명</td>
+					<td><input type="text" class="extraInfo" name="image2info" id="image2info" /></td>
+				</tr>
+				<tr>
+					<td>이미지 3 타이틀</td>
+					<td><input type="text" class="extraInfo" name="image3title" id="image3title" /></td>
+				</tr>
+				<tr>
+					<td>이미지 3 설명</td>
+					<td><input type="text" class="extraInfo" name="image3info" id="image3info" /></td>
+				</tr>
+				<tr>
+					<td>식음료 반입 가능 여부</td>
+					<td><input type="text" class="extraInfo" name="foodorDrink" id="foodorDrink" /></td>
+				</tr>
+				<tr>
+					<td>촬영 가능 여부</td>
+					<td><input type="text" class="extraInfo" name="photo" id="photo" /></td>
+				</tr>
+				<tr>
+					<td>기타 관람 제한 사항</td>
+					<td><input type="text" class="extraInfo" name="extraRestriction" id="extraRestriction" /></td>
+				</tr>
 				<tr>
 					<td>분야</td>
 					<td>
@@ -697,7 +775,60 @@
 			</table>
 			
 			<div id="selectTag">
-				태그자리
+				<div id="byExpression">
+					<h4>#표현별</h4>
+				<%-- 	<c:forEach test="{}"> --%>
+					<span>거친</span>&nbsp;<span>자연의</span><br/>
+					<span>사실적인</span>&nbsp;<span>거친</span>&nbsp;<span>자연의</span><br/>
+					<span>거친</span>&nbsp;<span>자연의</span><br/>
+					<span>사실적인</span>&nbsp;<span>거친</span>&nbsp;<span>자연의</span><br/>
+					<span>거친</span>&nbsp;<span>자연의</span><br/>
+					<span>사실적인</span>&nbsp;<span>거친</span>&nbsp;<span>자연의</span><br/>
+					<span>거친</span>&nbsp;<span>자연의</span><br/>
+					<span>사실적인</span>&nbsp;<span>거친</span>&nbsp;<span>자연의</span><br/>
+					<span>거친</span>&nbsp;<span>자연의</span><br/>
+					<span>사실적인</span>&nbsp;<span>거친</span>&nbsp;<span>자연의</span><br/>
+				<%-- 	</c:forEach> --%>
+				</div>
+				<div id="byGenre">
+					<h4>#장르별</h4>
+					<span>거친</span>&nbsp;<span>자연의</span><br/>
+					<span>사실적인</span>&nbsp;<span>거친</span>&nbsp;<span>자연의</span><br/>
+					<span>거친</span>&nbsp;<span>자연의</span><br/>
+					<span>사실적인</span>&nbsp;<span>거친</span>&nbsp;<span>자연의</span><br/>
+					<span>거친</span>&nbsp;<span>자연의</span><br/>
+					<span>사실적인</span>&nbsp;<span>거친</span>&nbsp;<span>자연의</span><br/>
+					<span>거친</span>&nbsp;<span>자연의</span><br/>
+					<span>사실적인</span>&nbsp;<span>거친</span>&nbsp;<span>자연의</span><br/>
+					<span>거친</span>&nbsp;<span>자연의</span><br/>
+					<span>사실적인</span>&nbsp;<span>거친</span>&nbsp;<span>자연의</span><br/>
+				</div>
+				<div id="byAdjective">
+					<h4>#형용별</h4>
+					<span>거친</span>&nbsp;<span>자연의</span><br/>
+					<span>사실적인</span>&nbsp;<span>거친</span>&nbsp;<span>자연의</span><br/>
+					<span>거친</span>&nbsp;<span>자연의</span><br/>
+					<span>사실적인</span>&nbsp;<span>거친</span>&nbsp;<span>자연의</span><br/>
+					<span>거친</span>&nbsp;<span>자연의</span><br/>
+					<span>사실적인</span>&nbsp;<span>거친</span>&nbsp;<span>자연의</span><br/>
+					<span>거친</span>&nbsp;<span>자연의</span><br/>
+					<span>사실적인</span>&nbsp;<span>거친</span>&nbsp;<span>자연의</span><br/>
+					<span>거친</span>&nbsp;<span>자연의</span><br/>
+					<span>사실적인</span>&nbsp;<span>거친</span>&nbsp;<span>자연의</span><br/>
+				</div>
+				<div id="byColor">
+					<h4>#색상별</h4>
+					<span>거친</span>&nbsp;<span>자연의</span><br/>
+					<span>사실적인</span>&nbsp;<span>거친</span>&nbsp;<span>자연의</span><br/>
+					<span>거친</span>&nbsp;<span>자연의</span><br/>
+					<span>사실적인</span>&nbsp;<span>거친</span>&nbsp;<span>자연의</span><br/>
+					<span>거친</span>&nbsp;<span>자연의</span><br/>
+					<span>사실적인</span>&nbsp;<span>거친</span>&nbsp;<span>자연의</span><br/>
+					<span>거친</span>&nbsp;<span>자연의</span><br/>
+					<span>사실적인</span>&nbsp;<span>거친</span>&nbsp;<span>자연의</span><br/>
+					<span>거친</span>&nbsp;<span>자연의</span><br/>
+					<span>사실적인</span>&nbsp;<span>거친</span>&nbsp;<span>자연의</span><br/>
+				</div>
 			</div>
 			
 			<div id="openBtn" align="center">
