@@ -17,8 +17,45 @@ public class AdminController {
 	@RequestMapping(value="/members.at")
 	public String members() {
 		
-		return "admin/members.tiles";
+		return "admin/members/members.tiles";
 	}
+	
+	@RequestMapping(value="/memberInfo.at")
+	public String memberInfo(HttpServletRequest request) {
+		
+		String no = request.getParameter("no");
+		
+		return "admin/members/memberInfo.tiles";
+	}
+	
+	// ------------------ 각종 통계페이지 -------------------- //
+	
+	@RequestMapping(value="/bySales.at")
+	public String bySales() {
+		return "admin/statistics/bySales.tiles";
+	}
+	
+	@RequestMapping(value="/byGender.at")
+	public String byGender() {
+		return "admin/statistics/byGender.tiles";
+	}
+	
+	@RequestMapping(value="/byGenre.at")
+	public String byGenre() {
+		return "admin/statistics/byGenre.tiles";
+	}
+	
+	@RequestMapping(value="/byTags.at")
+	public String byTags() {
+		return "admin/statistics/byTags.tiles";
+	}
+	
+	@RequestMapping(value="/byTicketingRate.at")
+	public String byTicketingRate() {
+		return "admin/statistics/byTicketingRate.tiles";
+	}
+	
+	// ----------------------------------------------------- //
 	
 	@RequestMapping(value="/registerformList.at")
 	public String resisterformList() {

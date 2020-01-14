@@ -10,10 +10,10 @@
 
 <!-- 메인 전용 레이아웃 -->
 	<definition name="tiles-Mainlayout" template="/WEB-INF/tiles/layout/tiles-Mainlayout.jsp"> 
-		<put-attribute name="header" value="/WEB-INF/tiles/mainTiles/header.jsp" />
+	<!-- 	<put-attribute name="header" value="/WEB-INF/tiles/mainTiles/header.jsp" />	 -->
 		<put-attribute name="content" value="" /> <!--  content는 페이지마다 바뀌므로 value는 그때그때 지정한다. -->
-		<put-attribute name="sideinfo" value="/WEB-INF/tiles/mainTiles/sideinfo.jsp" />
-		<put-attribute name="footer" value="/WEB-INF/tiles/mainTiles/footer.jsp" />
+	<!-- 	<put-attribute name="sideinfo" value="/WEB-INF/tiles/mainTiles/sideinfo.jsp" />	 -->
+	<!-- 	<put-attribute name="footer" value="/WEB-INF/tiles/mainTiles/footer.jsp" />		  -->
 	</definition>
 	
 	<definition name="*.maintiles" extends="tiles-Mainlayout">
@@ -28,7 +28,7 @@
 
 <!--  메인을 제외한 모든 페이지의 레이아웃 -->
 	<definition name="tiles-Basiclayout" template="/WEB-INF/tiles/layout/tiles-Basiclayout.jsp"> 
-		<put-attribute name="header" value="/WEB-INF/tiles/basicTiles/header.jsp" />
+		<put-attribute name="header" value="/WEB-INF/tiles/basicTiles/header.jsp" />	
 		<put-attribute name="content" value="" /> <!--  content는 페이지마다 바뀌므로 value는 그때그때 지정한다. -->
 		<put-attribute name="sideinfo" value="/WEB-INF/tiles/basicTiles/sideinfo.jsp" />
 		<put-attribute name="footer" value="/WEB-INF/tiles/basicTiles/footer.jsp" />

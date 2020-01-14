@@ -79,7 +79,13 @@ public class BoardController {
 	public String reviewDetail(HttpServletRequest request) {
 		
 		return "board/review/reviewDetail.tiles";
-	} // end of reviewList --------------------------------------------
+	} // end of reviewDetail --------------------------------------------
+	
+	@RequestMapping(value="/addReview.at")
+	public String addReview(HttpServletRequest request) {
+		
+		return "board/review/addReview.tiles";
+	} // end of addReview --------------------------------------------
 	
 	
 	@RequestMapping(value="/previewList.at")
@@ -88,16 +94,59 @@ public class BoardController {
 		return "board/preview/previewList.tiles";
 	} // end of previewList -------------------------------------------
 	
+	@RequestMapping(value="/previewDetail.at")
+	public String previewDetail(HttpServletRequest request) {
+		
+		return "board/preview/previewDetail.tiles";
+	} // end of previewDetail -------------------------------------------
+	
+	@RequestMapping(value="/addPreview.at")
+	public String addPreview(HttpServletRequest request) {
+		
+		return "board/preview/addPreview.tiles";
+	} // end of addPreview --------------------------------------------
+	
 	@RequestMapping(value="/communityList.at")
 	public String communityList(HttpServletRequest request) {
 		
 		return "board/community/communityList.tiles";
 	} // end of communityList -------------------------------------------
 	
+	@RequestMapping(value="/communityDetail.at")
+	public String communityDetail(HttpServletRequest request) {
+		
+		return "board/community/communityDetail.tiles";
+	} // end of communityDetail -------------------------------------------
+	
+	@RequestMapping(value="/addCommunity.at")
+	public String addCommunity(HttpServletRequest request) {
+		
+		return "board/community/addCommunity.tiles";
+	} // end of addCommunity --------------------------------------------
+	
+	
+	@RequestMapping(value="/eventList.at")
+	public String eventList() {
+		return "board/events/eventList.tiles";
+	}
+	
 	@RequestMapping(value="/addEvent.at")
 	public String addEvent() {
 		
 		return "board/events/addEvent.tiles";
 	}
+	
+	// (일반 사용자) 전시회 등록 신청 폼
+	@RequestMapping(value="/addExhibition.at")
+	public String addExhibition() {
+		return "exhibitions/addExhibition.tiles";
+	}
+	
+	// 공지 게시판
+	@RequestMapping(value="/notice.at")
+	public String notice() {
+		return "board/notice/notice.tiles";
+	}
+
 	
 }
