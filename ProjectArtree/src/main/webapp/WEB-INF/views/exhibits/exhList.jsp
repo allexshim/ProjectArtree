@@ -169,7 +169,7 @@
 		</a>
 		<a class="exh_one" onclick="exhDetail()">
 			<img class="exh_poster" src="<%= ctxPath%>/resources/images/exhibition/artmap_20200102_9426350.jpg"/>
-			<span class="art_info_aboutLoca InfoWhereWhen">전북도립미술관 | 전북</span>
+			<span class=" InfoWhereWhen">전북도립미술관 | 전북</span>
 			<span class="art_mainTitle">그녀의 이름은</span>		
 			<span class="art_info_aboutTime InfoWhereWhen">2020.11.12 - 2020.11.13 | FREE</span>
 		</a>

@@ -16,5 +16,13 @@ public class ExhibitsController {
 		return "exhibits/exhDetail.tiles";
 	}
 	
+	@RequestMapping(value="/galDetail.at")
+	public String galleryDetail() {
+		return "exhibits/galDetail.tiles";
+	}
 	
+	@RequestMapping(value="/galList.at")
+	public String galleryList() {
+		return "exhibits/galList.tiles";
+	}
 }
