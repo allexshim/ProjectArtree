@@ -52,8 +52,8 @@
 		</div>
 		
 		<div style="overflow: hidden;">	
-			<div onclick="location.href='<%= ctxPath %>/datebin.at'" style="color:white; background:black; cursor:pointer; float: left; border: solid 2.5px black; border-radius: 4px; width: 10%; margin-top: 3%;">이전</div>
-			<div onclick="location.href='<%= ctxPath %>/paymentbin.at'" style="color:white; background:black; cursor:pointer; float: right; border: solid 2.5px black; border-radius: 4px; width: 10%; margin-top: 3%;">다음</div>
+			<div onclick="location.href='<%= ctxPath %>/datebin.at'" style="color:black; background:white; cursor:pointer; float: left; border: solid 2px black; border-radius: 4px; width: 10%; margin-top: 3%;">이전</div>
+			<div onclick="location.href='<%= ctxPath %>/paymentbin.at'" style="color:black; background:white; cursor:pointer; float: right; border: solid 2px black; border-radius: 4px; width: 10%; margin-top: 3%;">다음</div>
 		</div>
 		
 	</div>
