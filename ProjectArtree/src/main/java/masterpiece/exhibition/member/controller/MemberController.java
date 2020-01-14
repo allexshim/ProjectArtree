@@ -14,6 +14,18 @@ public class MemberController {
 		return "member/join/join.tiles";
 	} // end of join --------------------------------------------
 	
+	@RequestMapping(value="/joinEnd.at")
+	public String joinEnd(HttpServletRequest request) {
+		
+		return "member/join/joinEnd.tiles";
+	} // end of joinEnd --------------------------------------------
+	
+	@RequestMapping(value="/joinEndTwo.at")
+	public String joinEndTwo(HttpServletRequest request) {
+		
+		return "member/join/joinEndTwo.tiles";
+	} // end of joinEnd --------------------------------------------
+	
 	@RequestMapping(value="/idFind.at")
 	public String idFind(HttpServletRequest request) {
 		
@@ -38,4 +50,16 @@ public class MemberController {
 		return "member/mypage/mypage.tiles";
 	} // end of mypage --------------------------------------------
 	
+	@RequestMapping(value="/mypage_order.at")
+	public String mypage_order(HttpServletRequest request) {
+		
+		return "member/mypage/mypage_order.tiles";
+	} // end of mypage_order --------------------------------------------
+	
+	@RequestMapping(value="/mypage_set.at")
+	public String mypage_set(HttpServletRequest request) {
+		
+		return "member/mypage/mypage_set.tiles";
+	} // end of mypage_set --------------------------------------------
+
 }

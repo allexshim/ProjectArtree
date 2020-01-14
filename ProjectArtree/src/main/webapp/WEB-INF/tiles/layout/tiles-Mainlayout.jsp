@@ -28,18 +28,18 @@
    <%-- 이 파일의 css는 해당 파일에서 담당한다. --%>
 </head>
 <body>
-	<div id="mycontainer">
-		<div id="myheader"> <%-- 이 div에는 tiles-layout.xml에서 선언한 header.jsp 부분이 들어온다고 지정한다. --%>
+	<%-- <div id="mycontainer">
+		<div id="myheader"> 이 div에는 tiles-layout.xml에서 선언한 header.jsp 부분이 들어온다고 지정한다.
 			<tiles:insertAttribute name="header" />
 		</div>
-		
+		 --%>
 		<div id="mycontent">
 			<tiles:insertAttribute name="content" />
 		</div>
-		
+		<%-- 
 		<div id="mysideinfo">
 			<tiles:insertAttribute name="sideinfo" />
-		</div>
+		</div> --%>
 	<%-- 	
 		<div id="myfooter">
 			<tiles:insertAttribute name="footer" />

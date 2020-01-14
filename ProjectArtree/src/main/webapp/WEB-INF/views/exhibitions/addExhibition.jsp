@@ -29,12 +29,8 @@
 		font-family: 'Noto Sans Kr', sans-serif;
 	}
 	
-	div#detailContainer {
-		
-	}
-	
 	#detailContainer {	
-		margin: 100px 0 100px 0;
+		margin: 100px 0 50px 0;
 	}	
 		
 	#detailContainer .Title_Area {	
@@ -97,7 +93,7 @@
 	}
 	
 	table#detailTable tr td:first-child {
-		width : 100px;
+		width : 160px;
 		font-weight: bold;
 	}
 	
@@ -120,7 +116,7 @@
 	
 	div#myPoster img, div#bigImage img {
 		border-radius: 15px;
-		box-shadow: 5px 5px 5px grey;
+		/* box-shadow: 5px 5px 5px grey; */
 	}
 	
 	div#myPoster, div#myImages {
@@ -161,22 +157,25 @@
 		overflow: hidden;
 	}
 	
-	
 	div#myImages div#bigImage {
 		padding-top : 20px;
 	}
 	
-	div#myImages div#bigImage .bigImage {
-		margin-left : 50px;
-		margin-right : 50px;
-	}
-	
 	div#myImages div#bigImage .arrow {
 		cursor : pointer;
+		font-size:60px; 
+		font-weight:bold; 
+		color : black;
+		text-decoration: none;
+		padding : 0 20px;
+	}
+	
+	div#myImages div#bigImage a {
+		vertical-align: middle;
 	}
 	
 	table#extraInfoTable tr td:first-child {
-		width : 80px;
+		width : 170px;
 		font-weight: bold;
 	}
 	
@@ -185,6 +184,9 @@
 		padding-top : 20px;
 		padding-bottom : 20px;
 		overflow : hidden;
+	}
+	
+	img#openBtn {
 		cursor : pointer;
 	}
 	
@@ -257,6 +259,21 @@
 		border : none !important;
 	}
 	
+	#image-wrap {
+		display:inline-block; 
+		width:400px; 
+		height:400px; 
+		border:solid 1px lightgray; 
+		border-radius: 15px; 
+		overflow:hidden; 
+		vertical-align: middle;	
+		box-shadow: 5px 5px 5px grey;
+	} 
+	
+	div#bigImage {
+		padding-bottom : 30px;
+	}
+	
 	.image-input:hover {
 		cursor: pointer;
 	}
@@ -266,6 +283,48 @@
 		width : 200px !important;
 		border : none !important;
 		padding-top:3px;
+	}
+	
+	#image-wrap > div.item.active > img {
+		height : 100%;
+		width : 100%;
+	}
+	
+	#image-wrap > div.item.active {
+		height : 100%;
+		width : 100%;
+	}
+	
+	/* 관련 정보 부분 */
+	.extraInfo {
+		width : 100%;
+	}
+	
+	/* 태그 등록 부분 */
+	div#selectTag {
+		display : none;
+		width : 80%;
+		margin : 0 auto;
+		border-collapse: collapse;
+		margin-left : 200px;
+		border : solid 1px gray;
+		border-top : solid 3px black;
+		text-align: center;
+		border-radius: 5px;
+	}
+	
+	div#selectTag > div {
+		display : inline-block;
+		/* border : solid 1px black; */
+		padding : 0;
+		margin-left: 20px;
+		border-collapse: collapse;
+		width : 20%;
+		padding-bottom : 20px;
+	}
+	
+	div#selectTag > div > span {
+		font-size : 10pt;
 	}
 	
 </style>
@@ -287,6 +346,17 @@
 		// 하단 작품 전경
 		$(".image-input").on("change", handleSubImgFileSelect);
 
+		$("#myCarousel").carousel({interval: false});
+			
+		// Enable Carousel Controls
+		$(".left").click(function(){
+		    $("#myCarousel").carousel("prev");
+		});
+		
+		$(".right").click(function(){
+		    $("#myCarousel").carousel("next");
+		});	
+	
 		// 가격 정보 입력 버튼 --------------------------------------------
 		$(".freeBtn").on("click", function(){
 			
@@ -326,23 +396,23 @@
 		// 가격 정보 입력 버튼 끝 --------------------------------------------
 		
 		
-		/* --------- 유효성 검사 ---------------------------------------- */
-		$("#openBtn").click(function(){
-			let frm = document.addExhibitionFrm;
-			/* 
+		/* 태그 input에 focus했을때 태그 선택 div 보이게 함*/
+		$("input#tag").focus(function(){
+			$("div#selectTag").css('display','inline-block');
+		});
+		
+		// 각 태그 키워드 클릭
+		$("div#selectTag > div > span").click(function(){
+			var val = $("input#tag").val();
+			
+			var str = (val=="")?"":",";
+			
+			$("input#tag").val(val+str+$(this).text());
+			$(this).css({'border':'solid 1px black', 'border-radius':'10px'})
+		});
 
-			let author = frm.author.value;
-			let authorInfo = frm.authorInfo.value;
-			let gallery = frm.gallery.value;
-			let startDate = frm.startDate.value;
-			let endDate = frm.endDate.value;
-			let email = frm.email.value;
-			let price = frm.price.value;
-			let posterInput = frm.posterInput.value;
-			let imageInput1 = frm.imageInput1.value;
-			let imageInput2 = frm.imageInput2.value;
-			let imageInput3 = frm.imageInput3.value;
-			let tel = frm.tel.value; */
+		/* --------- 유효성 검사 ---------------------------------------- */
+		$("img#openBtn").click(function(){
 			
 			if($("#applierName").val().trim()==""){
 				alert("신청자 이름을 입력하세요.");
@@ -421,6 +491,7 @@
 				$(this).focus();
 			}
 			else {
+				let frm = document.addExhibitionFrm;
 				frm.method = "POST";
 				frm.action = "*.at";
 				frm.submit();
@@ -465,12 +536,21 @@
 				alert("확장자는 이미지 확장자만 가능합니다.");
 				return;
 			}
-
+			
 			sel_file = f;
 			
 			let reader = new FileReader();
 			reader.onload = function(e) {
-				$("div#bigImage img#bigImage").attr("src", e.target.result);
+				let src = $("#image-wrap > div.item.active > img").attr("src");
+				
+				$("#image-wrap > div.item > img").each(function(){
+					if($(this).attr('src') == ""){
+						$(this).attr('src',src);
+						return false;
+					}
+				});
+				
+				$("#image-wrap > div.item.active > img").attr("src", e.target.result);
 				handleThumbNailImages(e.target.result);	
 			}
 			reader.readAsDataURL(f);
@@ -489,7 +569,7 @@
 		});
 		if(!bool){
 			// 모든 칸이 차 있다면 가장 마지막 썸네일 자리에 새 이미지를 교체해서 넣는다.
-			$("#myImages > img:nth-child(4)").attr("src",img);
+			$("#myImages > div:nth-child(2) > div:nth-child(3) > img").attr("src",img);
 		}
 		
 	} // end of handleThumbNailImages
@@ -601,15 +681,30 @@
 				<div class="thumbNail-wrap"><img class="thumbNail" src="" alt="" style="border:none;"/></div>
 				<div class="thumbNail-wrap"><img class="thumbNail" src="" alt="" style="border:none;"/></div>
 			</div>
-			<div id="bigImage" align="center">
-				<i class='fa fa-angle-left arrow' style='font-size:60px; font-weight:bold;'></i>
-				
-				<div id="image-wrap" style="display:inline-block; width:500px; height:450px;" align="center">
-					<img id="bigImage"  width="400px" height="400px" style="border: none;"/>
+			<div id="myCarousel" class="carousel slide"  style="display:inline-block; overflow:hidden;">
+				<div id="bigImage" align="center" style="display:inline-block; vertical-align: middle;">
+					<a class="left" style="display:inline-block;">
+						<i class='fa fa-angle-left arrow'></i>
+					</a>
+					
+					<div id="image-wrap" class="carousel-inner" role="listbox" align="center">
+					    <div class="item active">
+					      <img src="" alt="">
+					    </div>
+					    <div class="item">
+					      <img src="" alt="">
+					    </div>
+					    <div class="item">
+					      <img src="" alt="">
+					    </div>
+				 	</div>
+
+					<a class="right" style="display:inline-block;">
+						<i class='fa fa-angle-right arrow'></i>
+					</a>
 				</div>
-				
-				<i class='fa fa-angle-right arrow' style='font-size:60px; font-weight:bold;'></i>
-			</div>	
+			</div>
+		</div>	
 			
 			<div align="center" style="margin: 0 auto;">
 				<input type="file" class="image-input" name="imageInput1" id="imageInput1" />
@@ -621,16 +716,121 @@
 		<div id="extraInfo">
 			<table id="extraInfoTable">
 				<tr>
+					<td>이미지 1 타이틀</td>
+					<td><input type="text" class="extraInfo" name="image1title" id="image1title" /></td>
+				</tr>
+				<tr>
+					<td>이미지 1 설명</td>
+					<td><input type="text" class="extraInfo" name="image1info" id="image1info" /></td>
+				</tr>
+				<tr>
+					<td>이미지 2 타이틀</td>
+					<td><input type="text" class="extraInfo" name="image2title" id="image2title" /></td>
+				</tr>
+				<tr>
+					<td>이미지 2 설명</td>
+					<td><input type="text" class="extraInfo" name="image2info" id="image2info" /></td>
+				</tr>
+				<tr>
+					<td>이미지 3 타이틀</td>
+					<td><input type="text" class="extraInfo" name="image3title" id="image3title" /></td>
+				</tr>
+				<tr>
+					<td>이미지 3 설명</td>
+					<td><input type="text" class="extraInfo" name="image3info" id="image3info" /></td>
+				</tr>
+				<tr>
+					<td>식음료 반입 가능 여부</td>
+					<td><input type="text" class="extraInfo" name="foodorDrink" id="foodorDrink" /></td>
+				</tr>
+				<tr>
+					<td>촬영 가능 여부</td>
+					<td><input type="text" class="extraInfo" name="photo" id="photo" /></td>
+				</tr>
+				<tr>
+					<td>기타 관람 제한 사항</td>
+					<td><input type="text" class="extraInfo" name="extraRestriction" id="extraRestriction" /></td>
+				</tr>
+				<tr>
 					<td>분야</td>
-					<td><input type="text" name="category" id="category" /></td>
+					<td>
+						<select id="category" name="category" style="width:100%;">
+							<option value=""></option>
+							<option value="media">미디어</option>
+							<option value="design">디자인</option>
+							<option value="drawing">회화</option>
+							<option value="picture">사진</option>
+							<option value="sculpture">조각</option>
+							<option value="installation">설치미술</option>
+							<option value="crafts">공예</option>
+						</select>
+					</td>
 				<tr>
 				<tr>
 					<td>태그</td>
 					<td>
-						<span><input type="text" name="tag" class="tag" /></span>
+						<span><input type="text" id="tag" name="tag" class="tag" style="width:100%" /></span>
 					</td>
 				<tr>
 			</table>
+			
+			<div id="selectTag">
+				<div id="byExpression">
+					<h4>#표현별</h4>
+				<%-- 	<c:forEach test="{}"> --%>
+					<span>거친</span>&nbsp;<span>자연의</span><br/>
+					<span>사실적인</span>&nbsp;<span>거친</span>&nbsp;<span>자연의</span><br/>
+					<span>거친</span>&nbsp;<span>자연의</span><br/>
+					<span>사실적인</span>&nbsp;<span>거친</span>&nbsp;<span>자연의</span><br/>
+					<span>거친</span>&nbsp;<span>자연의</span><br/>
+					<span>사실적인</span>&nbsp;<span>거친</span>&nbsp;<span>자연의</span><br/>
+					<span>거친</span>&nbsp;<span>자연의</span><br/>
+					<span>사실적인</span>&nbsp;<span>거친</span>&nbsp;<span>자연의</span><br/>
+					<span>거친</span>&nbsp;<span>자연의</span><br/>
+					<span>사실적인</span>&nbsp;<span>거친</span>&nbsp;<span>자연의</span><br/>
+				<%-- 	</c:forEach> --%>
+				</div>
+				<div id="byGenre">
+					<h4>#장르별</h4>
+					<span>거친</span>&nbsp;<span>자연의</span><br/>
+					<span>사실적인</span>&nbsp;<span>거친</span>&nbsp;<span>자연의</span><br/>
+					<span>거친</span>&nbsp;<span>자연의</span><br/>
+					<span>사실적인</span>&nbsp;<span>거친</span>&nbsp;<span>자연의</span><br/>
+					<span>거친</span>&nbsp;<span>자연의</span><br/>
+					<span>사실적인</span>&nbsp;<span>거친</span>&nbsp;<span>자연의</span><br/>
+					<span>거친</span>&nbsp;<span>자연의</span><br/>
+					<span>사실적인</span>&nbsp;<span>거친</span>&nbsp;<span>자연의</span><br/>
+					<span>거친</span>&nbsp;<span>자연의</span><br/>
+					<span>사실적인</span>&nbsp;<span>거친</span>&nbsp;<span>자연의</span><br/>
+				</div>
+				<div id="byAdjective">
+					<h4>#형용별</h4>
+					<span>거친</span>&nbsp;<span>자연의</span><br/>
+					<span>사실적인</span>&nbsp;<span>거친</span>&nbsp;<span>자연의</span><br/>
+					<span>거친</span>&nbsp;<span>자연의</span><br/>
+					<span>사실적인</span>&nbsp;<span>거친</span>&nbsp;<span>자연의</span><br/>
+					<span>거친</span>&nbsp;<span>자연의</span><br/>
+					<span>사실적인</span>&nbsp;<span>거친</span>&nbsp;<span>자연의</span><br/>
+					<span>거친</span>&nbsp;<span>자연의</span><br/>
+					<span>사실적인</span>&nbsp;<span>거친</span>&nbsp;<span>자연의</span><br/>
+					<span>거친</span>&nbsp;<span>자연의</span><br/>
+					<span>사실적인</span>&nbsp;<span>거친</span>&nbsp;<span>자연의</span><br/>
+				</div>
+				<div id="byColor">
+					<h4>#색상별</h4>
+					<span>거친</span>&nbsp;<span>자연의</span><br/>
+					<span>사실적인</span>&nbsp;<span>거친</span>&nbsp;<span>자연의</span><br/>
+					<span>거친</span>&nbsp;<span>자연의</span><br/>
+					<span>사실적인</span>&nbsp;<span>거친</span>&nbsp;<span>자연의</span><br/>
+					<span>거친</span>&nbsp;<span>자연의</span><br/>
+					<span>사실적인</span>&nbsp;<span>거친</span>&nbsp;<span>자연의</span><br/>
+					<span>거친</span>&nbsp;<span>자연의</span><br/>
+					<span>사실적인</span>&nbsp;<span>거친</span>&nbsp;<span>자연의</span><br/>
+					<span>거친</span>&nbsp;<span>자연의</span><br/>
+					<span>사실적인</span>&nbsp;<span>거친</span>&nbsp;<span>자연의</span><br/>
+				</div>
+			</div>
+			
 			<div id="openBtn" align="center">
 				<img id="openBtn" src="<%= ctxPath %>/resources/images/board/applyBtn.JPG" />
 			</div>
