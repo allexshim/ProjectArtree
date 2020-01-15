@@ -23,12 +23,14 @@
 	#container_exhibition .Title_Area .st {
 		display: block;
 		font-size: 15pt;
+		color: #000;
 	}
 	
 	#container_exhibition .Title_Area .lt {
 		display: block;
 		font-size: 35pt;
 		font-weight: bold;
+		color: #000;
 	}
 	
 	#container_exhibition .ExhCategory_Area {
@@ -75,7 +77,7 @@
 		cursor: pointer;
 		display: inline-block;
 		width: 22%;
-		height: 600px;
+		height: 550px;
 		margin-right: 3.7%;
 		margin-top: 40px;
 		border: solid 1px #e6e6e6;
@@ -103,6 +105,7 @@
 	#container_exhibition .ExhList_Area a .art_info_aboutTime {
 		position: relative;
 	}
+	
 </style>
 
 <%-- EXHIBITION LIST SCRIPT START --%>
@@ -136,7 +139,7 @@
 <div id="container_exhibition">
 	<div class="Title_Area">
 		<span class="st">WHAT'S ON</span>
-		<span class="lt">EXHIBITION</span>
+		<span class="lt">EXHIBITIONS</span>
 	</div>
 	
 	<div class="ExhCategory_Area">

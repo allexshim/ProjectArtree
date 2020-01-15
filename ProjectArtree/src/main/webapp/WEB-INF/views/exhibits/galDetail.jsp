@@ -16,7 +16,6 @@
 	
 	#container_gal_detail .main_top {
 		display: inline-block;
-		margin-top: 50px;
 		width: 100%; 
 		height: 600px; 
 		border: solid 1px #e6e6e6;
@@ -288,6 +287,20 @@
 		text-align: left;
 	}
 	
+	#container_gal_detail .Title_Area {
+		width: 100%;
+		display: inline-block; 
+		text-align: center;
+		margin: 100px 0 100px 0;
+	}
+	
+	#container_gal_detail .Title_Area .lt {
+		display: block;
+		font-size: 35pt;
+		font-weight: bold;
+		color: #000;
+	}
+	
 </style>  
 
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -403,6 +416,10 @@
 
 <div id="container_gal_detail">
 
+	<div class="Title_Area">
+		<span class="lt">GALLERY</span>
+	</div>
+	
 	<div class="main_top">
 		<img class="main_img" src="<%= ctxPath%>/resources/images/exhibition/챕터투.png">
 		<div class="info_top">

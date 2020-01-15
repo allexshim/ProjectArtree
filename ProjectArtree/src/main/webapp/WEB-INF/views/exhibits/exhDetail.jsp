@@ -16,7 +16,6 @@
 	
 	#container_exh_detail .main_top {
 		display: inline-block;
-		margin-top: 50px;
 		width: 100%; 
 		height: 600px; 
 		border: solid 1px #e6e6e6;
@@ -525,6 +524,20 @@
 		width: 30px;
 		height: 30px;
 	}
+	
+	#container_exh_detail .Title_Area {
+		width: 100%;
+		display: inline-block; 
+		text-align: center;
+		margin: 100px 0 100px 0;
+	}
+	
+	#container_exh_detail .Title_Area .lt {
+		display: block;
+		font-size: 35pt;
+		font-weight: bold;
+		color: #000;
+	}
 </style>  
 
 
@@ -737,19 +750,16 @@
 		
 		
 	});
-	
+
 	function share(sns){
 		
 		var title = "전시회 제목 - ARTREE";	
-		var href = current_url;
 			
-		if(sns == 'google'){
-			loc = '//plus.google.com/share?url='+href;
-			window.open(loc);
+		if(sns == 'mail'){
+			window.open('mailto:?subject=sub&body=http://art-map.co.kr/exhibition/view.php?idx=5119');
 		}
 		else if(sns == 'kakao'){
-			loc = 'https://story.kakao.com/share?url='+encodeURIComponent(href);
-			window.open(loc);
+			window.open('https://story.kakao.com/share?url=http://art-map.co.kr/exhibition/view.php?idx=5119'); 
 		}
 		else if(sns == 'twitter'){
 			window.open('https://twitter.com/intent/tweet?text=TEXT&url=http://art-map.co.kr/exhibition/view.php?idx=5119');			
@@ -761,9 +771,9 @@
 			var IE=(document.all)?true:false;
 			if (IE) {
 			if(confirm("주소를 복사하시겠습니까?"))
-				window.clipboardData.setData("Text", url);
+				window.clipboardData.setData("Text", 'http://art-map.co.kr/exhibition/view.php?idx=5119');
 			} else {
-				temp = prompt("Ctrl+C를 눌러 클립보드로 복사하세요", url);
+				temp = prompt("Ctrl+C를 눌러 클립보드로 복사하세요", 'http://art-map.co.kr/exhibition/view.php?idx=5119');
 			}
 		}
 	}
@@ -774,8 +784,12 @@
 
 <div id="container_exh_detail">
 
+	<div class="Title_Area">
+		<span class="lt">EXHIBITION</span>
+	</div>
+	
 	<div class="main_top">
-		<img class="main_img" src="<%= ctxPath%>/resources/images/exhibition/sample_detail_main.png">
+		<img class="main_img" src="<%= ctxPath%>/resources/images/exhibition/poster2.JPG">
 		<div class="info_top">
 			<span class="info_title">박수경 개인전 : 꿈의 집_원형 속 앙겔로스</span>
 			<span class="info_artist">박수경</span>
@@ -806,14 +820,14 @@
 			      <div class="modal-body">
 			      	<span class="snsShare_title">공유하기</span>
 			      	<div class="shareArea">
-						<img class="shareImg" src="<%= ctxPath%>/resources/images/exhibition/ico/google.png" onclick="share('google')">
+						<img class="shareImg" src="<%= ctxPath%>/resources/images/exhibition/ico/email.png" onclick="share('mail')">
 						<img class="shareImg" src="<%= ctxPath%>/resources/images/exhibition/ico/kakao.png" onclick="share('kakao')">
 						<img class="shareImg" src="<%= ctxPath%>/resources/images/exhibition/ico/twitter.png" onclick="share('twitter')">
 						<img class="shareImg" src="<%= ctxPath%>/resources/images/exhibition/ico/facebook.png" onclick="share('facebook')">
 						<img class="shareImg" src="<%= ctxPath%>/resources/images/exhibition/ico/url.png" onclick="share('url')" style="margin-right: 0px;">
 					</div>
 					<div class="shareArea">
-						<span>GOOGLE</span>
+						<span>MAIL</span>
 						<span>KAKAO</span>
 						<span>TWITTER</span>
 						<span>FACEBOOK</span>
