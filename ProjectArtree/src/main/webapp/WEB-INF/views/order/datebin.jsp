@@ -35,13 +35,18 @@
 		line-height: 3;
 	}	
 	
+	#test1  {
+	}
+	
 </style>
 <script>
 	$(document).ready(function(){					
 		$("#testDatepicker").datepicker({			
 			dayNamesMin : ['월','화','수','목','금','토','일'],			
-			monthNames: ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월']
-		});		
+			monthNames: ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'],
+			altField: '#calendar-date',
+			dateFormat: 'yy-mm-dd'
+		});				
 	});
 	
 
@@ -60,8 +65,18 @@
 	    fjs.parentNode.insertBefore(js, fjs);
 	}(document, 'script', 'kakao-js-sdk'));	  
 	
+	// 값을 가지고 페이지 이동 
+	function goDetail() {
+		var frm = document.dateBin;	
+		frm.method="GET";
+		frm.action="<%=ctxPath %>/detailsbin.at";		
+		frm.submit();
+	}
+	
+	
 </script>
 <body>
+	<form name="dateBin">
 	<div style="width: 60%; margin: 0 auto;" align="center">
 		<div style="padding-top: 2.5%;">
 			<ul style="border-radius:4px; border-top: solid 1px black; list-style-type: none; display: inline-flex; padding: 0;
@@ -73,12 +88,13 @@
 			</ul>		
 		</div>
 		<div style="padding-top: 2.5%;">
-			<div id="testDatepicker"></div>									
+			<div id="testDatepicker"></div>
+			<input id="calendar-date" name="dateBin" hidden="hidden" value="base">
 		</div>		
 		
 		<div style="overflow: hidden; padding-top: 1%">	
-			<div onclick="location.href='<%= ctxPath %>/ticketsbin.at'" style="color:white; background:black; cursor:pointer; float: left; border: solid 2.5px black; border-radius: 4px; width: 10%; margin-top: 3%;">이전</div>
-			<div onclick="location.href='<%= ctxPath %>/detailsbin.at'" style="color:white; background:black; cursor:pointer; float: right; border: solid 2.5px black; border-radius: 4px; width: 10%; margin-top: 3%;">다음</div>
+			<div onclick="location.href='<%= ctxPath %>/ticketsbin.at'" style="color:black; background:white; cursor:pointer; float: left; border: solid 2px black; border-radius: 4px; width: 10%; margin-top: 3%;">이전</div>
+			<div onclick="goDetail()" style="color:black; background:white; cursor:pointer; float: right; border: solid 2px black; border-radius: 4px; width: 10%; margin-top: 3%;">다음</div>
 		</div>
 		
 		<div style="padding-top: 5%;">
@@ -87,5 +103,6 @@
 		</div>
 		
 	</div>
+	</form>
 </body>
 </html>

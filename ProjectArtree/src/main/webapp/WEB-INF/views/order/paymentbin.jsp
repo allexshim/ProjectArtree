@@ -47,6 +47,10 @@
 <script>			
 	
 	$(document).ready(function(){
+		if ( ${totalBin != null}) {
+			var totalbin = ${totalBin};
+			$(".totalBin").html("&#8361;"+totalbin.toLocaleString());
+		}				
 		$.fn.bmdIframe = function( options ) {
 	        var self = this;
 	        var settings = $.extend({
@@ -71,8 +75,7 @@
 	  
 		$("#myModal").bmdIframe();		
 		
-	});
-	
+	});	
 	
 </script>
 <body>
@@ -86,24 +89,41 @@
 				<li class="menubin" style="background-color: black; color: white;">4.Payment</li>			
 			</ul>		
 		</div>
-		<div style="padding: 5% 0%;">	
-			<form name="pgForm">
-			<input type="hidden" name="Amt" value="1000">
-			<input type="hidden" name="BuyerName" value="홍길동">
-			<input type="hidden" name="OrderName" value="결제테스트">
-			</form>			
-		</div>
+		<hr>
+		 
+		<div style="overflow:hidden; text-align: right;">
+			<div onclick="location.href='<%= ctxPath %>/detailsbin.at'" style="color:black; background:white; cursor:pointer; float: right; border: solid 2px black; text-align:center; padding:6px 12px; border-radius: 4px; width: 10%; font-size: 15px;">Submit</div>
+			<div style="margin-right:1%; font-size:15px; float:right;"><input style="width:10em; padding:6px 12px;" type="text" size="2" placeholder="Promo code"></div>
+			<div style="padding:6px 12px; font-weight:bold; margin-right:3%; overflow:hidden; font-size:15px; border:2px solid black; float:right;">
+				<div style="float:left;">Cart</div>
+				<div style="float:right;"><img style="margin-left:3%; width: 15px; height: 15px;" src="<%=ctxPath%>/resources/images/order/cart.png"></div>
+			</div>		
+		</div>	
 		
-		<hr style="border: 2px solid black">
+		<div style="margin-top:3%; text-align:left; font-size:18px; padding: 27px; border: 1px solid #EDEBEB;">
 		
-		<div style="overflow: hidden;">
-			<div style="float: left;">총 결제금액</div>
-			<div style="float: right;">0원</div>		
-		</div>
+			<div style="overflow: hidden;">
+				<div style="float: left;">KAWS: COMPANIONSHIP IN THE AGE OF LONELINESS</div>
+				<div style="float: right;">$138.00</div>
+			</div>
+				
+			<div>Sunday 19 Jan 2020</div>
+			
+			<div style="color:#666; margin:3% 0; font-size:14px; padding:4px 10px; overflow: hidden; background-color: #f3f3f4;">
+				<div style="float: left;">갯수</div>
+				<div style="float: right;">개당가격</div>
+			</div>							
+			
+			<div style="overflow: hidden;">								
+				<div class="totalBin" style="font-weight:bold; float: right;"></div>
+				<div style="margin-right:5%; font-weight:bold; float:right;">Total</div>		
+			</div>
+		
+		</div>			
 		
 		<div style="overflow: hidden;">	
-			<div onclick="location.href='<%= ctxPath %>/detailsbin.at'" style="color:white; background:black; cursor:pointer; float: left; border: solid 2.5px black; border-radius: 4px; width: 10%; margin-top: 3%;">이전</div>
-			<div data-target="#myModal" data-bmdSrc="<%=ctxPath%>/paymentGatebin.at" data-toggle="modal" class="bmd-modalButton" style="color:white; background:black; cursor:pointer; float: right; border: solid 2.5px black; border-radius: 4px; width: 10%; margin-top: 3%;">결제하기</div>			 			
+			<div onclick="location.href='<%= ctxPath %>/detailsbin.at'" style="color:black; background:white; cursor:pointer; float: left; border: solid 2px black; border-radius: 4px; width: 10%; margin-top: 3%;">이전</div>
+			<div data-target="#myModal" data-bmdSrc="<%=ctxPath%>/paymentGatebin.at" data-toggle="modal" class="bmd-modalButton" style="color:black; background:white; cursor:pointer; float: right; border: solid 2px black; border-radius: 4px; width: 10%; margin-top: 3%;">결제하기</div>			 			
 		</div>		
 	</div>
     

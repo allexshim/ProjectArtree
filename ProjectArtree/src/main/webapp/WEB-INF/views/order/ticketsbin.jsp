@@ -31,10 +31,45 @@
 </style>
 
 <script type="text/javascript">
-	$(document).ready(function(){					
+	$(document).ready(function(){	
+		var string1 = "${bin}"; 		
+		var split =  string1.split(',');			
+		var totalB = 0;		
+		if (split != "") {
+			$.each(split, function(index,item){			
+				$(".qtBin:eq("+index+")").val(item);			
+				var totalA = item*$(".pribin:eq("+index+")").val();
+				totalB += totalA;
+				if(totalA != 0) {
+					$(".qtResult:eq("+index+")").html("&#8361;"+totalA.toLocaleString());
+				}
+				else { 
+					$(".qtResult:eq("+index+")").html("");
+				}
+			});
+		}
 		
-		$(".qtBin").spinner();		
+		if(totalB != 0) {
+				$(".totalBin").html("&#8361;"+totalB.toLocaleString());
+				$(".totalBin").val(totalB);
+			}
+			
+		else {
+				$(".totalBin").html("");
+			}
+		
+		$(".qtBin").spinner();			
+		
 		$(".qtBin").bind("spinstop",function(event){
+			
+			// 음수, 100이상 처리
+			var num = $(".qtBin").index(this);
+			if($(".qtBin:eq("+num+")").val()>99) {
+				$(".qtBin:eq("+num+")").val(99);
+			}
+			else if($(".qtBin:eq("+num+")").val()<0) {
+				$(".qtBin:eq("+num+")").val(0);
+			}
 			
 			// 단체 할인 1~9명 처리 
 			var groupqt = $(".groupBin").val();
@@ -66,14 +101,13 @@
 			
 			if(totalP != 0) {
 				$(".totalBin").html("&#8361;"+totalP.toLocaleString());
+				$(".totalBin").val(totalP);
 			}
 			
 			else {
 				$(".totalBin").html("");
 			}
-			
-			
-		});
+		});							
 	});			
 	
 	function goCtrl() {
@@ -82,9 +116,11 @@
 		frm.action="<%=ctxPath %>/datebin.at";		
 		frm.submit();
 	}
+	
 </script>
 
 <body>
+	<form name="reposiBin">
 	<div style="width: 60%; margin: 0 auto;" align="center">
 		<div style="padding-top: 5%;">
 			<ul style="border-radius:4px; border-top: solid 1px black; list-style-type: none; display: inline-flex; padding: 0;
@@ -96,7 +132,7 @@
 			</ul>		
 		</div>
 		
-		<form name="reposiBin">
+		
 		<div style="padding-top: 5%;">
 			<table class="table table-hover" style="width: 100%;">
 				<thead>
@@ -147,20 +183,21 @@
 				</tbody>
 			</table>
 		</div>
-		</form>
+		
 		
 		<hr style="border: 2px solid black">
 		
 		<div style="overflow: hidden;">
 			<div style="float: left;">총 결제금액</div>
-			<div class="totalBin" style="float: right;"></div>		
+			<div class="totalBin" style="float: right;"></div>
+			<input class="totalBin" hidden="hidden" value="" name="totalBin">		
 		</div>
 		
 		<div style="overflow: hidden;">						
-			<div onclick="goCtrl()" style="color:white; background:black; cursor:pointer; float: right; border: solid 2.5px black; border-radius: 4px; width: 10%; margin-top: 3%;">다음</div>
+			<div onclick="goCtrl()" style="color:black; background:white; cursor:pointer; float: right; border: solid 2px black; border-radius: 4px; width: 10%; margin-top: 3%;">다음</div>
 		</div>
 		
 	</div>		
-	
+	</form>
 </body>
 </html>
