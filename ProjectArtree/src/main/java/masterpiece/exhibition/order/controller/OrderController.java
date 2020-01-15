@@ -85,4 +85,29 @@ public class OrderController {
 		request.setAttribute("dateBin", dateBin);
 		return "order/paymentGateway";
 	}
+	
+	@RequestMapping(value="/orderEnd.at")
+	public String orderEnd(HttpServletRequest request) {
+		
+		HttpSession session = request.getSession();		
+		String totalBin = (String)session.getAttribute("totalBin");		
+		String dateBin = (String)session.getAttribute("dateBin");
+		
+		request.setAttribute("totalBin", totalBin);
+		request.setAttribute("dateBin", dateBin);
+		return "order/orderEnd.tiles";
+	}	
+	
+	@RequestMapping(value="/refundBin.at")
+	public String refundBin(HttpServletRequest request) {
+		
+		HttpSession session = request.getSession();		
+		String totalBin = (String)session.getAttribute("totalBin");		
+		String dateBin = (String)session.getAttribute("dateBin");
+		
+		request.setAttribute("totalBin", totalBin);
+		request.setAttribute("dateBin", dateBin);
+		return "order/orderEnd.tiles";
+	}		
+	
 }

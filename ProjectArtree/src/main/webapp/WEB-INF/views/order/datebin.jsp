@@ -98,8 +98,7 @@
 		</div>
 		
 		<div style="padding-top: 5%;">
-			<div id="kakao-talk-channel-chat-button" data-channel-public-id="_DxkEZxb" data-title="question" data-size="small" data-color="mono" data-shape="pc" data-support-multiple-densities="true"></div>
-			<div><span>여기에 환불 만들겁니다.</span></div>	
+			<div id="kakao-talk-channel-chat-button" data-channel-public-id="_DxkEZxb" data-title="question" data-size="small" data-color="mono" data-shape="pc" data-support-multiple-densities="true"></div>			
 		</div>
 		
 	</div>

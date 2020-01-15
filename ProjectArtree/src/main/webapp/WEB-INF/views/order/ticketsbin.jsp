@@ -31,7 +31,17 @@
 </style>
 
 <script type="text/javascript">
-	$(document).ready(function(){	
+	$(document).ready(function(){
+		
+		$("#nextBin").click(function(){
+			if($("input[name=totalBin]").val()!=""){
+				goCtrl()	
+			}			
+			else {
+				alert("수량을 입력해주세요.")
+			}
+		})
+		
 		var string1 = "${bin}"; 		
 		var split =  string1.split(',');			
 		var totalB = 0;		
@@ -194,7 +204,7 @@
 		</div>
 		
 		<div style="overflow: hidden;">						
-			<div onclick="goCtrl()" style="color:black; background:white; cursor:pointer; float: right; border: solid 2px black; border-radius: 4px; width: 10%; margin-top: 3%;">다음</div>
+			<div id="nextBin" style="color:black; background:white; cursor:pointer; float: right; border: solid 2px black; border-radius: 4px; width: 10%; margin-top: 3%;">다음</div>
 		</div>
 		
 	</div>		
