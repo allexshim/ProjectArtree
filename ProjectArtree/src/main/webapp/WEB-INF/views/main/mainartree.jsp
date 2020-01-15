@@ -138,8 +138,10 @@
 	
 	/* header */
 	.topnav {
+	  padding-top: 10px;
+	  background-color: black;
 	  border-bottom: solid 2px #f2f2f2;
-	  margin-top: 10px;
+	  margin-top: 0px;
 	  z-index: 2;
 	  display: inline-block;
 	  overflow-x: hidden;
@@ -155,7 +157,7 @@
 	  padding: 14px 16px;
 	  text-decoration: none;
 	  font-size: 25px;
-	  color: black;
+	  color: white;
 	}
 	
 	.topnav a.logo {
@@ -171,6 +173,7 @@
 	}
 	
 	.topnav a.login {
+		color: white;
 		margin: 0 20px 0 20px;
 		float: right;
 	}
@@ -213,7 +216,7 @@
 	  .sidenav a {font-size: 18px;}
 	}
 	
-	span {
+	.recom-info {
 	    display: block;
 	    width: 80px;
 	    padding: 2px 16px;
@@ -292,7 +295,6 @@
 	}
 	
 	.explain {
-		 font-size: 24pt; 
 		 position: absolute; 
 		 top: 0;
 		 left: 60%;
@@ -328,18 +330,61 @@
 	}
 	
 	.exhibitions-img {
-		margin-top: 30px;
+		margin-right: 60px;
 		
+	}
+
+	
+	.hot-exhTitle {
+		font-size: 26pt;
 	}
 	
-	.notice {
-		
-	    left: 20%;
-	    
+	.recom-exhibitions {
+		text-align: center;
+		position:relative;
+	    left: 25%;
+	    display: -webkit-flex;
+	    display: flex;
+	    -webkit-justify-content: center;
+	    justify-content: center;
+	    -webkit-align-items: center;
+	    align-items: center; 
 		top: 5%;
-		width: 1200px;
-		height: 660px;
+		width: 800px;
+		height: 400px;
 	}
+	
+	.recom_one {
+		margin-right: 50px;
+		flex: 1;
+		width: 25%;
+		height: 60%;
+	}
+	
+	.exh_poster {
+		width: 200px;
+		height: 350px;
+	}
+	
+	.recom-info {
+		width: 100%;
+	}
+	
+	.recomExh {
+		position: absolute;
+		top: 15%;
+		left: 20%;
+		font-size: 26pt;
+	}
+	
+	.newNend-exh-exp {
+		display: block;
+		text-align: center;
+		width: 400px;
+		font-size: 14pt;
+	}
+	
+	
 </style>
 	
 <script type="text/javascript">
@@ -362,7 +407,7 @@
 	            $(this).carousel('prev');
 	            
 	        } else {
-	            if (getActiveIdx === 3){
+	            if (getActiveIdx === 4){
 	            	return;
 	            	}
 	         
@@ -391,11 +436,12 @@
 	<div class="main-container">
 	    <div id="myCarousel" class="carousel slide">		            
 		    <!-- Indicators -->
-		    <ol class="carousel-indicators">
-		        <li data-target="#myCarousel" data-slide-to="0" class="active list-text">홈</li>
-		        <li data-target="#myCarousel" data-slide-to="1" class="list-text">인기전시회</li>
-		        <li data-target="#myCarousel" data-slide-to="2" class="list-text">신규/종료임박</li>
-		        <li data-target="#myCarousel" data-slide-to="3" class="list-text">전시회등록</li>
+		    <ol class="carousel-indicators" style="margin:20px 20px; top: 30%;">
+		        <li style="-webkit-transform:rotate(270deg) translate(80px,0px); " data-target="#myCarousel" data-slide-to="0" class="active list-text">HOME</li>
+		        <li style="-webkit-transform:rotate(270deg) translate(40px,0px); " data-target="#myCarousel" data-slide-to="1" class="list-text">HOT</li>
+		        <li style="-webkit-transform:rotate(270deg) translate(10px,0px); " data-target="#myCarousel" data-slide-to="2" class="list-text">FAVORITE</li>
+		        <li style="-webkit-transform:rotate(270deg) translate(-60px,0px); " data-target="#myCarousel" data-slide-to="3" class="list-text">NEW/END</li>
+		        <li style="-webkit-transform:rotate(270deg) translate(-120px,0px); " data-target="#myCarousel" data-slide-to="4" class="list-text">FOOTER</li>
 		    </ol>
 		
 		     <!-- Wrapper for slides -->
@@ -417,7 +463,7 @@
 		         </div>
 		         
 		         <div class="item">
-			     	 <div class="topnav" style="margin-bottom: 0;">
+			     	 <div class="topnav">
 						<a class="logo">로고이미지</a>
 						<a class="header-nav" href="#">GALLARY</a>
 						<a class="header-nav" href="<%= ctxPath %>/exhList.at">EXHIBITION</a>
@@ -425,68 +471,113 @@
 						<a class="header-nav" href="#">SERVICE</a>
 						
 						<a class="login" href="<%= ctxPath %>/admin.at"><img src="<%= ctxPath %>/resources/images/main/mainheader-setting.png"/></a>
-						<a class="login" href="#"><img src="<%= ctxPath %>/resources/images/main/mainheader-account.png" /></a>
-						<a class="login" href="#">my</a>
+						<a class="login" href="#"><img src="<%= ctxPath %>/resources/images/main/mainheader-account-login.png" /></a>
+						
 					 </div>
 					 <div class="sidenav" >
-						<a href="#" style="margin-top: 80%;">
+						<a href="#" style="margin-top: 150%;">
 							<img alt="검색" src="<%= ctxPath %>/resources/images/main/mainside-search.png" />
 						</a>
 						<p class="arrow_box" style="color: white; text-align: center;">Search</p>
 						
 						<a href="#">
-							<img alt="티켓" src="<%= ctxPath %>/resources/images/main/mainside-ticket.png" />
-						</a>
-						<p class="arrow_box" style="color: white; text-align: center;">Buy a Tickets</p>
-							
-						<a href="#">
 							<img alt="채팅" src="<%= ctxPath %>/resources/images/main/mainside-chat.png" />
 						</a>
 						<p class="arrow_box" style="color: white; text-align: center;">Chat</p>
-							
+						
 						<a href="#">
-							<img alt="달력" src="<%= ctxPath %>/resources/images/main/mainside-schedule.png" />
+							<img alt="지도" src="<%= ctxPath %>/resources/images/main/mainside-Enr.png" />
 						</a>
-						<p class="arrow_box" style="color: white; text-align: center;">Schedule</p>
-							
-						<a href="#">
-							<img alt="지도" src="<%= ctxPath %>/resources/images/main/mainside-location.png" />
-						</a>
-						<p class="arrow_box" style="color: white; text-align: center;">Location</p>
+						<p class="arrow_box" style="color: white; text-align: center;">Enrollment</p>
 					 </div>
 		               <div class="fill" >
-							<div class="best">지금 핫한 전시회</div>
+							<div class="best">TOP 5</div>
 	        				<div class="imgfadein">
 								<div id="slide">
 								    <div>
 								     	<img style="width: 400px; height: 500px;" src="<%= ctxPath %>/resources/images/exhibition/poster1.JPG" alt="" />
 								      	<div class="explain">
-									제목 내용
+											<div class="hot-exhTitle" >
+												핫한전시회들
+											</div>
+											<div class="hot-exhAuthor">
+												<h3>핫한전시회 작가들</h3>
+											</div>
+											<div class="hot-exhGallery">
+												<h3>핫한전시회 갤러리</h3>
+											</div>
+											<div class="hot-exhDate">
+												<h3>핫한전시회 날짜</h3>
+											</div>
 										</div>
 								    </div>
 								
 								     <div>
 								     	<img style="width: 400px; height: 500px;" src="<%= ctxPath %>/resources/images/exhibition/poster2.JPG" alt="" />
 								     	<div class="explain">
-											BEST Exhibitions
+											<div class="hot-exhTitle" >
+												핫한전시회들2
+											</div>
+											<div class="hot-exhAuthor">
+												<h3>핫한전시회 작가들</h3>
+											</div>
+											<div class="hot-exhGallery">
+												<h3>핫한전시회 갤러리</h3>
+											</div>
+											<div class="hot-exhDate">
+												<h3>핫한전시회 날짜</h3>
+											</div>
 										</div>
 								     </div>
 								     <div>
 								     	<img style="width: 400px; height: 500px;" src="<%= ctxPath %>/resources/images/exhibition/poster3.JPG" alt="" />
 								     	<div class="explain">
-											BEST Exhibitions
+											<div class="hot-exhTitle" >
+												핫한전시회들3
+											</div>
+											<div class="hot-exhAuthor">
+												<h3>핫한전시회 작가들</h3>
+											</div>
+											<div class="hot-exhGallery">
+												<h3>핫한전시회 갤러리</h3>
+											</div>
+											<div class="hot-exhDate">
+												<h3>핫한전시회 날짜</h3>
+											</div>
 										</div>
 								     </div>
 								     <div>
 								     	<img style="width: 400px; height: 500px;" src="<%= ctxPath %>/resources/images/exhibition/poster2.JPG" alt="" />
 								     	<div class="explain">
-											BEST Exhibitions
+											<div class="hot-exhTitle" >
+												핫한전시회들4
+											</div>
+											<div class="hot-exhAuthor">
+												<h3>핫한전시회 작가들</h3>
+											</div>
+											<div class="hot-exhGallery">
+												<h3>핫한전시회 갤러리</h3>
+											</div>
+											<div class="hot-exhDate">
+												<h3>핫한전시회 날짜</h3>
+											</div>
 										</div>
 								     </div>
 								     <div>
 								     	<img style="width: 400px; height: 500px;" src="<%= ctxPath %>/resources/images/exhibition/poster3.JPG" alt="" />
 								        	<div class="explain">
-												BEST Exhibitions
+												<div class="hot-exhTitle" >
+												핫한전시회들5
+											</div>
+											<div class="hot-exhAuthor">
+												<h3>핫한전시회 작가들</h3>
+											</div>
+											<div class="hot-exhGallery">
+												<h3>핫한전시회 갤러리</h3>
+											</div>
+											<div class="hot-exhDate">
+												<h3>핫한전시회 날짜</h3>
+											</div>
 											</div>
 								        </div>
 								</div>
@@ -495,115 +586,172 @@
 		          </div>
 		          
 		          <div class="item">
-					<div class="topnav" style="margin-bottom: 0;">
+					<div class="topnav">
 						<a class="logo">arTree</a>
 						<a class="active header-nav" href="#">GALLARY</a>
 						<a class="header-nav" href="#">EXHIBITION</a>
 						<a class="header-nav" href="#">ABOUT ARTREE</a>
 						<a class="header-nav" href="#">SERVICE</a>
 						<a class="login" href="#"><img src="<%= ctxPath %>/resources/images/main/mainheader-setting.png"/></a>
-						<a class="login" href="#"><img src="<%= ctxPath %>/resources/images/main/mainheader-account.png" /></a>
-						  <a class="login" href="#">my</a>
+						<a class="login" href="#"><img src="<%= ctxPath %>/resources/images/main/mainheader-account-login.png" /></a>
+						
 					</div>
 					<div class="sidenav" >
-						<a href="#" style="margin-top: 80%;">
+						<a href="#" style="margin-top: 150%;">
 							<img alt="검색" src="<%= ctxPath %>/resources/images/main/mainside-search.png" />
 						</a>
 						<p class="arrow_box" style="color: white; text-align: center;">Search</p>
 						
 						<a href="#">
-							<img alt="티켓" src="<%= ctxPath %>/resources/images/main/mainside-ticket.png" />
-						</a>
-						<p class="arrow_box" style="color: white; text-align: center;">Buy a Tickets</p>
-							
-						<a href="#">
 							<img alt="채팅" src="<%= ctxPath %>/resources/images/main/mainside-chat.png" />
 						</a>
 						<p class="arrow_box" style="color: white; text-align: center;">Chat</p>
-							
+						
 						<a href="#">
-							<img alt="달력" src="<%= ctxPath %>/resources/images/main/mainside-schedule.png" />
+							<img alt="지도" src="<%= ctxPath %>/resources/images/main/mainside-Enr.png" />
 						</a>
-						<p class="arrow_box" style="color: white; text-align: center;">Schedule</p>
-							
-						<a href="#">
-							<img alt="지도" src="<%= ctxPath %>/resources/images/main/mainside-location.png" />
-						</a>
-						<p class="arrow_box" style="color: white; text-align: center;">Location</p>
+						<p class="arrow_box" style="color: white; text-align: center;">Enrollment</p>
 						  
 					</div>
-		            <div class="fill" style="">
-		             	<div class="exhibitions">
-		             		<div style="flex:1; width: 50%; height: 100%;" class="endexpected-exh">
-		             			<div class="exhibitions-title" style="text-align: left;">
-		             				종료예정 전시회
-		             			</div>
-		             			<div class="exhibitions-img">
-		             				<img style="width: 400px; height: 500px;" src="<%= ctxPath %>/resources/images/exhibition/poster3.JPG" />
-		             			</div>
-		             		</div>
-		             		<div style="flex:1; width: 50%; height: 100%;" class="new-exh">
-		             			
-		             			<div >
-		             				<img style="width: 400px; height: 500px; margin-top: 0;" src="<%= ctxPath %>/resources/images/exhibition/poster3.JPG" />
-		             			</div>
-		             			<div class="exhibitions-title" style="margin-top: 30px; text-align: right;">
-		             				신규 전시회 
-		             			</div>
-		             		</div>
-		             		
-		             	</div>
-		             </div>
+					
+					<div class="fill" style="">
+	                	<div class="recomExh">추천 전시회</div>
+		               	<div class="recom-exhibitions">
+		               		<a class="recom_one" >
+								<img class="exh_poster" src="<%= ctxPath%>/resources/images/exhibition/artmap_20200102_9426350.jpg"/>
+								<span class="recom-info">그녀의 이름은</span>
+								<span class="recom-info">전북도립미술관 | 전북</span>		
+								<span class="recom-info">2020.11.12 - 2020.11.13</span>
+							</a>
+							<a class="recom_one" >
+								<img class="exh_poster" src="<%= ctxPath%>/resources/images/exhibition/artmap_20200102_9426350.jpg"/>
+								<span class="recom-info">그녀의 이름은</span>
+								<span class="recom-info">전북도립미술관 | 전북</span>		
+								<span class="recom-info">2020.11.12 - 2020.11.13</span>
+							</a>
+							<a class="recom_one" >
+								<img class="exh_poster" src="<%= ctxPath%>/resources/images/exhibition/artmap_20200102_9426350.jpg"/>
+								<span class="recom-info">그녀의 이름은</span>
+								<span class="recom-info">전북도립미술관 | 전북</span>		
+								<span class="recom-info">2020.11.12 - 2020.11.13</span>
+							</a>
+							<a class="recom_one" >
+								<img class="exh_poster" src="<%= ctxPath%>/resources/images/exhibition/artmap_20200102_9426350.jpg"/>
+								<span class="recom-info">그녀의 이름은</span>
+								<span class="recom-info">전북도립미술관 | 전북</span>		
+								<span class="recom-info">2020.11.12 - 2020.11.13</span>
+							</a>
+		               	</div>
+	                </div>
+		            
 		         </div>
 		         
 				 <div class="item">
-					<div class="topnav" style="margin-bottom: 0;">
+					<div class="topnav">
 						<a class="logo">arTree</a>
 						<a class="active header-nav" href="#">GALLARY</a>
 						<a class="header-nav" href="#">EXHIBITION</a>
 						<a class="header-nav" href="#">ABOUT ARTREE</a>
 						<a class="header-nav" href="#">SERVICE</a>
 						<a class="login" href="#"><img src="<%= ctxPath %>/resources/images/main/mainheader-setting.png"/></a>
-						<a class="login" href="#"><img src="<%= ctxPath %>/resources/images/main/mainheader-account.png" /></a>
-						<a class="login" href="#">my</a>
+						<a class="login" href="#"><img src="<%= ctxPath %>/resources/images/main/mainheader-account-login.png" /></a>
+						
 					</div>
 					<div class="sidenav" >
-						<a href="#" style="margin-top: 80%;">
-						<img alt="검색" src="<%= ctxPath %>/resources/images/main/mainside-search.png" />
+						<a href="#" style="margin-top: 150%;">
+							<img alt="검색" src="<%= ctxPath %>/resources/images/main/mainside-search.png" />
 						</a>
 						<p class="arrow_box" style="color: white; text-align: center;">Search</p>
 						
-						<a href="#">
-							<img alt="티켓" src="<%= ctxPath %>/resources/images/main/mainside-ticket.png" />
-						</a>
-						<p class="arrow_box" style="color: white; text-align: center;">Buy a Tickets</p>
-							
 						<a href="#">
 							<img alt="채팅" src="<%= ctxPath %>/resources/images/main/mainside-chat.png" />
 						</a>
 						<p class="arrow_box" style="color: white; text-align: center;">Chat</p>
 						
 						<a href="#">
-							<img alt="달력" src="<%= ctxPath %>/resources/images/main/mainside-schedule.png" />
+							<img alt="지도" src="<%= ctxPath %>/resources/images/main/mainside-Enr.png" />
 						</a>
-						<p class="arrow_box" style="color: white; text-align: center;">Schedule</p>
-							
-						<a href="#">
-							<img alt="지도" src="<%= ctxPath %>/resources/images/main/mainside-location.png" />
-						</a>
-						<p class="arrow_box" style="color: white; text-align: center;">Location</p>
+						<p class="arrow_box" style="color: white; text-align: center;">Enrollment</p>
 					</div>
 					
-	                <div class="fill" style="">
-		               	<div class="notice">
-		               		
-		               	</div>
-	                </div>
+					<div class="fill" style="">
+		             	<div class="exhibitions">
+		             		<div style="flex:1; width: 50%; height: 100%; margin-right: 30px;" class="endexpected-exh" >
+			             		<div style="float: center; text-align: center; margin-left: 175px;">	
+			             			<span class="newNend-exh-exp endexh">종료예정 전시회</span>
+		             				<span class="newNend-exh-exp endexh">종료예정 전시회 위치</span>
+		             				<span class="newNend-exh-exp endexh">종료예정 전시회 기간</span>
+		             			</div>	
+		             			<div class="exhibitions-img" >
+			             			<div class="exhibitions-title" style="text-align: left; float:left; margin-right:0px; top:400px; -webkit-transform:rotate(270deg) translate(-400px,60px);">
+			             				종료예정 전시회
+			             			</div>
+		             				<img style="width: 400px; height: 500px;" src="<%= ctxPath %>/resources/images/exhibition/poster3.JPG" />
+		             			</div>
+		             		</div>
+		             		<div style="flex:1; width: 50%; height: 100%; " class="new-exh">
+		             			
+		             			<div style="text-align: left; margin:-20 0 0 200px;">
+			             			<div class="exhibitions-title" style="margin: 0 100px 0 0; float:right; text-align: right; -webkit-transform:rotate(270deg) translate(-50px,-450px);">
+			             				신규 전시회 
+			             			</div>
+		             				<img style="width: 400px; height: 500px; margin-top: 0; -webkit-transform:translate(50px,0);" src="<%= ctxPath %>/resources/images/exhibition/poster3.JPG" />
+		             			</div>
+		             			<div style="float: center; text-align: center; margin-left: 50px;" >
+		             				<span class="newNend-exh-exp">새로나온 전시회</span>
+		             				<span class="newNend-exh-exp">새로나온 전시회 위치</span>
+		             				<span class="newNend-exh-exp">새로나온 전시회 기간</span>
+		             			</div>
+		             			
+		             		</div>
+		             		
+		             	</div>
+		             </div>
+					
+	                <!-- 
 				                    
+					<div class="footer">
+					  	<p>Footer</p>
+					</div> -->
+				</div>
+				
+				<div class="item">
+					<div class="topnav">
+						<a class="logo">arTree</a>
+						<a class="active header-nav" href="#">GALLARY</a>
+						<a class="header-nav" href="#">EXHIBITION</a>
+						<a class="header-nav" href="#">ABOUT ARTREE</a>
+						<a class="header-nav" href="#">SERVICE</a>
+						<a class="login" href="#"><img src="<%= ctxPath %>/resources/images/main/mainheader-setting.png"/></a>
+						<a class="login" href="#"><img src="<%= ctxPath %>/resources/images/main/mainheader-account-login.png" /></a>
+						
+					</div>
+					<div class="sidenav" >
+						<a href="#" style="margin-top: 150%;">
+							<img alt="검색" src="<%= ctxPath %>/resources/images/main/mainside-search.png" />
+						</a>
+						<p class="arrow_box" style="color: white; text-align: center;">Search</p>
+						
+						<a href="#">
+							<img alt="채팅" src="<%= ctxPath %>/resources/images/main/mainside-chat.png" />
+						</a>
+						<p class="arrow_box" style="color: white; text-align: center;">Chat</p>
+						
+						<a href="#">
+							<img alt="지도" src="<%= ctxPath %>/resources/images/main/mainside-Enr.png" />
+						</a>
+						<p class="arrow_box" style="color: white; text-align: center;">Enrollment</p>
+					</div>
+					
+					<div class="fill" style="">
+		             	
+		             </div>
+					             
 					<div class="footer">
 					  	<p>Footer</p>
 					</div>
 				</div>
+				
 	        </div>
 	    </div>
 	</div>
