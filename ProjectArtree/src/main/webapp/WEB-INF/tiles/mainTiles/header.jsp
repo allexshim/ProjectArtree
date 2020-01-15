@@ -28,21 +28,21 @@
 	  font-size: 25px;
 	  color: black;
 	}
-	
+
 	.topnav a.logo {
-	  z-index: 2;
+	  -webkit-transform:translate(0,-10px);
+	  z-index: 100;
 	  float: left;
 	  text-align: left;
-	  padding: 14px 16px;
 	  text-decoration: none;
 	}
+	
 	
 	.topnav a:hover {
 	  color: gray;
 	}
 	
 	.topnav a.login {
-		
 		text-decoration: none;
 		color: white;
 		margin: 0 20px 0 20px;
@@ -51,9 +51,9 @@
 </style>
 
 <div class="topnav">
-	<a class="logo">arTree</a>
+	<a class="logo"><img style="height: 60px;" src="<%=ctxPath %>/resources/images/main/logo_black1.jpg" /></a>
 	<a class="active header-nav" href="#">GALLARY</a>
-	<a class="header-nav" href="#">EXHIBITION</a>
+	<a class="header-nav" href="<%=ctxPath%>/exhList.at">EXHIBITION</a>
 	<a class="header-nav" href="#">ABOUT ARTREE</a>
 	<a class="header-nav" href="#">SERVICE</a>
 	<a class="login" href="#"><img src="<%= ctxPath %>/resources/images/main/mainheader-setting.png"/></a>

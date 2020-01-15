@@ -240,7 +240,7 @@
 	.recomExh {
 		position: absolute;
 		top: 15%;
-		left: 20%;
+		left: 18.5%;
 		font-size: 26pt;
 	}
 	
@@ -334,7 +334,7 @@
 		         	 <div class="fill" style="z-index:10; margin-top:0; background-image: url('<%= ctxPath%>/resources/images/main/mainImg.jpg')">
 		         		
 		         		 <div class="main-logo" style="z-index: 5;">
-		         			로고이미지
+		         			ARTREE
 		         		 </div>
 				         <div class="main-search" style="z-index: 5;">
 			       			<div class="inputdiv">
