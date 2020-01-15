@@ -11,30 +11,31 @@
 
 <style type="text/css">
 /* sidebar */
-.sidenav {
-  height: 100%;
-  width: 10%;
-  position: fixed;
-  z-index: 1;
-  top: 0;
-  left: 0;
-  overflow-x: hidden;
-  overflow-y: hidden;
-  padding-top: 20px;
-}
-
-.sidenav a {
-  margin-top: 50px;
-  padding: 0;
-  text-decoration: none;
-  font-size: 25px;
-  color: #818181;
-  display: block;
-}
-
-.sidenav a:hover {
-  color: #f2f2f2;
-}
+	.sidenav {
+	  margin-left: 10px;
+	  height: 100%;
+	  width: 10%;
+	  position: fixed;
+	  z-index: 1;
+	  top: 0;
+	  left: 0;
+	  overflow-x: hidden;
+	  overflow-y: hidden;
+	  padding-top: 20px;
+	}
+	
+	.sidenav a {
+	  margin-top: 50px;
+	  padding: 0;
+	  text-decoration: none;
+	  font-size: 25px;
+	  color: #818181;
+	  display: block;
+	}
+	
+	.sidenav a:hover {
+	  color: #f2f2f2;
+	}
 
 .main {
   margin-left: 160px; /* Same as the width of the sidenav */
@@ -56,7 +57,7 @@ span {
 .arrow_box {
   display: none;
   position: absolute;
-  width: 100px;
+  width: 80px;
   padding: 8px;
   margin-top: 8px;
   left: 0;
@@ -89,23 +90,18 @@ a:hover + p.arrow_box {
 </style>
 
 <div class="sidenav" >
-  <a href="#" style="margin-top: 150%;">
-  	<img alt="검색" src="<%= ctxPath %>/resources/images/main/mainside-search.png" />
-  </a>
-  <p class="arrow_box" style="color: white; text-align: center;">Search</p>
-  
-  <a href="#">
-  	<img alt="티켓" src="<%= ctxPath %>/resources/images/main/mainside-ticket.png" />
-  </a>
-  <p class="arrow_box" style="color: white; text-align: center;">Buy a Tickets</p>
-  	
-  <a href="#">
-  	<img alt="채팅" src="<%= ctxPath %>/resources/images/main/mainside-chat.png" />
-  </a>
-  <p class="arrow_box" style="color: white; text-align: center;">Chat</p>
-  	
-  <a href="#">
-  </a>
-  <p class="arrow_box" style="color: white; text-align: center;">Chat</p>
-  
+	<a href="#" style="margin-top: 150%;">
+		<img alt="검색" src="<%= ctxPath %>/resources/images/main/mainside-search.png" />
+	</a>
+	<p class="arrow_box" style="color: white; text-align: center;">검색</p>
+	
+	<a href="#">
+		<img alt="채팅" src="<%= ctxPath %>/resources/images/main/mainside-chat.png" />
+	</a>
+	<p class="arrow_box" style="color: white; text-align: center;">채팅</p>
+	
+	<a href="#">
+		<img alt="지도" src="<%= ctxPath %>/resources/images/main/mainside-Enr.png" />
+	</a>
+	<p class="arrow_box" style="color: white; text-align: center;">전시등록</p>
 </div>
