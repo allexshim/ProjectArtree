@@ -27,6 +27,7 @@
 		display: inline-block;
 		width: 100%;
 		margin: 0 0 50px 0;
+		height: 500px;
 	}
 	
 	<%-- slider start --%>
@@ -70,10 +71,12 @@
 		display: inline-block;
 	}
 	
+	#container_gal_list .contents .thisCurExh img:hover { opacity: 0.7 }
 	#container_gal_list .contents .thisCurExh img {
 		display: inline-block;
-		width: 29%;
+		width: 28%;
 		margin-right: 35px;
+		transition: opacity 0.5s ease;
 	}
 	
 	#container_gal_list .searchArea {
@@ -123,16 +126,11 @@
 	#container_gal_list .galArea .gal_one {
 		display: inline-block;
 		width: 28%;
-		margin: 0 5% 60px 0;
+		margin: 0 5% 80px 0;
 		text-align: left;
 		text-decoration: none;
-		transition: opacity 0.5s ease;
 	}
-	
-	#container_gal_list .galArea .gal_one:hover {
-		opacity: 0.7;
-	}
-	
+
 	#container_gal_list .galArea .gal_one img {
 		width: 100%;
 		margin-bottom: 15px;
@@ -144,10 +142,12 @@
 		color: #000;
 	}
 	
+	#container_gal_list .galArea .gal_one .galAddr { position: relative; }
+	
 	#container_gal_list .galArea .gal_one .galTitle { 
 		font-size: 15pt; 
 		font-weight: bold; 
-		margin: 15px 0 8px 0;
+		margin: 15px 0 5px 0;
 	}
 
 	#container_gal_list .Title_Area {
@@ -166,7 +166,7 @@
 	
 	#container_gal_list .carousel-inner {
 		position: relative;
-		height: 550px;
+		height: 500px;
 	}
 	
 	#container_gal_list .carousel-inner .item {
@@ -358,6 +358,14 @@
 <script type="text/javascript">
 
 	$(document).ready(function(){
+		
+		$(".gal_one").hover(function(){
+			$(this).children(".galAddr").stop().animate({top:'3px'}, 150);
+
+		}, function(){
+			$(this).children(".galAddr").stop().animate({top:'0px'}, 150);
+		});
+		
 		
 		$("#searchText").keydown(function(event){
 			

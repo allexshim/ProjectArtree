@@ -118,11 +118,9 @@
 	$(document).ready(function(){
 		
 		$(".exh_one").hover(function(){
-			$(this).css('opacity','0.8');
 			$(this).children(".art_info_aboutTime").stop().animate({top:'7px'});
 
 		}, function(){
-			$(this).css('opacity','1.0');
 			$(this).children(".art_info_aboutTime").stop().animate({top:'0px'});
 		});
 		
