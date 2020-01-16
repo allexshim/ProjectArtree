@@ -19,7 +19,7 @@
 		width: 100%;
 		text-align: center;
 		font-weight: bold;
-		font-size: 30pt;
+		font-size: 25pt;
 		margin: 30px 0 60px 0;
 	}
 	
@@ -27,15 +27,16 @@
 		display: inline-block;
 		width: 100%;
 		margin: 0 0 50px 0;
+		height: 500px;
 	}
 	
 	<%-- slider start --%>
-	#container_gal_list .mySlides {	display: none; height: 500px; width: 100%;}
-	#container_gal_list img { 
+	#container_gal_list .mainGalImg { 
 		vertical-align: middle; 
 		width: 50%;
 		float: left;
 		height: 100%;
+		padding-bottom: 40px;
 	}
 	
 	#container_gal_list .contents {
@@ -53,7 +54,7 @@
 		display: inline-block;
 	}
 	
-	#container_gal_list .contents .recom_info { margin: 20px 0 50px 0;}
+	#container_gal_list .contents .recom_info { margin: 40px 0 50px 0;}
 	
 	#container_gal_list .contents .recom_info span {
 		width: 100%;
@@ -70,63 +71,22 @@
 		display: inline-block;
 	}
 	
+	#container_gal_list .contents .thisCurExh img:hover { opacity: 0.7 }
 	#container_gal_list .contents .thisCurExh img {
 		display: inline-block;
-		width: 29%;
+		width: 28%;
 		margin-right: 35px;
+		transition: opacity 0.5s ease;
 	}
-	
-	#container_gal_list .slideshow-container {
-	  width: 100%; 
-	  position: relative;
-	  margin: auto;
-	  display: inline-block;
-	}
-	
-	#container_gal_list .numbertext {
-		display: none;	  
-	}
-	
-	#container_gal_list .dot {
-	  height: 10px;
-	  width: 10px;
-	  margin: 40px 2px;
-	  background-color: #bbb;
-	  border-radius: 50%;
-	  display: inline-block;
-	  transition: background-color 0.6s ease;
-	}
-	
-	#container_gal_list .active {
-	  background-color: #717171;
-	}
-	
-	#container_gal_list .fade {
-	  -webkit-animation-name: fade;
-	  -webkit-animation-duration: 3s;
-	  animation-name: fade;
-	  animation-duration: 3s;
-	}
-	
-	@-webkit-keyframes fade {
-	  from {opacity: .4} 
-	  to {opacity: 1}
-	}
-	
-	@keyframes fade {
-	  from {opacity: .4} 
-	  to {opacity: 1}
-	}
-	<%-- slider end --%>
 	
 	#container_gal_list .searchArea {
 		display: inline-block;
 		width: 100%;
-		margin: 50px 0 100px 0;
+		margin: 100px 0 150px 0;
 	}
 	
 	#container_gal_list .searchArea select {
-		width: 15%;
+		width: 20%;
 		display: inline-block;
 		margin-right: 5%;
 		font-size: 15pt;
@@ -142,6 +102,7 @@
 		width: 95%;
 		font-size: 15pt;
 		padding-left: 10px;
+		background-color: white;
 	}
 	
 	#container_gal_list .searchArea img {
@@ -154,7 +115,7 @@
 	#container_gal_list .inputText {
 		border-bottom: solid 2px #444;
 		display: inline-block;
-		width: 53%;
+		width: 70%;
 	}
 	
 	#container_gal_list .galArea {
@@ -165,16 +126,11 @@
 	#container_gal_list .galArea .gal_one {
 		display: inline-block;
 		width: 28%;
-		margin: 0 5% 60px 0;
+		margin: 0 5% 80px 0;
 		text-align: left;
 		text-decoration: none;
-		transition: opacity 1s ease;
 	}
-	
-	#container_gal_list .galArea .gal_one:hover {
-		opacity: 0.7;
-	}
-	
+
 	#container_gal_list .galArea .gal_one img {
 		width: 100%;
 		margin-bottom: 15px;
@@ -186,35 +142,86 @@
 		color: #000;
 	}
 	
+	#container_gal_list .galArea .gal_one .galAddr { position: relative; }
+	
 	#container_gal_list .galArea .gal_one .galTitle { 
 		font-size: 15pt; 
 		font-weight: bold; 
-		margin: 15px 0 8px 0;
+		margin: 15px 0 5px 0;
 	}
 
+	#container_gal_list .Title_Area {
+		width: 100%;
+		display: inline-block; 
+		text-align: center;
+		margin: 100px 0 100px 0;
+	}
+	
+	#container_gal_list .Title_Area .lt {
+		display: block;
+		font-size: 35pt;
+		font-weight: bold;
+		color: #000;
+	}
+	
+	#container_gal_list .carousel-inner {
+		position: relative;
+		height: 500px;
+	}
+	
+	#container_gal_list .carousel-inner .item {
+		height: 100%;
+	}
+	
+	#container_gal_list .carousel-control {
+		background-image: none;
+	}
+	
+	#container_gal_list .carousel-indicators {
+	  display: block;
+	  bottom: -30px;
+	  color: #bbb;
+	}
+	
+	#container_gal_list .carousel-indicators li {    
+	  background-color: #cbcbcb;
+	  margin-right: 5px;
+	  margin-left: 5px;
+	}
+	
+	#container_gal_list .carousel-indicators .active {
+	  background-color: #737373;
+	}
+	
 	
 </style>  
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-<script type="text/javascript">
-
-
-	
-</script>
 
 <div id="container_gal_list" align="center">
 
+	<div class="Title_Area">
+		<span class="lt">GALLERY</span>
+	</div>
+	
 	<span class="main_title">이번주 추천 공간</span>
-	<%-- -------------------------------------슬라이드쇼 영역 --%>
-
+	
 	<div class="main_top">
-		<div class="slideshow-container">
-			<div class="mySlides fade" align="center">
-			  <div class="numbertext">1 / 3</div>
-			  <img class="slideView" src="<%= ctxPath%>/resources/images/exhibition/챕터투.png">
-			  <div class="contents">			  	
+	  <div id="myCarousel" class="carousel slide" data-ride="carousel">
+	    <!-- Indicators -->
+	    <ol class="carousel-indicators">
+	      <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+	      <li data-target="#myCarousel" data-slide-to="1"></li>
+	      <li data-target="#myCarousel" data-slide-to="2"></li>
+	    </ol>
+	
+	    <!-- Wrapper for slides -->
+	    <div class="carousel-inner">
+	      <div class="item active">
+	        <a href=""><img class="mainGalImg" src="<%= ctxPath%>/resources/images/exhibition/챕터투.png"></a>
+	        <div class="contents">			  	
 			  	<span class="recom_title">스튜디오퓨어파이브|부산</span>
 			  	<div class="recom_info">
 			  		<span style="color: red;">현재 전시중</span>
@@ -229,14 +236,13 @@
 				  		<a href=""><img src="<%= ctxPath%>/resources/images/exhibition/artmap_20200102_9426350.jpg" style="margin-right: 0px;"></a>
 			  		</div>
 			  	</div>
-			   </div>
-			</div>
-			
-			<div class="mySlides fade">
-			  <div class="numbertext">2 / 3</div>
-			  <img class="slideView" src="<%= ctxPath%>/resources/images/exhibition/챕터투.png">
-			  <div class="contents">
-			  	<span class="recom_title">아라리오뮤지엄 탑동시네마|제주</span>
+			  </div>
+	      </div>
+	
+	      <div class="item">
+	        <a href=""><img class="mainGalImg" src="<%= ctxPath%>/resources/images/exhibition/챕터투.png"></a>
+	        <div class="contents">			  	
+			  	<span class="recom_title">스튜디오퓨어파이브|부산</span>
 			  	<div class="recom_info">
 			  		<span style="color: red;">현재 전시중</span>
 			  		<span>휴관일 월요일</span>
@@ -250,14 +256,13 @@
 				  		<a href=""><img src="<%= ctxPath%>/resources/images/exhibition/artmap_20200102_9426350.jpg" style="margin-right: 0px;"></a>
 			  		</div>
 			  	</div>
-			  </div>
-			</div>
-			
-			<div class="mySlides fade">
-			  <div class="numbertext">3 / 3</div>
-			  <img class="slideView" src="<%= ctxPath%>/resources/images/exhibition/챕터투.png">
-			  <div class="contents">
-			  	<span class="recom_title">더가든팩토리|경기</span>
+			 </div>
+	      </div>
+	    
+	      <div class="item">
+	        <a href=""><img class="mainGalImg" src="<%= ctxPath%>/resources/images/exhibition/챕터투.png"></a>
+	        <div class="contents">			  	
+			  	<span class="recom_title">스튜디오퓨어파이브|부산</span>
 			  	<div class="recom_info">
 			  		<span style="color: red;">현재 전시중</span>
 			  		<span>휴관일 월요일</span>
@@ -271,41 +276,28 @@
 				  		<a href=""><img src="<%= ctxPath%>/resources/images/exhibition/artmap_20200102_9426350.jpg" style="margin-right: 0px;"></a>
 			  		</div>
 			  	</div>
-			  </div>
-			</div>
-		</div>
-		<br>
-		<div style="text-align:center">
-		  <span class="dot"></span> 
-		  <span class="dot"></span> 
-		  <span class="dot"></span> 
-		</div>
+			 </div>
+	      </div>
+	    </div>
+	  </div>
 	</div>
+		
 
 	<div class="searchArea">
-		<form name="">
+		<form name="searchGalFrm">
 			<select name="searchWhere" id="searchWhere">
-				<option>지역전체</option>
-				<option>서울</option>
-				<option>경기 인천</option>
-				<option>부산 울산 경남</option>
-				<option>대구 경북</option>
-				<option>광주 전라</option>
-				<option>대전 충청 세종</option>
-				<option>제주 강원</option>
-			</select>
-			<select name="searchPlaceType" id="searchPlaceType">
-				<option>공간전체</option>
-				<option>미술관</option>
-				<option>박물관</option>
-				<option>갤러리</option>
-				<option>복합문화공간</option>
-				<option>대안공간</option>
-				<option>창작 스튜디오</option>
+				<option value="">지역전체</option>
+				<option value="서울">서울</option>
+				<option value="경기 인천">경기 인천</option>
+				<option value="부산 울산 경남">부산 울산 경남</option>
+				<option value="대구 경북">대구 경북</option>
+				<option value="광주 전라">광주 전라</option>
+				<option value="대전 충청 세종">대전 충청 세종</option>
+				<option value="제주 강원">제주 강원</option>
 			</select>
 			<div class="inputText">
 				<input type="text" name="searchText" id="searchText" placeholder="전시회 검색???"/>
-				<img class="icoForSearch" onclick="" src="<%= ctxPath%>/resources/images/exhibition/ico/ico_search.png">
+				<img class="icoForSearch" onclick="goSearch()" src="<%= ctxPath%>/resources/images/exhibition/ico/ico_search.png">
 			</div>
 		</form>
 	</div>
@@ -367,29 +359,64 @@
 
 	$(document).ready(function(){
 		
+		$(".gal_one").hover(function(){
+			$(this).children(".galAddr").stop().animate({top:'3px'}, 150);
+
+		}, function(){
+			$(this).children(".galAddr").stop().animate({top:'0px'}, 150);
+		});
+		
+		
+		$("#searchText").keydown(function(event){
+			
+			if(event.keyCode == 13){
+				goSearch();
+			}
+			
+		});
+		
+		$("select[name=searchWhere]").change(function(){
+			goSearch();
+		});
 		
 	});
+	
+	function goSearch(){
+		
+		var searchWhere = $("#searchWhere").val();
+		var searchText = $("#searchText").val().trim();
 
-	<%-- select works slider start --%>
-	var slideIndex = 0;
-	showSlides();
+		if ( searchWhere == '' && searchText == ''){
+			alert("검색어를 입력 후 다시 시도해주세요.");
+			return;
+		}
+		
+		var formData = $("form[name=searchGalFrm]").serialize();		
+			
+			$.ajax({
+				
+				url: "<%= ctxPath%>/galList.at",
+				data: formData,
+				type: "GET",
+				dataType: "JSON",
+				success:function(json){
+					
+					var html = "";
+					
+					$.each(json, function(){
+						
+						
+						
+					});
+					
+					
+				},
+				error: function(request, status, error){
+					alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+				}
+			});		
+		
+	}// end of goSearch() ---------
 
-	function showSlides() {
-	  var i;
-	  var slides = document.getElementsByClassName("mySlides");
-	  var dots = document.getElementsByClassName("dot");
-	  for (i = 0; i < slides.length; i++) {
-	    slides[i].style.display = "none";  
-	  }
-	  slideIndex++;
-	  if (slideIndex > slides.length) {slideIndex = 1}    
-	  for (i = 0; i < dots.length; i++) {
-	    dots[i].className = dots[i].className.replace(" active", "");
-	  }
-	  slides[slideIndex-1].style.display = "block";  
-	  dots[slideIndex-1].className += " active";
-	  setTimeout(showSlides, 3000);
-	}
-	<%-- select works slider end --%>
 
 </script>

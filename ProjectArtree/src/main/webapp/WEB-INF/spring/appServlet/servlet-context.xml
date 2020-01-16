@@ -49,7 +49,8 @@
 		<!--  위의 BeanNameViewResolver 에서 해당하는 bean이 없으면 이후에 이 resolver가 실행된다. -->
 	</beans:bean>
 	
-	<!-- ===== 파일업로드 및 파일다운로드에 필요한 의존객체 설정하기 ===== -->
+	
+	<!-- ===== #20. 파일업로드 및 파일다운로드에 필요한 의존객체 설정하기 ===== -->
 	<beans:bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">   
 	<!-- 자바파일이 UTF-8로 저장된 경우 한글파일명이 깨지지 않게하기 위해 -->
         <beans:property name="defaultEncoding" value="utf-8" />

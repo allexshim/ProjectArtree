@@ -12,6 +12,7 @@
 <style type="text/css">
 /* sidebar */
 .sidenav {
+  margin-left: 10px;
   height: 100%;
   width: 10%;
   position: fixed;
@@ -92,20 +93,16 @@ a:hover + p.arrow_box {
   <a href="#" style="margin-top: 150%;">
   	<img alt="검색" src="<%= ctxPath %>/resources/images/main/mainside-search.png" />
   </a>
-  <p class="arrow_box" style="color: white; text-align: center;">Search</p>
+  <p class="arrow_box" style="color: white; text-align: center;">검색</p>
   
   <a href="#">
-  	<img alt="티켓" src="<%= ctxPath %>/resources/images/main/mainside-ticket.png" />
+  	<img alt="전시등록" src="<%= ctxPath %>/resources/images/main/mainside-Enr.png" />
   </a>
-  <p class="arrow_box" style="color: white; text-align: center;">Buy a Tickets</p>
+  <p class="arrow_box" style="color: white; text-align: center;">전시등록</p>
   	
   <a href="#">
   	<img alt="채팅" src="<%= ctxPath %>/resources/images/main/mainside-chat.png" />
   </a>
-  <p class="arrow_box" style="color: white; text-align: center;">Chat</p>
-  	
-  <a href="#">
-  </a>
-  <p class="arrow_box" style="color: white; text-align: center;">Chat</p>
+  <p class="arrow_box" style="color: white; text-align: center;">채팅</p>
   
 </div>

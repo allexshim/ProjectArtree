@@ -16,10 +16,10 @@
 	
 	#container_gal_detail .main_top {
 		display: inline-block;
-		margin-top: 50px;
 		width: 100%; 
-		height: 600px; 
+		height: 500px; 
 		border: solid 1px #e6e6e6;
+		margin-bottom: 50px;
 	}
 	
 	#container_gal_detail .main_img {
@@ -32,7 +32,7 @@
 		float: right; 
 		width: 50%; 
 		text-align: center; 
-		padding: 8% 5% 0 5%;
+		padding: 5% 5% 0 5%;
 	}
 	
 	#container_gal_detail .specialArea {
@@ -41,27 +41,30 @@
 	}
 	
 	#container_gal_detail .specialArea .exhStatus {
-		font-size: 13pt;
+		font-size: 12pt;
 		border: none;
 		background-color: #ff6666;
-		padding: 5px 10px;
+		padding: 4px 9px;
 		color: white;
 		border-radius: 5px;
 		margin-right: 10px;
 	}
 	
+	#container_gal_detail .specialArea img { width: 30px; height: 30px; margin-bottom: 5px;}
+	
 	#container_gal_detail .info_title {
 		display: block; 
-		font-size: 30pt; 
+		font-size: 22pt; 
 		font-weight: bold;
 	}
 	
 	#container_gal_detail .info_aboutGal {
 		width: 100%;
 		border-collapse: collapse;
-		font-size: 15pt;
+		font-size: 13pt;
 		text-align: left;
 		margin-top: 40px;
+		color: #000;
 	}
 	
 	#container_gal_detail .info_aboutGal tr {
@@ -130,7 +133,7 @@
 	#container_gal_detail .divComCss {
 		display: inline-block;
 		width: 100%;
-		margin: 50px 0 30px 0;
+		margin: 60px 0 80px 0;
 	}
 	
 	#container_gal_detail .spanTitle {
@@ -140,8 +143,9 @@
 		font-weight: bold;
 		text-align: left;
 		border-right: solid 3px #000;
-		margin-right: 30px;
+		margin-right: 20px;
 		float: left;
+		color: #000;
 	}
 	
 	#container_gal_detail .intro_content {
@@ -149,7 +153,7 @@
 		text-align: left;
 		display: block;
 		float: left;
-		width: 90%;
+		width: 87%;
 	}
 	
 	#container_gal_detail .curExh {
@@ -171,7 +175,7 @@
 	#container_gal_detail .curExhList a {
 		text-decoration: none;
 		color: #000;
-		transition: opacity 1s ease;
+		transition: opacity 0.5s ease;
 	}
 	
 	#container_gal_detail .curExhList a:hover {
@@ -206,7 +210,6 @@
 	  color: #222;
 	  width: 100%;
 	  cursor: pointer;
-	  padding: 18px;
 	  border: none;
 	  text-align: center;
 	  font-size: 35px;
@@ -217,7 +220,7 @@
 	}
 
 	#container_gal_detail .accordion:hover {
-		background-color: #e6e6e6;
+		background-color: #f2f2f2;
 	}
 	
 	#container_gal_detail .active {
@@ -251,14 +254,14 @@
 		max-width: 100%;
 		margin-top: 100px;
 	}
-	
+
 	#container_gal_detail .ExhList_Area a {
 		text-decoration: none;
 		color: #0d0d0d;
 		cursor: pointer;
-		display: inline-block;
+		display: inline-block; 
 		width: 21%;
-		height: 500px;
+		height: 450px;
 		margin-right: 3.7%;
 		margin-top: 20px;
 		margin-bottom: 40px;
@@ -276,6 +279,7 @@
 		font-weight: bold;
 		margin: 3px 0 3px 0;
 		padding-left: 10px;
+		position: relative;
 	}
 	
 	#container_gal_detail .ExhList_Area a .InfoWhereWhen {
@@ -288,6 +292,20 @@
 		text-align: left;
 	}
 	
+	#container_gal_detail .Title_Area {
+		width: 100%;
+		display: inline-block; 
+		text-align: center;
+		margin: 100px 0 100px 0;
+	}
+	
+	#container_gal_detail .Title_Area .lt {
+		display: block;
+		font-size: 35pt;
+		font-weight: bold;
+		color: #000;
+	}
+	
 </style>  
 
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -298,6 +316,13 @@
 <script type="text/javascript">
 
 	$(document).ready(function(){
+		
+		$(".exh_one").hover(function(){
+			$(this).children(".art_mainTitle").stop().animate({top:'5px'});
+
+		}, function(){
+			$(this).children(".art_mainTitle").stop().animate({top:'0px'});
+		});
 			
 		<%-- http://apis.map.kakao.com/web/guide/ 카카오 지도 스크립트 --%>
 			var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
@@ -403,6 +428,10 @@
 
 <div id="container_gal_detail">
 
+	<div class="Title_Area">
+		<span class="lt">GALLERY</span>
+	</div>
+	
 	<div class="main_top">
 		<img class="main_img" src="<%= ctxPath%>/resources/images/exhibition/챕터투.png">
 		<div class="info_top">

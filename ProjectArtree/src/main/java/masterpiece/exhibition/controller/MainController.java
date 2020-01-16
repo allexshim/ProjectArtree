@@ -6,11 +6,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 public class MainController {
 	
-	@RequestMapping(value="/samplecontent.at")
-	public String samplecontent() {	
-		return "main/samplecontent.tiles";
-	}
-	
 	@RequestMapping(value="/mainartree.at")
 	public String mainartree() {
 		return "main/mainartree.maintiles";

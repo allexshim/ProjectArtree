@@ -16,7 +16,6 @@
 	
 	#container_exh_detail .main_top {
 		display: inline-block;
-		margin-top: 50px;
 		width: 100%; 
 		height: 600px; 
 		border: solid 1px #e6e6e6;
@@ -37,20 +36,22 @@
 	
 	#container_exh_detail .info_title {
 		display: block; 
-		font-size: 30pt; 
+		font-size: 25pt; 
 		font-weight: bold;
 	}
 	
 	#container_exh_detail .info_artist {
 		display: block; 
-		font-size: 25pt; 
+		font-size: 20pt; 
 		font-weight: bold; 
-		margin: 20px 0 40px 0;
+		margin: 20px 0 60px 0;
 	}
 	
 	#container_exh_detail .main_btm {
 		margin: 30px 0 30px 0; 
 		min-height: 600px;
+		display: block;
+		overflow: hidden;
 	}
 	
 	#container_exh_detail .btmInfo_left {
@@ -87,7 +88,7 @@
 		width: 50%; 
 		float: right; 
 		padding: 5%; 
-		font-size: 15pt;
+		font-size: 13pt;
 	}
 
 	#container_exh_detail .btmInfo_time_noti {
@@ -138,7 +139,9 @@
 	#container_exh_detail .selectWorks_area .s1 {
 		font-size: 30pt;
 		font-weight: bold;
-		margin-bottom: 50px;
+		margin-top: 200px;
+		display: block;
+		
 	}
 	
 	#container_exh_detail .selectWorks_area .slideshow {
@@ -173,7 +176,7 @@
 	  color: black;
 	  font-size: 15px;
 	  padding: 8px 12px;
-	  top: 600px;
+	  top: 550px;
 	  width: 100%;
 	  text-align: center;
 	  position: relative;
@@ -183,7 +186,7 @@
 	  cursor: pointer;
 	  height: 10px;
 	  width: 10px;
-	  margin: 50px 10px;
+	  margin: 20px 10px;
 	  background-color: #bbb;
 	  border-radius: 50%;
 	  display: inline-block;
@@ -204,8 +207,8 @@
 	    top: 50%;
 	    left: 50%;
 	    transform: translate(-50%,-50%);
-	    width: 100%;
-	    height: 100%;
+	    width: auto;
+	    height: auto;
 	    max-width: 748px;
 	    max-height: 60vh;
 	}
@@ -289,6 +292,7 @@
 		width: 100%;
 		min-height: 600px;
 		margin-top: 80px; 
+		margin-bottom: 50px;
 		display: inline-block; 
 		width: 100%;
 	}
@@ -300,7 +304,7 @@
 	  cursor: pointer;
 	  padding: 18px;
 	  border: none;
-	  border-bottom: solid 2px #333;
+	  border-bottom: solid 1px #333;
 	  text-align: left;
 	  font-size: 25px;
 	  transition: 0.4s;
@@ -320,6 +324,8 @@
 	  overflow: hidden;
 	  transition: max-height 0.3s ease-out;
 	  margin-bottom: 0;
+	  border: none;
+	  box-shadow: none;
 	}
 	
 	#container_exh_detail .accordion:after {
@@ -343,11 +349,10 @@
 		display: inline-block; 
 		margin-bottom: 20px;
 	}
-	
+
 	#container_exh_detail .panel .defaultL {
 		float: left; 
 		padding: 20px; 
-		border-right: solid 1px #e6e6e6; 
 		line-height: 200%; 
 		width: 50%;
 	}
@@ -356,7 +361,7 @@
 		float: right; 
 		padding: 20px; 
 		line-height: 200%; 
-		font-size: 15pt; 
+		font-size: 12pt; 
 		width: 50%;
 	}
 	
@@ -372,15 +377,15 @@
 	}
 	
 	#container_exh_detail .price_area table td:first-child {
-		border-right: solid 2px #e6e6e6;
+		border-right: solid 1px #e6e6e6;
 	}
 	
 	#container_exh_detail .price_area table th {
 		text-align: center;
 		font-weight: bold;
 		font-size: 15pt;
-		border-top: solid 2px #e6e6e6;
-		border-bottom: solid 2px #e6e6e6; 
+		border-top: solid 1px #e6e6e6;
+		border-bottom: solid 1px #e6e6e6; 
 	}
 
 	#container_exh_detail .price_area .price_notice ul {
@@ -402,7 +407,7 @@
 	#container_exh_detail .check_area table td {
 		width: 50%;
 		font-size: 13pt;
-		border-bottom: solid 2px #e6e6e6;
+		border-bottom: solid 1px #e6e6e6;
 	} 
 	
 	#container_exh_detail .place_area #map {
@@ -525,6 +530,20 @@
 		width: 30px;
 		height: 30px;
 	}
+	
+	#container_exh_detail .Title_Area {
+		width: 100%;
+		display: inline-block; 
+		text-align: center;
+		margin: 100px 0 100px 0;
+	}
+	
+	#container_exh_detail .Title_Area .lt {
+		display: block;
+		font-size: 35pt;
+		font-weight: bold;
+		color: #000;
+	}
 </style>  
 
 
@@ -539,6 +558,7 @@
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
 <script type="text/javascript">
 
 	$(document).ready(function(){
@@ -737,19 +757,16 @@
 		
 		
 	});
-	
+
 	function share(sns){
 		
 		var title = "전시회 제목 - ARTREE";	
-		var href = current_url;
 			
-		if(sns == 'google'){
-			loc = '//plus.google.com/share?url='+href;
-			window.open(loc);
+		if(sns == 'mail'){
+			window.open('mailto:?subject=sub&body=http://art-map.co.kr/exhibition/view.php?idx=5119');
 		}
 		else if(sns == 'kakao'){
-			loc = 'https://story.kakao.com/share?url='+encodeURIComponent(href);
-			window.open(loc);
+			window.open('https://story.kakao.com/share?url=http://art-map.co.kr/exhibition/view.php?idx=5119'); 
 		}
 		else if(sns == 'twitter'){
 			window.open('https://twitter.com/intent/tweet?text=TEXT&url=http://art-map.co.kr/exhibition/view.php?idx=5119');			
@@ -761,11 +778,19 @@
 			var IE=(document.all)?true:false;
 			if (IE) {
 			if(confirm("주소를 복사하시겠습니까?"))
-				window.clipboardData.setData("Text", url);
+				window.clipboardData.setData("Text", 'http://art-map.co.kr/exhibition/view.php?idx=5119');
 			} else {
-				temp = prompt("Ctrl+C를 눌러 클립보드로 복사하세요", url);
+				temp = prompt("Ctrl+C를 눌러 클립보드로 복사하세요", 'http://art-map.co.kr/exhibition/view.php?idx=5119');
 			}
 		}
+	} // end of share --------------------
+	
+	function Move(){
+
+		var start = $(".price_area").offset();
+		
+		$('html, body').animate({scrollTop:start.top}, 1000);
+
 	}
 
 </script>
@@ -774,8 +799,12 @@
 
 <div id="container_exh_detail">
 
+	<div class="Title_Area">
+		<span class="lt">EXHIBITION</span>
+	</div>
+	
 	<div class="main_top">
-		<img class="main_img" src="<%= ctxPath%>/resources/images/exhibition/sample_detail_main.png">
+		<img class="main_img" src="<%= ctxPath%>/resources/images/exhibition/poster2.JPG">
 		<div class="info_top">
 			<span class="info_title">박수경 개인전 : 꿈의 집_원형 속 앙겔로스</span>
 			<span class="info_artist">박수경</span>
@@ -784,7 +813,7 @@
 					BUY TICKETS
 					<img class="forMoving" src="<%= ctxPath%>/resources/images/exhibition/ico/right_arrow.png">
 				</button>
-				<button type="button" class="checkBtn forIco" onclick="">
+				<button type="button" class="checkBtn forIco" onclick="Move();">
 					CHECK THIS PRICE
 					<img class="ico1 forMoving" src="<%= ctxPath%>/resources/images/exhibition/ico/mouse.png">
 				</button>
@@ -806,14 +835,14 @@
 			      <div class="modal-body">
 			      	<span class="snsShare_title">공유하기</span>
 			      	<div class="shareArea">
-						<img class="shareImg" src="<%= ctxPath%>/resources/images/exhibition/ico/google.png" onclick="share('google')">
+						<img class="shareImg" src="<%= ctxPath%>/resources/images/exhibition/ico/email.png" onclick="share('mail')">
 						<img class="shareImg" src="<%= ctxPath%>/resources/images/exhibition/ico/kakao.png" onclick="share('kakao')">
 						<img class="shareImg" src="<%= ctxPath%>/resources/images/exhibition/ico/twitter.png" onclick="share('twitter')">
 						<img class="shareImg" src="<%= ctxPath%>/resources/images/exhibition/ico/facebook.png" onclick="share('facebook')">
 						<img class="shareImg" src="<%= ctxPath%>/resources/images/exhibition/ico/url.png" onclick="share('url')" style="margin-right: 0px;">
 					</div>
 					<div class="shareArea">
-						<span>GOOGLE</span>
+						<span>MAIL</span>
 						<span>KAKAO</span>
 						<span>TWITTER</span>
 						<span>FACEBOOK</span>
@@ -842,12 +871,22 @@
 
 아가사 크리스티의 추리소설 『꿈의 집』과 『비뚤어진 집』을 재구성 한 작품에서 에드거 엘런포의 『검은고양이』를 모티브로 한 작품까지 총 19점을 만날 수 있다.
 
-작가는 작업을 통해 한 사람으로서의 고독과 외로움, 가족에 대한 그리움을 표현하는 동시에 최근작 천사와 꽃 리스(wreathe)시리즈에서 작은 희망들, 잃어버린 무언가에 대한 새로운 희망을 찾고있다.</span>
+작가는 작업을 통해 한 사람으로서의 고독과 외로움, 가족에 대한 그리움을 표현하는 동시에 최근작 천사와 꽃 리스(wreathe)시리즈에서 작은 희망들, 잃어버린 무언가에 대한 새로운 희망을 찾고있다.
+박수경작가의 집과 가족을 주제로 한 전작부터 최근작을 만날 수 있다. 작가는 유년시절 즐겨읽던 추리소설과 경험을 재조합하여 작업한다.
+
+아가사 크리스티의 추리소설 『꿈의 집』과 『비뚤어진 집』을 재구성 한 작품에서 에드거 엘런포의 『검은고양이』를 모티브로 한 작품까지 총 19점을 만날 수 있다.
+
+작가는 작업을 통해 한 사람으로서의 고독과 외로움,박수경작가의 집과 가족을 주제로 한 전작부터 최근작을 만날 수 있다. 작가는 유년시절 즐겨읽던 추리소설과 경험을 재조합하여 작업한다.
+
+아가사 크리스티의 추리소설 『꿈의 집』과 『비뚤어진 집』을 재구성 한 작품에서 에드거 엘런포의 『검은고양이』를 모티브로 한 작품까지 총 19점을 만날 수 있다.
+
+작가는 작업을 통해 한 사람으로서의 고독과 외로움,
+			</span>
 		</div>
 	</div>
 
 	<%-- -------------------------------------슬라이드쇼 영역 --%>
-	<div class="selectWorks_area" style="margin-bottom: 300px;">
+	<div class="selectWorks_area" style="margin-bottom: 300px; display: block;">
 		<div class="s1" style="text-align: center;"><span class="slideshow_title">SELECT WORKS</span></div>
 		<div class="slideshow">
 		  <div class="mySlides">
@@ -1091,15 +1130,15 @@
 			<img class="ico2" src="<%= ctxPath%>/resources/images/exhibition/ico/contact.png">
 			CONTACT US
 		</button>
-		<div class="panel contact_area" style="text-align: center;">
-		  <div class="cont_left defaultL" style="font-size: 17pt; font-weight: bold;">
+		<div class="panel contact_area" style="text-align: left;">
+		  <div class="cont_left defaultL" style="font-size: 13pt; font-weight: bold;">
 		  	<ul style="list-style: none;">
 		  		<li>ARTREE</li>
 		  		<li>000 - 123 - 4567</li>
 		  		<li>artree0213@gmail.com</li>
 		  	</ul>
 		  </div>
-		  <div class="cont_right defaultR" style="">
+		  <div class="cont_right defaultR">
 		  	<ul style="list-style: none;">
 		  		<li>고객센터 휴무 - 주말 및 공휴일</li>
 		  		<li>문의가능 시간 - 13 : 30 ~ 19 : 00</li>

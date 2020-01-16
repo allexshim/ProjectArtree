@@ -2,57 +2,62 @@
 	pageEncoding="UTF-8"%>
 
 <%
-	String cxtpath = request.getContextPath();
+	String ctxPath = request.getContextPath();
 %>
-
-<%--
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
 
 <style type="text/css">
 /* header */
-.topnav {
-  position: fixed;
-  z-index: 2;
-  display: inline-block;
-  overflow-x: hidden;
-  overflow-y: hidden;
-  background-color: #333;
-  text-align: center;
-  width: 100%;
-  height: 50px;
-}
+	.topnav {
+	  padding-top: 10px;
+	  border-bottom: solid 2px #f2f2f2;
+	  margin-top: 0px;
+	  z-index: 2;
+	  display: inline-block;
+	  overflow-x: hidden;
+	  overflow-y: hidden;
+	  text-align: center;
+	  width: 100%;
+	  height: 60px;
+	}
+	
+	.topnav a.header-nav {
+	  text-align: center;
+	  margin: 20px;
+	  padding: 14px 16px;
+	  text-decoration: none;
+	  font-size: 25px;
+	  color: black;
+	}
 
-.topnav a.header-nav {
-  text-align: center;
-  margin: 30px;
-  padding: 14px 16px;
-  text-decoration: none;
-  font-size: 25px;
-  color: white;
-}
-
-.topnav a.logo {
-  z-index: 2;
-  color: white;
-  float: left;
-  text-align: left;
-  padding: 14px 16px;
-  text-decoration: none;
-}
-
-.topnav a:hover {
-  color: gray;
-}
+	.topnav a.logo {
+	  -webkit-transform:translate(0,-10px);
+	  z-index: 100;
+	  float: left;
+	  text-align: left;
+	  text-decoration: none;
+	}
+	
+	
+	.topnav a:hover {
+	  color: gray;
+	}
+	
+	.topnav a.login {
+		text-decoration: none;
+		color: white;
+		margin: 0 20px 0 20px;
+		float: right;
+	}
 </style>
 
-<div class="topnav" style="margin-bottom: 0;">
-  <a class="logo">arTree</a>
-  <a class="active header-nav" href="#">Home</a>
-  <a class="header-nav" href="#">News</a>
-  <a class="header-nav" href="#">Contact</a>
-  <a class="header-nav" href="#">About</a>
+<div class="topnav">
+	<a class="logo"><img style="height: 60px;" src="<%=ctxPath %>/resources/images/main/logo_black1.jpg" /></a>
+	<a class="active header-nav" href="#">GALLARY</a>
+	<a class="header-nav" href="<%=ctxPath%>/exhList.at">EXHIBITION</a>
+	<a class="header-nav" href="#">ABOUT ARTREE</a>
+	<a class="header-nav" href="#">SERVICE</a>
+	<a class="login" href="#"><img src="<%= ctxPath %>/resources/images/main/mainheader-setting.png"/></a>
+	<a class="login" href="#"><img src="<%= ctxPath %>/resources/images/main/mainheader-account-login.png" /></a>
+	
 </div>
 
---%>

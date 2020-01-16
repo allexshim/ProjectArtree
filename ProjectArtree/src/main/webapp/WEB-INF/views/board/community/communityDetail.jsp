@@ -252,8 +252,7 @@
 			<img src="<%= ctxPath %>/resources/images/exhibition/poster1.JPG" />
 		</div>
 		
-		<div id="detailContents">
-
+		<div id="detailContents">		
 			<h3>예술섬의 사색 Ⅰ : 이배경 작가전</h3>
 			<table id="detailTable">
 				<tr>

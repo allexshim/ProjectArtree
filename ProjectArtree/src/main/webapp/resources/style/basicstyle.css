@@ -14,19 +14,19 @@ html,body {
     background-color: #fff;
 	
 }
-#myheader { 
+#myheader {
+  background-color: white;
   position: fixed;
   z-index: 2;
   display: inline-block;
   overflow-x: hidden;
   overflow-y: hidden;
-  background-color: #333;
   text-align: center;
   width: 100%;
-  height: 50px;
+  height: 60px;
 	
 }
-
+/*
 #mysideinfo{
   background-color: white;
   margin-left: 10px;
@@ -41,7 +41,7 @@ html,body {
   padding-top: 20px;
 	
 }
-
+*/
 #mycontent		{
 	padding-top: 50px;
 	width: 100%;
@@ -49,16 +49,7 @@ html,body {
     background-color: #fff;
 	padding-left:60px;
 }
-#myfooter	{
-   z-index: 2;
-   position: fixed;
-   left: 0;
-   bottom: 0;
-   width: 100%;
-   background-color: red;
-   color: white;
-   text-align: center;
 
-}
+
 	
 		
