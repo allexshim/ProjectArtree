@@ -132,7 +132,8 @@
 <body>
 	<form name="reposiBin">
 	<div style="width: 60%; margin: 0 auto;" align="center">
-		<div style="padding-top: 5%;">
+	
+		<div style="padding-top: 1%;">
 			<ul style="border-radius:4px; border-top: solid 1px black; list-style-type: none; display: inline-flex; padding: 0;
 			border-bottom: solid 1px black; border-left: solid 1px black; width: 100%;">
 				<li class="menubin" style="background-color: black; color: white;">1.Ticket</li>
@@ -142,8 +143,11 @@
 			</ul>		
 		</div>
 		
+		<div><img style="width: 100%; height: 650px;" src="<%=ctxPath%>/resources/images/order/${img}"></div>
 		
-		<div style="padding-top: 5%;">
+		<div style="margin:1% 0; font-size: 32px; font-weight: bold; text-align: left;">${name}</div>
+		
+		<div style="padding-top: 2%;">
 			<table class="table table-hover" style="width: 100%;">
 				<thead>
 					<tr>

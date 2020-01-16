@@ -10,7 +10,6 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 
 <link rel="stylesheet" type="text/css" href="<%=ctxPath%>/resources/jquery-ui-1.12.1.custom/jquery-ui.css" />
@@ -26,9 +25,13 @@
 		width: 25%;				
 	}
 </style>
+<script
+    src="https://code.jquery.com/jquery-3.3.1.min.js"
+    integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+    crossorigin="anonymous"></script><!-- jQuery CDN 환불 --->
 <script>
 	$(function(){
-		$("#accordion").accordion();
+		/* $("#accordion").accordion(); */
 	})
 		
 	function goRefund() {
@@ -37,6 +40,28 @@
 		frm.action="<%=ctxPath %>/refundBin.at";		
 		frm.submit();
 	}
+	
+	/* 환불 */
+	function cancelPay() {
+	      jQuery.ajax({
+	        "url": "http://www.myservice.com/payments/cancel",
+	        "type": "POST",
+	        "contentType": "application/json",
+	        "data": JSON.stringify({
+	          "merchant_uid": "mid_" + new Date().getTime(), // 주문번호
+	          "cancel_request_amount": 2000, // 환불금액
+	          "reason": "테스트 결제 환불", // 환불사유
+	          "refund_holder": "홍길동", // [가상계좌 환불시 필수입력] 환불 가상계좌 예금주
+	          "refund_bank": "88", // [가상계좌 환불시 필수입력] 환불 가상계좌 은행코드(ex. KG이니시스의 경우 신한은행은 88번)
+	          "refund_account": "56211105948400" // [가상계좌 환불시 필수입력] 환불 가상계좌 번호
+	        }),
+	        "dataType": "json"
+	        }).done(function(result) { // 환불 성공시 로직 
+	            alert("환불 성공");
+	        }).fail(function(error) { // 환불 실패시 로직
+	          alert("환불 실패");
+	      });
+	    }
 </script>
 <body>
 	<form name="refundBin">
@@ -62,7 +87,7 @@
 				</tr>										
 				<tr>
 					<th>예매취소</th>
-					<td><div onclick="goRefund()" style="font-weight:bold; text-align:center; color:black; background:white; cursor:pointer; border: solid 1px black; border-radius: 4px; width: 5%;">취소</div></td>
+					<td><div onclick="cancelPay()" style="font-weight:bold; text-align:center; color:black; background:white; cursor:pointer; border: solid 1px black; border-radius: 4px; width: 5%;">취소</div></td>
 				</tr>				
 			</table>						
 		</div>	
@@ -112,8 +137,8 @@
 		</div>
 		
 		<div id="accordion">		
-			<h3 style="text-align: left; font-size: 22px; font-weight: bold;">예매 취소 시 유의사항</h3>
-			<div>
+			<h3 style="padding:2%; margin-bottom:3% !important; text-align: left; font-size: 22px; font-weight: bold;">예매 취소 시 유의사항</h3>
+			<div style="height:400px !important;">
 				<div>
 					<div style="font-size: 14px; font-weight: bold;">유의사항<br><br></div>
 					<div style="line-height:1.8; font-size: 14px;">
@@ -133,8 +158,8 @@
 					</div>
 				</div>		
 			</div>
-			<h3 style="text-align: left; font-size: 22px; font-weight: bold;">티켓 수령 안내</h3>
-			<div>
+			<h3 style="padding:2%; margin-bottom:3% !important; text-align: left; font-size: 22px; font-weight: bold;">티켓 수령 안내</h3>
+			<div style="height:400px !important;">
 				<div style="font-size: 14px; font-weight: bold;">현장수령<br><br></div>
 				<div style="line-height:1.8; font-size: 14px;">					
 					전시당일 뮤지엄 메인로비 '티켓 박스'에서 티켓을 발권 받을 수 있습니다.<br>

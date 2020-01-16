@@ -9,9 +9,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 public class OrderController {
 	@RequestMapping(value="/ticketsbin.at")
-	public String ticketsbin(HttpServletRequest request) {		
-		//request.getParameter("No");
+	public String ticketsbin(HttpServletRequest request) {
+		
+		// #after 나중에 가격과 이름 불러오기 // 전시기간 추가...? 
+		String name = "KAWS: COMPANIONSHIP IN THE AGE OF LONELINESS";
 		int price = 12000;
+		String img ="base.jpg";
+		
 		double price20 = (double) price*0.8;
 		double price30 = (double) price*0.7;
 		double price50 = (double) price*0.5;
@@ -20,7 +24,9 @@ public class OrderController {
 		request.setAttribute("price20", price20);
 		request.setAttribute("price30", price30);
 		request.setAttribute("price50", price50);						
-	
+		request.setAttribute("name", name);
+		request.setAttribute("img", img);
+		
 		HttpSession session = request.getSession();
 		String[] qt = null;
 		String bin = "";

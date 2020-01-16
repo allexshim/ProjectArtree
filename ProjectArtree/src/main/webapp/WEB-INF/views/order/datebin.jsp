@@ -40,7 +40,11 @@
 	
 </style>
 <script>
-	$(document).ready(function(){					
+	$(document).ready(function(){		
+		$("#nextbin").click(function(){			
+			goDetail();							
+		});			
+		
 		$("#testDatepicker").datepicker({			
 			dayNamesMin : ['월','화','수','목','금','토','일'],			
 			monthNames: ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'],
@@ -89,12 +93,12 @@
 		</div>
 		<div style="padding-top: 2.5%;">
 			<div id="testDatepicker"></div>
-			<input id="calendar-date" name="dateBin" hidden="hidden" value="base">
+			<input id="calendar-date" name="dateBin" hidden="hidden" value="">
 		</div>		
 		
 		<div style="overflow: hidden; padding-top: 1%">	
 			<div onclick="location.href='<%= ctxPath %>/ticketsbin.at'" style="color:black; background:white; cursor:pointer; float: left; border: solid 2px black; border-radius: 4px; width: 10%; margin-top: 3%;">이전</div>
-			<div onclick="goDetail()" style="color:black; background:white; cursor:pointer; float: right; border: solid 2px black; border-radius: 4px; width: 10%; margin-top: 3%;">다음</div>
+			<div id="nextbin" style="color:black; background:white; cursor:pointer; float: right; border: solid 2px black; border-radius: 4px; width: 10%; margin-top: 3%;">다음</div>
 		</div>
 		
 		<div style="padding-top: 5%;">
