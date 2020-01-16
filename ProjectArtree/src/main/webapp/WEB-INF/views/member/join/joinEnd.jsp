@@ -170,6 +170,13 @@ img.img_margin {
 
 <script type="text/javascript">
 
+// 뒤로가기 막기
+window.history.forward();
+
+function noBack() {
+	window.history.forward();
+}
+
 function gender_chg(g) {
 	$(".gender").removeClass("on");
 	$("#gender_"+g).addClass("on");
@@ -178,11 +185,12 @@ function gender_chg(g) {
 	
 </script>
 
-<body>
+<body onload="noBack();" onpageshow="if(event.persisted) noBack();" onunload="">
 	<div class="container_joinEnd" align="center">
 		<div class="joinEnd_wrap">
+		<form>
 			<div class="joinEnd_header">
-				<span>Artree님, 환영합니다.</span>
+				<span>${name}님, 환영합니다.</span>
 			</div>
 			<div class="joinEnd_content">
 				<span id="fisrt_info">큐레이션 중심, 메타데이터 분석 기반 서비스로<br/>미술작품과 가까워질 수 있어요.</span>
@@ -256,7 +264,8 @@ function gender_chg(g) {
 			</div>
 		
 
-		<button type="button" id="next_btn" onClick="javascript:location.href='<%= request.getContextPath()%>/joinEndTwo.at'">확인</button>
+			<button type="button" id="next_btn" onClick="javascript:location.href='<%= request.getContextPath()%>/joinEndTwo.at'">확인</button>
+		</form>
 		</div>
 	</div>
 </body>
