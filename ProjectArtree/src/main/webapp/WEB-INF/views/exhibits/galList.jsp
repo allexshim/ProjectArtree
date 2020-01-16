@@ -74,9 +74,10 @@
 	#container_gal_list .contents .thisCurExh img:hover { opacity: 0.7 }
 	#container_gal_list .contents .thisCurExh img {
 		display: inline-block;
-		width: 28%;
+		width: 25%;
 		margin-right: 35px;
 		transition: opacity 0.5s ease;
+		height: 100%;
 	}
 	
 	#container_gal_list .searchArea {
@@ -193,6 +194,34 @@
 	  background-color: #737373;
 	}
 	
+	.inSlideForGal {
+	  max-width: 1000px;
+	  position: relative;
+	  margin: auto;
+	}
+
+	.inSlides1 {
+	  display: none;
+	}
+	
+	.inSlideForGal .next {
+	  cursor: pointer;
+	  position: absolute;
+	  top: 50%;
+	  width: auto;
+	  margin-top: -22px;
+	  padding: 16px;
+	  color: black;
+	  font-weight: bold;
+	  font-size: 18px;
+	  border-radius: 0 3px 3px 0;
+	  user-select: none;
+	  right: 0;
+	}
+	
+	.inSlideForGal .next:hover {
+		text-decoration: none;
+	}
 	
 </style>  
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -230,11 +259,21 @@
 			  	</div>
 			  	<div class="thisCurExh">
 			  		<span>진행중 전시회</span>
-			  		<div class="thisExhPoster">
-				  		<a href=""><img src="<%= ctxPath%>/resources/images/exhibition/artmap_20200102_9426350.jpg"></a>
-				  		<a href=""><img src="<%= ctxPath%>/resources/images/exhibition/artmap_20200102_9426350.jpg"></a>
-				  		<a href=""><img src="<%= ctxPath%>/resources/images/exhibition/artmap_20200102_9426350.jpg" style="margin-right: 0px;"></a>
-			  		</div>
+			  		<!-- Slideshow container -->
+					<div class="inSlideForGal">
+					  <div class="inSlides1">
+					    <img src="<%= ctxPath%>/resources/images/exhibition/artmap_20200102_9426350.jpg">
+					    <img src="<%= ctxPath%>/resources/images/exhibition/artmap_20200102_9426350.jpg">
+					    <img src="<%= ctxPath%>/resources/images/exhibition/artmap_20200102_9426350.jpg">
+					  </div>
+					
+					  <div class="inSlides1">
+					    <img src="<%= ctxPath%>/resources/images/exhibition/챕터투.png">
+					    <img src="<%= ctxPath%>/resources/images/exhibition/챕터투.png">
+					  </div>
+
+					  <a class="next" onclick="plusSlides(1)">&#10095;</a>
+					</div>
 			  	</div>
 			  </div>
 	      </div>
@@ -250,11 +289,21 @@
 			  	</div>
 			  	<div class="thisCurExh">
 			  		<span>진행중 전시회</span>
-			  		<div class="thisExhPoster">
-				  		<a href=""><img src="<%= ctxPath%>/resources/images/exhibition/artmap_20200102_9426350.jpg"></a>
-				  		<a href=""><img src="<%= ctxPath%>/resources/images/exhibition/artmap_20200102_9426350.jpg"></a>
-				  		<a href=""><img src="<%= ctxPath%>/resources/images/exhibition/artmap_20200102_9426350.jpg" style="margin-right: 0px;"></a>
-			  		</div>
+			  		<!-- Slideshow container -->
+					<div class="inSlideForGal">
+					  <div class="inSlides2">
+					    <img src="<%= ctxPath%>/resources/images/exhibition/poster1.JPG">
+					    <img src="<%= ctxPath%>/resources/images/exhibition/poster1.JPG">
+					    <img src="<%= ctxPath%>/resources/images/exhibition/poster1.JPG">
+					  </div>
+					
+					  <div class="inSlides2">
+					    <img src="<%= ctxPath%>/resources/images/exhibition/poster2.JPG">
+					    <img src="<%= ctxPath%>/resources/images/exhibition/poster2.JPG">
+					  </div>
+
+					  <a class="next" onclick="plusSlides(1)">&#10095;</a>
+					</div>
 			  	</div>
 			 </div>
 	      </div>
@@ -270,11 +319,21 @@
 			  	</div>
 			  	<div class="thisCurExh">
 			  		<span>진행중 전시회</span>
-			  		<div class="thisExhPoster">
-				  		<a href=""><img src="<%= ctxPath%>/resources/images/exhibition/artmap_20200102_9426350.jpg"></a>
-				  		<a href=""><img src="<%= ctxPath%>/resources/images/exhibition/artmap_20200102_9426350.jpg"></a>
-				  		<a href=""><img src="<%= ctxPath%>/resources/images/exhibition/artmap_20200102_9426350.jpg" style="margin-right: 0px;"></a>
-			  		</div>
+			  		<!-- Slideshow container -->
+					<div class="inSlideForGal">
+					  <div class="inSlides3">
+					    <img src="<%= ctxPath%>/resources/images/exhibition/poster3.JPG">
+					    <img src="<%= ctxPath%>/resources/images/exhibition/poster3.JPG">
+					    <img src="<%= ctxPath%>/resources/images/exhibition/poster3.JPG">
+					  </div>
+					
+					  <div class="inSlides3">
+					    <img src="<%= ctxPath%>/resources/images/exhibition/exhPoster.jpg">
+					    <img src="<%= ctxPath%>/resources/images/exhibition/exhPoster.jpg">
+					  </div>
+
+					  <a class="next" onclick="plusSlides(1)">&#10095;</a>
+					</div>
 			  	</div>
 			 </div>
 	      </div>
@@ -417,6 +476,31 @@
 			});		
 		
 	}// end of goSearch() ---------
+	
+	var slideIndex = 1;
+	showSlides(slideIndex);
+
+	// Next/previous controls
+	function plusSlides(n) {
+	  showSlides(slideIndex += n);
+	}
+
+	// Thumbnail image controls
+	function currentSlide(n) {
+	  showSlides(slideIndex = n);
+	}
+
+	function showSlides(n) {
+	  var i;
+	  var slides = $()
+	  var slides = document.getElementsByClassName("inSlides1");
+	  if (n > slides.length) {slideIndex = 1}
+	  if (n < 1) {slideIndex = slides.length}
+	  for (i = 0; i < slides.length; i++) {
+	      slides[i].style.display = "none";
+	  }
+	  slides[slideIndex-1].style.display = "block";
+	}
 
 
 </script>

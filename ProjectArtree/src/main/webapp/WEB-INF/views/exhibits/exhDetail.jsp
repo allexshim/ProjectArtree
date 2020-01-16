@@ -569,6 +569,17 @@
 		}, function(){
 			$(this).children(".forMoving").stop().animate({left:'0px'}, 'fast');
 		});
+		
+		$('[data-toggle="tooltip"]').tooltip();
+		
+		$(".moving").click(function(){
+			var start = $(".price_area").offset();
+			$('html, body').animate({scrollTop:start.top}, 1000);
+			$('[data-toggle="checktip"]').tooltip('show');
+			$(".accordion").click(function(){
+				$('[data-toggle="checktip"]').tooltip('hide');
+			});
+		});
 
 		<%-- 차트 영역 --%>
 		// 성별 차트
@@ -784,14 +795,6 @@
 			}
 		}
 	} // end of share --------------------
-	
-	function Move(){
-
-		var start = $(".price_area").offset();
-		
-		$('html, body').animate({scrollTop:start.top}, 1000);
-
-	}
 
 </script>
 <%-- EXHIBITION LIST SCRIPT END --%>
@@ -813,7 +816,7 @@
 					BUY TICKETS
 					<img class="forMoving" src="<%= ctxPath%>/resources/images/exhibition/ico/right_arrow.png">
 				</button>
-				<button type="button" class="checkBtn forIco" onclick="Move();">
+				<button type="button" class="checkBtn forIco moving" >
 					CHECK THIS PRICE
 					<img class="ico1 forMoving" src="<%= ctxPath%>/resources/images/exhibition/ico/mouse.png">
 				</button>
@@ -823,9 +826,15 @@
 				</button>
 			</div>
 			<div class="special_area" style="margin-top: 30px;">
-				<a href="" style="margin-right: 10px;"><img src="<%= ctxPath%>/resources/images/exhibition/ico/empty_heart.png"></a>
-				<a href="" style="margin-right: 10px;"><img src="<%= ctxPath%>/resources/images/exhibition/ico/select.png"></a>
-				<a href="" data-toggle="modal" data-target="#myModal"><img src="<%= ctxPath%>/resources/images/exhibition/ico/ico_share.png"></a>
+				<a href="" style="margin-right: 10px;">
+					<img data-toggle="tooltip" title="전시회 관심 지정 !" data-placement="bottom" src="<%= ctxPath%>/resources/images/exhibition/ico/empty_heart.png">
+				</a>
+				<a href=""style="margin-right: 10px;">
+					<img data-toggle="tooltip" title="갤러리 관심 지정 !" data-placement="bottom" src="<%= ctxPath%>/resources/images/exhibition/ico/select.png">
+				</a>
+				<a href="" data-toggle="modal" data-target="#myModal">
+					<img src="<%= ctxPath%>/resources/images/exhibition/ico/ico_share.png">
+				</a>
 			</div>
 			<!-- Modal -->
 			<div class="modal fade" id="myModal" role="dialog">
@@ -1072,7 +1081,7 @@
 		</div>
 		
 		<button class="accordion">
-			<img class="ico2" src="<%= ctxPath%>/resources/images/exhibition/ico/ico_ticket.png">
+			<img class="ico2" data-toggle="checktip" title="클릭하여 확인해보세요 !" src="<%= ctxPath%>/resources/images/exhibition/ico/ico_ticket.png">
 			TICKET PRICE
 		</button>
 		<div class="panel price_area">

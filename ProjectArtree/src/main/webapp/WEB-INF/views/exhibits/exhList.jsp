@@ -118,10 +118,10 @@
 	$(document).ready(function(){
 		
 		$(".exh_one").hover(function(){
-			$(this).children(".art_info_aboutTime").stop().animate({top:'7px'});
+			$(this).children(".art_info_aboutTime").stop().animate({top:'7px'}, 180);
 
 		}, function(){
-			$(this).children(".art_info_aboutTime").stop().animate({top:'0px'});
+			$(this).children(".art_info_aboutTime").stop().animate({top:'0px'}, 180);
 		});
 		
 	});

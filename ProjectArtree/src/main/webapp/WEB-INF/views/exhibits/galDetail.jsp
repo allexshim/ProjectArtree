@@ -305,7 +305,7 @@
 		font-weight: bold;
 		color: #000;
 	}
-	
+
 </style>  
 
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -323,6 +323,8 @@
 		}, function(){
 			$(this).children(".art_mainTitle").stop().animate({top:'0px'});
 		});
+		
+		 $('[data-toggle="tooltip"]').tooltip();   
 			
 		<%-- http://apis.map.kakao.com/web/guide/ 카카오 지도 스크립트 --%>
 			var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
@@ -433,12 +435,14 @@
 	</div>
 	
 	<div class="main_top">
-		<img class="main_img" src="<%= ctxPath%>/resources/images/exhibition/챕터투.png">
+		<img class="main_img" src="http://app.art-map.co.kr//upload/museum/museum_img_1446528609.JPG">
 		<div class="info_top">
 			<span class="info_title">챕터투/서울</span>
 			<div class="specialArea">
 				<span class="exhStatus">전시중</span>
-				<a href="" style="margin-right: 10px;"><img src="<%= ctxPath%>/resources/images/exhibition/ico/empty_heart.png"></a>
+				<a href="" data-toggle="tooltip" title="갤러리 관심 지정 !" data-placement="right"  style="margin-right: 10px;">
+					<img src="<%= ctxPath%>/resources/images/exhibition/ico/select.png">
+				</a>
 			</div>
 			<table class="info_aboutGal">
 				<tr>
