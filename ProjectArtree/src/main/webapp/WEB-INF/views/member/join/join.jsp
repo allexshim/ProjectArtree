@@ -71,7 +71,7 @@ table#join_tbl td input{
     border-style: none;
 }
 
-button#gender_male {
+button#gender_1 {
 	float: left;
 	width: 50%;
 	cursor: pointer;
@@ -82,7 +82,7 @@ button#gender_male {
 	border: 1px solid #e7e7e7;
 }
 
-button#gender_female {
+button#gender_2 {
 	float: right;
 	width: 50%;
 	cursor: pointer;
@@ -256,7 +256,12 @@ span#allCheck_txt {
 		/* 로그인 제이쿼리 */
 		$(".layer").css("display", "none");
 		
+		$("#gender").val("1");
+		$("#agegroup").val("10");
+		$("#area").val($("#area_select option:selected").val());
+		
 		/* 회원가입 제이쿼리 */
+		/* 체크박스 선택하면  이미지 바뀜 */
 		$("input:checkbox[class=agree_chx]").css("display", "none");
 		
 		$("input:checkbox[class=agree_chx]").click(function() {
@@ -316,31 +321,34 @@ span#allCheck_txt {
 		
 	}); // end of function()
 	
+	// 성별 선택하면 border 변경
 	function gender_chg(g) {
 		$(".gender").removeClass("on");
 		$("#gender_"+g).addClass("on");
 		$("#gender").val(g);
 	}
 	
+	// 연령대 선택하면 border 변경
 	function age_chg(a) {
 		$(".ageGroup").removeClass("on");
 		$("#age_"+a).addClass("on");
-		$("#age").val(a);
+		$("#agegroup").val(a);
 	}
 	
-/* 	function goRegister() {
+	// 회원가입	
+	function goRegister() {
 		
 		var email = document.getElementById("email");
 		var email_bool = myEmailCheck(email.value);
 		
 		var pwd = document.getElementById("password");
-		
-		console.log(pwd);
-		
-		var pwd_bool = myPasswdCheck(pwd);
+		var pwd_bool = myPasswdCheck(pwd.value);
 		
 		var pwdCheck = document.getElementById("passwordCheck");
 		var pwdCheck_bool = myPasswdCheck2(pwd, pwdCheck);
+		
+		var hp = document.getElementById("hp");
+		var hp_bool = myHpCheck(hp.value);
 		  
 		if( $("#email").val().trim() == "" ) {
 			  alert("이메일을 입력해 주세요.");
@@ -348,16 +356,21 @@ span#allCheck_txt {
 			  return;
 		  }
 		  else if (!email_bool) {
-			  alert("올바른 아이디를 입력하세요.");
+			  alert("올바른 형식의 이메일을 입력하세요.");
 			  $("#email").val("").focus();
 			  return;
 		  }
-		   else if (!idDuplicate) {
+		  /*  else if (!idDuplicate) {
 			  alert("이미 사용중인 아이디입니다.");
 			  $("#userid").val("").focus();
 			  return;
+		  }  */
+		  else if ( $("#name").val().trim() == "" ) {
+			  alert("이름을 입력해 주세요.");
+			  $("#name").focus();
+			  return;
 		  } 
-		  else if( $("#password").val().trim() == "" ||  $("#passwordCheck").val().trim() == ""  ) {
+		  else if ( $("#password").val().trim() == "" ||  $("#passwordCheck").val().trim() == ""  ) {
 			  alert("비밀번호를 입력해 주세요.");
 			  $("#password").val("");
 			  $("#passwordCheck").val("");
@@ -365,26 +378,32 @@ span#allCheck_txt {
 			  return;
 		  }
 		  else if ( !pwd_bool ) {
-			  alert("올바른 비밀번호를 입력하세요.");
+			  alert("비밀번호는 8글자 이상 16자 이하로 영문 대/소문자, 숫자, 특수문자를 포함하여야 합니다.");
 			  $("#password").val("").focus();
 			  return;
-		  }
-		  else if ( !passwordCheck_bool ) {
+		  } 
+		  else if ( !pwdCheck_bool ) {
 			  alert("비밀번호와 비밀번호 확인 값이 동일하지 않습니다.");
 			  $("#password").val("").focus();
 			  $("#passwordCheck").val("")
 			  return;
 		  }
-		  else if ( $("#name").val().trim() == "" ) {
-			  alert("이름 항목은 필수 입력값입니다.");
+		  else if ( $("#hp").val().trim() == "" ) {
+			  alert("휴대폰 번호를 입력해 주세요.");
+			  $("#hp").focus();
 			  return;
-		  } 
+		  }
+		  else if ( !hp_bool ) {
+			  alert("올바른 형식의 휴대폰 번호를 입력하세요.");
+			  $("#hp").val("").focus();
+			  return;
+		  }	
 		  else if ( $("#area_select").val().trim() == "" ) {
 			  alert("지역을 선택해 주세요.");
 			  return;
 		  }
 		  else if( !$("input:checkbox[id=privacy_chx]").is(":checked") ) {
-			  alert("이용약관에 동의 하세요.");
+			  alert("개인정보 수집/이용 약관에 동의 하세요.");
 			  return;
 		  } 
 		  else if( !$("input:checkbox[id=use_chx]").is(":checked") ) {
@@ -394,35 +413,46 @@ span#allCheck_txt {
 		 
 		  var frm = document.joinForm;
 		  frm.method = "POST";
-		  // frm.action = "joinInsert.artree";
-		  // frm.submit();
+		  frm.action = "<%= request.getContextPath()%>/joinEnd.at";
+		  frm.submit();
 	}
 	
+	// 이메일 정규식
 	function myEmailCheck(email) {
 		var regExp = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i; 
 		var bool = regExp.test(email);  // 리턴타입은 boolean 
 		return bool;
 	}
 	
+	// 비밀번호 정규식
 	function myPasswdCheck(pwd) {
-		//  (영문 대소문자/숫자/특수문자 조합, 8자~16자)
-		var regExp = new RegExp(/^.*(?=^.{8,15}$)(?=.*\d)(?=.*[a-zA-Z])(?=.*[^a-zA-Z0-9]).*$/g);  
+		// 영문 대소문자/숫자/특수문자 조합, 8자~16자
+		var regExp = /^.*(?=^.{8,16}$)(?=.*\d)(?=.*[a-zA-Z])(?=.*[^a-zA-Z0-9]).*$/g;
 		var bool = regExp.test(pwd);
 		return bool;
 	}
 	
+	//  비밀번호 확인
 	function myPasswdCheck2(pwd, pwdCheck) {
-		//  비밀번호 확인
-		var pwd = document.getElementById("pwd");
-		var pwdCheck = document.getElementById("pwdCheck");
+		var pwd = document.getElementById("password");
+		var pwdCheck = document.getElementById("passwordCheck");
 		var bool = true;
 		if( pwd.value != pwdCheck.value ){
 			bool = false;
 		}
 		return bool;
-	};  */
+	}; 
 	
-	/* 로그인 스크립트 */
+	// 휴대폰번호 확인
+	function myHpCheck(hp) {
+		if(hp.length==11 || hp.length==10) {
+			var regExp = /^(01[016789]{1}|02|0[3-9]{1}[0-9]{1})([0-9]{3,4})([0-9]{4})$/;
+			var bool = regExp.test(hp);
+			return bool;
+		}
+	}; 
+	
+	// 로그인 스크립트
 	function layer_open(el) {
 		$("."+el).css("display", "");
 		var temp = $('#' + el);
@@ -470,45 +500,51 @@ span#allCheck_txt {
 					</td>
 				</tr>
 				<tr>
-					<td style="border: 0px;">
-						<button type="button" id="gender_male" class="gender on" onclick="javascript:gender_chg('male')">남</button>
-						<button type="button" id="gender_female" class="gender" onclick="javascript:gender_chg('female')">여</button>
-						<input type="text" id="gender" name="gender" value=""/>
+					<td>
+						<input type="text" placeholder="'-' 없이 휴대폰 번호만 입력해 주세요" name="hp" id="hp" />
 					</td>
 				</tr>
 				<tr>
 					<td style="border: 0px;">
-						<button type="button" class="ageGroup on" id="age_10" name="age_10" onclick="javascript:age_chg('10')">10대</button>
+						<button type="button" id="gender_1" class="gender on" onclick="javascript:gender_chg('1')">남</button>
+						<button type="button" id="gender_2" class="gender" onclick="javascript:gender_chg('2')">여</button>
+						<input type="hidden" id="gender" name="gender"/>
+					</td>
+				</tr>
+				<tr>
+					<td style="border: 0px;">
+						<button type="button" class="ageGroup on" id="age_10" onclick="javascript:age_chg('10')">10대</button>
 						<button type="button" class="ageGroup" id="age_20" onclick="javascript:age_chg('20')">20대</button>
 						<button type="button" class="ageGroup" id="age_30" onclick="javascript:age_chg('30')">30대</button>
 						<button type="button" class="ageGroup" id="age_40" onclick="javascript:age_chg('40')">40대</button>
 						<button type="button" class="ageGroup" id="age_50" onclick="javascript:age_chg('50')">50대</button>
 						<button type="button" class="ageGroup" id="age_60" onclick="javascript:age_chg('60')">60대이상</button>
-						<input type="text" id="age" value=""/>
+						<input type="hidden" id="agegroup" name="agegroup"/>
 					</td>
 				</tr>
 				<tr>
 					<td style="border: 0px;">
 						<select id="area_select">
 							<option value="">지역선택</option>
-							<option value="0">서울</option>
-							<option value="1">부산</option>
-							<option value="2">대구</option>
-							<option value="3">인천</option>
-							<option value="4">광주</option>
-							<option value="5">대전</option>
-							<option value="6">울산</option>
-							<option value="7">세종</option>
-							<option value="8">강원</option>
-							<option value="9">경기</option>
-							<option value="10">경남</option>
-							<option value="11">경북</option>
-							<option value="12">전남</option>
-							<option value="13">전북</option>
-							<option value="14">제주</option>
-							<option value="15">충남</option>
-							<option value="16">충북</option>
+							<option value="서울">서울</option>
+							<option value="부산">부산</option>
+							<option value="대구">대구</option>
+							<option value="인천">인천</option>
+							<option value="광주">광주</option>
+							<option value="대전">대전</option>
+							<option value="울산">울산</option>
+							<option value="세종">세종</option>
+							<option value="강원">강원</option>
+							<option value="경기">경기</option>
+							<option value="경남">경남</option>
+							<option value="경북">경북</option>
+							<option value="전남">전남</option>
+							<option value="전북">전북</option>
+							<option value="제주">제주</option>
+							<option value="충남">충남</option>
+							<option value="충북">충북</option>
 						</select>
+						<input type="text" name="area" id="area"/>
 					</td>
 				</tr>
 			</table>
