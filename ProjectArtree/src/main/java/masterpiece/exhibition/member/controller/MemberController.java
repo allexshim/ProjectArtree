@@ -1,12 +1,31 @@
 package masterpiece.exhibition.member.controller;
 
+import java.io.UnsupportedEncodingException;
+import java.security.GeneralSecurityException;
+
 import javax.servlet.http.HttpServletRequest;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.ModelAndView;
 
+import masterpiece.exhibition.common.AES256;
+import masterpiece.exhibition.common.SHA256;
+import masterpiece.exhibition.member.model.MemberVO;
+import masterpiece.exhibition.member.service.InterMemberService;
+
+@Component
 @Controller
 public class MemberController {
+	
+	// 의존객체 주입
+	@Autowired   
+	private InterMemberService service;
+
+	@Autowired   
+	private AES256 aes;
 	
 	@RequestMapping(value="/join.at")
 	public String join(HttpServletRequest request) {
@@ -15,9 +34,51 @@ public class MemberController {
 	} // end of join --------------------------------------------
 	
 	@RequestMapping(value="/joinEnd.at")
-	public String joinEnd(HttpServletRequest request) {
+	public ModelAndView joinEnd(HttpServletRequest request, ModelAndView mav) {
 		
-		return "member/join/joinEnd.tiles";
+		String email = request.getParameter("email");
+		String name = request.getParameter("name");
+		String password = request.getParameter("password");
+		int agegroup = Integer.parseInt(request.getParameter("agegroup"));
+		int gender = Integer.parseInt(request.getParameter("gender"));
+		String area = request.getParameter("area");
+		String hp = request.getParameter("hp");
+	
+		// 클라이언트의 IP 주소 알아오기
+		String clientIP = request.getRemoteAddr();
+		
+		MemberVO mvo = new MemberVO();
+		mvo.setEmail(email);
+		mvo.setName(name);
+		mvo.setPassword(SHA256.encrypt(password));
+		mvo.setAgegroup(agegroup);
+		mvo.setGender(gender);
+		mvo.setArea(area);
+		
+		try {
+			mvo.setHp(aes.encrypt(hp));
+		} catch (UnsupportedEncodingException | GeneralSecurityException e) {
+			e.printStackTrace();
+		}
+		
+		mvo.setClientIP(clientIP);
+		
+		int n = service.joinInsert(mvo);
+		
+		if(n==1) {
+			mav.setViewName("joinEnd");
+		}
+		else {
+			String msg = "회원가입 실패";
+			String loc = "javascript:history.back()";
+			 
+			mav.addObject("msg", msg);
+			mav.addObject("loc", loc);
+			
+			mav.setViewName("msg");
+		}
+		
+		return mav;
 	} // end of joinEnd --------------------------------------------
 	
 	@RequestMapping(value="/joinEndTwo.at")

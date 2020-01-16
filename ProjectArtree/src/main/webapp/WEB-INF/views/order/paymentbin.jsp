@@ -93,8 +93,8 @@
 		 
 		<div style="overflow:hidden; text-align: right;">
 			<div onclick="location.href='<%= ctxPath %>/detailsbin.at'" style="color:black; background:white; cursor:pointer; float: right; border: solid 2px #EDEBEB; text-align:center; padding:6px 12px; border-radius: 4px; width: 10%; font-size: 15px;">Submit</div>
-			<div style="margin-right:1%; font-size:15px; float:right; width:11%; "><input style="width:10em; padding:6px 12px;" type="text" size="2" placeholder="Promo code"></div>
-			<div style="padding:6px 12px; font-weight:bold; margin-right:3%; overflow:hidden; font-size:15px; border:2px solid black; float:right;">
+			<div style="margin-right:1%; font-size:15px; float:right;"><input style="width:10em; padding:6px 12px;" type="text" size="2" placeholder="Promo code"></div>
+			<div style="width:9%; padding:6px 12px; font-weight:bold; margin-right:3%; overflow:hidden; font-size:15px; border:2px solid black; float:right;">
 				<div style="float:left;" >Cart</div>
 				<div style="float:right;"><img style="width: 15px; height: 15px;" src="<%=ctxPath%>/resources/images/order/cart.png"></div>
 			</div>		
