@@ -14,18 +14,24 @@ html,body {
     background-color: #fff;
 	
 }
-#myheader {
-  background-color: white;
-  position: fixed;
-  z-index: 2;
-  display: inline-block;
-  overflow-x: hidden;
-  overflow-y: hidden;
-  text-align: center;
-  width: 100%;
-  height: 60px;
+
+@import url(//fonts.googleapis.com/earlyaccess/notosanskr.css);
+
+/* header */
+	#myheader {
+	  margin: 0 auto;
+	  padding-top: 10px;
+	  z-index: 2;
+	  display: inline-block;
+	  overflow-x: hidden;
+	  overflow-y: hidden;
+	  text-align: center;
+	  width: 100%;
+	  height: 60px;
+	  overflow:visible; 
+	  float: center;
+	}
 	
-}
 /*
 #mysideinfo{
   background-color: white;

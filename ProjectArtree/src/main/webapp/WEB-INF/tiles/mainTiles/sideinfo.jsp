@@ -10,6 +10,7 @@
 %>
 
 <style type="text/css">
+@import url(//fonts.googleapis.com/earlyaccess/notosanskr.css);
 /* sidebar */
 .sidenav {
   margin-left: 10px;
@@ -90,12 +91,12 @@ a:hover + p.arrow_box {
 </style>
 
 <div class="sidenav" >
-  <a href="#" style="margin-top: 150%;">
+  <a href="/search.at" style="margin-top: 150%;">
   	<img alt="검색" src="<%= ctxPath %>/resources/images/main/mainside-search.png" />
   </a>
   <p class="arrow_box" style="color: white; text-align: center;">검색</p>
   
-  <a href="#">
+  <a href="<%=ctxPath%>/addExhibition.at">
   	<img alt="전시등록" src="<%= ctxPath %>/resources/images/main/mainside-Enr.png" />
   </a>
   <p class="arrow_box" style="color: white; text-align: center;">전시등록</p>
