@@ -6,6 +6,7 @@
 %>
 
 <style type="text/css">
+
 	@import url(//fonts.googleapis.com/earlyaccess/notosanskr.css);
 	
 	#container_gal_list {
@@ -69,15 +70,6 @@
 		margin-bottom: 15px;
 		width: 100%;
 		display: inline-block;
-	}
-	
-	#container_gal_list .contents .thisCurExh img:hover { opacity: 0.7 }
-	#container_gal_list .contents .thisCurExh img {
-		display: inline-block;
-		width: 25%;
-		margin-right: 35px;
-		transition: opacity 0.5s ease;
-		height: 100%;
 	}
 	
 	#container_gal_list .searchArea {
@@ -193,37 +185,36 @@
 	#container_gal_list .carousel-indicators .active {
 	  background-color: #737373;
 	}
-	
-	.inSlideForGal {
-	  max-width: 1000px;
-	  position: relative;
-	  margin: auto;
-	}
 
-	.inSlides1 {
-	  display: none;
+	#container_gal_list .contents .thisCurExh img {
+		display: inline-block;
+		width: 25%;
+		margin-right: 35px;
+		height: 200px;
 	}
 	
-	.inSlideForGal .next {
-	  cursor: pointer;
-	  position: absolute;
-	  top: 50%;
-	  width: auto;
-	  margin-top: -22px;
-	  padding: 16px;
-	  color: black;
-	  font-weight: bold;
-	  font-size: 18px;
-	  border-radius: 0 3px 3px 0;
-	  user-select: none;
-	  right: 0;
-	}
 	
-	.inSlideForGal .next:hover {
-		text-decoration: none;
-	}
 	
+	
+	
+	.thisCurExh ul,li{list-style:none;}
+    .exhSlide{overflow:hidden;}
+    .exhSlide ul{width:calc(100% * 2);display:flex;animation:exhSlide 8s infinite;} /* slide를 8초동안 진행하며 무한반복 함 */
+    .exhSlide li{width:calc(100% / 2);height:200px;}
+    @keyframes exhSlide {
+      0% {margin-left:0;} /* 0 ~ 10  : 정지 */
+      10% {margin-left:0;} /* 10 ~ 25 : 변이 */
+      25% {margin-left:-100%;} /* 25 ~ 35 : 정지 */
+      35% {margin-left:-100%;} /* 35 ~ 50 : 변이 */ 
+/*       50% {margin-left:-200%;}
+      60% {margin-left:-200%;}
+      75% {margin-left:-300%;}
+      85% {margin-left:-300%;} */
+      100% {margin-left:0;}
+    } 
+ 
 </style>  
+
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
@@ -234,8 +225,9 @@
 	<div class="Title_Area">
 		<span class="lt">GALLERY</span>
 	</div>
-	
+
 	<span class="main_title">이번주 추천 공간</span>
+
 	
 	<div class="main_top">
 	  <div id="myCarousel" class="carousel slide" data-ride="carousel">
@@ -259,22 +251,17 @@
 			  	</div>
 			  	<div class="thisCurExh">
 			  		<span>진행중 전시회</span>
-			  		<!-- Slideshow container -->
-					<div class="inSlideForGal">
-					  <div class="inSlides1">
-					    <img src="<%= ctxPath%>/resources/images/exhibition/artmap_20200102_9426350.jpg">
-					    <img src="<%= ctxPath%>/resources/images/exhibition/artmap_20200102_9426350.jpg">
-					    <img src="<%= ctxPath%>/resources/images/exhibition/artmap_20200102_9426350.jpg">
-					  </div>
-					
-					  <div class="inSlides1">
-					    <img src="<%= ctxPath%>/resources/images/exhibition/챕터투.png">
-					    <img src="<%= ctxPath%>/resources/images/exhibition/챕터투.png">
-					  </div>
-
-					  <a class="next" onclick="plusSlides(1)">&#10095;</a>
+					<div class="exhSlide">
+						<ul>
+						  <li><img src="<%= ctxPath%>/resources/images/exhibition/챕터투.png"/>
+						  <img src="<%= ctxPath%>/resources/images/exhibition/poster1.JPG"/>
+						  <img src="<%= ctxPath%>/resources/images/exhibition/챕터투.png"/></li>
+						  <li><img src="<%= ctxPath%>/resources/images/exhibition/챕터투.png"/>
+						  <img src="<%= ctxPath%>/resources/images/exhibition/챕터투.png"/>
+						  <img src="<%= ctxPath%>/resources/images/exhibition/챕터투.png"/></li>
+						</ul>
 					</div>
-			  	</div>
+				 </div>
 			  </div>
 	      </div>
 	
@@ -289,20 +276,11 @@
 			  	</div>
 			  	<div class="thisCurExh">
 			  		<span>진행중 전시회</span>
-			  		<!-- Slideshow container -->
-					<div class="inSlideForGal">
-					  <div class="inSlides2">
-					    <img src="<%= ctxPath%>/resources/images/exhibition/poster1.JPG">
-					    <img src="<%= ctxPath%>/resources/images/exhibition/poster1.JPG">
-					    <img src="<%= ctxPath%>/resources/images/exhibition/poster1.JPG">
-					  </div>
-					
-					  <div class="inSlides2">
-					    <img src="<%= ctxPath%>/resources/images/exhibition/poster2.JPG">
-					    <img src="<%= ctxPath%>/resources/images/exhibition/poster2.JPG">
-					  </div>
-
-					  <a class="next" onclick="plusSlides(1)">&#10095;</a>
+					<div class="exhSlide">
+						<ul>
+						  <li><img src="<%= ctxPath%>/resources/images/exhibition/챕터투.png"/>
+						  <img src="<%= ctxPath%>/resources/images/exhibition/챕터투.png"/></li>
+						</ul>
 					</div>
 			  	</div>
 			 </div>
@@ -319,20 +297,12 @@
 			  	</div>
 			  	<div class="thisCurExh">
 			  		<span>진행중 전시회</span>
-			  		<!-- Slideshow container -->
-					<div class="inSlideForGal">
-					  <div class="inSlides3">
-					    <img src="<%= ctxPath%>/resources/images/exhibition/poster3.JPG">
-					    <img src="<%= ctxPath%>/resources/images/exhibition/poster3.JPG">
-					    <img src="<%= ctxPath%>/resources/images/exhibition/poster3.JPG">
-					  </div>
-					
-					  <div class="inSlides3">
-					    <img src="<%= ctxPath%>/resources/images/exhibition/exhPoster.jpg">
-					    <img src="<%= ctxPath%>/resources/images/exhibition/exhPoster.jpg">
-					  </div>
-
-					  <a class="next" onclick="plusSlides(1)">&#10095;</a>
+					<div class="exhSlide">
+						<ul>
+						  <li><img src="<%= ctxPath%>/resources/images/exhibition/챕터투.png"/>
+						  <img src="<%= ctxPath%>/resources/images/exhibition/poster1.JPG"/>
+						  <img src="<%= ctxPath%>/resources/images/exhibition/챕터투.png"/></li>
+						</ul>
 					</div>
 			  	</div>
 			 </div>
@@ -417,7 +387,7 @@
 <script type="text/javascript">
 
 	$(document).ready(function(){
-		
+	    
 		$(".gal_one").hover(function(){
 			$(this).children(".galAddr").stop().animate({top:'3px'}, 150);
 
@@ -438,7 +408,7 @@
 			goSearch();
 		});
 		
-	});
+	}); // end of document ready ---------------
 	
 	function goSearch(){
 		
@@ -476,31 +446,5 @@
 			});		
 		
 	}// end of goSearch() ---------
-	
-	var slideIndex = 1;
-	showSlides(slideIndex);
-
-	// Next/previous controls
-	function plusSlides(n) {
-	  showSlides(slideIndex += n);
-	}
-
-	// Thumbnail image controls
-	function currentSlide(n) {
-	  showSlides(slideIndex = n);
-	}
-
-	function showSlides(n) {
-	  var i;
-	  var slides = $()
-	  var slides = document.getElementsByClassName("inSlides1");
-	  if (n > slides.length) {slideIndex = 1}
-	  if (n < 1) {slideIndex = slides.length}
-	  for (i = 0; i < slides.length; i++) {
-	      slides[i].style.display = "none";
-	  }
-	  slides[slideIndex-1].style.display = "block";
-	}
-
 
 </script>

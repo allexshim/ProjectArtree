@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- ====  mapper 기본설정 ==== -->
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="search">
+
+	<resultMap type="HashMap" id="allMap">
+	<!-- key값, 행이름, 받아오는 데이터타입
+	전시회 이름
+	갤러리 이름/지역
+	전시 시작 기간 - 전시 종료 기간
+	메인 포스터
+	 -->
+	 	<result property="" column="" 	javaType="String"/> 
+	</resultMap>
+
+	<select id="getAllExhibition" resultType="allMap">
+		select V.exhibitionName, G.detailAddress as detailAddress, V.startDate, V.endDate, V.mainPoster, V.exhibitionno
+		from (select * from exhibition E join exhibitionDetail D on E.exhibitionno = D.fk_exhibitionno) V
+		join gallery G
+		on V.fk_galleryNo = G.galleryNo;
+	</select>
+
+</mapper>
