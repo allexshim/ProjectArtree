@@ -334,14 +334,8 @@
 		         	 <div class="fill" style="z-index:10; margin-top:0; background-image: url('<%= ctxPath%>/resources/images/main/mainImg.jpg')">
 		         		
 		         		 <div class="main-logo" style="z-index: 5;">
-		         			ARTREE
+		         			<img alt="" src="" />
 		         		 </div>
-				         <div class="main-search" style="z-index: 5;">
-			       			<div class="inputdiv">
-								<input class="search-input" placeholder="전시회 이름으로 검색"/>
-								<input class="search-input" placeholder="지역별 전시회 검색"/>										   			
-			       			</div>
-				         </div>
 		         	</div>
 		         </div>
 		         

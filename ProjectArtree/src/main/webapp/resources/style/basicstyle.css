@@ -6,19 +6,20 @@ html,body {
 	width: 100%;
     height: 100%;
     background-color: #fff;
+    font-family: 'Noto Sans Kr', sans-serif !important;
 }
 
 #mycontainer	{
-	width: 100%;
-    height: 100%;
     background-color: #fff;
 	
 }
 
-@import url(//fonts.googleapis.com/earlyaccess/notosanskr.css);
 
 /* header */
-	#myheader {
+	#myheader {/* 
+	  background-color: white;
+	  position: fixed;
+	  top: 0; */
 	  margin: 0 auto;
 	  padding-top: 10px;
 	  z-index: 2;
@@ -27,35 +28,89 @@ html,body {
 	  overflow-y: hidden;
 	  text-align: center;
 	  width: 100%;
-	  height: 60px;
+	  height: 70px;
 	  overflow:visible; 
 	  float: center;
 	}
 	
-/*
+
 #mysideinfo{
-  background-color: white;
-  margin-left: 10px;
   height: 100%;
-  width: 50px;
+  width: 100px;
   position: fixed;
   z-index: 1;
   top: 0;
   left: 0;
   overflow-x: hidden;
   overflow-y: hidden;
-  padding-top: 20px;
+  padding: 150px 0 0 10px;
 	
 }
-*/
-#mycontent		{
-	padding-top: 50px;
+
+#mycontent	{
 	width: 100%;
     height: 100%;
     background-color: #fff;
-	padding-left:60px;
 }
 
 
 	
 		
+@charset "UTF-8";
+
+@import url(//fonts.googleapis.com/earlyaccess/notosanskr.css);
+
+html,body {      
+   width: 100%;
+    height: 100%;
+    background-color: #fff;
+    font-family: 'Noto Sans Kr', sans-serif !important;
+}
+
+#mycontainer   {
+    background-color: #fff;
+   
+}
+
+
+/* header */
+   #myheader {/* 
+     background-color: white;
+     position: fixed;
+     top: 0; */
+     margin: 0 auto;
+     padding-top: 10px;
+     z-index: 2;
+     display: inline-block;
+     overflow-x: hidden;
+     overflow-y: hidden;
+     text-align: center;
+     width: 100%;
+     height: 70px;
+     overflow:visible; 
+     float: center;
+   }
+   
+
+#mysideinfo{
+  height: 100%;
+  width: 100px;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  overflow-x: hidden;
+  overflow-y: hidden;
+  padding: 150px 0 0 10px;
+   
+}
+
+#mycontent   {
+   width: 100%;
+    height: 100%;
+    background-color: #fff;
+}
+
+
+   
+      
