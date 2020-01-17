@@ -6,20 +6,19 @@
 <mapper namespace="search">
 
 	<resultMap type="HashMap" id="allMap">
-	<!-- key값, 행이름, 받아오는 데이터타입
-	전시회 이름
-	갤러리 이름/지역
-	전시 시작 기간 - 전시 종료 기간
-	메인 포스터
-	 -->
-	 	<result property="" column="" 	javaType="String"/> 
+	 	<result property="exhibitionName" column="exhibitionName" 	javaType="String"/> 
+	 	<result property="galleryName" column="galleryName" 	javaType="String"/> 
+	 	<result property="startDate" column="startDate" 	javaType="String"/> 
+	 	<result property="endDate" column="endDate" 	javaType="String"/> 
+	 	<result property="mainPoster" column="mainPoster" 	javaType="String"/> 
+	 	<result property="exhibitionno" column="exhibitionno" 	javaType="String"/> 
 	</resultMap>
 
-	<select id="getAllExhibition" resultType="allMap">
-		select V.exhibitionName, G.detailAddress as detailAddress, V.startDate, V.endDate, V.mainPoster, V.exhibitionno
+	<select id="getAllExhibition" resultMap="allMap">
+		select exhibitionName, galleryName, startDate, endDate, mainPoster, exhibitionno
 		from (select * from exhibition E join exhibitionDetail D on E.exhibitionno = D.fk_exhibitionno) V
 		join gallery G
-		on V.fk_galleryNo = G.galleryNo;
+		on V.fk_galleryNo = G.galleryNo
 	</select>
 
 </mapper>

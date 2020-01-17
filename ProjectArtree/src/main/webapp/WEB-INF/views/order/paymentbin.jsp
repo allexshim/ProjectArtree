@@ -19,8 +19,7 @@
 <style>
 	@import url(//fonts.googleapis.com/earlyaccess/notosanskr.css);
 	body{
-		font-family: 'Noto Sans Kr', sans-serif;
-		font-size: 250%;
+		font-family: 'Noto Sans Kr', sans-serif;		
 	}
 	
 	.menubin {
@@ -46,10 +45,12 @@
 
 <script>			
 	
-	$(document).ready(function(){
+	$(function(){			
+		
 		if ( ${totalBin != null}) {
 			var totalbin = ${totalBin};
-			$(".totalBin").html("&#8361;"+totalbin.toLocaleString());
+			$("#Subtotal").html("&#8361;"+totalbin.toLocaleString());
+			$("#total").html("&#8361;"+totalbin.toLocaleString());
 		}				
 		$.fn.bmdIframe = function( options ) {
 	        var self = this;
@@ -77,55 +78,76 @@
 		
 	});	
 	
+	function discountBin() {		
+		if($("#promo").val()=="하빈"){			
+			if ( ${totalBin != null}) {
+				var totalbin = ${totalBin};
+				var discount = totalbin * 0.5;
+				$("#Discount").html("&#8361;"+discount.toLocaleString());
+				var total = totalbin - discount;
+				$("#total").html("&#8361;"+total.toLocaleString());
+			}	
+		}				
+	}
+	
 </script>
 <body>
-	<div style="width: 60%; margin: 0 auto;" align="center">
-		<div style="padding-top: 5%;">
-			<ul style="border-radius:4px; border-top: solid 1px black; list-style-type: none; display: inline-flex; padding: 0;
-			border-bottom: solid 1px black; border-left: solid 1px black; width: 100%;">
-				<li class="menubin" style="background-color: black; color: white;">1.Ticket</li>
-				<li class="menubin" style="background-color: black; color: white;">2.Date</li>
-				<li class="menubin" style="background-color: black; color: white;">3.Detail</li>
-				<li class="menubin" style="background-color: black; color: white;">4.Payment</li>			
-			</ul>		
-		</div>
-		<hr>
+	<div style="padding-right:60px; width: 100%; margin: 0 auto;" align="center">
+	<div style="padding: 3%;">
+	
+		<div style="padding-bottom:2%; padding-top: 1%; font-size: 25px;">
+			PAYMENT
+		</div>			
 		 
 		<div style="overflow:hidden; text-align: right;">
-			<div onclick="location.href='<%= ctxPath %>/detailsbin.at'" style="color:black; background:white; cursor:pointer; float: right; border: solid 2px #EDEBEB; text-align:center; padding:6px 12px; border-radius: 4px; width: 10%; font-size: 15px;">Submit</div>
-			<div style="margin-right:1%; font-size:15px; float:right;"><input style="width:10em; padding:6px 12px;" type="text" size="2" placeholder="Promo code"></div>
+			<div onclick="discountBin()" style="color:black; background:white; cursor:pointer; float: right; border: solid 2px #EDEBEB; text-align:center; padding:6px 12px; border-radius: 4px; width: 10%; font-size: 15px;">Submit</div>
+			<div style="margin-right:1%; font-size:15px; float:right;"><input id="promo" style="width:10em; padding:6px 12px;" type="text" size="2" placeholder="Promo code"></div>
 			<div style="width:9%; padding:6px 12px; font-weight:bold; margin-right:3%; overflow:hidden; font-size:15px; border:2px solid black; float:right;">
 				<div style="float:left;" >Cart</div>
 				<div style="float:right;"><img style="width: 15px; height: 15px;" src="<%=ctxPath%>/resources/images/order/cart.png"></div>
 			</div>		
-		</div>	
+		</div>
+			
+		<hr>
 		
-		<div style="margin-top:3%; text-align:left; font-size:18px; padding: 27px; border: 1px solid #EDEBEB;">
+		<div style="font-size: 25px; text-align: left;">CART</div>
+		
+		<div style="margin-top:2%; text-align:left; font-size:18px; padding: 27px; border: 1px solid #EDEBEB;">
 		
 			<div style="overflow: hidden;">
-				<div style="float: left;">KAWS: COMPANIONSHIP IN THE AGE OF LONELINESS</div>
-				<div style="float: right;">$138.00</div>
+				<div style="float: left; font-weight: bold;">${exhibitionname }</div>
+				<div style="float: right; font-weight: bold;">$138.00</div>
 			</div>
 				
-			<div>Sunday 19 Jan 2020</div>
+			<div style="padding: 1% 0;">${dateBin}</div>
 			
-			<div style="color:#666; margin:3% 0; font-size:14px; padding:4px 10px; overflow: hidden; background-color: #f3f3f4;">
-				<div style="float: left;">갯수</div>
-				<div style="float: right;">개당가격</div>
-			</div>							
+			<div style="margin: 1% 0 3% 0;">	
+				${html}										
+			</div>
 			
 			<div style="overflow: hidden;">								
-				<div class="totalBin" style="font-weight:bold; float: right;"></div>
+				<div id="Subtotal" style="float: right; width: 10%; text-align: right;"></div>
+				<div style="margin-right:5%; float:right;">Subtotal</div>		
+			</div>
+			
+			<div style="overflow: hidden;">								
+				<div id="Discount" style="float: right; width: 10%; text-align: right;">&#8361;0</div>
+				<div style="margin-right:5%; float:right;">Discount</div>		
+			</div>
+			
+			<div style="overflow: hidden;">								
+				<div id="total" style="font-weight:bold; float: right; width: 10%; text-align: right;"></div>
 				<div style="margin-right:5%; font-weight:bold; float:right;">Total</div>		
 			</div>
 		
 		</div>			
 		
 		<div style="overflow: hidden;">	
-			<div onclick="location.href='<%= ctxPath %>/detailsbin.at'" style="color:black; background:white; cursor:pointer; float: left; border: solid 2px black; border-radius: 4px; width: 10%; margin-top: 3%;">이전</div>
-			<div data-target="#myModal" data-bmdSrc="<%=ctxPath%>/paymentGatebin.at" data-toggle="modal" class="bmd-modalButton" style="color:black; background:white; cursor:pointer; float: right; border: solid 2px black; border-radius: 4px; width: 10%; margin-top: 3%;">결제하기</div>			 			
-		</div>		
+			<div onclick="location.href='<%= ctxPath %>/ticketsbin.at'" style="color:black; background:white; cursor:pointer; float: left; border: solid 1px black; border-radius: 4px; width: 5%; margin-top: 1%; padding: 0.3%;">이전</div>
+			<div data-target="#myModal" data-bmdSrc="<%=ctxPath%>/paymentGatebin.at" data-toggle="modal" class="bmd-modalButton" style="color:black; background:white; cursor:pointer; float: right; border: solid 1px black; border-radius: 4px; width: 5%; margin-top: 1%; padding: 0.3%;">결제하기</div>			 			
+		</div>	
 	</div>
+	</div>		
     
     <div class="modal fade" id="myModal" style="background-color: transparent;">
 		<div class="modal-dialog" style="width: 880px;">

@@ -11,7 +11,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-
 <link rel="stylesheet" type="text/css" href="<%=ctxPath%>/resources/jquery-ui-1.12.1.custom/jquery-ui.css" />
 <script type="text/javascript" src="<%=ctxPath%>/resources/jquery-ui-1.12.1.custom/jquery-ui.js"></script>							
 
@@ -25,13 +24,10 @@
 		width: 25%;				
 	}
 </style>
-<script
-    src="https://code.jquery.com/jquery-3.3.1.min.js"
-    integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
-    crossorigin="anonymous"></script><!-- jQuery CDN 환불 --->
+
 <script>
 	$(function(){
-		/* $("#accordion").accordion(); */
+		$("#accordion").accordion();
 	})
 		
 	function goRefund() {
@@ -40,34 +36,13 @@
 		frm.action="<%=ctxPath %>/refundBin.at";		
 		frm.submit();
 	}
-	
-	/* 환불 */
-	function cancelPay() {
-	      jQuery.ajax({
-	        "url": "http://www.myservice.com/payments/cancel",
-	        "type": "POST",
-	        "contentType": "application/json",
-	        "data": JSON.stringify({
-	          "merchant_uid": "mid_" + new Date().getTime(), // 주문번호
-	          "cancel_request_amount": 2000, // 환불금액
-	          "reason": "테스트 결제 환불", // 환불사유
-	          "refund_holder": "홍길동", // [가상계좌 환불시 필수입력] 환불 가상계좌 예금주
-	          "refund_bank": "88", // [가상계좌 환불시 필수입력] 환불 가상계좌 은행코드(ex. KG이니시스의 경우 신한은행은 88번)
-	          "refund_account": "56211105948400" // [가상계좌 환불시 필수입력] 환불 가상계좌 번호
-	        }),
-	        "dataType": "json"
-	        }).done(function(result) { // 환불 성공시 로직 
-	            alert("환불 성공");
-	        }).fail(function(error) { // 환불 실패시 로직
-	          alert("환불 실패");
-	      });
-	    }
+		
 </script>
 <body>
 	<form name="refundBin">
 	<div style="width: 60%; margin: 0 auto;">
 		<div>
-			<div style="margin-bottom: 1%; font-weight: bold; font-size: 22px; padding-top: 5%;">주문 상품 정보</div>
+			<div style="margin-bottom: 1%; font-size: 22px; padding-top: 5%;">주문 상품 정보</div>
 			<table class="table table-hover">			
 				<tr>
 					<th>이미지</th>
@@ -87,7 +62,7 @@
 				</tr>										
 				<tr>
 					<th>예매취소</th>
-					<td><div onclick="cancelPay()" style="font-weight:bold; text-align:center; color:black; background:white; cursor:pointer; border: solid 1px black; border-radius: 4px; width: 5%;">취소</div></td>
+					<td><div onclick="cancelPay()" style="text-align:center; color:black; background:white; cursor:pointer; border: solid 1px black; border-radius: 4px; width: 5%;">취소</div></td>
 				</tr>				
 			</table>						
 		</div>	
@@ -137,8 +112,8 @@
 		</div>
 		
 		<div id="accordion">		
-			<h3 style="padding:2%; margin-bottom:3% !important; text-align: left; font-size: 22px; font-weight: bold;">예매 취소 시 유의사항</h3>
-			<div style="height:400px !important;">
+			<h3 style="padding:2%; text-align: left; font-size: 22px; font-weight: bold;">예매 취소 시 유의사항</h3>
+			<div style="height:325px !important;">
 				<div>
 					<div style="font-size: 14px; font-weight: bold;">유의사항<br><br></div>
 					<div style="line-height:1.8; font-size: 14px;">
@@ -147,7 +122,7 @@
 						고객 귀책 사유로 티켓 분실이나 파손이 될 경우에는 티켓은 재발행 되지 않으며, 취소도 불가합니다.<br>
 						티켓 예매시 선택한 결제수단으로만 환불이 가능합니다.<br>
 						Artree 이외의 외부 예매처에서 예매한 티켓은 직접 예매한 곳으로 환불 절차를 문의해주시기 바랍니다.<br>
-						초대권으로 명시된 티켓은 화불이 불가합니다.<br><br><br>			
+						초대권으로 명시된 티켓은 화불이 불가합니다.<br><br>			
 					</div>
 				</div>
 				<div>
@@ -158,7 +133,7 @@
 					</div>
 				</div>		
 			</div>
-			<h3 style="padding:2%; margin-bottom:3% !important; text-align: left; font-size: 22px; font-weight: bold;">티켓 수령 안내</h3>
+			<h3 style="padding:2%; text-align: left; font-size: 22px; font-weight: bold;">티켓 수령 안내</h3>
 			<div style="height:400px !important;">
 				<div style="font-size: 14px; font-weight: bold;">현장수령<br><br></div>
 				<div style="line-height:1.8; font-size: 14px;">					
@@ -169,7 +144,7 @@
 			</div>			
 		</div>		
 		<div style="overflow: hidden; margin-bottom: 5%;">
-			<div style="font-weight:bold; text-align:center; color:black; background:white; cursor:pointer; float: right; border: solid 2px black; border-radius: 4px; width: 10%; margin-top: 3%;">주문목록</div>					
+			<div style="text-align:center; color:black; background:white; cursor:pointer; float: right; border: solid 1px black; border-radius: 4px; width: 8%; margin-top: 1%; padding: 0.3%;">주문목록</div>					
 		</div>				
 	</div>
 	</form>			

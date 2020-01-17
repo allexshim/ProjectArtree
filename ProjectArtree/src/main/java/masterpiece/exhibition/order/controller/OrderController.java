@@ -1,19 +1,51 @@
 package masterpiece.exhibition.order.controller;
 
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import masterpiece.exhibition.order.service.InterOrderService;
+
 @Controller
 public class OrderController {
+	
+	@Autowired
+	private InterOrderService service;
+	
 	@RequestMapping(value="/ticketsbin.at")
 	public String ticketsbin(HttpServletRequest request) {
+		HashMap<String,String> map = new HashMap<String,String>();
+				
+		String no = "4901"; // 구매하기 눌렀을때 전시회 번호 받아와야함 지금은 임시
+		if ( no==null || no.trim().isEmpty() ) {
+			no = "";
+		}
 		
-		// #after 나중에 가격과 이름 불러오기 // 전시기간 추가...? 
-		String name = "KAWS: COMPANIONSHIP IN THE AGE OF LONELINESS";
-		int price = 12000;
+		map.put("no", no);
+		
+		List<HashMap<String, String>> exList = service.getEx(map);
+		
+		
+		// 키값 꺼내서 리퀘스트셋
+		Set key = exList.get(0).keySet();
+		Iterator iterator = key.iterator();		
+		for (iterator = key.iterator(); iterator.hasNext();) {
+		   String keyName = (String) iterator.next();		   
+		   System.out.println(keyName);
+		   request.setAttribute(keyName, exList.get(0).get(keyName));
+		}		
+		
+		request.setAttribute("exList", exList);
+		
+		int price = Integer.parseInt(exList.get(0).get("price"));
 		String img ="base.jpg";
 		
 		double price20 = (double) price*0.8;
@@ -23,11 +55,10 @@ public class OrderController {
 		request.setAttribute("price", price);
 		request.setAttribute("price20", price20);
 		request.setAttribute("price30", price30);
-		request.setAttribute("price50", price50);						
-		request.setAttribute("name", name);
+		request.setAttribute("price50", price50);								
 		request.setAttribute("img", img);
-		
-		HttpSession session = request.getSession();
+					
+		HttpSession session = request.getSession();	
 		String[] qt = null;
 		String bin = "";
 		qt = (String[])session.getAttribute("qt");
@@ -44,39 +75,47 @@ public class OrderController {
 		}					
 		
 		return "order/ticketsbin.tiles";
-	}
-	
-	@RequestMapping(value="/datebin.at")
-	public String datebin(HttpServletRequest request) {
-		String[] qt = request.getParameterValues("qt");
-		String totalBin = request.getParameter("totalBin");		
-		
-		HttpSession session = request.getSession();
-		session.setAttribute("qt", qt);
-		session.setAttribute("totalBin", totalBin);
-		
-		return "order/datebin.tiles";
-	}
-	
-	@RequestMapping(value="/detailsbin.at")
-	public String detailsbin(HttpServletRequest request) {
-		String date = request.getParameter("dateBin");
-		HttpSession session = request.getSession();
-		session.setAttribute("dateBin", date);		
-		
-		return "order/detailsbin.tiles";
-	}
+	}	
 	
 	@RequestMapping(value="/paymentbin.at")
 	public String paymentbin(HttpServletRequest request) {
-		HttpSession session = request.getSession();
-		String[] qt = (String[])session.getAttribute("qt");
-		String totalBin = (String)session.getAttribute("totalBin");	
-		String dateBin = (String)session.getAttribute("dateBin");
+						
+		String html = "";
 		
-		request.setAttribute("qt", qt);
+		String[] qt = request.getParameterValues("qt");				
+		String[] type = request.getParameterValues("type");
+		String[] price = request.getParameterValues("price");			
+		
+		if ( qt != null && type != null && price != null ) {
+			for (int i=0; i<qt.length; i++){	
+				if(Integer.parseInt(qt[i])==0) {
+					html += "";
+				}				
+				else {
+					html += "<div style='border-bottom: 1px solid white; color:#666; font-size:14px; padding:4px 10px; overflow: hidden; background-color: #f3f3f4;'>";
+					html += "<div style='float: left; width: 25%; text-align: left;'>"+type[i]+"</div>";
+					html += "<div style='float: left;'>"+qt[i]+"&nbsp;Item(s)</div>";
+					html += "<div style='float: right;'>"+price[i]+"</div>";
+					html += "</div>	";
+				}							
+			}		
+			request.setAttribute("html", html);			
+		}					
+			
+		String totalBin = request.getParameter("totalBin");
+		String dateBin = request.getParameter("dateBin");			
+		String exhibitionname = request.getParameter("exhibitionname");		
+		
+		HttpSession session = request.getSession();
+		
+		session.setAttribute("qt", qt);
+		session.setAttribute("totalBin", totalBin);
+		session.setAttribute("dateBin", dateBin);						
+		
 		request.setAttribute("totalBin", totalBin);
 		request.setAttribute("dateBin", dateBin);
+		request.setAttribute("exhibitionname", exhibitionname);
+		
 		return "order/paymentbin.tiles";
 	}
 	
