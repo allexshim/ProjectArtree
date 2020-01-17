@@ -225,7 +225,7 @@
 <body>
 	<div id="communityContainer">
 		<div id="imgcontainer">	
-	  		<img id="boardtop" src="<%= ctxPath %>/resources/images/board/boardImage1.jpg" />
+	  		<img id="boardtop" src="<%= ctxPath %>/resources/images/board/boardImage3.jpg" />
 		</div>
 
 		<div id="topText">
