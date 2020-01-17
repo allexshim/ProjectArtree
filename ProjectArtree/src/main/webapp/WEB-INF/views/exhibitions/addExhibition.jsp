@@ -81,6 +81,10 @@
 		overflow: hidden; /* div밖으로 이미지가 넘칠 때 해결 방법! 기억해둘것! */
 	}
 	
+	input {
+		padding: 4px 10px;
+	}
+	
 	table#detailTable, table#extraInfoTable {
 		width : 95%;
 		margin : 0 auto;
@@ -654,7 +658,7 @@
 						<img class="priceBtn" src="<%= ctxPath %>/resources/images/board/button_price.PNG" alt=""/>
 						
 						<div id="priceArea" style="display:none;">
-							<input style="width:100px;" type="text" name="price" id="price" value="" placeholder="가격" />
+							<input style="width:100px; text-align:center;" type="text" name="price" id="price" value="" placeholder="가격" />
 						</div>
 					</td>
 				<tr>
