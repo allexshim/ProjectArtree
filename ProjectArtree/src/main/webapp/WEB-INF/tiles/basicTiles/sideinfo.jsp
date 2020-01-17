@@ -30,10 +30,10 @@
 .arrow_box {
   display: none;
   position: absolute;
-  width: 100px;
+  width: 80px;
   padding: 8px;
   margin-top: 8px;
-  left: 0;
+  left: 10px;
   -webkit-border-radius: 8px;
   -moz-border-radius: 8px;  
   border-radius: 8px;
@@ -62,20 +62,21 @@ a:hover + p.arrow_box {
 }
 </style>
 
-
-  <a href="/search.at" style="margin-top: 150%;">
-  	<img alt="검색" src="<%= ctxPath %>/resources/images/main/mainside-search.png" />
+  
+  
+  <a href="#"  style="margin-top: 150%;">
+  	<img alt="채팅" src="<%= ctxPath %>/resources/images/main/mainside-chat.png" />
   </a>
-  <p class="arrow_box" style="color: white; text-align: center;">검색</p>
+  <p class="arrow_box" style="color: white; text-align: center;">채팅</p>
+  
+  <a href="/search.at">
+  	<img alt="검색" src="<%= ctxPath %>/resources/images/main/mainside-ticket.png" />
+  </a>
+  <p class="arrow_box" style="color: white; text-align: center;">예매</p>
   
   <a href="<%=ctxPath%>/addExhibition.at">
   	<img alt="전시등록" src="<%= ctxPath %>/resources/images/main/mainside-Enr.png" />
   </a>
   <p class="arrow_box" style="color: white; text-align: center;">전시등록</p>
   	
-  <a href="#">
-  	<img alt="채팅" src="<%= ctxPath %>/resources/images/main/mainside-chat.png" />
-  </a>
-  <p class="arrow_box" style="color: white; text-align: center;">채팅</p>
-  
 
