@@ -2,11 +2,11 @@
     pageEncoding="UTF-8"%>
 
 <script type="text/javascript">
-    if("${msg != null}") {
-		alert("${msg}");
+    if(${msg != null}) {
+		alert("${ msg }");
     }
     
-    if("${loc != null}") {
-		location.href="${loc}";
+    if(${loc != null}) {
+		location.href="${ loc }";
     }
-</script>    
+</script>
