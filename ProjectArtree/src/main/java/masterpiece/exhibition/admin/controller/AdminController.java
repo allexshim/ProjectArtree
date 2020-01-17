@@ -71,4 +71,22 @@ public class AdminController {
 		return "exhibitions/adminregisterformDetail.tiles";
 	}
 	
+	// ------------------------------------------------------------ //
+	
+	// (일반 사용자) 전시회 등록 신청 폼
+	@RequestMapping(value="/addExhibition.at")
+	public String addExhibition() {
+		return "exhibitions/addExhibition.tiles";
+	}
+	
+	@RequestMapping(value="/addEndExhibition.at")
+	public String addEndExhibition() {
+		
+		
+		
+		
+		return "";
+		
+	}
+	
 }

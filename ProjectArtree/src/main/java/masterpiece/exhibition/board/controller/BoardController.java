@@ -136,12 +136,6 @@ public class BoardController {
 		return "board/events/addEvent.tiles";
 	}
 	
-	// (일반 사용자) 전시회 등록 신청 폼
-	@RequestMapping(value="/addExhibition.at")
-	public String addExhibition() {
-		return "exhibitions/addExhibition.tiles";
-	}
-	
 	// 공지 게시판
 	@RequestMapping(value="/notice.at")
 	public String notice() {
