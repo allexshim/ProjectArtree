@@ -8,10 +8,15 @@
 <title>Insert title here</title>
 
 <style type="text/css">
+@import url(//fonts.googleapis.com/earlyaccess/notosanskr.css);
+
+body, html {
+	font-family: 'Noto Sans Kr', sans-serif !important;
+}
 
 #container-admin {
-	margin: 30vh auto;
-	width: 60%;
+	margin: 20vh auto;
+	width: 90%;
 }
 
 .categories {
