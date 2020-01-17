@@ -16,7 +16,10 @@ html,body {
 
 
 /* header */
-	#myheader {
+	#myheader {/* 
+	  background-color: white;
+	  position: fixed;
+	  top: 0; */
 	  margin: 0 auto;
 	  padding-top: 10px;
 	  z-index: 2;
