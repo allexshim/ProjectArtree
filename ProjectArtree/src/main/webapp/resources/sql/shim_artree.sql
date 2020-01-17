@@ -32,84 +32,20 @@ insert into tag(type, keyword) values('표현별','여름');	insert into tag(typ
 insert into tag(type, keyword) values('표현별','정원');	insert into tag(type, keyword) values('장르별','판화');	insert into tag(type, keyword) values('형용별','생동감');	insert into tag(type, keyword) values('색상별','황금');
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-select *
-from tab;
 
-drop table gallery;
+select * from gallery order by to_number(galleryno) desc;
 
-create table gallery(
-galleryNo   VARCHAR2(100)	NOT NULL,
-galleryName	VARCHAR2(100)	NOT NULL,
-detailAddress	VARCHAR2(100)	NOT NULL,
-mainPicture	VARCHAR2(100)	NOT NULL,
-introduction LONG	NULL,
-website	VARCHAR2(100)	NULL,
-location	VARCHAR2(100)	NOT NULL,
-openingHour	VARCHAR2(20)	NULL,
-holiday	VARCHAR2(300)	NULL,
-tel 	VARCHAR2(20),
-status	 number	NOT NULL,
-constraint PK_gallery_galleryNo primary key(galleryNo)  
-);
+select * from exhibition;
+select * from exhibitionDetail;
 
-drop sequence seq_gallery;
-
-rollback;
-commit;
-
-select location,galleryno,galleryname from gallery 
-where status = '1' and location = '-'
-order by to_number(galleryno);
-
-select * from gallery
-where status = '1'
-order by to_number(galleryno) desc;
-
-select count(*) from gallery
-where status = '1'
-order by to_number(galleryno) desc;
-
-ALTER TABLE gallery MODIFY(detailAddress VARCHAR2(200));
-
---------------------------------------------------------------------------------------------
-
-create table exhibition(
-exhibitionNo	number	NOT NULL
-,fk_galleryNo	VARCHAR2(100)	NULL
-,exhibitionName	VARCHAR2(100)	NULL
-,applier	VARCHAR2(20)	NOT NULL
-,author	VARCHAR2(300)	NOT NULL
-,startDate	VARCHAR2(20)	NOT NULL
-,endDate	VARCHAR2(20)	NOT NULL
-,email 	VARCHAR2(100)	NULL
-,tel	VARCHAR2(20)	NULL
-,genre	 VARCHAR2(20)	NOT NULL
-,tag	VARCHAR2(100)	NOT NULL
-,authorInfo	VARCHAR2(200)	NULL
-,exhibitionInfo	LONG	NOT NULL
-,price number	NOT NULL
-,foodorDrink	VARCHAR2(100)	NULL
-,extraRestriction	VARCHAR2(100)	NULL
-,photo	VARCHAR2(100)	NULL
-,openCloseTime	VARCHAR2(100)	NOT NULL
-,status		VARCHAR2(20)	NOT NULL
-,readCount	number	NOT NULL
-,constraint PK_exhibition_exhibitionNo primary key(exhibitionNo) 
-,constraint FK_exhibition_fk_galleryNo foreign key(fk_galleryNo) 
-                                                        references gallery(galleryNo)
-);
+select exhibitionName, galleryName, startDate, endDate, mainPoster, exhibitionno
+		from (select * from exhibition E join exhibitionDetail D on E.exhibitionno = D.fk_exhibitionno) V
+		join gallery G
+		on V.fk_galleryNo = G.galleryNo;
 
 /*
-exhibitionDetail
-fk_exhibitionNo(FK)	N/A	number	NOT NULL
-image1	N/A	VARCHAR2(100)	NULL
-image2	N/A	VARCHAR2(100)	NULL
-image3	N/A	VARCHAR2(100)	NULL
-mainPoster	N/A	VARCHAR2(100)	NOT NULL
-image1title	N/A	VARCHAR2(200)	NULL
-image1info	N/A	VARCHAR2(500)	NULL
-image2title	N/A	VARCHAR2(200)	NULL
-image2info	N/A	VARCHAR2(500)	NULL
-image3title	N/A	VARCHAR2(200)	NULL
-image3info	N/A	VARCHAR2(500)	NULL
+전시회 이름
+갤러리 이름/지역
+전시 시작 기간 - 전시 종료 기간
+메인 포스터
 */
