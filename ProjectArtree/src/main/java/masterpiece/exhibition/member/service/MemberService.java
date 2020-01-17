@@ -14,7 +14,9 @@ public class MemberService implements InterMemberService {
 	
 	@Override
 	public int joinInsert(MemberVO mvo) {
+
 		int n = dao.joinInsert(mvo);
+	
 		return n;
 	}
 

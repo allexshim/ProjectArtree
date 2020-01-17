@@ -34,8 +34,9 @@ public class MemberController {
 	} // end of join --------------------------------------------
 	
 	@RequestMapping(value="/joinEnd.at")
-	public ModelAndView joinEnd(HttpServletRequest request, ModelAndView mav) {
+	public String joinEnd(HttpServletRequest request) {
 		
+		/////////////////// 회원가입 ////////////////////
 		String email = request.getParameter("email");
 		String name = request.getParameter("name");
 		String password = request.getParameter("password");
@@ -62,29 +63,36 @@ public class MemberController {
 		}
 		
 		mvo.setClientIP(clientIP);
+		////////////////////////////////////////////////////
+	
+		/////////////////// 선호 전시회 설정 ////////////////////
 		
+		////////////////////////////////////////////////////
+
+		// 데이터베이스에 회원가입 데이터 insert
 		int n = service.joinInsert(mvo);
 		
+		int m = 0;
+		
 		if(n==1) {
-			mav.setViewName("joinEnd");
 		}
+		
 		else {
 			String msg = "회원가입 실패";
 			String loc = "javascript:history.back()";
 			 
-			mav.addObject("msg", msg);
-			mav.addObject("loc", loc);
-			
-			mav.setViewName("msg");
+			request.setAttribute("msg", msg);
+			request.setAttribute("loc", loc);			
 		}
 		
-		return mav;
+		return "member/join/joinEnd";
+		
 	} // end of joinEnd --------------------------------------------
 	
 	@RequestMapping(value="/joinEndTwo.at")
 	public String joinEndTwo(HttpServletRequest request) {
 		
-		return "member/join/joinEndTwo.tiles";
+		return "member/join/joinEndTwo";
 	} // end of joinEnd --------------------------------------------
 	
 	@RequestMapping(value="/idFind.at")
