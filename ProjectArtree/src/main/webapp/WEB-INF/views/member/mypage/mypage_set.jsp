@@ -185,11 +185,10 @@
 			$("#tagB").attr("onclick","fav('"+tag1+"B','2')");
 			$("#tagC").attr("onclick","fav('"+tag1+"C','2')");
 			$("#tagD").attr("onclick","fav('"+tag1+"D','2')");
-			
-			console.log(n.substring(0,1));
 
 		} else {
-			// var paran = JSON.stringify({"tag1":n.substring(0,1), ""})
+			// var param = JSON.stringify({"tag1":n.substring(0,1), "idx":idx, "tag2":n})
+
 /* 
 			var param = JSON.stringify({"tag1":n.substring(0,1),"_id":userid,"tag2":n});
 			$.post("/data/info.php",param,function(data){
@@ -247,12 +246,14 @@
 							<img id="tagD"/>
 						</div>
 						
-						<div style="margin-top:30px; width:582px; float:left; display:none;" id="tag2">
-							<div style=" margin-right:22px;  margin-bottom:22px;  background-size:cover; background-position:center" id="tagA"></div>
-							<div style="background-size:cover; background-position:center" id="tagB"></div>
-							<div style="margin-right:22px; background-size:cover; background-position:center" id="tagC"></div>
-							<div style="background-size:cover; background-position:center" id="tagD"></div>
-						</div>
+						<form name="tagForm">
+							<input type="text" id="tag1_input" name="tag1_input"/>
+							<input type="text" id="tag2_input" name="tag2_input"/>
+							<input type="text" id="galleryno1" name="galleryno1"/>
+							<input type="text" id="exhibitionno1" name="exhibitionno1"/>
+							<input type="text" id="galleryno2" name="galleryno2"/>
+							<input type="text" id="exhibitionno2" name="exhibitionno2"/>
+						</form>
 					</td>
 				</tr>
 				<tr class="name_set">
