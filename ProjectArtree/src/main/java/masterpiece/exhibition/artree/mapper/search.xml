@@ -6,6 +6,7 @@
 <mapper namespace="search">
 
 	<resultMap type="HashMap" id="allMap">
+		<result property="detailAddress" column="detailAddress" 	javaType="String"/> 
 	 	<result property="exhibitionName" column="exhibitionName" 	javaType="String"/> 
 	 	<result property="galleryName" column="galleryName" 	javaType="String"/> 
 	 	<result property="startDate" column="startDate" 	javaType="String"/> 
@@ -15,9 +16,9 @@
 	</resultMap>
 
 	<select id="getAllExhibition" resultMap="allMap">
-		select exhibitionName, galleryName, startDate, endDate, mainPoster, exhibitionno
+		select detailAddress, exhibitionName, galleryName, startDate, endDate, mainPoster, exhibitionno
 		from (select * from exhibition E join exhibitionDetail D on E.exhibitionno = D.fk_exhibitionno) V
-		join gallery G
+		join (select * from gallery where status = 1) G
 		on V.fk_galleryNo = G.galleryNo
 	</select>
 
