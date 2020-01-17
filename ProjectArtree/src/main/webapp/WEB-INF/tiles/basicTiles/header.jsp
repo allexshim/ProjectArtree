@@ -7,10 +7,11 @@
 
 <style type="text/css">
 @import url(//fonts.googleapis.com/earlyaccess/notosanskr.css);
-
 /* header */
-	
-	
+html,body{
+	font-family: 'Noto Sans Kr', sans-serif !important; 
+}
+
 	#myheader a.header-nav {
 	  font-weight: bold;
 	  text-align: center;
@@ -89,7 +90,7 @@
   font-weight: bold;
   text-align: center;
   font-size: 15px;
-  margin: 55px 0 0;
+  margin: 50px 0 0;
   display: none;
   position: absolute;
   background-color: white;

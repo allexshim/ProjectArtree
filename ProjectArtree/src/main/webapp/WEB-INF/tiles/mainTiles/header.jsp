@@ -128,8 +128,8 @@
 }
 
 
-
 </style>
+
 
 <div  class="topnav" style="">
 	<div class="row">
@@ -156,7 +156,7 @@
 			<div class="dropdown" style="float: right;">
 				  <a class="dropbtn login" style="padding-top: 0px;"><img src="<%= ctxPath %>/resources/images/main/mainheader-account-login.png" /></a>
 				  <div class="dropdown-content-R">
-				    <a href="<%=ctxPath%>/join.at">로그인</a>
+				    <a href="javascript:layer_open('layer')">로그인</a>
 				    <a href="<%=ctxPath%>/join.at">회원가입</a>
 				    <a href="<%=ctxPath%>/mypage.at">마이페이지</a> 
 				  </div>
@@ -164,4 +164,5 @@
 		</div>
 	</div>
 </div>
+
 
