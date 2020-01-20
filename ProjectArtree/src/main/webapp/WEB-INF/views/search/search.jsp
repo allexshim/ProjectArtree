@@ -380,6 +380,7 @@
 	       minLevel: 10 // 클러스터 할 최소 지도 레벨 
 	   });
 	
+	   var coordsArr = {"positions":[]};
 	   // 데이터를 가져오기 위해 jQuery를 사용합니다
 	   // ajax로 데이터를 가져옵니다.
 	    $.ajax({ 
@@ -389,7 +390,6 @@
 	          success: function(json) {
 	        	 // 주소-좌표 변환 객체를 생성합니다
 	        	 var geocoder = new kakao.maps.services.Geocoder();
-				 var coordsArr = {"positions":[]};
 				 
 	        	  $.each(json, function(index, item){
 	        		  // console.log(item.detailAddress);
@@ -408,30 +408,31 @@
 		        	          /* {"lat": 37.27943075229118,"lng": 127.01763998406159} */
 		        	          }
 			        	  }); 
-		        	  });
-	    	          // console.log(coordsArr); --> 카카오 api에서 클러스터러를 사용하기 위해 요구하는 데이터 type
-    	      		  $.get(coordsArr, function(data) {
-				        // 데이터에서 좌표 값을 가지고 마커를 표시합니다
-				        // 마커 클러스터러로 관리할 마커 객체는 생성할 때 지도 객체를 설정하지 않습니다
-				        var markers = $(data.positions).map(function(i, position) {
-				            return new kakao.maps.Marker({
-				                position : new kakao.maps.LatLng(position.lat, position.lng)
-				            });
-				        });
-				
-				        // 클러스터러에 마커들을 추가합니다
-				        clusterer.addMarkers(markers);
-    	      		  });   
+		        	  });  
 	        	  },
 	          error: function(request, status, error){
 	                alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
 	            }
 	       });
+	   
+	    	// console.log(coordsArr); --> 카카오 api에서 클러스터러를 사용하기 위해 요구하는 데이터 type
+		  $.get(coordsArr, function(data) {
+	        // 데이터에서 좌표 값을 가지고 마커를 표시합니다
+	        // 마커 클러스터러로 관리할 마커 객체는 생성할 때 지도 객체를 설정하지 않습니다
+	        var markers = $(data.positions).map(function(i, position) {
+	            return new kakao.maps.Marker({
+	                position : new kakao.maps.LatLng(position.lat, position.lng)
+	            });
+	        });
+	
+		        // 클러스터러에 마커들을 추가합니다
+		        clusterer.addMarkers(markers);
+		 	 }); 
 	}; //----------------------------------------end of searchbyLocation
 		/////////////////////////////////////////////////////////////////////////////
 		/* ----------------------- 카카오 지도 API -----------------------------*/
 
-	
+///////////////////////////////////////////////////////////////////////////////////////	
 		/* ----------- 테마별 word chart --------------------------------------------*/
 		
 		// 아래 text는 샘플 텍스트이므로 추후 수정
