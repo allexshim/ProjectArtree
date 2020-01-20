@@ -70,7 +70,7 @@ html,body{
   font-weight: bold;
   text-align: left;
   font-size: 20px;
-  margin: 20px 0 0 20px;
+  margin: 15px 0 0 20px;
   display: none;
   position: absolute;
   background-color: white;
@@ -99,7 +99,7 @@ html,body{
   font-weight: bold;
   text-align: center;
   font-size: 12px;
-  margin: 55px 0 0 0;
+  margin: 50px 0 0 0;
   -webkit-transform:translate(12px,0);
   display: none;
   position: absolute;
@@ -129,7 +129,7 @@ html,body{
   font-weight: bold;
   text-align: center;
   font-size: 12px;
-  margin: 55px 0 0 0;
+  margin: 50px 0 0 0;
   display: none;
   position: absolute;
   background-color: white;
