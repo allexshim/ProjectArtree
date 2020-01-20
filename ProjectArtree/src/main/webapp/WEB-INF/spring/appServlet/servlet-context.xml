@@ -81,5 +81,4 @@
 	  <aop:pointcut id="controllerOperation" expression="execution(public * masterpiece.exhibition..*Controller.*(..))" />
     </aop:config>
 	
-	
 </beans:beans>
