@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="exhibits">
+
+	<resultMap type="HashMap" id="ExhMap">
+		<result property="EXHIBITIONNO" column="exhibitionno" javaType="int"/>
+		<result property="FK_GALLERYNO" column="fk_galleryno" javaType="string"/>
+		<result property="GALLERYNAME" column="galleryname" javaType="string"/>
+		<result property="LOCATION" column="location" javaType="string"/>
+		<result property="EXHIBITIONNAME" column="exhibitionname" javaType="string"/>
+		<result property="SCHEDULE" column="schedule" javaType="string"/>
+		<result property="PRICE" column="price" javaType="int"/>
+		<result property="MAINPOSTER" column="mainposter" javaType="string"/>
+	</resultMap>
+
+	<select id="getExhList" resultMap="ExhMap" parameterType="HashMap">
+		select *
+		from
+		(
+		select row_number() over(order by exhibitionno desc) AS RNO
+			 , exhibitionno, fk_galleryno, B.galleryname, B.location, exhibitionname
+			 , startdate ||' - '|| enddate AS schedule
+			 , price, D.mainposter
+		from exhibition A left join gallery B
+		on A.fk_galleryno = B.galleryno
+		left join exhibitiondetail D
+		on A.exhibitionno = d.fk_exhibitionno
+		) V
+		where RNO between #{page} and #{end}
+	</select>
+
+</mapper>

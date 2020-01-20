@@ -1,13 +1,25 @@
 package masterpiece.exhibition.admin.controller;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.ModelAndView;
 
+import masterpiece.exhibition.admin.model.AppliedExhibitionVO;
+import masterpiece.exhibition.admin.service.InterAdminService;
+
+@Component
 @Controller
 public class AdminController {
 
+	// 의존객체 주입 ( DI: Dependency Injection )
+	@Autowired
+	private InterAdminService service;
+	
 	@RequestMapping(value="/admin.at")
 	public String admin() {
 		
@@ -80,12 +92,62 @@ public class AdminController {
 	}
 	
 	@RequestMapping(value="/addEndExhibition.at")
-	public String addEndExhibition() {
+	public ModelAndView addEndExhibition(HttpServletRequest request, HttpServletResponse response, ModelAndView mav) {
 		
+		String applyingNo = request.getParameter("applyingNo");
+		String fk_galleryNo = request.getParameter("fk_galleryNo");
+		String exhibitionName = request.getParameter("exhibitionName");
+		String applier = request.getParameter("applier");
+		String author = request.getParameter("author");
+		String startDate = request.getParameter("startDate");
+		String endDate = request.getParameter("endDate");
+		String email = request.getParameter("email");
+		String tel = request.getParameter("tel");
+		String genre = request.getParameter("genre");
+		String tag = request.getParameter("tag");
+		String authorInfo = request.getParameter("authorInfo");
+		String exhibitionInfo = request.getParameter("exhibitionInfo");
+		String price = request.getParameter("price");
+		String foodorDrink = request.getParameter("foodorDrink");
+		String extraRestriction = request.getParameter("extraRestriction");
+		String photo = request.getParameter("photo");
+		String openCloseTime = request.getParameter("openCloseTime");
 		
+		AppliedExhibitionVO avo = new AppliedExhibitionVO();
+		avo.setApplyingNo(applyingNo);
+		avo.setFk_galleryNo(fk_galleryNo);
+		avo.setExhibitionName(exhibitionName);
+		avo.setApplier(applier);
+		avo.setAuthor(author);
+		avo.setStartDate(startDate);
+		avo.setEndDate(endDate);
+		avo.setEmail(email);
+		avo.setTel(tel);
+		avo.setGenre(genre);
+		avo.setTag(tag);
+		avo.setAuthorInfo(authorInfo);
+		avo.setExhibitionInfo(exhibitionInfo);
+		avo.setPrice(Integer.parseInt(price));
+		avo.setFoodorDrink(foodorDrink);
+		avo.setExtraRestriction(extraRestriction);
+		avo.setPhoto(photo);
+		avo.setOpenCloseTime(openCloseTime);
 		
+		int n = service.addExhibition(avo);
 		
-		return "";
+		if(n == 1) {
+			
+			String msg = "전시회 신청이 완료되었습니다.";
+			String loc = "javascript:history.back()";
+			
+			mav.addObject(msg);
+			mav.addObject(loc);
+			
+			mav.setViewName("msg");
+			
+		}
+		
+		return mav;
 		
 	}
 	
