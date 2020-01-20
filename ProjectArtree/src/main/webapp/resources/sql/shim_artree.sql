@@ -42,6 +42,20 @@ select exhibitionName, galleryName, startDate, endDate, mainPoster, exhibitionno
 		from (select * from exhibition E join exhibitionDetail D on E.exhibitionno = D.fk_exhibitionno) V
 		join gallery G
 		on V.fk_galleryNo = G.galleryNo;
+        
+        select detailAddress, exhibitionName, galleryName, startDate, endDate, mainPoster, exhibitionno
+		from (select * from exhibition E join exhibitionDetail D on E.exhibitionno = D.fk_exhibitionno) V
+		join gallery G
+		on V.fk_galleryNo = G.galleryNo;
+        
+        select count(*)
+       from
+       ( select detailAddress, exhibitionName, galleryName, startDate, endDate, mainPoster, exhibitionno
+		from (select * from exhibition E join exhibitionDetail D on E.exhibitionno = D.fk_exhibitionno) V
+		join (select * from gallery where status = 1) G
+		on V.fk_galleryNo = G.galleryNo
+        );
+        
 
 /*
 전시회 이름

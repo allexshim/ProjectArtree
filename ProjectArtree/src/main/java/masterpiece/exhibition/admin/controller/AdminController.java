@@ -20,16 +20,16 @@ public class AdminController {
 	@Autowired
 	private InterAdminService service;
 	
-	@RequestMapping(value="/admin.at")
-	public String admin() {
+	@RequestMapping(value="/adminhome.at")
+	public String adminhome() {
 		
-		return "admin/admin-main.tiles";
+		return "admin/adminhome.tiles";
 	}
 	
-	@RequestMapping(value="/members.at")
-	public String members() {
+	@RequestMapping(value="/memberList.at")
+	public String memberList() {
 		
-		return "admin/members/members.tiles";
+		return "admin/members/memberList.tiles";
 	}
 	
 	@RequestMapping(value="/memberInfo.at")

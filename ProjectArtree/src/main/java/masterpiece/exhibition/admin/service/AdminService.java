@@ -11,18 +11,18 @@ import masterpiece.exhibition.admin.model.InterAdminDAO;
 public class AdminService implements InterAdminService {
 
 	// 의존객체 주입 ( DI: Dependency Injection )
-		@Autowired
-		private InterAdminDAO dao;
-		
-		// 양방향 암호화 알고리즘인 AES256 을 사용해 암호화/복호화 를 하기 위한 클래스 의존객체 주입 ( DI : Dependency Injection )
-		@Autowired
-		private AES256 aes;
+	@Autowired
+	private InterAdminDAO dao;
+	
+	// 양방향 암호화 알고리즘인 AES256 을 사용해 암호화/복호화 를 하기 위한 클래스 의존객체 주입 ( DI : Dependency Injection )
+	@Autowired
+	private AES256 aes;
 
-		// 전시회등록
-		@Override
-		public int addExhibition(AppliedExhibitionVO avo) {
-			int n = dao.addExhibition(avo);
-			return n;
-		}
+	// 전시회등록
+	@Override
+	public int addExhibition(AppliedExhibitionVO avo) {
+		int n = dao.addExhibition(avo);
+		return n;
+	}
 	
 }

@@ -6,7 +6,7 @@
 	
 	<!-- 회원가입 -->
 	<insert id="joinInsert" parameterType="masterpiece.exhibition.member.model.MemberVO"> 
-      insert into test_member(idx, email, name, password, agegroup, gender, area, hp, status, registerday, lastLoginDate, lastPasswordDate, clientIP)
-      values(test_seq_member.nextval, #{email}, #{name}, #{password}, #{agegroup}, #{gender}, #{area}, #{hp}, default, default, default, default, #{clientIP})
+      insert into member(idx, email, name, password, agegroup, gender, area, hp, status, registerday, lastLoginDate, lastPasswordDate, clientIP)
+      values(seq_member.nextval, #{email}, #{name}, #{password}, #{agegroup}, #{gender}, #{area}, #{hp}, default, default, default, default, #{clientIP})
    </insert>
 </mapper>

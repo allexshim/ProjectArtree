@@ -1,5 +1,6 @@
 package masterpiece.exhibition.order.controller;
 
+import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -38,8 +39,7 @@ public class OrderController {
 		Set key = exList.get(0).keySet();
 		Iterator iterator = key.iterator();		
 		for (iterator = key.iterator(); iterator.hasNext();) {
-		   String keyName = (String) iterator.next();		   
-		   System.out.println(keyName);
+		   String keyName = (String) iterator.next();		   		   
 		   request.setAttribute(keyName, exList.get(0).get(keyName));
 		}		
 		
@@ -48,9 +48,9 @@ public class OrderController {
 		int price = Integer.parseInt(exList.get(0).get("price"));
 		String img ="base.jpg";
 		
-		double price20 = (double) price*0.8;
-		double price30 = (double) price*0.7;
-		double price50 = (double) price*0.5;
+		int price20 = (int) (price*0.8);
+		int price30 = (int) (price*0.7);
+		int price50 = (int) (price*0.5);
 					
 		request.setAttribute("price", price);
 		request.setAttribute("price20", price20);
@@ -85,6 +85,8 @@ public class OrderController {
 		String[] qt = request.getParameterValues("qt");				
 		String[] type = request.getParameterValues("type");
 		String[] price = request.getParameterValues("price");			
+		int n = 0;
+		DecimalFormat dec = new DecimalFormat("#,###");
 		
 		if ( qt != null && type != null && price != null ) {
 			for (int i=0; i<qt.length; i++){	
@@ -95,10 +97,14 @@ public class OrderController {
 					html += "<div style='border-bottom: 1px solid white; color:#666; font-size:14px; padding:4px 10px; overflow: hidden; background-color: #f3f3f4;'>";
 					html += "<div style='float: left; width: 25%; text-align: left;'>"+type[i]+"</div>";
 					html += "<div style='float: left;'>"+qt[i]+"&nbsp;Item(s)</div>";
-					html += "<div style='float: right;'>"+price[i]+"</div>";
+					html += "<div style='float: right;'>&#8361;"+dec.format(Integer.parseInt(price[i]))+"</div>";
 					html += "</div>	";
+					n += Integer.parseInt(qt[i])*Integer.parseInt(price[i]);
 				}							
 			}		
+			
+			
+			request.setAttribute("n", "&#8361;"+dec.format(n));
 			request.setAttribute("html", html);			
 		}					
 			
@@ -107,10 +113,9 @@ public class OrderController {
 		String exhibitionname = request.getParameter("exhibitionname");		
 		
 		HttpSession session = request.getSession();
-		
-		session.setAttribute("qt", qt);
-		session.setAttribute("totalBin", totalBin);
-		session.setAttribute("dateBin", dateBin);						
+										
+		session.setAttribute("exhibitionname", exhibitionname);
+		session.setAttribute("dateBin", dateBin);
 		
 		request.setAttribute("totalBin", totalBin);
 		request.setAttribute("dateBin", dateBin);
@@ -122,12 +127,10 @@ public class OrderController {
 	@RequestMapping(value="/paymentGatebin.at")
 	public String paymentGatebin(HttpServletRequest request) {
 		
-		HttpSession session = request.getSession();		
-		String totalBin = (String)session.getAttribute("totalBin");		
-		String dateBin = (String)session.getAttribute("dateBin");
+		HttpSession session = request.getSession();
+		String exhibitionname = (String)session.getAttribute("exhibitionname");	
 		
-		request.setAttribute("totalBin", totalBin);
-		request.setAttribute("dateBin", dateBin);
+		request.setAttribute("exhibitionname", exhibitionname);		
 		return "order/paymentGateway";
 	}
 	
