@@ -221,6 +221,13 @@
 	
 	$(document).ready(function(){
 		
+		$(".new-one").hover(function(){
+			$(this).children(".new-exp").stop().animate({top:'7px'}, 180);
+
+		}, function(){
+			$(this).children(".new-exp").stop().animate({top:'0px'}, 180);
+		});
+		
 		
 	});
 	
@@ -247,19 +254,19 @@
 			<div class="hot-exh-L">
 				<img class="hot-img1" src="<%= ctxPath%>/resources/images/exhibition/poster1.JPG">
 				<div class="hot-info1">
-					<span class="hot-title">인기전시회</span>
-					<span class="hot-content">인기전시회 작가</span>
-					<span class="hot-content">인기전시회 위치</span>
-					<span class="hot-content">인기전시회 기간</span>
+					<span class="hot-title">전시회명</span>
+					<span class="hot-content">작가명</span>
+					<span class="hot-content">전시위치</span>
+					<span class="hot-content">2020-01-20~2020-01-22</span>
 				</div>
 			</div>
 			
 			<div class="hot-exh-R">
 				<div class="hot-info2">
-					<span class="hot-title">인기전시회</span>
-					<span class="hot-content">인기전시회 작가</span>
-					<span class="hot-content">인기전시회 위치</span>
-					<span class="hot-content">인기전시회 기간</span>
+					<span class="hot-title">전시회명</span>
+					<span class="hot-content">작가명</span>
+					<span class="hot-content">전시위치</span>
+					<span class="hot-content">2020-01-20~2020-01-22</span>
 				</div>
 				<img class="hot-img2" src="<%= ctxPath%>/resources/images/exhibition/poster2.JPG">
 			</div>
@@ -267,10 +274,10 @@
 			<div class="hot-exh-L">
 				<img class="hot-img1" src="<%= ctxPath%>/resources/images/exhibition/poster3.JPG">
 				<div class="hot-info1">
-					<span class="hot-title">인기전시회</span>
-					<span class="hot-content">인기전시회 작가</span>
-					<span class="hot-content">인기전시회 위치</span>
-					<span class="hot-content">인기전시회 기간</span>
+					<span class="hot-title">전시회명</span>
+					<span class="hot-content">작가명</span>
+					<span class="hot-content">전시위치</span>
+					<span class="hot-content">2020-01-20~2020-01-22</span>
 				</div>
 			</div>
 		</div>
@@ -285,40 +292,40 @@
 			    
 			    <img class="slide-img" src="<%= ctxPath%>/resources/images/exhibition/poster2.JPG">
 			    	<div class="hot-info1">
-						<span class="hot-title">인기전시회</span>
-						<span class="hot-content">인기전시회 작가</span>
-						<span class="hot-content">인기전시회 위치</span>
-						<span class="hot-content">인기전시회 기간</span>
+						<span class="hot-title">전시회명</span>
+						<span class="hot-content">작가명</span>
+						<span class="hot-content">전시위치</span>
+						<span class="hot-content">2020-01-20~2020-01-22</span>
 					</div>
 			  </div>
 			  
 			  <div class="mySlides">
 			    <img class="slide-img" src="<%= ctxPath%>/resources/images/exhibition/poster1.JPG">
 			   		<div class="hot-info1">
-						<span class="hot-title">인기전시회</span>
-						<span class="hot-content">인기전시회 작가</span>
-						<span class="hot-content">인기전시회 위치</span>
-						<span class="hot-content">인기전시회 기간</span>
+						<span class="hot-title">전시회명</span>
+						<span class="hot-content">작가명</span>
+						<span class="hot-content">전시위치</span>
+						<span class="hot-content">2020-01-20~2020-01-22</span>
 					</div>
 			  </div>
 			
 			  <div class="mySlides">
 			    <img class="slide-img" src="<%= ctxPath%>/resources/images/exhibition/poster2.JPG">
 			    	<div class="hot-info1">
-						<span class="hot-title">인기전시회</span>
-						<span class="hot-content">인기전시회 작가</span>
-						<span class="hot-content">인기전시회 위치</span>
-						<span class="hot-content">인기전시회 기간</span>
+						<span class="hot-title">전시회명</span>
+						<span class="hot-content">작가명</span>
+						<span class="hot-content">전시위치</span>
+						<span class="hot-content">2020-01-20~2020-01-22</span>
 					</div>
 			  </div>
 			  
 			  <div class="mySlides">
 			    <img class="slide-img" src="<%= ctxPath%>/resources/images/exhibition/poster3.JPG">
 			    	<div class="hot-info1">
-						<span class="hot-title">인기전시회</span>
-						<span class="hot-content">인기전시회 작가</span>
-						<span class="hot-content">인기전시회 위치</span>
-						<span class="hot-content">인기전시회 기간</span>
+						<span class="hot-title">전시회명</span>
+						<span class="hot-content">작가명</span>
+						<span class="hot-content">전시위치</span>
+						<span class="hot-content">2020-01-20~2020-01-22</span>
 					</div>
 			  </div>
 			
@@ -398,7 +405,7 @@
 		<h2 style="float: left;">EVENT</h2>
 	</div>
 	<div class="event-more" style="float: right; transform:translate(-35px, 220px);">
-		<span >더보기+</span>
+		<a class="event-morebtn" href="<%= ctxPath%>/eventList.at">더보기+</a>
 	</div>
        	<div class="event-div" >
            	<a class="event_one" >
