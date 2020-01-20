@@ -223,7 +223,11 @@ span#allCheck_txt {
 	    border: 1px solid #fff;
 	    margin-bottom: 10px;
 	    font-size: 16px;
-	    color: #fff;
+	    color: white;
+	}
+	
+	.pop .pop-conts input::placeholder {
+		color: white;
 	}
 	
 	a.find_btn {
@@ -238,12 +242,13 @@ span#allCheck_txt {
 		float: left;
 		width: 380px;
 	    cursor: pointer;
-	    background-color: #a385bd;
-	    color: white;
+	    background-color: #fce373;
+	    color: black;
 	    font-weight: bold;
 	    height: 60px;
 	    margin-top: 15px;
 	    font-size: 16px;
+	    border: none !important;
 	}
 
 </style>

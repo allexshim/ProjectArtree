@@ -27,14 +27,14 @@ $(document).ready(function() {
        pg : 'html5_inicis', // 결제방식 PG사 구분
        pay_method : 'card',	// 결제 수단
        merchant_uid : 'merchant_' + new Date().getTime(), // 가맹점에서 생성/관리하는 고유 주문번호
-       name : '${dateBin},전시회이름,주문번호',	 // 코인충전 또는 order 테이블에 들어갈 주문명 혹은 주문 번호. (선택항목)원활한 결제정보 확인을 위해 입력 권장(PG사 마다 차이가 있지만) 16자 이내로 작성하기를 권장
-       amount : ${totalBin} ,	  // 결제 금액 number 타입 
-       buyer_email : '',  // 구매자 email
-       buyer_name : '',	  // 구매자 이름 
-       buyer_tel : '',    // 구매자 전화번호 (필수항목)
-       buyer_addr : '',  
-       buyer_postcode : '',
-       m_redirect_url : ''  
+       name : '${exhibitionname}',	 // 코인충전 또는 order 테이블에 들어갈 주문명 혹은 주문 번호. (선택항목)원활한 결제정보 확인을 위해 입력 권장(PG사 마다 차이가 있지만) 16자 이내로 작성하기를 권장
+       amount : 100 ,	  // sessionStorage.getItem("order") 결제 금액 number 타입 
+       buyer_email : '1',  // 구매자 email 여기랑
+       buyer_name : '2',	  // 구매자 이름 여기만
+       buyer_tel : '3',    // 구매자 전화번호 (필수항목)
+       buyer_addr : '4',  
+       buyer_postcode : '5',
+       m_redirect_url : '6'  
     		   // 휴대폰 사용시 결제 완료 후 action : 컨트롤러로 보내서 자체 db에 입력시킬것!
    }, function(rsp) {
 	   
@@ -49,6 +49,8 @@ $(document).ready(function() {
        // 결제시 
 	   if ( rsp.success ) {
 		   parent.document.location.href="orderEnd.at";
+		   alert("1"+rsp.imp_uid +"2"+ rsp.merchant_uid +"3"+rsp.apply_num );
+		   //1 imp_101725519638 2merchant_1579246724245 353164033
 	   }        
 	   // 실패시
 	   else {						   

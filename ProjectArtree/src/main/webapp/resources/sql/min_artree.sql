@@ -41,5 +41,6 @@ desc appliedexhibits;
 drop table appliedExhibits purge;
 
 
-
+insert into appliedexhibits ( applyingNo, fk_galleryNo, exhibitionName, applier, author, startDate, endDate, email, tel, genre, tag, authorInfo, exhibitionInfo, price, foodorDrink, extraRestriction, photo, openCloseTime )
+values (  );
 

@@ -49,6 +49,8 @@ create table review
 );
 -- Table REVIEW이(가) 생성되었습니다.
 
+drop table review purge;
+
 create sequence seq_review_revNo
 start with 1
 increment by 1
@@ -129,3 +131,21 @@ from tabs;
 
 select *
 from gallery;
+
+select *
+from EXHIBITION;
+
+select *
+from EXHIBITIONDETAIL
+order by fk_exhibitionno;
+
+select *
+from exhibition
+where exhibitionno = 1506;
+
+select *
+from EXHIBITIONDETAIL
+where fk_exhibitionno = 1096;
+
+select *
+from wishlist
