@@ -141,7 +141,7 @@
 	
 	function goCtrl() {
 		var frm = document.reposiBin;	
-		frm.method="GET";
+		frm.method="POST";
 		frm.action="<%=ctxPath %>/paymentbin.at";		
 		frm.submit();
 	}
