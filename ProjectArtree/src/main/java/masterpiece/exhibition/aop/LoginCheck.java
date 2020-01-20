@@ -19,7 +19,7 @@ import masterpiece.exhibition.common.MyUtil;
 @Aspect
 @Component
 public class LoginCheck {
-	/* requireLogin_ 으로 시작하는 모든 메소드 */
+	/* requireLogin_ 으로 시작하는 모든 메소드 
 	// === PointCut을 생성한다 === * Controller에서 해당 advice가 필요한 메소드 이름을 require기능_~으로 명명한다.
 		@Pointcut("execution(public * masterpiece.exhibition..*Controller.requireLogin_*(..)) ")
 		public void requireLogin() {}
@@ -37,7 +37,7 @@ public class LoginCheck {
 			if(session.getAttribute("loginuser") == null) {
 				try {
 					String msg = "먼저 로그인하세요!"; 
-					String loc = request.getContextPath()+"/login.action";
+					String loc = request.getContextPath()+"/";
 					
 					request.setAttribute("msg", msg);
 					request.setAttribute("loc", loc);
@@ -55,4 +55,4 @@ public class LoginCheck {
 				} 
 			} // end of if ------------------------------------------------	
 		} // end of before ----------------------------------------------------------
-}
+*/}
