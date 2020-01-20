@@ -10,18 +10,20 @@
 %>
 
 <style type="text/css">
+@import url(//fonts.googleapis.com/earlyaccess/notosanskr.css);
 /* sidebar */
 .sidenav {
-  margin-left: 10px;
+  overflow: visible;
+  padding-left: 10px;
   height: 100%;
-  width: 10%;
+  width: 100px;
   position: fixed;
   z-index: 1;
   top: 0;
   left: 0;
   overflow-x: hidden;
   overflow-y: hidden;
-  padding-top: 20px;
+  padding-top: 150px;
 }
 
 .sidenav a {
@@ -48,12 +50,7 @@
   .sidenav a {font-size: 18px;}
 }
 
-span {
-    display: block;
-    width: 80px;
-    padding: 2px 16px;
-    cursor: pointer;
-}
+
 .arrow_box {
   display: none;
   position: absolute;
@@ -90,12 +87,12 @@ a:hover + p.arrow_box {
 </style>
 
 <div class="sidenav" >
-  <a href="#" style="margin-top: 150%;">
+  <a href="/search.at" style="margin-top: 150%;">
   	<img alt="검색" src="<%= ctxPath %>/resources/images/main/mainside-search.png" />
   </a>
   <p class="arrow_box" style="color: white; text-align: center;">검색</p>
   
-  <a href="#">
+  <a href="<%=ctxPath%>/addExhibition.at">
   	<img alt="전시등록" src="<%= ctxPath %>/resources/images/main/mainside-Enr.png" />
   </a>
   <p class="arrow_box" style="color: white; text-align: center;">전시등록</p>

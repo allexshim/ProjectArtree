@@ -5,4 +5,12 @@
 
 <mapper namespace="admin">
 
+	<insert id="addExhibition" parameterType="masterpiece.exhibition.admin.model.AppliedExhibitionVO">
+		insert into appliedExhibits ( applyingNo, fk_galleryNo, exhibitionName, applier, author, startDate, endDate
+			, email, tel, genre, tag, authorInfo, exhibitionInfo, price, foodorDrink, extraRestriction, photo, openCloseTime )
+		values ( applyingNoSeq.nextval, ${ fk_galleryNo }, ${ exhibitionName }, ${ applier }, ${ author }, ${ startDate }, ${ endDate }
+			, ${ email }, ${ tel }, ${ genre }, ${ tag }, ${ authorInfo }, ${ exhibitionInfo }, ${ price }, ${ foodorDrink }, ${ extraRestriction }
+			, ${ photo }, ${ openCloseTime } )
+	</insert>
+
 </mapper>

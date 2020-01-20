@@ -175,19 +175,21 @@
 		if(s == "1"){
 
 			var tag1 = n;
-			$("#tag1").hide();
-			$("#tag2").show();
-			$("#tagA").css("background-image","url('http://www.art-map.co.kr/img/fav/"+tag1+"A.png')");
-			$("#tagB").css("background-image","url('http://www.art-map.co.kr/img/fav/"+tag1+"B.png')");
-			$("#tagC").css("background-image","url('http://www.art-map.co.kr/img/fav/"+tag1+"C.png')");
-			$("#tagD").css("background-image","url('http://www.art-map.co.kr/img/fav/"+tag1+"D.png')");
+			$("#tag1").css("display", "none");
+			$("#tag2").css("display", "");
+			$("#tagA").attr("src","<%= ctxPath%>/resources/images/member/"+tag1+"A.png");
+			$("#tagB").attr("src","<%= ctxPath%>/resources/images/member/"+tag1+"B.png");
+			$("#tagC").attr("src","<%= ctxPath%>/resources/images/member/"+tag1+"C.png");
+			$("#tagD").attr("src","<%= ctxPath%>/resources/images/member/"+tag1+"D.png");
 			$("#tagA").attr("onclick","fav('"+tag1+"A','2')");
 			$("#tagB").attr("onclick","fav('"+tag1+"B','2')");
 			$("#tagC").attr("onclick","fav('"+tag1+"C','2')");
 			$("#tagD").attr("onclick","fav('"+tag1+"D','2')");
 
 		} else {
+			// var param = JSON.stringify({"tag1":n.substring(0,1), "idx":idx, "tag2":n})
 
+/* 
 			var param = JSON.stringify({"tag1":n.substring(0,1),"_id":userid,"tag2":n});
 			$.post("/data/info.php",param,function(data){
 				var res = JSON.parse(data);
@@ -197,8 +199,8 @@
 				if(res.result){
 					alert("변경되었습니다.");
 					location.reload();
-				}
-			});
+				} 
+			});*/
 		}
 
 	}
@@ -229,19 +231,29 @@
 					</th>
 					<td>
 						<div class="img_wrap" id="tag1">
-							<img class="img_margin" src="http://www.art-map.co.kr/img/fav/1.png" onClick="(fav('1', '1'))"/>
-							<img src="http://www.art-map.co.kr/img/fav/2.png" onClick="(favo('2', '1'))"/>
+							<img class="img_margin" src="<%= ctxPath%>/resources/images/member/1.png" onClick="(fav('1', '1'))"/>
+							<img src="<%= ctxPath%>/resources/images/member/2.png" onClick="(fav('2', '1'))"/>
 							<br/>
-							<img class="img_margin" src="http://www.art-map.co.kr/img/fav/3.png" onClick="(fav('3', '1'))"/>
-							<img src="http://www.art-map.co.kr/img/fav/4.png" onClick="(favo('4', '1'))"/>
+							<img class="img_margin" src="<%= ctxPath%>/resources/images/member/3.png" onClick="(fav('3', '1'))"/>
+							<img src="<%= ctxPath%>/resources/images/member/4.png" onClick="(fav('4', '1'))"/>
 						</div>
 
-						<div style="margin-top:30px; width:582px; float:left; display:none;" id="tag2">
-							<div style=" margin-right:22px;  margin-bottom:22px;  background-size:cover; background-position:center"  id="tagA"></div>
-							<div style="background-size:cover; background-position:center" onclick="fav('B','2')" id="tagB"></div>
-							<div style="margin-right:22px; background-size:cover; background-position:center" onclick="fav('C','2')" id="tagC"></div>
-							<div style="background-size:cover; background-position:center" onclick="fav('D','2')" id="tagD"></div>
+						<div class="img_wrap" id="tag2" style="display: none;">
+							<img class="img_margin" id="tagA"/>
+							<img id="tagB"/>
+							<br/>
+							<img class="img_margin" id="tagC"/>
+							<img id="tagD"/>
 						</div>
+						
+						<form name="tagForm">
+							<input type="text" id="tag1_input" name="tag1_input"/>
+							<input type="text" id="tag2_input" name="tag2_input"/>
+							<input type="text" id="galleryno1" name="galleryno1"/>
+							<input type="text" id="exhibitionno1" name="exhibitionno1"/>
+							<input type="text" id="galleryno2" name="galleryno2"/>
+							<input type="text" id="exhibitionno2" name="exhibitionno2"/>
+						</form>
 					</td>
 				</tr>
 				<tr class="name_set">

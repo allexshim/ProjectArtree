@@ -4,6 +4,9 @@
 <script type="text/javascript">
     if(${msg != null}) {
 <<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> branch 'master' of https://github.com/allexshim/ProjectArtree.git
 		alert("${msg}");
 =======
 		alert("${ msg }");
@@ -12,6 +15,9 @@
     
     if(${loc != null}) {
 <<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> branch 'master' of https://github.com/allexshim/ProjectArtree.git
 		location.href="${loc}";
 =======
 		location.href="${ loc }";

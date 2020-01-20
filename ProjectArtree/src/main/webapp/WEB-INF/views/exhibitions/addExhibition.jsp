@@ -81,8 +81,9 @@
 		overflow: hidden; /* div밖으로 이미지가 넘칠 때 해결 방법! 기억해둘것! */
 	}
 	
-	input {
+	input, select {
 		padding: 4px 10px;
+		border-radius: 5px;
 	}
 	
 	table#detailTable, table#extraInfoTable {
@@ -586,9 +587,9 @@
 	<div id="detailContainer">
 		<div class="Title_Area">
 			<span class="st">Exhibition</span>
-			<span class="lt">Registeration</span>
-			<span class="titleDetail">Artree는 작가 여러분이 개최하시는 전시회를 <br/> 홈페이지, 공식 SNS에 홍보합니다.</span>
-			<span class="titleContact"><br/>*자료가 많은 경우 아래 메일로 보내주세요.<br/><br/></span>
+			<span class="lt">Registration</span>
+			<span class="titleDetail">Artree 는 작가 여러분이 개최하시는 전시회를 <br/> 홈페이지, 공식 SNS 에 홍보합니다.</span>
+			<span class="titleContact"><br/>* 자료가 많은 경우 아래 메일로 보내주세요.<br/><br/></span>
 			
 			<div id="emailArtree">
 				<i class="far fa-envelope"></i>
@@ -601,7 +602,7 @@
 			<table id="detailTable">
 				<tr>
 					<td>신청자 이름</td>
-					<td><input type="text" name="applierName" id="applierName" value="심예은" /></td> <!-- ${session.loginuser.username} -->
+					<td><input type="text" name="applierName" id="applierName" /></td> <!-- ${session.loginuser.username} -->
 				<tr>
 				<tr>
 					<td>전시회명</td>
@@ -715,7 +716,6 @@
 				<input type="file" class="image-input" name="imageInput2" id="imageInput2" />
 				<input type="file" class="image-input" name="imageInput3" id="imageInput3" />
 			</div>
-		</div>
 		
 		<div id="extraInfo">
 			<table id="extraInfoTable">
@@ -759,7 +759,7 @@
 					<td>분야</td>
 					<td>
 						<select id="category" name="category" style="width:100%;">
-							<option value=""></option>
+							<option value="">:: 선택하세요 ::</option>
 							<option value="media">미디어</option>
 							<option value="design">디자인</option>
 							<option value="drawing">회화</option>

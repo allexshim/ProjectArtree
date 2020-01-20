@@ -175,7 +175,7 @@ span#allCheck_txt {
 /* 회원가입 버튼 */
 #join_submit {
 	padding: 10px 40px;
-    background: #510089;
+    background: black;
     color: #fff;
     font-size: 18px;
     border-radius: 5px;
@@ -200,8 +200,8 @@ span#allCheck_txt {
 	.layer .bg {
 		width: 100%;
 		height: 100%;
-		background-color: #612581;
-		opacity: 0.9;
+		background-color: black;
+		opacity: 0.8;
 	}
 	
 	.pop {
@@ -223,7 +223,11 @@ span#allCheck_txt {
 	    border: 1px solid #fff;
 	    margin-bottom: 10px;
 	    font-size: 16px;
-	    color: #fff;
+	    color: white;
+	}
+	
+	.pop .pop-conts input::placeholder {
+		color: white;
 	}
 	
 	a.find_btn {
@@ -238,12 +242,13 @@ span#allCheck_txt {
 		float: left;
 		width: 380px;
 	    cursor: pointer;
-	    background-color: #E3DBEA;
-	    color: #612581;
+	    background-color: #fce373;
+	    color: black;
 	    font-weight: bold;
 	    height: 60px;
 	    margin-top: 15px;
 	    font-size: 16px;
+	    border: none !important;
 	}
 
 </style>
