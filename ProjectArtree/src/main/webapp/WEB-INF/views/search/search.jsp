@@ -84,6 +84,7 @@
 		padding-top : 10px;
 		width : 200px;
 		height : 250px;
+		color : black !important;
 	}
 	
 	.singleExhibition {
@@ -93,6 +94,10 @@
 	.singleExhibition .title {
 		font-size : 12pt;
 		font-weight : bold;
+	}
+	
+	.singleExhibition:hover {
+		opacity : 0.8;
 	}
 	
 	/* 검색조건 선택 ------------------------------------------------------*/
@@ -199,6 +204,7 @@
 	}
 	
 /* --------------- 테마 차트 ------------------------------------------------- */
+ 
 
 </style>
 
@@ -236,7 +242,7 @@
 				getListByDate(dateText);
             }
 		});	
-		
+
 		// 화면이 로딩되면 지역별로 전시회 리스트를 가져오는 ajax function을 실행시킨다.
 		getListByLocation();
 		
@@ -258,18 +264,18 @@
 			getListByDateAll();
 		});
 	
-		/* // 테마별 검색 클릭
+		// 테마별 검색 클릭
 		$(".byTheme").click(function(){
 			$(".condition").each(function(){
 				$(this).removeClass("currentCondition");
 			});
 			$(this).addClass("currentCondition");
-			getListByTheme();
-		}); */
+			getListByAllTheme();
+		});
 		
 	}); // end of document.ready -----------------------------------------------
 
-	// 날짜별로 리스트를 가져오는 함수
+	// 날짜별로 리스트를 가져오는 함수 ---------------------------------------------------------
 	function getListByDateAll(){
 		$("#map").css('display','none');
 		$("#theme").css('display','none');
@@ -279,7 +285,7 @@
 		getListByMonth("2020","1");
 	} //----------------------------------------------------------------------------
 	
-	function getListByMonth(year,month){ // 해당 달에 열리는 전시회목록을 가져온다.
+	function getListByMonth(year,month){ // 해당 달에 열리는 전시회목록을 가져온다.------------
 		$.ajax({ 
 	    	  url:"<%=request.getContextPath()%>/monthSearch.at",
 	          type:"GET",
@@ -294,7 +300,7 @@
 	       });
 	} // end of getListByMonth ------------------------------------------------
 	
-	// 선택한 날짜에 열리는 전시회 목록을 가져온다.
+	// 선택한 날짜에 열리는 전시회 목록을 가져온다.------------------------------------------
 	function getListByDate(dateText){
 		
 		$.ajax({ 
@@ -311,18 +317,18 @@
 	       });
 	} // end of getListByDate ----------------------------------------------------
 	
-	// 받아온 json 데이터를 view단에 뿌리는 함수
+	// 받아온 json 데이터를 view단에 뿌리는 함수----------------------------------------
 	function listofExhibition(json){
 		var html = "";
 		 $("#exhibitionList").empty();
-		 $.each(json, function(index, item) {
-				 html += "<div class='singleExhibition'>";
+		 $.each(json, function(index, item) { // 링크 해결하세요
+				 html += "<a href='/artree/exhDetail.at?exhibitionno="+item.exhibitionno+"'><div class='singleExhibition'>";
 				 html += "<img src='"+item.mainposter+"' />";
 				 html += "<span class='infoContainer'>";
-				 html += "<span class='title'>"+item.exhibitionname+"</span><br/><br/>";
-				 html += "<span class='gallery'>"+item.galleryname+"/"+item.location+"</span><br/><br/>";
+				 html += "<span class='title' style='font-size:13pt;'>"+item.exhibitionname+"</span><br/><br/>";
+				 html += "<span class='gallery'>"+item.galleryname+"/"+item.location+"</span><br/>";
 				 html += "<span class='period'>"+item.startdate+" - "+item.enddate+"</span><br/>";			
-				 html += "</span></div>";		
+				 html += "</span></div></a>";		
 			 $("#exhibitionList").append(html);
 			 html = "";
 		});
@@ -335,19 +341,6 @@
 		
 	} // end of listofExhibition -----------------------------------------------
 	  
-	
-	// 테마별로 리스트를 가져오는 함수
-	function getListByTheme(){
-		$("#map").css('display','none');
-		$("#date").css('display','none');
-		$("#theme").css('display','inline-block');
-		// ajax ........
-	} //----------------------------------------
-	
-	// 나중에 exhDetail함수에 전시회 코드를 parameter로 넣습니다.
-	function exhDetail(){ // .at?code=code 와 같이 전송해서 해당 이벤트의 전시회 상세페이지로 이동합니다.
-		location.href="<%= ctxPath%>/exhDetail.at";
-	}
 </script>
 
 <div id="container_exhibition">
@@ -471,9 +464,48 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////	
 		/* ----------- 테마별 word chart --------------------------------------------*/
+			
+		// 테마별로 리스트를 가져오는 함수-------------------------------------------------------
+		function getListByAllTheme(){ 
+		// 가장 처음, 모든 전시회의 태그를 String으로 연결해서 가져오고, 모든 전시회 정보를 가져온다.
+			$("#map").css('display','none');
+			$("#date").css('display','none');
+			$("#theme").css('display','inline-block');
+			$.ajax({
+				  url:"<%=request.getContextPath()%>/allThemeSearch.at",
+		          type:"GET",
+		          dataType:"JSON",
+		          success: function(json) { 
+		        	  // 차트 만들기
+		        	  getThemeChart("${allTag}");
+		        	  
+		        	  // 모든 전시회 정보 뿌리기
+		        	  listofExhibition(json);
+		          },
+		          error: function(request, status, error){
+		                alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+		          }
+			});
+		} //------------------------------------------------------------------------------
+	
+		// 선택한 테마에 해당하는 전시회만 보여주기
+		function getListBySelectTheme(tag){
+			$.ajax({
+				  url:"<%=request.getContextPath()%>/selectThemeSearch.at",
+		          type:"GET",
+		          data : {"tag":tag },
+		          dataType:"JSON",
+		          success: function(json) { 
+		        	  // 선택해온 전시회 정보 뿌리기
+		        	  listofExhibition(json);
+		          },
+		          error: function(request, status, error){
+		                alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+		          }
+			});
+		}
 		
-		// 아래 text는 샘플 텍스트이므로 추후 수정
-		var text = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean bibendum erat ac justo sollicitudin, quis lacinia ligula fringilla. Pellentesque hendrerit, nisi vitae posuere condimentum, lectus urna accumsan libero, rutrum commodo mi lacus pretium erat. Phasellus pretium ultrices mi sed semper. Praesent ut tristique magna. Donec nisl tellus, sagittis ut tempus sit amet, consectetur eget erat. Sed ornare gravida lacinia. Curabitur iaculis metus purus, eget pretium est laoreet ut. Quisque tristique augue ac eros malesuada, vitae facilisis mauris sollicitudin. Mauris ac molestie nulla, vitae facilisis quam. Curabitur placerat ornare sem, in mattis purus posuere eget. Praesent non condimentum odio. Nunc aliquet, odio nec auctor congue, sapien justo dictum massa, nec fermentum massa sapien non tellus. Praesent luctus eros et nunc pretium hendrerit. In consequat et eros nec interdum. Ut neque dui, maximus id elit ac, consequat pretium tellus. Nullam vel accumsan lorem.';
+		function getThemeChart(text){
 		var lines = text.split(/[,\. ]+/g),
 		    data = Highcharts.reduce(lines, function (arr, word) {
 		        var obj = Highcharts.find(arr, function (obj) {
@@ -491,32 +523,35 @@
 		        return arr;
 		    }, []);
 		
-		/*
-		data ~ 예시 배열 : 아래같은 데이터 배열을 ajax로 들고와서 아래 data에 넣어주면 될듯!
-		0: {name: "Lorem", weight: 1}
-		1: {name: "ipsum", weight: 1}
-		*/
-		
-		Highcharts.chart('themeContainer', {
-		    accessibility: {
-		        screenReaderSection: {
-		            beforeChartFormat: ''
-		        }
-		    },
-		    chart: {
-		        type: 'String',
-		        width: 500,
-		        height: 800,
-		    },
-		    series: [{
-		        type: 'wordcloud',
-		        data: data,
-		        name: 'Occurrences'
-		    }],
-		    title: {
-		        text: ''
-		    }
-		});
-		
+			
+			Highcharts.chart('themeContainer', {
+			    accessibility: {
+			        screenReaderSection: {
+			            beforeChartFormat: ''
+			        }
+			    },
+			    chart: {
+			        type: 'String',
+			        width: 500,
+			        height: 800,
+			    },
+			    series: [{
+			        type: 'wordcloud',
+			        data: data,
+			        name: 'Occurrences',
+			        cursor: 'pointer',
+			        events: {
+		                click: function (event) {
+		                	getListBySelectTheme(event.target.textContent);
+		                }
+		            }
+			    }],
+			    title: {
+			        text: ''
+			    }
+			});
+		}
 		/* ------------------------------------------------------------------------ */
+
+		
 </script>

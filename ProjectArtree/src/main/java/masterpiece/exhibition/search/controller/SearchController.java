@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -65,7 +66,7 @@ public class SearchController {
 		List<HashMap<String,String>> exhibitionList =  null;
 		exhibitionList = service.getExhibitionbyMonth(month);
 		
-		System.out.println(exhibitionList.size()); // 45
+		//System.out.println(exhibitionList.size()); // 45
 		
 		for(HashMap<String,String> single :exhibitionList) {
 			JSONObject jsobj = new JSONObject();
@@ -97,7 +98,7 @@ public class SearchController {
 		List<HashMap<String,String>> exhibitionList =  null;
 		exhibitionList = service.getExhibitionbyDate(date);
 		
-		System.out.println(exhibitionList.size());
+		//System.out.println(exhibitionList.size());
 		
 		for(HashMap<String,String> single :exhibitionList) {
 			JSONObject jsobj = new JSONObject();
@@ -119,5 +120,74 @@ public class SearchController {
 		return jsarr.toString();
 		
 	} // end of dateSearch ------------------------------------------------------
+	
+	// 모든 전시회의 테마를 가져온다. (오늘 기준으로 전시중인 전시회만)
+	@ResponseBody
+	@RequestMapping(value="/allThemeSearch.at", produces="text/plain;charset=UTF-8")
+	public String allThemeSearch(HttpServletRequest request) {
+		JSONArray jsarr = new JSONArray();
+		List<HashMap<String,String>> exhibitionList =  null;
+		exhibitionList = service.getExhibitionbyTheme();
+		
+		//System.out.println(exhibitionList.size());
+		String allTag = "";
+		for(HashMap<String,String> single :exhibitionList) {
+			JSONObject jsobj = new JSONObject();
+			
+			jsobj.put("exhibitionno",single.get("exhibitionno"));
+			jsobj.put("fk_galleryno",single.get("fk_galleryno"));
+			jsobj.put("exhibitionname",single.get("exhibitionname"));
+			jsobj.put("author",single.get("author"));
+			jsobj.put("startdate",single.get("startdate"));
+			jsobj.put("enddate",single.get("enddate"));
+			jsobj.put("mainposter",single.get("mainposter"));
+			jsobj.put("galleryname",single.get("galleryname"));
+			jsobj.put("galleryno",single.get("galleryno"));
+			jsobj.put("location",single.get("location"));
+			
+			allTag += ","+single.get("tag");
+			
+			jsarr.put(jsobj);
+		}
+		
+		HttpSession session = request.getSession();
+		session.setAttribute("allTag", allTag);
+
+		return jsarr.toString();	
+	} // end of allThemeSearch ------------------------------------------------------
+	
+	
+	// 선택한 테마에 해당하는 전시회 목록을 가져온다.
+	@ResponseBody
+	@RequestMapping(value="/selectThemeSearch.at", produces="text/plain;charset=UTF-8")
+	public String selectThemeSearch(HttpServletRequest request) {
+		
+		String tag = request.getParameter("tag");
+		
+		JSONArray jsarr = new JSONArray();
+		List<HashMap<String,String>> exhibitionList =  null;
+		exhibitionList = service.getExhibitionbySelectTheme(tag);
+		
+	//	System.out.println(exhibitionList.size());
+		for(HashMap<String,String> single :exhibitionList) {
+			JSONObject jsobj = new JSONObject();
+			
+			jsobj.put("exhibitionno",single.get("exhibitionno"));
+			jsobj.put("fk_galleryno",single.get("fk_galleryno"));
+			jsobj.put("exhibitionname",single.get("exhibitionname"));
+			jsobj.put("author",single.get("author"));
+			jsobj.put("startdate",single.get("startdate"));
+			jsobj.put("enddate",single.get("enddate"));
+			jsobj.put("mainposter",single.get("mainposter"));
+			jsobj.put("galleryname",single.get("galleryname"));
+			jsobj.put("galleryno",single.get("galleryno"));
+			jsobj.put("location",single.get("location"));
+
+			jsarr.put(jsobj);
+		}
+		return jsarr.toString();	
+	} // end of selectThemeSearch ------------------------------------------------------
+	
+	
 	
 }

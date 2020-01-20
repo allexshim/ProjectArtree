@@ -36,6 +36,22 @@ public class SearchDAO implements InterSearchDAO {
 		List<HashMap<String,String>> ExhibitionList = sqlsession.selectList("search.getExhibitionbyDate", date);
 		return ExhibitionList;
 	}
+
+	// 오늘을 포함해서 전시중인 전시회 정보를 받아온다.
+	@Override
+	public List<HashMap<String, String>> getExhibitionbyTheme() {
+		List<HashMap<String,String>> ExhibitionList = sqlsession.selectList("search.getExhibitionbyTheme");
+		return ExhibitionList;
+	}
+
+	// 선택한 태그에 해당하는 전시회 정보를 받아온다.
+	@Override
+	public List<HashMap<String, String>> getExhibitionbySelectTheme(String tag) {
+		List<HashMap<String,String>> ExhibitionList = sqlsession.selectList("search.getExhibitionbySelectTheme",tag);
+		return ExhibitionList;
+	}
+	
+	
 	
 	
 	

@@ -62,7 +62,7 @@ from
 ) V join exhibitionDetail D
 on V.exhibitionno = D.fk_exhibitionno;
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-	    select exhibitionno, fk_galleryno, exhibitionname, author, startdate, enddate, mainposter, galleryname, galleryno, location
+	    select exhibitionno, fk_galleryno, exhibitionname, author, startdate, enddate, mainposter, galleryname, galleryno, location, tag
         from 
         (
         select *
@@ -70,13 +70,29 @@ on V.exhibitionno = D.fk_exhibitionno;
 		(
 		    select *
 		    from exhibition
-		    where to_date(enddate) >= to_date(sysdate) 
-		    	  and to_date(enddate) <= last_day( to_date('2020-04-01') )
+		    where tag like '%초록%'
+		    order by to_date(enddate)
+		) V join exhibitionDetail D
+		on V.exhibitionno = D.fk_exhibitionno
+        ) E join gallery G
+        on E.fk_galleryno = G.galleryno
+        order by startdate;
+        
+        select exhibitionno, fk_galleryno, exhibitionname, author, startdate, enddate, mainposter, galleryname, galleryno, location, tag
+        from 
+        (
+        select *
+		from
+		(
+		    select *
+		    from exhibition
+		    where to_date(enddate) >= sysdate
 		    order by to_date(enddate)
 		) V join exhibitionDetail D
 		on V.exhibitionno = D.fk_exhibitionno
         ) E join gallery G
         on E.fk_galleryno = G.galleryno;
+
 
 /*
 전시회 이름
