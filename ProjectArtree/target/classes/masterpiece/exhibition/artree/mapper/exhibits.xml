@@ -5,13 +5,14 @@
 <mapper namespace="exhibits">
 
 	<resultMap type="HashMap" id="ExhMap">
-		<result property="exhibitionno" column="exhibitionno" javaType="int"/>
-		<result property="fk_galleryno" column="fk_galleryno" javaType="string"/>
-		<result property="galleryname" column="galleryname" javaType="string"/>
-		<result property="location" column="location" javaType="string"/>
-		<result property="exhibitionname" column="exhibitionname" javaType="string"/>
-		<result property="schedule" column="schedule" javaType="string"/>
-		<result property="price" column="price" javaType="int"/>
+		<result property="EXHIBITIONNO" column="exhibitionno" javaType="int"/>
+		<result property="FK_GALLERYNO" column="fk_galleryno" javaType="string"/>
+		<result property="GALLERYNAME" column="galleryname" javaType="string"/>
+		<result property="LOCATION" column="location" javaType="string"/>
+		<result property="EXHIBITIONNAME" column="exhibitionname" javaType="string"/>
+		<result property="SCHEDULE" column="schedule" javaType="string"/>
+		<result property="PRICE" column="price" javaType="int"/>
+		<result property="MAINPOSTER" column="mainposter" javaType="string"/>
 	</resultMap>
 
 	<select id="getExhList" resultMap="ExhMap" parameterType="HashMap">
@@ -21,9 +22,11 @@
 		select row_number() over(order by exhibitionno desc) AS RNO
 			 , exhibitionno, fk_galleryno, B.galleryname, B.location, exhibitionname
 			 , startdate ||' - '|| enddate AS schedule
-			 , price
+			 , price, D.mainposter
 		from exhibition A left join gallery B
 		on A.fk_galleryno = B.galleryno
+		left join exhibitiondetail D
+		on A.exhibitionno = d.fk_exhibitionno
 		) V
 		where RNO between #{page} and #{end}
 	</select>

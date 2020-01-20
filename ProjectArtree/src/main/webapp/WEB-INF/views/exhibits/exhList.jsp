@@ -148,7 +148,7 @@
 		console.log(page);
 		console.log(lenExh);
 		$.ajax({
-			url: "<%= ctxPath%>/exhibitsList.at",  
+			url: "<%= ctxPath%>/exhList.at",  
 	        dataType : "JSON", 
 	        data : {"page" : page, "len" : lenExh},
 	        success : function(json) {
@@ -167,23 +167,35 @@
 					$.each(json, function(index, item){
 					
 						if( (index+1)%4 != 0){				
-							html += "<a class='exh_one' onclick='exhDetail()'>"
-								 + "<img class='exh_poster' src='/resources/images/exhibition/artmap_20200102_9426350.jpg'/>"
-								 + "<span class='art_info_aboutLoca InfoWhereWhen'>전북도립미술관 | 전북</span>"
-								 + "<span class='art_mainTitle'>그녀의 이름은</span>"		
-								 + "<span class='art_info_aboutTime InfoWhereWhen'>2020.11.12 - 2020.11.13 | FREE</span>"
-								 + "</a>";
+							html += "<a class='exh_one' onclick='exhDetail("+item.EXHIBITIONNO+")'>"
+								 + "<img class='exh_poster' src='"+item.MAINPOSTER+"'/>"
+								 + "<span class='art_info_aboutLoca InfoWhereWhen'>"+item.GALLERYNAME+" | "+item.LOCATION+"</span>"
+								 + "<span class='art_mainTitle'>"+item.EXHIBITIONNAME+"</span>";
+								
+							if(item.PRICE != null && item.PRICE == 0){
+								html += "<span class='art_info_aboutTime InfoWhereWhen'>"+item.EXHIBITIONNAME+" | FREE</span>";
+							}
+							else {
+								html += "<span class='art_info_aboutTime InfoWhereWhen'>"+item.EXHIBITIONNAME+" | BOOK NOW</span>";
+							}
+							
+							html += "</a>";
 						}
 						else {
-							html += "<a class='exh_one' onclick='exhDetail()' style='margin-right: 0;'>"
-								 + "<img class='exh_poster' src=/resources/images/exhibition/artmap_20200102_9426350.jpg'/>"
-								 + "<span class='art_info_aboutLoca InfoWhereWhen'>전북도립미술관 | 전북</span>"
-								 + "<span class='art_mainTitle'>그녀의 이름은</span>"		
-								 + "<span class='art_info_aboutTime InfoWhereWhen'>2020.11.12 - 2020.11.13 | FREE</span>"
-								 + "</a>";
-							html += "<br/>";
+							html += "<a class='exh_one' onclick='"+item.EXHIBITIONNO+"' style='margin-right: 0;'>"
+								 + "<img class='exh_poster' src='"+item.MAINPOSTER+"'/>"
+								 + "<span class='art_info_aboutLoca InfoWhereWhen'>"+item.GALLERYNAME+" | "+item.LOCATION+"</span>"
+								 + "<span class='art_mainTitle'>"+item.EXHIBITIONNAME+"</span>";	
 							
-							html += "<div>성공!??!?!!?<div>";
+							if(item.PRICE != null && item.PRICE == 0){
+								html += "<span class='art_info_aboutTime InfoWhereWhen'>"+item.EXHIBITIONNAME+" | FREE</span>";
+							}
+							else {
+								html += "<span class='art_info_aboutTime InfoWhereWhen'>"+item.EXHIBITIONNAME+" | BOOK NOW</span>";
+							}
+					
+							html += "</a>";
+							html += "<br/>";
 						}
 					
 					});
@@ -204,8 +216,8 @@
 		
 	}
 	
-	function exhDetail(){
-		location.href="<%= ctxPath%>/exhDetail.at";
+	function exhDetail(eno){
+		location.href="<%= ctxPath%>/exhDetail.at?eno=";
 	}
 
 </script>
@@ -240,105 +252,5 @@
 	</div>
 	
 	<div class="ExhList_Area">
-		<a class="exh_one" onclick="exhDetail()">
-			<img class="exh_poster" src="<%= ctxPath%>/resources/images/exhibition/artmap_20200102_9426350.jpg"/>
-			<span class="art_info_aboutLoca InfoWhereWhen">전북도립미술관 | 전북</span>
-			<span class="art_mainTitle">그녀의 이름은</span>		
-			<span class="art_info_aboutTime InfoWhereWhen">2020.11.12 - 2020.11.13 | FREE</span>
-		</a>
-		<a class="exh_one" onclick="exhDetail()">
-			<img class="exh_poster" src="<%= ctxPath%>/resources/images/exhibition/artmap_20200102_9426350.jpg"/>
-			<span class=" InfoWhereWhen">전북도립미술관 | 전북</span>
-			<span class="art_mainTitle">그녀의 이름은</span>		
-			<span class="art_info_aboutTime InfoWhereWhen">2020.11.12 - 2020.11.13 | FREE</span>
-		</a>
-		<a class="exh_one" onclick="exhDetail()">
-			<img class="exh_poster" src="<%= ctxPath%>/resources/images/exhibition/artmap_20200102_9426350.jpg"/>
-			<span class="art_info_aboutLoca InfoWhereWhen">전북도립미술관 | 전북</span>
-			<span class="art_mainTitle">그녀의 이름은</span>		
-			<span class="art_info_aboutTime InfoWhereWhen">2020.11.12 - 2020.11.13 | FREE</span>
-		</a>
-		<a class="exh_one" onclick="exhDetail()" style="margin-right: 0;">
-			<img class="exh_poster" src="<%= ctxPath%>/resources/images/exhibition/artmap_20200102_9426350.jpg"/>
-			<span class="art_info_aboutLoca InfoWhereWhen">전북도립미술관 | 전북</span>
-			<span class="art_mainTitle">그녀의 이름은</span>		
-			<span class="art_info_aboutTime InfoWhereWhen">2020.11.12 - 2020.11.13 | FREE</span>
-		</a>
-		<br/>
-		<a class="exh_one" onclick="exhDetail()">
-			<img class="exh_poster" src="<%= ctxPath%>/resources/images/exhibition/artmap_20200102_9426350.jpg"/>
-			<span class="art_info_aboutLoca InfoWhereWhen">전북도립미술관 | 전북</span>
-			<span class="art_mainTitle">그녀의 이름은</span>		
-			<span class="art_info_aboutTime InfoWhereWhen">2020.11.12 - 2020.11.13 | FREE</span>
-		</a>
-		<a class="exh_one" onclick="exhDetail()">
-			<img class="exh_poster" src="<%= ctxPath%>/resources/images/exhibition/artmap_20200102_9426350.jpg"/>
-			<span class="art_info_aboutLoca InfoWhereWhen">전북도립미술관 | 전북</span>
-			<span class="art_mainTitle">그녀의 이름은</span>		
-			<span class="art_info_aboutTime InfoWhereWhen">2020.11.12 - 2020.11.13 | FREE</span>
-		</a>
-		<a class="exh_one" onclick="exhDetail()">
-			<img class="exh_poster" src="<%= ctxPath%>/resources/images/exhibition/artmap_20200102_9426350.jpg"/>
-			<span class="art_info_aboutLoca InfoWhereWhen">전북도립미술관 | 전북</span>
-			<span class="art_mainTitle">그녀의 이름은</span>		
-			<span class="art_info_aboutTime InfoWhereWhen">2020.11.12 - 2020.11.13 | FREE</span>
-		</a>
-		<a class="exh_one" onclick="exhDetail()" style="margin-right: 0;">
-			<img class="exh_poster" src="<%= ctxPath%>/resources/images/exhibition/artmap_20200102_9426350.jpg"/>
-			<span class="art_info_aboutLoca InfoWhereWhen">전북도립미술관 | 전북</span>
-			<span class="art_mainTitle">그녀의 이름은</span>		
-			<span class="art_info_aboutTime InfoWhereWhen">2020.11.12 - 2020.11.13 | FREE</span>
-		</a>
-		<br/>
-		<a class="exh_one" onclick="exhDetail()">
-			<img class="exh_poster" src="<%= ctxPath%>/resources/images/exhibition/artmap_20200102_9426350.jpg"/>
-			<span class="art_info_aboutLoca InfoWhereWhen">전북도립미술관 | 전북</span>
-			<span class="art_mainTitle">그녀의 이름은</span>		
-			<span class="art_info_aboutTime InfoWhereWhen">2020.11.12 - 2020.11.13 | FREE</span>
-		</a>
-		<a class="exh_one" onclick="exhDetail()">
-			<img class="exh_poster" src="<%= ctxPath%>/resources/images/exhibition/artmap_20200102_9426350.jpg"/>
-			<span class="art_info_aboutLoca InfoWhereWhen">전북도립미술관 | 전북</span>
-			<span class="art_mainTitle">그녀의 이름은</span>		
-			<span class="art_info_aboutTime InfoWhereWhen">2020.11.12 - 2020.11.13 | FREE</span>
-		</a>
-		<a class="exh_one" onclick="exhDetail()">
-			<img class="exh_poster" src="<%= ctxPath%>/resources/images/exhibition/artmap_20200102_9426350.jpg"/>
-			<span class="art_info_aboutLoca InfoWhereWhen">전북도립미술관 | 전북</span>
-			<span class="art_mainTitle">그녀의 이름은</span>		
-			<span class="art_info_aboutTime InfoWhereWhen">2020.11.12 - 2020.11.13 | FREE</span>
-		</a>
-		<a class="exh_one" onclick="exhDetail()" style="margin-right: 0;">
-			<img class="exh_poster" src="<%= ctxPath%>/resources/images/exhibition/artmap_20200102_9426350.jpg"/>
-			<span class="art_info_aboutLoca InfoWhereWhen">전북도립미술관 | 전북</span>
-			<span class="art_mainTitle">그녀의 이름은</span>		
-			<span class="art_info_aboutTime InfoWhereWhen">2020.11.12 - 2020.11.13 | FREE</span>
-		</a>
-		<br/>
-		<a class="exh_one" onclick="exhDetail()">
-			<img class="exh_poster" src="<%= ctxPath%>/resources/images/exhibition/artmap_20200102_9426350.jpg"/>
-			<span class="art_info_aboutLoca InfoWhereWhen">전북도립미술관 | 전북</span>
-			<span class="art_mainTitle">그녀의 이름은</span>		
-			<span class="art_info_aboutTime InfoWhereWhen">2020.11.12 - 2020.11.13 | FREE</span>
-		</a>
-		<a class="exh_one" onclick="exhDetail()">
-			<img class="exh_poster" src="<%= ctxPath%>/resources/images/exhibition/artmap_20200102_9426350.jpg"/>
-			<span class="art_info_aboutLoca InfoWhereWhen">전북도립미술관 | 전북</span>
-			<span class="art_mainTitle">그녀의 이름은</span>		
-			<span class="art_info_aboutTime InfoWhereWhen">2020.11.12 - 2020.11.13 | FREE</span>
-		</a>
-		<a class="exh_one" onclick="exhDetail()">
-			<img class="exh_poster" src="<%= ctxPath%>/resources/images/exhibition/artmap_20200102_9426350.jpg"/>
-			<span class="art_info_aboutLoca InfoWhereWhen">전북도립미술관 | 전북</span>
-			<span class="art_mainTitle">그녀의 이름은</span>		
-			<span class="art_info_aboutTime InfoWhereWhen">2020.11.12 - 2020.11.13 | FREE</span>
-		</a>
-		<a class="exh_one" onclick="exhDetail()" style="margin-right: 0;">
-			<img class="exh_poster" src="<%= ctxPath%>/resources/images/exhibition/artmap_20200102_9426350.jpg"/>
-			<span class="art_info_aboutLoca InfoWhereWhen">전북도립미술관 | 전북</span>
-			<span class="art_mainTitle">그녀의 이름은</span>		
-			<span class="art_info_aboutTime InfoWhereWhen">2020.11.12 - 2020.11.13 | FREE</span>
-		</a>
-		<br/>
 	</div>
 </div>

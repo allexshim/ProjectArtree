@@ -22,21 +22,19 @@ public class ExhibitsController {
 
 	
 	///////////////////// 전시회 목록 페이지 ///////////////////
-	@RequestMapping(value="/exhList.at", produces="text/plain;charset=UTF-8")
-	public String exhibitionList(HttpServletRequest request) {
+	@RequestMapping(value="/exhHome.at", produces="text/plain;charset=UTF-8")
+	public String exhHomeList(HttpServletRequest request) {
 		
 		return "exhibits/exhList.tiles";
 	}
 	
 	/////////////////// 전시회 목록 불러오기 /////////////////////
 	@ResponseBody
-	@RequestMapping(value="/exhibitsList.at", produces="text/plain;charset=UTF-8")
+	@RequestMapping(value="/exhList.at", produces="text/plain;charset=UTF-8")
 	public String exhList(HttpServletRequest request) {
 		
 		String len = request.getParameter("len");
 		String page = request.getParameter("page");
-		
-		System.out.println(len+"/"+page);
 		
 		String end = String.valueOf(Integer.parseInt(page)+Integer.parseInt(len)-1);
 		
@@ -73,18 +71,32 @@ public class ExhibitsController {
 		return jsonStr;
 	}
 	
+	///////////////////// 전시회 상세페이지 /////////////////////
 	@RequestMapping(value="/exhDetail.at")
 	public String exhibitionDetail() {
 		return "exhibits/exhDetail.tiles";
 	}
+
+	/////////////////// 갤러리 목록 페이지 /////////////////////
+	@RequestMapping(value="/galHome.at")
+	public String galleryHomeList() {
+		return "exhibits/galList.tiles";
+	}
 	
+	/////////////////// 갤러리 목록 불러오기 ////////////////////
+	@ResponseBody
+	@RequestMapping(value="/galList.at", produces="text/plain;charset=UTF-8")
+	public String galleryList(HttpServletRequest request) {
+		
+		
+		
+		return "";
+	}
+	
+	/////////////////// 갤러리 상세페이지 /////////////////////
 	@RequestMapping(value="/galDetail.at")
 	public String galleryDetail() {
 		return "exhibits/galDetail.tiles";
 	}
-	
-	@RequestMapping(value="/galList.at")
-	public String galleryList() {
-		return "exhibits/galList.tiles";
-	}
+
 }
