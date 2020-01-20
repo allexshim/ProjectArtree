@@ -8,4 +8,7 @@ public interface InterSearchService {
 	// 모든 전시회 정보를 받아온다.
 	List<HashMap<String,String>> getAllExhibition();
 
+	// 해당 월의 전시회 정보를 받아온다.
+	List<HashMap<String, String>> getExhibitionbyMonth(String month);
+
 }

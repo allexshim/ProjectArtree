@@ -32,30 +32,24 @@ insert into tag(type, keyword) values('표현별','여름');	insert into tag(typ
 insert into tag(type, keyword) values('표현별','정원');	insert into tag(type, keyword) values('장르별','판화');	insert into tag(type, keyword) values('형용별','생동감');	insert into tag(type, keyword) values('색상별','황금');
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+select detailAddress, exhibitionName, galleryName, startDate, endDate, mainPoster, exhibitionno
+		from (select * from exhibition E join exhibitionDetail D on E.exhibitionno = D.fk_exhibitionno) V
+		join (select * from gallery where status = 1) G
+		on V.fk_galleryNo = G.galleryNo;
+
 
 select * from gallery order by to_number(galleryno) desc;
 
 select * from exhibition;
 select * from exhibitionDetail;
 
-select exhibitionName, galleryName, startDate, endDate, mainPoster, exhibitionno
-		from (select * from exhibition E join exhibitionDetail D on E.exhibitionno = D.fk_exhibitionno) V
-		join gallery G
-		on V.fk_galleryNo = G.galleryNo;
-        
-        select detailAddress, exhibitionName, galleryName, startDate, endDate, mainPoster, exhibitionno
-		from (select * from exhibition E join exhibitionDetail D on E.exhibitionno = D.fk_exhibitionno) V
-		join gallery G
-		on V.fk_galleryNo = G.galleryNo;
-        
-        select count(*)
-       from
-       ( select detailAddress, exhibitionName, galleryName, startDate, endDate, mainPoster, exhibitionno
-		from (select * from exhibition E join exhibitionDetail D on E.exhibitionno = D.fk_exhibitionno) V
-		join (select * from gallery where status = 1) G
-		on V.fk_galleryNo = G.galleryNo
-        );
-        
+select *
+from exhibition E join exhibitionDetail D
+on E.exhibitionno = D.fk_exhibitionno;
+
+select to_date(startdate), to_date(enddate)
+from exhibition
+
 
 /*
 전시회 이름

@@ -20,6 +20,13 @@ public class SearchService implements InterSearchService {
 		List<HashMap<String,String>> ExhibitionList = dao.getAllExhibition();
 		return ExhibitionList;
 	}
+
+	// 해당 월의 전시회 정보를 받아온다.
+	@Override
+	public List<HashMap<String, String>> getExhibitionbyMonth(String month) {
+		List<HashMap<String,String>> ExhibitionList = dao.getExhibitionbyMonth(month);
+		return ExhibitionList;
+	}
 	
 	
 	

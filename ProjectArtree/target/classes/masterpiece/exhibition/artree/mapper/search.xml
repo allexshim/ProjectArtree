@@ -22,4 +22,30 @@
 		on V.fk_galleryNo = G.galleryNo
 	</select>
 
+	<!-- 해당 월의 전시회 정보를 받아온다. -->
+	<resultMap type="HashMap" id="monthMap">
+		<result property="exhibitionno"   column="exhibitionno" 	javaType="String"/> 
+	 	<result property="fk_galleryno"   column="fk_galleryno" 	javaType="String"/>
+	 	<result property="exhibitionname" column="exhibitionname" 	javaType="String"/>
+	 	<result property="author"  		  column="author" 			javaType="String"/>
+	 	<result property="startdate"  	  column="startdate" 		javaType="String"/>
+	 	<result property="enddate"   	  column="enddate" 			javaType="String"/>
+	 	<result property="mainposter"     column="mainposter" 		javaType="String"/>
+	</resultMap>
+	
+	<select id="getExhibitionbyMonth" parameterType="String" resultMap="monthMap" >
+		select exhibitionno, fk_galleryno, exhibitionname, author, startdate, enddate, mainposter
+		from
+		(
+		    select *
+		    from exhibition
+		    where <![CDATA[to_date(enddate) >= to_date(to_char(ADD_MONTHS(LAST_DAY(#{month})+1,-1),'YYYYMMDD'))]]> 
+		    	  and <![CDATA[to_date(enddate) <= last_day( #{month})]]> 
+		    order by to_date(enddate)
+		) V join exhibitionDetail D
+		on V.exhibitionno = D.fk_exhibitionno
+	</select>
+	
+
+	
 </mapper>

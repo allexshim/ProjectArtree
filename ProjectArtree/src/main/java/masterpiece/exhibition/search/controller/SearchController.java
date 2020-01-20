@@ -40,6 +40,8 @@ public class SearchController {
 		for(HashMap<String,String> single :exhibitionList) {
 			JSONObject jsobj = new JSONObject();
      
+			// exhibitionList에 데이터가 저장은 다 되어있는데 지도 부분이 미완성이라 2개만 저장한 것
+			// 나중에 수정해야함!
 			jsobj.put("detailAddress",single.get("detailAddress"));
 			jsobj.put("exhibitionName",single.get("exhibitionName"));
 
@@ -49,6 +51,36 @@ public class SearchController {
 		return jsarr.toString();
 	} // end of locationSearch ---------------------------------------
 	
-	
+	// 해당 월에 열리는 전시회 목록을 가져온다.
+	@ResponseBody
+	@RequestMapping(value="/monthSearch.at", produces="text/plain;charset=UTF-8")
+	public String monthSearch(HttpServletRequest request) {
+		String month = request.getParameter("month");
+		String str = (Integer.parseInt(month)>=10)?"":"0";
+		
+		month = "2020-"+str+month+"-01"; //2020-01-01
+		System.out.println(month);
+		JSONArray jsarr = new JSONArray();
+		List<HashMap<String,String>> exhibitionList =  null;
+		exhibitionList = service.getExhibitionbyMonth(month);
+		
+		// System.out.println(exhibitionList.size()); // 118
+		
+		for(HashMap<String,String> single :exhibitionList) {
+			JSONObject jsobj = new JSONObject();
+			
+			jsobj.put("exhibitionno",single.get("exhibitionno"));
+			jsobj.put("fk_galleryno",single.get("fk_galleryno"));
+			jsobj.put("exhibitionname",single.get("exhibitionname"));
+			jsobj.put("author",single.get("author"));
+			jsobj.put("startdate",single.get("startdate"));
+			jsobj.put("enddate",single.get("enddate"));
+			jsobj.put("mainposter",single.get("mainposter"));
+			
+			jsarr.put(jsobj);
+		}
+		
+		return jsarr.toString();
+	} // end of monthSearch ------------------------------------------------------
 	
 }
