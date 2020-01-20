@@ -55,16 +55,17 @@ public class SearchController {
 	@ResponseBody
 	@RequestMapping(value="/monthSearch.at", produces="text/plain;charset=UTF-8")
 	public String monthSearch(HttpServletRequest request) {
-		String month = request.getParameter("month");
-		String str = (Integer.parseInt(month)>=10)?"":"0";
+		String year = request.getParameter("year");
+		String month = request.getParameter("month"); // 1월 2020
 		
-		month = "2020-"+str+month+"-01"; //2020-01-01
-		System.out.println(month);
+		String str = (Integer.parseInt(month)>=10)?"":"0";
+		month = year+"-"+str+month+"-01"; //2020-01-01
+		
 		JSONArray jsarr = new JSONArray();
 		List<HashMap<String,String>> exhibitionList =  null;
 		exhibitionList = service.getExhibitionbyMonth(month);
 		
-		// System.out.println(exhibitionList.size()); // 118
+		System.out.println(exhibitionList.size()); // 45
 		
 		for(HashMap<String,String> single :exhibitionList) {
 			JSONObject jsobj = new JSONObject();
@@ -76,11 +77,47 @@ public class SearchController {
 			jsobj.put("startdate",single.get("startdate"));
 			jsobj.put("enddate",single.get("enddate"));
 			jsobj.put("mainposter",single.get("mainposter"));
-			
+			jsobj.put("galleryname",single.get("galleryname"));
+			jsobj.put("galleryno",single.get("galleryno"));
+			jsobj.put("location",single.get("location"));
+   
 			jsarr.put(jsobj);
 		}
 		
 		return jsarr.toString();
 	} // end of monthSearch ------------------------------------------------------
+	
+	// 해당 날짜에 열리는 전시회 목록을 가져온다.
+	@ResponseBody
+	@RequestMapping(value="/dateSearch.at", produces="text/plain;charset=UTF-8")
+	public String dateSearch(HttpServletRequest request) {
+		String date = request.getParameter("date");
+
+		JSONArray jsarr = new JSONArray();
+		List<HashMap<String,String>> exhibitionList =  null;
+		exhibitionList = service.getExhibitionbyDate(date);
+		
+		System.out.println(exhibitionList.size());
+		
+		for(HashMap<String,String> single :exhibitionList) {
+			JSONObject jsobj = new JSONObject();
+			
+			jsobj.put("exhibitionno",single.get("exhibitionno"));
+			jsobj.put("fk_galleryno",single.get("fk_galleryno"));
+			jsobj.put("exhibitionname",single.get("exhibitionname"));
+			jsobj.put("author",single.get("author"));
+			jsobj.put("startdate",single.get("startdate"));
+			jsobj.put("enddate",single.get("enddate"));
+			jsobj.put("mainposter",single.get("mainposter"));
+			jsobj.put("galleryname",single.get("galleryname"));
+			jsobj.put("galleryno",single.get("galleryno"));
+			jsobj.put("location",single.get("location"));
+   
+			jsarr.put(jsobj);
+		}
+		
+		return jsarr.toString();
+		
+	} // end of dateSearch ------------------------------------------------------
 	
 }

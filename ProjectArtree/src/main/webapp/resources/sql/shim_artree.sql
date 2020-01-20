@@ -47,9 +47,36 @@ select *
 from exhibition E join exhibitionDetail D
 on E.exhibitionno = D.fk_exhibitionno;
 
-select to_date(startdate), to_date(enddate)
-from exhibition
-
+select detailAddress, exhibitionName, galleryName, startDate, endDate, mainPoster, exhibitionno
+		from (select * from exhibition E join exhibitionDetail D on E.exhibitionno = D.fk_exhibitionno) V
+		join (select * from gallery where status = 1) G
+		on V.fk_galleryNo = G.galleryNo;
+-------------------------------------- 해당 월에 개최되는 전시회 조회하기 ----------------------------------------------------------------------------------------------------------
+select exhibitionno, fk_galleryno, exhibitionname, author, startdate, enddate, mainposter
+from
+(
+    select *
+    from exhibition
+    where to_date(enddate) >= to_date(to_char(ADD_MONTHS(LAST_DAY('2020-01-01')+1,-1),'YYYYMMDD')) and to_date(enddate) <= last_day('2020-01-01')
+    order by to_date(enddate)
+) V join exhibitionDetail D
+on V.exhibitionno = D.fk_exhibitionno;
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+	    select exhibitionno, fk_galleryno, exhibitionname, author, startdate, enddate, mainposter, galleryname, galleryno, location
+        from 
+        (
+        select *
+		from
+		(
+		    select *
+		    from exhibition
+		    where to_date(enddate) >= to_date(sysdate) 
+		    	  and to_date(enddate) <= last_day( to_date('2020-04-01') )
+		    order by to_date(enddate)
+		) V join exhibitionDetail D
+		on V.exhibitionno = D.fk_exhibitionno
+        ) E join gallery G
+        on E.fk_galleryno = G.galleryno;
 
 /*
 전시회 이름

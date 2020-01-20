@@ -223,7 +223,18 @@
 		
 		$("#testDatepicker").datepicker({			
 			dayNamesMin : ['월','화','수','목','금','토','일'],			
-			monthNames: ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월']
+			monthNames: ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'],
+			/* altField: '#calendar-date',
+			dateFormat: 'yy-mm-dd', */
+			minDate: 0,
+			onChangeMonthYear: function (year, month, inst) {
+				// 년 또는 월이 변경시 이벤트 발생
+				getListByMonth(year,month);
+			} ,
+			onSelect: function (dateText, inst) {
+    			// 일자 선택된 후 이벤트 발생
+				getListByDate(dateText);
+            }
 		});	
 		
 		// 화면이 로딩되면 지역별로 전시회 리스트를 가져오는 ajax function을 실행시킨다.
@@ -244,46 +255,86 @@
 				$(this).removeClass("currentCondition");
 			});
 			$(this).addClass("currentCondition");
-			getListByDate();
+			getListByDateAll();
 		});
-		
-		// 테마별 검색 클릭
+	
+		/* // 테마별 검색 클릭
 		$(".byTheme").click(function(){
 			$(".condition").each(function(){
 				$(this).removeClass("currentCondition");
 			});
 			$(this).addClass("currentCondition");
 			getListByTheme();
-		});
+		}); */
 		
 	}); // end of document.ready -----------------------------------------------
-	
+
 	// 날짜별로 리스트를 가져오는 함수
-	function getListByDate(){
+	function getListByDateAll(){
 		$("#map").css('display','none');
 		$("#theme").css('display','none');
 		$("#date").css('display','inline-block');
 		
-		// 각 월별 전시회 목록을 불러오는 ajax를 함수로 빼서 사용 (초기값 2020년 2월로)
-		getListByMonth(1);
-		
-		// ajax....
-	} //----------------------------------------
+		// 각 월별 전시회 목록을 불러오는 ajax를 함수로 빼서 사용 (초기값 2020년 1월로)
+		getListByMonth("2020","1");
+	} //----------------------------------------------------------------------------
 	
-	function getListByMonth(month){ // 해당 달에 열리는 전시회목록을 가져온다.
+	function getListByMonth(year,month){ // 해당 달에 열리는 전시회목록을 가져온다.
 		$.ajax({ 
 	    	  url:"<%=request.getContextPath()%>/monthSearch.at",
 	          type:"GET",
-	          data : {"month":month},
+	          data : {"year":year,"month":month},
 	          dataType:"JSON",
 	          success: function(json) { 
-	        	  
+	        	  listofExhibition(json);
 	          },
 	          error: function(request, status, error){
 	                alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
 	          }
 	       });
 	} // end of getListByMonth ------------------------------------------------
+	
+	// 선택한 날짜에 열리는 전시회 목록을 가져온다.
+	function getListByDate(dateText){
+		
+		$.ajax({ 
+	    	  url:"<%=request.getContextPath()%>/dateSearch.at",
+	          type:"GET",
+	          data : {"date":dateText},
+	          dataType:"JSON",
+	          success: function(json) { 
+	        	  listofExhibition(json);
+	          },
+	          error: function(request, status, error){
+	                alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+	          }
+	       });
+	} // end of getListByDate ----------------------------------------------------
+	
+	// 받아온 json 데이터를 view단에 뿌리는 함수
+	function listofExhibition(json){
+		var html = "";
+		 $("#exhibitionList").empty();
+		 $.each(json, function(index, item) {
+				 html += "<div class='singleExhibition'>";
+				 html += "<img src='"+item.mainposter+"' />";
+				 html += "<span class='infoContainer'>";
+				 html += "<span class='title'>"+item.exhibitionname+"</span><br/><br/>";
+				 html += "<span class='gallery'>"+item.galleryname+"/"+item.location+"</span><br/><br/>";
+				 html += "<span class='period'>"+item.startdate+" - "+item.enddate+"</span><br/>";			
+				 html += "</span></div>";		
+			 $("#exhibitionList").append(html);
+			 html = "";
+		});
+
+		if($("#exhibitionList").html()==""){
+			 html += "<div class='singleExhibition'>"+
+				     "<span style='font-size:20px; text-align:middle;'>해당 기간에 열리는 전시회가 없습니다.</span></div>"; 
+			 $("#exhibitionList").append(html);
+		}
+		
+	} // end of listofExhibition -----------------------------------------------
+	  
 	
 	// 테마별로 리스트를 가져오는 함수
 	function getListByTheme(){
@@ -311,55 +362,8 @@
 		<span class="condition byTheme">테마별</span>
 	</div>
 	
-	<div id="exhibitionList">
-		<div class="singleExhibition">
-			<img src="<%= ctxPath%>/resources/images/exhibition/artmap_20200102_9426350.jpg" />
-			<span class="infoContainer">
-				<span class="title">박기훈 초대전 : 공존 (共存)박기훈 초대전 : 공존 (共存박기훈 초대전 : 공존 (共存)박기훈 초대전 : 공존 (共存</span><br/><br/>
-				<span class="gallery">갤러리화이트원/서울</span><br/><br/>
-				<span class="period">2020.01.15 - 2020.02.12</span><br/>
-			</span>
-		</div>
-		<div class="singleExhibition">
-			<img src="<%= ctxPath%>/resources/images/exhibition/artmap_20200102_9426350.jpg" />
-			<span class="infoContainer">
-				<span class="title">박기훈 초대전 : 공존 (共存)</span><br/><br/>
-				<span class="gallery">갤러리화이트원/서울</span><br/><br/>
-				<span class="period">2020.01.15 - 2020.02.12</span><br/>
-			</span>
-		</div>
-		<div class="singleExhibition">
-			<img src="<%= ctxPath%>/resources/images/exhibition/artmap_20200102_9426350.jpg" />
-			<span class="infoContainer">
-				<span class="title">박기훈 초대전 : 공존 (共存)박기훈 초대전 : 공존 (共存박기훈 초대전 : 공존 (共存)박기훈 초대전 : 공존 (共存</span><br/><br/>
-				<span class="gallery">갤러리화이트원/서울</span><br/><br/>
-				<span class="period">2020.01.15 - 2020.02.12</span><br/>
-			</span>
-		</div>
-		<div class="singleExhibition">
-			<img src="<%= ctxPath%>/resources/images/exhibition/artmap_20200102_9426350.jpg" />
-			<span class="infoContainer">
-				<span class="title">박기훈 초대전 : 공존 (共存)</span><br/><br/>
-				<span class="gallery">갤러리화이트원/서울</span><br/><br/>
-				<span class="period">2020.01.15 - 2020.02.12</span><br/>
-			</span>
-		</div>
-		<div class="singleExhibition">
-			<img src="<%= ctxPath%>/resources/images/exhibition/artmap_20200102_9426350.jpg" />
-			<span class="infoContainer">
-				<span class="title">박기훈 초대전 : 공존 (共存)</span><br/><br/>
-				<span class="gallery">갤러리화이트원/서울</span><br/><br/>
-				<span class="period">2020.01.15 - 2020.02.12</span><br/>
-			</span>
-		</div>
-		<div class="singleExhibition">
-			<img src="<%= ctxPath%>/resources/images/exhibition/artmap_20200102_9426350.jpg" />
-			<span class="infoContainer">
-				<span class="title">박기훈 초대전 : 공존 (共存)박기훈 초대전 : 공존 (共存박기훈 초대전 : 공존 (共存)박기훈 초대전 : 공존 (共存</span><br/><br/>
-				<span class="gallery">갤러리화이트원/서울</span><br/><br/>
-				<span class="period">2020.01.15 - 2020.02.12</span><br/>
-			</span>
-		</div>
+	<!-- 전시회 정보가 들어가는 곳 -->
+	<div id="exhibitionList">	
 	</div>	
 	
 	<div id="map"></div>
@@ -424,11 +428,11 @@
 			        	      coords.lat = na.Ga;
 			        	      coords.lng = na.Ha;
 			        	      
-			        	      // 결과값으로 받은 위치를 마커로 표시합니다 (나중에 클러스터러 완성하면 삭제할 부분)
+			        	      /* // 결과값으로 받은 위치를 마커로 표시합니다 (나중에 클러스터러 완성하면 삭제할 부분)
 			        	        var marker = new kakao.maps.Marker({
 			        	            map: map,
 			        	            position: na
-			        	        });
+			        	        }); */
 			        	      
 		        	         //coordsArr.positions.push({"lat":na.Ga, "lng":na.Ha});   
 		        	          // console.log(coords);
@@ -441,7 +445,7 @@
 	        	  	var coordsJson = JSON.stringify(coordsArr);
 	    			//console.log(coordsJson); //--> 카카오 api에서 클러스터러를 사용하기 위해 요구하는 데이터 type
 	        	    
-		        	$.get(coordsJson, function(data) {
+		        	/* $.get(coordsJson, function(data) {
 		  	        // 데이터에서 좌표 값을 가지고 마커를 표시합니다
 		  	        // 마커 클러스터러로 관리할 마커 객체는 생성할 때 지도 객체를 설정하지 않습니다
 		  	        var markers = $(data.positions).map(function(i, position) {
@@ -452,7 +456,7 @@
 		  	
 	  		        // 클러스터러에 마커들을 추가합니다
 	  		        clusterer.addMarkers(markers);
-	  		 	 	});
+	  		 	 	}); */
 		        	
 	        	  },
 	          error: function(request, status, error){
