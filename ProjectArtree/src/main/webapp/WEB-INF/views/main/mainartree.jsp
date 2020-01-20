@@ -25,11 +25,12 @@
    }
    
   .hot-exh-L {
+  		-webkit-transform:translate(100px, 0);
   		margin-top: 50px;
   		float: left;
   		text-align: center;
 		display: inline-block;
-		width: 80%; 
+		width: 70%; 
 		height: 500px; 
 		border: solid 1px #e6e6e6;
 	}
@@ -42,17 +43,26 @@
 
 	.hot-info1 {
 		float: right; 
-		width: 50%; 
+		width: 50%;
+		height: 100%
 		text-align: center; 
-		padding: 8% 5% 0 5%;
+		padding: 15% 5% 0 5%;
+	}
+	
+	.recom-info {
+		float: right; 
+		width: 50%;
+		height: 100%
+		text-align: center; 
+		padding: 15% 5% 0 5%;
 	}
 	
 	.hot-exh-R {
 		margin-top: 50px;
-		-webkit-transform:translate(250px, 0);
+		-webkit-transform:translate(300px, 0);
   		text-align: center;
 		display: inline-block;
-		width: 80%; 
+		width: 70%; 
 		height: 500px; 
 		border: solid 1px #e6e6e6;
 	}
@@ -66,40 +76,42 @@
 	.hot-info2 {
 		float: left; 
 		width: 50%; 
+		height: 100%
 		text-align: center; 
-		padding: 8% 5% 0 5%;
+		padding: 15% 5% 0 5%;
 	}
 	
 	.hot-title {
 		display: block; 
-		font-size: 25pt; 
+		font-size: 20pt; 
 		font-weight: bold;
 	}
 	
 	.hot-content {
 		display: block; 
-		font-size: 20pt; 
+		font-size: 15pt; 
 		font-weight: bold; 
-		margin: 20px 0 60px 0;
+		margin: 20px 0 0 0;
 	}
 	
 	
 	
 	
 	.recom-exh {
-  		margin-top: 350px;
-  		float: left;
+		-webkit-transform:translate(100px,0);
+  		margin-top: 450px;
+  		float: center;
   		text-align: center;
 		display: inline-block;
-		width: 100%; 
-		height: 600px; 
+		width: 85%; 
+		height: 450px; 
 		border: solid 1px #f2f2f2;
 	}
 	
 	
 	.slideshow {
 	 
-	  height: 600px;
+	  height: 450px;
 	  position: relative;
 	  margin: auto;
 	}
@@ -113,8 +125,8 @@
 	}
 	
 	.slide-img { 
-		width: 50%;
-		height: 600px;
+		width: 35%;
+		height: 450px;
 	}
 
 	
@@ -165,7 +177,7 @@
 	}
 	
 	.end-exh {
-		margin-top: 450px;
+		margin-top: 350px;
 		text-align: center;
 		position:relative;
 	    display: -webkit-flex;
@@ -179,34 +191,21 @@
 	}
 	
 	.new-one {
-		color: black;
-		text-decoration: none;
+		
 		text-align: center;
 		display: block;
 		flex: 1;
 		width: 33%;
 		height: 100%;
-	}
-	
-	.new-one:hover {
-		color: black;
-		cursor: pointer;
 	}
 	
 	.end-one {
-		color: black;
-		text-decoration: none;
+		
 		text-align: center;
 		display: block;
 		flex: 1;
 		width: 33%;
 		height: 100%;
-	}
-	
-	.end-one:hover {
-		color: black;
-		cursor: pointer;
-		
 	}
 	
 	.new_poster {
@@ -220,23 +219,13 @@
 	}
 	
 	.new-exp {
-		margin: 10px;
 		display: block;
+		margin: 10px;
 	}
 	
 	.end-exp {
-		margin: 10px;
 		display: block;
-	}
-	
-	.event-morebtn {
-		color: black;
-		text-decoration: none;
-	}
-	
-	.event-morebtn:hover {
-		color: black;
-		text-decoration: none;
+		margin: 10px;
 	}
 	
    
@@ -273,7 +262,7 @@
 	
 	<div class="main-container" style="margin-bottom: 500px;">
 		<div class="hot-exh">
-			<div style="float:center; margin:0 auto; transform:translate(0,20px);">
+			<div style="float:center; margin:0 auto; transform:translate(100px,20px);">
 				<h2>인기 전시회</h2>
 			</div>
 			<div class="hot-exh-L">
@@ -315,8 +304,8 @@
 			<div class="slideshow">
 			  <div class="mySlides">
 			    
-			    <img class="slide-img" src="<%= ctxPath%>/resources/images/exhibition/poster2.JPG">
-			    	<div class="hot-info1">
+			    <a href="#"><img class="slide-img" src="<%= ctxPath%>/resources/images/exhibition/poster2.JPG"></a>
+			    	<div class="hot-info1" style="padding-top: 10%;">
 						<span class="hot-title">전시회명</span>
 						<span class="hot-content">작가명</span>
 						<span class="hot-content">전시위치</span>
@@ -325,8 +314,8 @@
 			  </div>
 			  
 			  <div class="mySlides">
-			    <img class="slide-img" src="<%= ctxPath%>/resources/images/exhibition/poster1.JPG">
-			   		<div class="hot-info1">
+			    <a href="#"><img class="slide-img" src="<%= ctxPath%>/resources/images/exhibition/poster1.JPG"></a>
+			   		<div class="hot-info1" style="padding-top: 10%;">
 						<span class="hot-title">전시회명</span>
 						<span class="hot-content">작가명</span>
 						<span class="hot-content">전시위치</span>
@@ -335,8 +324,8 @@
 			  </div>
 			
 			  <div class="mySlides">
-			    <img class="slide-img" src="<%= ctxPath%>/resources/images/exhibition/poster2.JPG">
-			    	<div class="hot-info1">
+			    <a href="#"><img class="slide-img" src="<%= ctxPath%>/resources/images/exhibition/poster2.JPG"></a>
+			    	<div class="hot-info1" style="padding-top: 10%;">
 						<span class="hot-title">전시회명</span>
 						<span class="hot-content">작가명</span>
 						<span class="hot-content">전시위치</span>
@@ -345,8 +334,8 @@
 			  </div>
 			  
 			  <div class="mySlides">
-			    <img class="slide-img" src="<%= ctxPath%>/resources/images/exhibition/poster3.JPG">
-			    	<div class="hot-info1">
+			    <a href="#"><img class="slide-img" src="<%= ctxPath%>/resources/images/exhibition/poster3.JPG"></a>
+			    	<div class="hot-info1" style="padding-top: 10%;">
 						<span class="hot-title">전시회명</span>
 						<span class="hot-content">작가명</span>
 						<span class="hot-content">전시위치</span>
@@ -356,9 +345,9 @@
 			
 			</div>
 			
-			<div class="recom-exh-title" style="float: center; transform:translate(0,-700px);">
+			<div class="recom-exh-title" style="float: center; transform:translate(0,-580px);">
 				<h2>추천 전시회</h2>
-				<span>ARTREE 추천전시회가 노출됩니다.</span>
+				<span>ARTREE 추천전시회를 보여줍니다.</span>
 			</div>
 			
 			<div style="text-align:center; display: none;">
@@ -370,11 +359,11 @@
 		</div>
 	</div>
 	
-	<hr color="#f2f2f2;" style="transform:translate(0, 1550px);" />
+	<hr color="#f2f2f2;" style="transform:translate(0, 100px);" />
 
 	
 	<div class="newNend">
-		<div style="float: left; -webkit-transform:translate(58px, 180px);">
+		<div class="new-title" style="float: left; -webkit-transform:translate(58px, 180px);">
 			<h2>신규 전시회</h2>
 		</div>
 		<div class="new-exh">
@@ -400,12 +389,10 @@
 			</a>
 		</div>
 		
-		<hr color="#f2f2f2;" style="transform:translate(0, 300px);"/>
-		
-		<div style="float: right; -webkit-transform:translate(-58px, 350px);">
+		<div class="new-title" style="float: right; -webkit-transform:translate(-58px, 370px);">
 			<h2>종료임박 전시회</h2>
 		</div>
-		<div class="end-exh">
+		<div class="end-exh" style="transform:translate(0, 100px);">
 			<a href="#" class="end-one">
 				<img class="end_poster" src="<%= ctxPath%>/resources/images/exhibition/artmap_20200102_9426350.jpg"/>
 				<span class="end-exp">전시회명</span>
@@ -429,16 +416,16 @@
 		</div>
 	</div>
 	
-	<hr color="#f2f2f2;" style="transform:translate(0, 100px);" />
+	<hr color="#f2f2f2;" style="transform:translate(0, 250px);" />
 	
 	
-	<div class="event-title" style="float: left; transform:translate(35px,-30px);">
+	<div class="event-title" style="float: left; transform:translate(35px, 180px);">
 		<h2 style="float: left;">EVENT</h2>
 	</div>
-	<div class="event-more" style="float: right; transform:translate(-35px, 220px);">
+	<div class="event-more" style="float: right; transform:translate(-35px, 420px);">
 		<a class="event-morebtn" href="<%= ctxPath%>/eventList.at">더보기+</a>
 	</div>
-       	<div class="event-div" >
+       	<div class="event-div" style="transform:translate(0, 200px);">
            	<a href="#" class="event_one" >
 				<img class="event_poster" src="<%= ctxPath%>/resources/images/exhibition/artmap_20200102_9426350.jpg"/>
 			</a>
