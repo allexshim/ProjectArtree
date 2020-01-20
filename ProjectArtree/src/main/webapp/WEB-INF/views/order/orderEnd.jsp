@@ -27,6 +27,7 @@
 
 <script>
 	$(function(){
+		session.removeAttribute("order");
 		$("#accordion").accordion();
 	})
 		
