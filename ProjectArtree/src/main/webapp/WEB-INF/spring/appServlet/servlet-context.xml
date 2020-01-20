@@ -24,7 +24,7 @@
     	</beans:constructor-arg> 
     </beans:bean>
 
- <context:component-scan base-package="masterpiece.exhibition.*" name-generator="masterpiece.exhibition.common.FullBeanNameGenerator" />
+ <!-- <context:component-scan base-package="masterpiece.exhibition.*" name-generator="masterpiece.exhibition.common.FullBeanNameGenerator" /> -->
     <!--  다른 패키지에 있는 같은 이름의 클래스가 bean으로 등록될때, 충돌이 일어나지 않도록  패키지 이름 전체를 넣는다.
     
         spring annotation-driven 시 bean name 중복(충돌,conflicts)을 해결하기 위해서 사용하는 커스트마이징된 BeanNameGenerator 이다. 

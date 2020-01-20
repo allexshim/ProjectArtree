@@ -111,7 +111,7 @@ body, html {
 		
 		$("#members").click(function(){
 			
-			window.location.href="/artree/members.at";
+			window.location.href="/artree/memberList.at";
 			
 		});
 		
