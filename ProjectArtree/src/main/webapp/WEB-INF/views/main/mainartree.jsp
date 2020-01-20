@@ -165,7 +165,7 @@
 	}
 	
 	.end-exh {
-		margin-top: 350px;
+		margin-top: 450px;
 		text-align: center;
 		position:relative;
 	    display: -webkit-flex;
@@ -179,7 +179,8 @@
 	}
 	
 	.new-one {
-		
+		color: black;
+		text-decoration: none;
 		text-align: center;
 		display: block;
 		flex: 1;
@@ -187,13 +188,25 @@
 		height: 100%;
 	}
 	
+	.new-one:hover {
+		color: black;
+		cursor: pointer;
+	}
+	
 	.end-one {
-		
+		color: black;
+		text-decoration: none;
 		text-align: center;
 		display: block;
 		flex: 1;
 		width: 33%;
 		height: 100%;
+	}
+	
+	.end-one:hover {
+		color: black;
+		cursor: pointer;
+		
 	}
 	
 	.new_poster {
@@ -207,11 +220,23 @@
 	}
 	
 	.new-exp {
+		margin: 10px;
 		display: block;
 	}
 	
 	.end-exp {
+		margin: 10px;
 		display: block;
+	}
+	
+	.event-morebtn {
+		color: black;
+		text-decoration: none;
+	}
+	
+	.event-morebtn:hover {
+		color: black;
+		text-decoration: none;
 	}
 	
    
@@ -252,7 +277,7 @@
 				<h2>인기 전시회</h2>
 			</div>
 			<div class="hot-exh-L">
-				<img class="hot-img1" src="<%= ctxPath%>/resources/images/exhibition/poster1.JPG">
+				<a href="#"><img class="hot-img1" src="<%= ctxPath%>/resources/images/exhibition/poster1.JPG"></a>
 				<div class="hot-info1">
 					<span class="hot-title">전시회명</span>
 					<span class="hot-content">작가명</span>
@@ -268,11 +293,11 @@
 					<span class="hot-content">전시위치</span>
 					<span class="hot-content">2020-01-20~2020-01-22</span>
 				</div>
-				<img class="hot-img2" src="<%= ctxPath%>/resources/images/exhibition/poster2.JPG">
+				<a href="#"><img class="hot-img2" src="<%= ctxPath%>/resources/images/exhibition/poster2.JPG"></a>
 			</div>
 			
 			<div class="hot-exh-L">
-				<img class="hot-img1" src="<%= ctxPath%>/resources/images/exhibition/poster3.JPG">
+				<a href="#"><img class="hot-img1" src="<%= ctxPath%>/resources/images/exhibition/poster3.JPG"></a>
 				<div class="hot-info1">
 					<span class="hot-title">전시회명</span>
 					<span class="hot-content">작가명</span>
@@ -333,7 +358,7 @@
 			
 			<div class="recom-exh-title" style="float: center; transform:translate(0,-700px);">
 				<h2>추천 전시회</h2>
-				<span>ARTREE 추천전시회를 보여줍니다.</span>
+				<span>ARTREE 추천전시회가 노출됩니다.</span>
 			</div>
 			
 			<div style="text-align:center; display: none;">
@@ -349,52 +374,58 @@
 
 	
 	<div class="newNend">
-		<div class="new-title" style="float: left; -webkit-transform:translate(58px, 180px);"><h2>신규 전시회</h2></div>
+		<div style="float: left; -webkit-transform:translate(58px, 180px);">
+			<h2>신규 전시회</h2>
+		</div>
 		<div class="new-exh">
-			<div class="new-one">
+			<a href="#" class="new-one">
 				<img class="new_poster" src="<%= ctxPath%>/resources/images/exhibition/artmap_20200102_9426350.jpg"/>
 				<span class="new-exp">전시회명</span>
 				<span class="new-exp">전시기간</span>
 				<span class="new-exp">전시작가</span>
-			</div>
+			</a>
 			
-			<div class="new-one">
+			<a href="#" class="new-one">
 				<img class="new_poster" src="<%= ctxPath%>/resources/images/exhibition/artmap_20200102_9426350.jpg"/>
 				<span class="new-exp">전시회명</span>
 				<span class="new-exp">전시기간</span>
 				<span class="new-exp">전시작가</span>
-			</div>
+			</a>
 			
-			<div class="new-one">
+			<a href="#" class="new-one">
 				<img class="new_poster" src="<%= ctxPath%>/resources/images/exhibition/artmap_20200102_9426350.jpg"/>
 				<span class="new-exp">전시회명</span>
 				<span class="new-exp">전시기간</span>
 				<span class="new-exp">전시작가</span>
-			</div>
+			</a>
 		</div>
 		
-		<div class="new-title" style="float: right; -webkit-transform:translate(-58px, 270px);"><h2>종료임박 전시회</h2></div>
+		<hr color="#f2f2f2;" style="transform:translate(0, 300px);"/>
+		
+		<div style="float: right; -webkit-transform:translate(-58px, 350px);">
+			<h2>종료임박 전시회</h2>
+		</div>
 		<div class="end-exh">
-			<div class="end-one">
+			<a href="#" class="end-one">
 				<img class="end_poster" src="<%= ctxPath%>/resources/images/exhibition/artmap_20200102_9426350.jpg"/>
 				<span class="end-exp">전시회명</span>
 				<span class="end-exp">전시기간</span>
 				<span class="end-exp">전시작가</span>
-			</div>
+			</a>
 			
-			<div class="end-one">
+			<a href="#" class="end-one">
 				<img class="end_poster" src="<%= ctxPath%>/resources/images/exhibition/artmap_20200102_9426350.jpg"/>
 				<span class="end-exp">전시회명</span>
 				<span class="end-exp">전시기간</span>
 				<span class="end-exp">전시작가</span>
-			</div>
+			</a>
 				
-			<div class="end-one">
+			<a href="#" class="end-one">
 				<img class="end_poster" src="<%= ctxPath%>/resources/images/exhibition/artmap_20200102_9426350.jpg"/>
 				<span class="end-exp">전시회명</span>
 				<span class="end-exp">전시기간</span>
 				<span class="end-exp">전시작가</span>
-			</div>
+			</a>
 		</div>
 	</div>
 	
@@ -408,16 +439,16 @@
 		<a class="event-morebtn" href="<%= ctxPath%>/eventList.at">더보기+</a>
 	</div>
        	<div class="event-div" >
-           	<a class="event_one" >
+           	<a href="#" class="event_one" >
 				<img class="event_poster" src="<%= ctxPath%>/resources/images/exhibition/artmap_20200102_9426350.jpg"/>
 			</a>
-			<a class="event_one" >
+			<a href="#" class="event_one" >
 				<img class="event_poster" src="<%= ctxPath%>/resources/images/exhibition/artmap_20200102_9426350.jpg"/>
 			</a>
-			<a class="event_one" >
+			<a href="#" class="event_one" >
 				<img class="event_poster" src="<%= ctxPath%>/resources/images/exhibition/artmap_20200102_9426350.jpg"/>
 			</a>
-			<a class="event_one" >
+			<a href="#" class="event_one" >
 				<img class="event_poster" src="<%= ctxPath%>/resources/images/exhibition/artmap_20200102_9426350.jpg"/>
 			</a>
        	</div>
