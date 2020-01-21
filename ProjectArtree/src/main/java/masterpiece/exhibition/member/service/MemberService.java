@@ -27,21 +27,23 @@ public class MemberService implements InterMemberService {
 	
 	// 로그인 처리
 	@Override
-	public MemberVO getLoginMember(MemberVO mvo) {
-		MemberVO loginuser = dao.getLoginMember(mvo);
+	public MemberVO getLoginMember(HashMap<String, String> paraMap) {
+		MemberVO loginuser = dao.getLoginMember(paraMap);
 		return loginuser;
 	}
 
 	// 회원가입 완료, 선호작품설정
 	@Override
-	
+	@Transactional(propagation=Propagation.REQUIRED, isolation= Isolation.READ_COMMITTED, rollbackFor={Throwable.class})
 	public List<HashMap<String, String>> joinFinalInsert(HashMap<String, String> paraMap) {
 
 		// member 테이블에 성별, 연령대, 지역 확정 insert
 		int n = dao.infoUpdate(paraMap);
+		System.out.println("member 테이블에 성별, 연령대, 지역 확정 insert : " +n);
 		
 		// 받아온 exhibitionno, galleryno로 작품 태그, 장르 select
 		List<HashMap<String, String>> favorList = dao.myFavorTagGenre(paraMap);
+		System.out.println("받아온 exhibitionno, galleryno로 작품 태그, 장르 select : " +favorList);
 
 		if(favorList != null) {
 			
@@ -60,14 +62,16 @@ public class MemberService implements InterMemberService {
 			
 			// wishList 테이블에 선호작품 insert
 			int m = dao.favorInsert(favorMap);
+			System.out.println("wishList 테이블에 선호작품 insert : " +m);
 
-			if((n+m) == 3) {
-				System.out.println("insert 성공!");
+			if(n+m == 3) {
+				System.out.println("성공~!");
 			}
 		}
 		
 		// 작품 이름, 작가, 작품이미지 select
 		List<HashMap<String, String>> myFavorList = dao.myFavorDesc(paraMap);
+		System.out.println("작품 이름, 작가, 작품이미지 select : "+myFavorList);
 		
 		return myFavorList;
 	}

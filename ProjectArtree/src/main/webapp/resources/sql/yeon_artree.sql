@@ -144,7 +144,13 @@ delete from test_wishList purge;
 delete from test_member purge;
 commit;
 
+drop table test_member purge;
 
+drop table test_wishList purge;
+
+drop sequence test_seq_wishList_wishNo;
+
+drop sequence test_seq_member;
 
 select *
 from tabs;
@@ -195,6 +201,8 @@ nominvalue
 nocycle
 nocache;
 
+
+
 -- 작품이미지1, 전시회이름, 전시회작가 select
 select D.image1, E.exhibitionname, E.author
 from exhibition E join exhibitiondetail D
@@ -208,3 +216,4 @@ BEGIN
      RETURN test_seq_wishList_wishNo.nextval;
 
 END;
+

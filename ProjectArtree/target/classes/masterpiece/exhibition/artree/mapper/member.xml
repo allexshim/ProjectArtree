@@ -6,16 +6,16 @@
 	
 	<!-- 회원가입 -->
 	<insert id="joinInsert" parameterType="masterpiece.exhibition.member.model.MemberVO"> 
-      insert into test_member(idx, email, name, password, agegroup, gender, area, hp, status, registerday, lastLoginDate, lastPasswordDate, clientIP)
-      values(test_seq_member.nextval, #{email}, #{name}, #{password}, #{agegroup}, #{gender}, #{area}, #{hp}, default, default, default, default, #{clientIP})
+      insert into member(idx, email, name, password, agegroup, gender, area, hp, status, registerday, lastLoginDate, lastPasswordDate, clientIP)
+      values(seq_member.nextval, #{email}, #{name}, #{password}, #{agegroup}, #{gender}, #{area}, #{hp}, default, default, default, default, #{clientIP})
     </insert>
    
     <!-- 로그인 처리 -->
     <select id="getLoginMember" parameterType="HashMap" resultType="masterpiece.exhibition.member.model.MemberVO">
-      select idx, email, name, agegroup, area
+      select idx, email, name, gender, agegroup, area
           , trunc( months_between(sysdate, lastLoginDate) ) AS lastlogindategap 
           , trunc( months_between(sysdate, lastPasswordDate) ) AS pwdchangegap 
-      from test_member
+      from member
       where status = 1 and 
             email = #{email} and
             password = #{password}
@@ -23,7 +23,7 @@
    
    <!-- member 테이블에 성별, 연령대, 지역 확정 insert -->
    <update id="infoUpdate" parameterType="HashMap">
-   	  update test_member set gender = ${gender}, agegroup = ${agegroup}, area = '${area}' where idx = ${idx}
+   	  update member set gender = ${gender}, agegroup = ${agegroup}, area = '${area}' where idx = ${idx}
    </update>
    
    
@@ -42,9 +42,9 @@
    <!-- wishList 테이블에 선호작품 insert -->
    <insert id="favorInsert" parameterType="HashMap">
    	  insert all
-   	  into test_wishList(wishNo, fk_idx, fk_galleryNo, fk_exhibitionNo, favorTag, favorGenre) 
+   	  into wishList(wishNo, fk_idx, fk_galleryNo, fk_exhibitionNo, favorTag, favorGenre) 
    	  values(get_wishno, #{idx}, #{galleryno1}, #{exhibitionno1}, #{favorTag1}, #{favorGenre1})
-   	  into test_wishList(wishNo, fk_idx, fk_galleryNo, fk_exhibitionNo, favorTag, favorGenre) 
+   	  into wishList(wishNo, fk_idx, fk_galleryNo, fk_exhibitionNo, favorTag, favorGenre) 
    	  values(get_wishno, #{idx}, #{galleryno2}, #{exhibitionno2}, #{favorTag2}, #{favorGenre2})
    	  select *
 	  from dual

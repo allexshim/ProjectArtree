@@ -219,7 +219,7 @@ div.word_chart {
 /* 푸터 설명 */
 div.joinEndTwo_footer {
 	text-align: left;
-	margin: 40px 0 10px 0;
+	margin: 40px 0 10px 30px;
 }
 
 div.joinEndTwo_footer span {
@@ -248,13 +248,19 @@ div.joinEndTwo_footer span {
 <script type="text/javascript">
 
 	$(function() {
+
+		$("#gender_"+${loginuser.getGender()}).addClass("on");
+		$("#gender").val(+${loginuser.getGender()});
 		
 		$("#agegroup").val(${loginuser.getAgegroup()});
+		$("#age_select option[value='${loginuser.getAgegroup()}']").attr("selected", true);
 		$("#area").val('${loginuser.getArea()}');
-		 
+		$("#area_select option[value='${loginuser.getArea()}']").attr("selected", true);
+		
+		
 		$("#age_select").click(function() {
 			$("#agegroup").val($("#age_select option:selected").val());
-		});
+		}); 
 		
 		$("#area_select").click(function() {
 			$("#area").val($("#area_select option:selected").val());
@@ -319,7 +325,7 @@ function confirm() {
 
 	var join_data = $("form[name=joinFinalForm]").serialize(); // form 태그에 있는 모든 것들이 name을 가지고 간다.
 	   
-   $.ajax({
+    $.ajax({
 	  url:"<%= request.getContextPath()%>/joinEndInsert.at",
 	  data:join_data,
 	  type:"POST",
@@ -328,19 +334,26 @@ function confirm() {
 		  var html = "";
 		  var data = json.myFavorList;
 
-		  $("#st1").css("display", "none");
-		  $("#st2").css("display", "");
-		  
+		 
 		  for(var i=0; i<data.length; i++) {
+			  
+			  html += "<div class='pick'>";
 			  html += "<div class='pickImg_wrap'>";
-			  html += "<img src='"+json.myFavorList[i]["image1"]+"'/>";
+			  html += "<img src='"+data[i]["image1"]+"'/>";
 			  html += "</div>";
 			  html += "<div class='pick_desc'>";
 			  html += "<span>"+data[i]["exhibitionname"]+"</span>";
 			  html += "<span>"+data[i]["author"]+"</span>";
 			  html += "</div>";
+			  html += "</div>";
 		  }
-		  $(".pick").html(html);
+		  
+		  $("#point").html(html);
+		  
+		  $("#st1").css("display", "none");
+		  $("#st2").css("display", "");
+		  $("#st2").css("align", "center");
+		  
 	  },
 	  
 	  error: function(request, status, error){
@@ -478,8 +491,8 @@ function confirm() {
 				<h2>선택작품으로 분석된 회원님의 취향입니다.</h2>
 			</div>
 			<div class="joinEndTwo_content">
-				
-				
+				<div id="point">
+				</div>
 				<div class="joinEndTwo_chart">
 					<span>* 마이페이지 - 작품컬렉션에서 확인하실 수 있습니다.</span>
 					<div class="word_chart">
@@ -500,13 +513,13 @@ function confirm() {
 		</div>	
 	</div>	
 	<form name="joinFinalForm">
-		<input type="text" name="finalGender" id="gender"/>
-		<input type="text" name="finalAgegroup" id="agegroup"/>
-		<input type="text" name="finalArea" id="area"/>
-		<input type="text" name="exhibitionno1" id="exhibitionno1">
-		<input type="text" name="galleryno1" id="galleryno1">
-		<input type="text" name="exhibitionno2" id="exhibitionno2">
-		<input type="text" name="galleryno2" id="galleryno2">
+		<input type="hidden" name="finalGender" id="gender"/>
+		<input type="hidden" name="finalAgegroup" id="agegroup"/>
+		<input type="hidden" name="finalArea" id="area"/>
+		<input type="hidden" name="exhibitionno1" id="exhibitionno1">
+		<input type="hidden" name="galleryno1" id="galleryno1">
+		<input type="hidden" name="exhibitionno2" id="exhibitionno2">
+		<input type="hidden" name="galleryno2" id="galleryno2">
 	</form>
 		
 		</div>

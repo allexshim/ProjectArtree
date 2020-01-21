@@ -7,7 +7,7 @@ public interface InterMemberDAO {
 
 	int joinInsert(MemberVO mvo); // 회원가입 insert
 
-	MemberVO getLoginMember(MemberVO mvo); // 로그인 처리
+	MemberVO getLoginMember(HashMap<String, String> paraMap); // 로그인 처리
 	
 	int infoUpdate(HashMap<String, String> paraMap); // member 테이블에 성별, 연령대, 지역 확정 update
 

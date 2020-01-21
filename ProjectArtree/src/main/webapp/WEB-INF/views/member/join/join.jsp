@@ -29,12 +29,6 @@ button {
 	outline: none;
 }
 
-/* 드래그 시 색상변경 */
-::selection {
-    background-color: #6e1fff;
-    color: #fff;
-}
-
 /* 회원가입 입력  */
 div#join_input {
 	border: solid 1px #b7b7b7;
@@ -258,6 +252,8 @@ span#allCheck_txt {
 <script type="text/javascript">
 	$(function() {
 		
+		console.log('${loginuser}');
+		
 		/* 로그인 제이쿼리 */
 		$(".layer").css("display", "none");
 		
@@ -325,9 +321,6 @@ span#allCheck_txt {
 		
 		}); // end of checkbox[class=agree_chx].click
 		
-		
-		
-		
 	}); // end of function()
 	
 	// 뒤로가기 막기
@@ -354,7 +347,7 @@ span#allCheck_txt {
 	// 회원가입	
 	function goRegister() {
 		
-		/* var email = document.getElementById("email");
+		var email = document.getElementById("email");
 		var email_bool = myEmailCheck(email.value);
 		
 		var pwd = document.getElementById("password");
@@ -375,7 +368,7 @@ span#allCheck_txt {
 			  alert("올바른 형식의 이메일을 입력하세요.");
 			  $("#email").val("").focus();
 			  return;
-		  } */
+		  } 
 		
 		  /*  else if (!idDuplicate) {
 			  alert("이미 사용중인 아이디입니다.");
@@ -383,7 +376,7 @@ span#allCheck_txt {
 			  return;
 		  }  */
 		  
-		  /*
+		  
 		  else if ( $("#name").val().trim() == "" ) {
 			  alert("이름을 입력해 주세요.");
 			  $("#name").focus();
@@ -430,8 +423,6 @@ span#allCheck_txt {
 			  return;
 		  } 
 		
-		*/
-		 
 		  var frm = document.joinForm;
 		  frm.method = "POST";
 		  frm.action = "<%= request.getContextPath()%>/joinInsert.at";
@@ -473,7 +464,8 @@ span#allCheck_txt {
 		}
 	}; 
 	
-	// 로그인 스크립트
+	// ============================ 로그인 스크립트 ============================
+	// 클릭하면 로그인 창 띄우기
 	function layer_open(el) {
 		$("."+el).css("display", "");
 		var temp = $('#' + el);
@@ -488,6 +480,26 @@ span#allCheck_txt {
 				e.preventDefault();
 			
 		});
+	}
+	
+	// 로그인 버튼 클릭하면 로그인
+	function goLogin() {
+		// 빈 칸 있는지 검사
+		if( $("#email_login").val().trim() == "" ) {
+			  alert("이메일을 입력해 주세요.");
+			  $("#email_login").focus();
+			  return;
+		  }
+		else if( $("#password_login").val().trim() == "" ) {
+			 alert("비밀번호를 입력해 주세요.");
+			 $("#password_login").focus();
+			 return;
+		}
+		
+		var frm = document.loginForm;
+		  frm.method = "POST";
+		  frm.action = "<%= request.getContextPath()%>/loginEnd.at";
+		  frm.submit();
 	}
 	
 </script>
@@ -632,6 +644,7 @@ span#allCheck_txt {
 		<%-- 로그인 버튼 --%>
 		<br/>
 		<a href="javascript:layer_open('layer')" id="login_main_btn" class="login_btn">로그인</a>
+		<input type="button" id="logout_btn" value="로그아웃" onClick="javascript:location.href='/artree/logout.at'"/>
 		</div>
 	
 	
@@ -650,10 +663,10 @@ span#allCheck_txt {
 				<input type="password" placeholder="비밀번호" name="password_login" id="password_login" class="login_input"/>
 				
 				<div class="login_find">
-					<a href="" class="find_btn">아이디 찾기&nbsp;&nbsp;|&nbsp;&nbsp;</a>
-					<a href="" class="find_btn">비밀번호 찾기</a>
+					<a href="/artree/idFind.at" class="find_btn">아이디 찾기&nbsp;&nbsp;|&nbsp;&nbsp;</a>
+					<a href="/artree/passwordFind" class="find_btn">비밀번호 찾기</a>
 				</div>
-				<input type="button" id="login_btn" value="로그인"/>
+				<input type="button" id="login_btn" value="로그인" onClick="goLogin()"/>
 			</div>
 			</form>
 		</div>

@@ -21,8 +21,8 @@ public class MemberDAO implements InterMemberDAO {
 	
 	// 로그인 처리
 	@Override
-	public MemberVO getLoginMember(MemberVO mvo) {
-		MemberVO loginuser = sqlsession.selectOne("member.getLoginMember", mvo);
+	public MemberVO getLoginMember(HashMap<String, String> paraMap) {
+		MemberVO loginuser = sqlsession.selectOne("member.getLoginMember", paraMap);
 		return loginuser;
 	}
 
