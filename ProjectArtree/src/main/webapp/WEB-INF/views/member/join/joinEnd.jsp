@@ -326,29 +326,21 @@ function confirm() {
 	  dataType:"JSON",
 	  success:function(json){
 		  var html = "";
-		  
-		  
-		  
-		  console.log(json.myFavorList.length());
-		  
+		  var data = json.myFavorList;
+
 		  $("#st1").css("display", "none");
 		  $("#st2").css("display", "");
 		  
-		 
-		  
-		  $.each(json, function(index){
-			  console.log(index);
+		  for(var i=0; i<data.length; i++) {
 			  html += "<div class='pickImg_wrap'>";
-			  html += "<img src='"+json.myFavorList[index]["image1"]+"'/>";
+			  html += "<img src='"+json.myFavorList[i]["image1"]+"'/>";
 			  html += "</div>";
 			  html += "<div class='pick_desc'>";
-			  html += "<span>"+json.myFavorList[index]["exhibitionname"]+"</span>";
-			  html += "<span>"+json.myFavorList[index]["author"]+"</span>";
+			  html += "<span>"+data[i]["exhibitionname"]+"</span>";
+			  html += "<span>"+data[i]["author"]+"</span>";
 			  html += "</div>";
-		  
+		  }
 		  $(".pick").html(html);
-		  
-		});
 	  },
 	  
 	  error: function(request, status, error){

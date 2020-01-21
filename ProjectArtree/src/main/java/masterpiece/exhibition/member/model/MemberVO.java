@@ -2,16 +2,16 @@ package masterpiece.exhibition.member.model;
 
 public class MemberVO {
 
-	private int idx;
+	private String idx;
 	private String email;
 	private String name;
 	private String password;
-	private int agegroup;
-	private int gender;
+	private String agegroup;
+	private String gender;
 	private String area;
 	private String hp;
 	
-	private int status; // 회원 탈퇴 유무   0: 사용불가(탈퇴) / 1: 사용가능 / 2: 관리자
+	private String status; // 회원 탈퇴 유무   0: 사용불가(탈퇴) / 1: 사용가능 / 2: 관리자
 	
 	private String registerday;
 	private String lastLoginDate; // 마지막으로 로그인 한 날짜시간 기록용
@@ -28,8 +28,8 @@ public class MemberVO {
 	
 	public MemberVO() {}
 
-	public MemberVO(int idx, String email, String name, String password, int agegroup, int gender, String area,
-			String hp, int status, String registerday, String lastLoginDate, String lastPasswordDate,
+	public MemberVO(String idx, String email, String name, String password, String agegroup, String gender, String area,
+			String hp, String status, String registerday, String lastLoginDate, String lastPasswordDate,
 			boolean requirePwdChange, boolean idleStatus, String clientIP) {
 		super();
 		this.idx = idx;
@@ -49,11 +49,11 @@ public class MemberVO {
 		this.clientIP = clientIP;
 	}
 
-	public int getIdx() {
+	public String getIdx() {
 		return idx;
 	}
 
-	public void setIdx(int idx) {
+	public void setIdx(String idx) {
 		this.idx = idx;
 	}
 
@@ -81,19 +81,19 @@ public class MemberVO {
 		this.password = password;
 	}
 
-	public int getAgegroup() {
+	public String getAgegroup() {
 		return agegroup;
 	}
 
-	public void setAgegroup(int agegroup) {
+	public void setAgegroup(String agegroup) {
 		this.agegroup = agegroup;
 	}
 
-	public int getGender() {
+	public String getGender() {
 		return gender;
 	}
 
-	public void setGender(int gender) {
+	public void setGender(String gender) {
 		this.gender = gender;
 	}
 
@@ -113,11 +113,11 @@ public class MemberVO {
 		this.hp = hp;
 	}
 
-	public int getStatus() {
+	public String getStatus() {
 		return status;
 	}
 
-	public void setStatus(int status) {
+	public void setStatus(String status) {
 		this.status = status;
 	}
 
@@ -167,6 +167,8 @@ public class MemberVO {
 
 	public void setClientIP(String clientIP) {
 		this.clientIP = clientIP;
-	};
+	}
+
+	
 
 }

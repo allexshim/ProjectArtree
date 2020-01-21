@@ -354,7 +354,7 @@ span#allCheck_txt {
 	// 회원가입	
 	function goRegister() {
 		
-		var email = document.getElementById("email");
+		/* var email = document.getElementById("email");
 		var email_bool = myEmailCheck(email.value);
 		
 		var pwd = document.getElementById("password");
@@ -375,12 +375,15 @@ span#allCheck_txt {
 			  alert("올바른 형식의 이메일을 입력하세요.");
 			  $("#email").val("").focus();
 			  return;
-		  }
+		  } */
+		
 		  /*  else if (!idDuplicate) {
 			  alert("이미 사용중인 아이디입니다.");
 			  $("#userid").val("").focus();
 			  return;
 		  }  */
+		  
+		  /*
 		  else if ( $("#name").val().trim() == "" ) {
 			  alert("이름을 입력해 주세요.");
 			  $("#name").focus();
@@ -426,10 +429,12 @@ span#allCheck_txt {
 			  alert("이용약관에 동의 하세요.");
 			  return;
 		  } 
+		
+		*/
 		 
 		  var frm = document.joinForm;
 		  frm.method = "POST";
-		  frm.action = "<%= request.getContextPath()%>/joinEnd.at";
+		  frm.action = "<%= request.getContextPath()%>/joinInsert.at";
 		  frm.submit();
 	}
 	
