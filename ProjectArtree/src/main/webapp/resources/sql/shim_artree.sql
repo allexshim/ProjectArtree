@@ -92,6 +92,19 @@ on V.exhibitionno = D.fk_exhibitionno;
 		on V.exhibitionno = D.fk_exhibitionno
         ) E join gallery G
         on E.fk_galleryno = G.galleryno;
+        
+        select * from gallery;
+        desc gallery;
+        
+        select detailAddress, exhibitionName, galleryName, startDate, endDate, mainPoster, exhibitionno
+        from (
+        select * from 
+        (select * from exhibition where status='전시중') E join exhibitionDetail D 
+        on E.exhibitionno = D.fk_exhibitionno
+        ) V
+		join (select * from gallery where status = 1) G
+		on V.fk_galleryNo = G.galleryNo
+		order by startdate;
 
 
 /*

@@ -17,7 +17,11 @@
 
 	<select id="getAllExhibition" resultMap="allMap">
 		select detailAddress, exhibitionName, galleryName, startDate, endDate, mainPoster, exhibitionno
-		from (select * from exhibition E join exhibitionDetail D on E.exhibitionno = D.fk_exhibitionno) V
+        from (
+        select * from 
+        (select * from exhibition where status='전시중') E join exhibitionDetail D 
+        on E.exhibitionno = D.fk_exhibitionno
+        ) V
 		join (select * from gallery where status = 1) G
 		on V.fk_galleryNo = G.galleryNo
 		order by startdate

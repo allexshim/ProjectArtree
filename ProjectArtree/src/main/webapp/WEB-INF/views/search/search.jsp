@@ -373,15 +373,14 @@
 <!-- services와 clusterer, drawing 라이브러리 불러오기 -->
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=9125653427d4cb8c3684192e44579a28&libraries=services,clusterer,drawing"></script>
 <script type="text/javascript">
+
 	//지역별로 리스트를 가져오는 함수
 	function getListByLocation(){
 		$("#date").css('display','none');
 		$("#theme").css('display','none');
 		$("#map").css('display','inline-block');
-		// ajax.........
-	
-	/* ----------------------- 카카오 지도 API -----------------------------*/	
-	////////////////////////////////////////////////////////////////////////////////
+		
+		/* ----------------------- 카카오 지도 API -----------------------------*/	
 		 var map = new kakao.maps.Map(document.getElementById('map'), { 
 			 // 지도를 표시할 div
 	       center : new kakao.maps.LatLng(36.2683, 127.6358), 
@@ -389,81 +388,93 @@
 	       level : 13 // 지도의 확대 레벨 
 	   });
 	   
-	   // 마커 클러스터러를 생성합니다 
-	   var clusterer = new kakao.maps.MarkerClusterer({
-	       map: map, // 마커들을 클러스터로 관리하고 표시할 지도 객체 
-	       averageCenter: true, // 클러스터에 포함된 마커들의 평균 위치를 클러스터 마커 위치로 설정 
-	       minLevel: 10 // 클러스터 할 최소 지도 레벨 
-	   });
-	   
-	   var coordsArr = {"positions":[]};
+		var clusterer = new kakao.maps.MarkerClusterer({
+		        map: map, // 마커들을 클러스터로 관리하고 표시할 지도 객체
+		        averageCenter: true, // 클러스터에 포함된 마커들의 평균 위치를 클러스터 마커 위치로 설정
+		        minLevel: 10, // 클러스터 할 최소 지도 레벨
+		        disableClickZoom: true // 클러스터 마커를 클릭했을 때 지도가 확대되지 않도록 설정한다
+		});
+		
+	   /*  var markers = []; */
 	   // 데이터를 가져오기 위해 jQuery를 사용합니다
 	   // ajax로 데이터를 가져옵니다.
+	   var coordsArr = new Array();
 	    $.ajax({ 
 	    	  url:"<%=request.getContextPath()%>/locationSearch.at",
 	          type:"GET",
+	          /* async:false, */
 	          dataType:"JSON",
 	          success: function(json) {
-	        	 // 주소-좌표 변환 객체를 생성합니다
-	        	 var geocoder = new kakao.maps.services.Geocoder();
-				 
-	        	  $.each(json, function(index, item){
-	        		  // console.log(item.detailAddress);
-	        		  
-	        		  // 주소로 좌표를 검색합니다
-		        	  geocoder.addressSearch(item.detailAddress, function(result, status) {
-		        	      // 정상적으로 검색이 완료됐으면 
-		        	       if (status === kakao.maps.services.Status.OK) {
-
-		        	          var na = new kakao.maps.LatLng(result[0].y, result[0].x);
-		        	          //console.log(na); // na {Ga: 128.6063345323323, Ha: 35.85594989300081}
-		        	       	  var coords = new Object();
-			        	      coords.lat = na.Ga;
-			        	      coords.lng = na.Ha;
-			        	      
-			        	      /* // 결과값으로 받은 위치를 마커로 표시합니다 (나중에 클러스터러 완성하면 삭제할 부분)
-			        	        var marker = new kakao.maps.Marker({
-			        	            map: map,
-			        	            position: na
-			        	        }); */
-			        	      
-		        	         //coordsArr.positions.push({"lat":na.Ga, "lng":na.Ha});   
-		        	          // console.log(coords);
-		        	          /* {"lat": 37.27943075229118,"lng": 127.01763998406159} */
-		        	          }
-			        	  }); 
-		        	  });  
-	        	   // 여기서 변환하고 json으로 출력하는 부분, 그리고 목록과 연동하는 부분 미완성
-	        	  	console.log(coordsArr);
-	        	  	var coordsJson = JSON.stringify(coordsArr);
-	    			//console.log(coordsJson); //--> 카카오 api에서 클러스터러를 사용하기 위해 요구하는 데이터 type
-	        	    
-		        	/* $.get(coordsJson, function(data) {
-		  	        // 데이터에서 좌표 값을 가지고 마커를 표시합니다
-		  	        // 마커 클러스터러로 관리할 마커 객체는 생성할 때 지도 객체를 설정하지 않습니다
-		  	        var markers = $(data.positions).map(function(i, position) {
-		  	            return new kakao.maps.Marker({
-		  	                position : new kakao.maps.LatLng(position.lat, position.lng)
-		  	            });
-		  	        });
-		  	
-	  		        // 클러스터러에 마커들을 추가합니다
-	  		        clusterer.addMarkers(markers);
-	  		 	 	}); */
-		        	
-	        	  },
+	        	// 주소-좌표 변환 객체를 생성합니다
+        	   	 var geocoder = new kakao.maps.services.Geocoder();
+        			 
+        	   	  $.each(json, function(index, item) {
+	       	   		  // console.log(item.detailAddress);
+	       	   		  
+	       	   		  // 주소로 좌표를 검색합니다
+	       	       	  geocoder.addressSearch(item.detailAddress, function(result, status) {
+	       	   	      // 정상적으로 검색이 완료됐으면 
+	       	   	       if (status === kakao.maps.services.Status.OK) {
+	
+	       	   	    	   var coord = new kakao.maps.LatLng(result[0].y, result[0].x);
+	
+	       	   	           // 결과값으로 받은 위치를 마커로 표시합니다
+	       	   	           var marker = new kakao.maps.Marker({
+	       	   	               map: map,
+	       	   	               position: coord
+	       	   	           });
+	       	   	  
+	       	   	          var coords = new Object();
+	       	       	      coords.lat = coord.Ha;
+	       	       	      coords.lng = coord.Ga; // {"lat":na.Ga, "lng":na.Ha}
+	
+	       	   	          coordsArr.push(coords);
+	       	   	          }
+        	       	  }); 		        	
+        	   	  }); // end of $.each --------------------------------------  
+        	   	  
+	        	   	window.setTimeout(function(){
+	        	   		console.log("~~~~ 원하는것. coordsArr.length => " + coordsArr.length);
+	        	   		
+	        	     	var data = {"coordsArr":JSON.stringify(coordsArr)};
+	        				
+	        				$.ajaxSettings.traditional = true;
+	        	     		$.ajax({ 
+	        	 	    	  url:"<%=request.getContextPath()%>/locationJSON.at",
+	        	 	          type:"GET",
+	        	 	          data : data,
+	        	 	          dataType:"json",
+	        	 	          success: function(data) {
+	        	 	        	  /* console.log(data); */
+	        	 	        	  // 데이터에서 좌표 값을 가지고 마커를 표시합니다
+	        	 	              // 마커 클러스터러로 관리할 마커 객체는 생성할 때 지도 객체를 설정하지 않습니다
+	        	 	              var markers = $(data.positions).map(function(i, position) {
+	        	 	                  return new kakao.maps.Marker({
+	        	 	                      position : new kakao.maps.LatLng(position.lat, position.lng)
+	        	 	                  });
+	        	 	              });
+	        						 /*  console.log(markers); */
+	        	 	              // 클러스터러에 마커들을 추가합니다
+	        	 	              clusterer.addMarkers(markers);
+	        	 	          },
+	        	 	          error: function(request, status, error){
+	        		               alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+	        		          }
+	        	     	  }); 
+	        	   	}, 5000);
+	         	 },
 	          error: function(request, status, error){
 	                alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
-	            }
-	       });
-	   
-	    	
-	}; //----------------------------------------end of searchbyLocation
-		
-		/* ----------------------- 카카오 지도 API -----------------------------*/
+	           }
+	       });	
 
-///////////////////////////////////////////////////////////////////////////////////////	
-		/* ----------- 테마별 word chart --------------------------------------------*/
+	    
+	}; //----------------------------------------end of searchbyLocation
+
+   	
+	/* ----------------------- 카카오 지도 API -----------------------------*/
+
+	/* ----------- 테마별 word chart --------------------------------------------*/
 			
 		// 테마별로 리스트를 가져오는 함수-------------------------------------------------------
 		function getListByAllTheme(){ 

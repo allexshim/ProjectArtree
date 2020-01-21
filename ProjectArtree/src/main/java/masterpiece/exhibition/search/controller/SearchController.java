@@ -10,8 +10,15 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
+
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import masterpiece.exhibition.search.service.InterSearchService;
 
@@ -40,17 +47,37 @@ public class SearchController {
 		
 		for(HashMap<String,String> single :exhibitionList) {
 			JSONObject jsobj = new JSONObject();
-     
-			// exhibitionList에 데이터가 저장은 다 되어있는데 지도 부분이 미완성이라 2개만 저장한 것
-			// 나중에 수정해야함!
+			//  detailAddress, exhibitionName, galleryName, startDate, endDate, mainPoster, exhibitionno
 			jsobj.put("detailAddress",single.get("detailAddress"));
 			jsobj.put("exhibitionName",single.get("exhibitionName"));
+			jsobj.put("galleryName",single.get("galleryName"));
+			jsobj.put("startdate",single.get("startdate"));
+			jsobj.put("enddate",single.get("enddate"));
+			jsobj.put("mainposter",single.get("mainposter"));
+			jsobj.put("exhibitionno",single.get("exhibitionno"));
 
 			jsarr.put(jsobj);
 		}
-		
 		return jsarr.toString();
 	} // end of locationSearch ---------------------------------------
+	
+	@ResponseBody
+	@RequestMapping(value="/locationJSON.at", produces="text/plain;charset=UTF-8")
+//	public String locationJSON(HttpServletRequest request, @RequestParam(value="coordsArr[]") String[] coordsArr) {
+	public String locationJSON(HttpServletRequest request) {	
+		
+		String str_coordsArr = request.getParameter("coordsArr");
+		
+		JSONObject jsobj = new JSONObject();
+		jsobj.put("positions", str_coordsArr);
+		
+		System.out.println("~~~~~~~ jsobj.toString() : " + jsobj.toString());
+		
+		return jsobj.toString();
+		
+	} // end of locationJSON ---------------------------------------
+	
+	
 	
 	// 해당 월에 열리는 전시회 목록을 가져온다.
 	@ResponseBody
