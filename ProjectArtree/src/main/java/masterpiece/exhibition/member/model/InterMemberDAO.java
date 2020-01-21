@@ -17,6 +17,8 @@ public interface InterMemberDAO {
 
 	List<HashMap<String, String>> myFavorDesc(HashMap<String, String> paraMap); // 작품 이름, 작가, 작품이미지 select
 
+	String duplicateCheck(String email); // 사용중인 이메일 체크
+
 	
 
 }

@@ -10,6 +10,13 @@
       values(seq_member.nextval, #{email}, #{name}, #{password}, #{agegroup}, #{gender}, #{area}, #{hp}, default, default, default, default, #{clientIP})
     </insert>
    
+    <!-- 이메일 중복 체크 -->
+    <select id="duplicateCheck" parameterType="String" resultType="String">
+    	select email
+    	from member
+    	where email = #{email}
+    </select>
+    
     <!-- 로그인 처리 -->
     <select id="getLoginMember" parameterType="HashMap" resultType="masterpiece.exhibition.member.model.MemberVO">
       select idx, email, name, gender, agegroup, area

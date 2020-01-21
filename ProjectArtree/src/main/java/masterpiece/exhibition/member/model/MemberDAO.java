@@ -13,10 +13,18 @@ public class MemberDAO implements InterMemberDAO {
 	@Autowired  
 	private SqlSessionTemplate sqlsession;
 
+	// 회원가입 insert
 	@Override
 	public int joinInsert(MemberVO mvo) {
 		int n = sqlsession.insert("member.joinInsert", mvo);
 		return n;
+	}
+	
+	// 사용중인 이메일 체크
+	@Override
+	public String duplicateCheck(String email) {
+		String result = sqlsession.selectOne("member.duplicateCheck", email);
+		return result;
 	}
 	
 	// 로그인 처리
@@ -56,6 +64,8 @@ public class MemberDAO implements InterMemberDAO {
 		return myFavorList;
 	}
 	// ==================== 회원가입 완료 후 작품설정 끝 ==================== //
+
+
 
 	
 	

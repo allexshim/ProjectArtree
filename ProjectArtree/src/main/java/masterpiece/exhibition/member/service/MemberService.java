@@ -25,6 +25,21 @@ public class MemberService implements InterMemberService {
 		return n;
 	}
 	
+	// 사용중인 이메일 체크
+	@Override
+	public boolean duplicateCheck(String email) {
+		
+		boolean isExistEmail = false;
+		
+		String result = dao.duplicateCheck(email);
+		
+		if(result != null) {
+			isExistEmail = true;
+		}
+		
+		return isExistEmail;
+	}
+	
 	// 로그인 처리
 	@Override
 	public MemberVO getLoginMember(HashMap<String, String> paraMap) {
@@ -75,5 +90,7 @@ public class MemberService implements InterMemberService {
 		
 		return myFavorList;
 	}
+
+
 
 }

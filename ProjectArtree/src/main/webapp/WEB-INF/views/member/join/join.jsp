@@ -321,6 +321,28 @@ span#allCheck_txt {
 		
 		}); // end of checkbox[class=agree_chx].click
 		
+		// email 중복 확인
+		$("#email").keyup(function() {
+			var email = $("#email").val().trim();
+			
+			$.ajax({
+				url:"<%= request.getContextPath()%>/duplicateCheck.at",  
+				data: {"email" : email},
+				dataType:"json",
+				success: function(json) {  
+					
+					$("#error").css("display","");
+					$("#error").children("span").html(json.msg);
+					
+					$("#duplicate").val(json.bool);
+					
+				},
+				error: function(request, status, error){
+					alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+				}
+			});
+		});
+		
 	}); // end of function()
 	
 	// 뒤로가기 막기
@@ -358,25 +380,24 @@ span#allCheck_txt {
 		
 		var hp = document.getElementById("hp");
 		var hp_bool = myHpCheck(hp.value);
-		  
+		
+		var duplicate = document.getElementById("duplicate");
+		
 		if( $("#email").val().trim() == "" ) {
 			  alert("이메일을 입력해 주세요.");
 			  $("#email").focus();
 			  return;
 		  }
-		  else if (!email_bool) {
+		 else if (!email_bool) {
 			  alert("올바른 형식의 이메일을 입력하세요.");
 			  $("#email").val("").focus();
 			  return;
-		  } 
-		
-		  /*  else if (!idDuplicate) {
-			  alert("이미 사용중인 아이디입니다.");
-			  $("#userid").val("").focus();
+		  } 	
+		 else if (duplicate) {
+			  alert("이미 사용중인 이메일입니다.");
+			  $("#email").val("").focus();
 			  return;
-		  }  */
-		  
-		  
+		 } 
 		  else if ( $("#name").val().trim() == "" ) {
 			  alert("이름을 입력해 주세요.");
 			  $("#name").focus();
@@ -515,6 +536,12 @@ span#allCheck_txt {
 				<tr>
 					<td>
 						<input type="text" placeholder="이메일" name="email" id="email" />
+					</td>
+				</tr>
+				<tr>
+					<td class="error" id="error" style="border: none; padding-top: 5px; text-align: right; color: gray; display: none;">
+						<span ></span>
+						<input type="hidden" id="duplicate"/>
 					</td>
 				</tr>
 				<tr>

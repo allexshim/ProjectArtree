@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -107,6 +108,31 @@ public class MemberController {
 		
 		return mav;
 	} // end of joinInsert --------------------------------------------
+	
+	@ResponseBody
+	@RequestMapping(value="/duplicateCheck.at", method= {RequestMethod.GET}, produces="text/plain;charset=UTF-8")
+	public String duplicateCheck(HttpServletRequest request) {
+
+		String email = request.getParameter("email");
+		boolean isExistEmail;
+		
+		JSONObject jsonObj = new JSONObject();
+		
+		isExistEmail = service.duplicateCheck(email);
+			
+		if (isExistEmail) {
+			jsonObj.put("msg", "이미 사용중인 이메일입니다.");
+			jsonObj.put("bool", "true");
+		}
+		else if (!isExistEmail)  {
+			jsonObj.put("msg", "사용 가능한 이메일입니다.");
+			jsonObj.put("bool", "false");
+		}
+
+		String result = jsonObj.toString(); 
+		
+		return result;
+	} // end of duplicateCheck --------------------------------------------
 	
 	@RequestMapping(value="/joinEnd.at")
 	public ModelAndView joinEnd(HttpServletRequest request, ModelAndView mav, MemberVO mvo) {
@@ -234,7 +260,6 @@ public class MemberController {
 		return mav;
 	} // end of loginEnd --------------------------------------------
 	
-	// === #50. 로그아웃 ===
 	@RequestMapping(value="logout.at")
 	public ModelAndView logout(HttpServletRequest request, ModelAndView mav) {
 		HttpSession session = request.getSession();
@@ -248,8 +273,9 @@ public class MemberController {
 	    
 		mav.setViewName("msg");
 		return mav;
-	}
-	
+	} // end of logout --------------------------------------------
+
+
 	@RequestMapping(value="/idFind.at")
 	public String idFind(HttpServletRequest request) {
 		
