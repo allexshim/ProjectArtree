@@ -19,6 +19,12 @@ public interface InterMemberDAO {
 
 	String duplicateCheck(String email); // 사용중인 이메일 체크
 
+	String idFind(HashMap<String, String> paraMap); // 이메일 찾기
+
+	String findUser(HashMap<String, String> paraMap); // 비밀번호 찾기 - 입력한 name, email, hp에 맞는 사용자가 있는지 확인
+
+	int updatePwd(HashMap<String, String> updateMap); // 임시 비밀번호로 현재 비밀번호 변경
+
 	
 
 }

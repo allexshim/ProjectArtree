@@ -109,7 +109,6 @@ create table test_member
 -- Table TEST_MEMBER이(가) 생성되었습니다.
 
 
-
 create sequence test_seq_member
 start with 1
 increment by 1
@@ -126,20 +125,10 @@ select *
 from test_member;
 
 
-
-insert all
-into test_wishList(wishNo, fk_idx, fk_galleryNo, fk_exhibitionNo, favorTag, favorGenre) 
-values(1, 13, '864', '1506', '사진', '초록,부조')
-into test_wishList(wishNO, fk_idx, fk_galleryNo, fk_exhibitionNo, favorTag, favorGenre) 
-values(2, 13, '864', '1506', '사진', '초록,부조')
-select *
-from dual;
-
 select *
 from test_wishList;
 
 delete from test_wishList purge;
-
 
 delete from test_member purge;
 commit;
@@ -154,6 +143,7 @@ drop sequence test_seq_member;
 
 select *
 from tabs;
+
 
 select *
 from gallery;
@@ -217,3 +207,31 @@ BEGIN
 
 END;
 
+CREATE FUNCTION get_wishno RETURN NUMBER IS
+
+BEGIN
+
+     RETURN seq_wishList_wishNo.nextval;
+
+END;
+
+drop function get_wishno;
+
+
+      
+SELECT A.uniqueness,
+       b.*
+  FROM ALL_INDEXES a,
+       ALL_IND_COLUMNS b
+ WHERE a.index_name = b.index_name
+   AND a.table_name=upper('gallery');
+
+SELECT * FROM USER_INDEXES where status='UNUSABLE';
+
+select *
+from member;
+
+
+
+select *
+from seq;

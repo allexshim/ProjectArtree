@@ -64,11 +64,31 @@
 	 	<result property="image1" 			column="image1" 		javaType="String"/>
    </resultMap>
    
+   <!-- 사용중인 이메일 체크 -->
    <select id="myFavorDesc" parameterType="HashMap" resultMap="favorDescMap">
    	  select E.exhibitionname, E.author, D.image1
 	  from exhibition E join exhibitiondetail D
 	  on E.exhibitionno = D.fk_exhibitionno
 	  where E.exhibitionno = #{exhibitionno1} or E.exhibitionno = #{exhibitionno2}
    </select>
+   
+   <!-- 이메일 찾기 -->
+   <select id="idFind" parameterType="HashMap" resultType="String">
+   	  select email
+   	  from member
+   	  where name=#{name} and hp=#{hp} and gender=#{gender} and agegroup=#{agegroup} and area=#{area}
+   </select>
+   
+   <!-- 비밀번호 찾기 - 입력한 name, email, hp에 맞는 사용자가 있는지 확인 -->
+   <select id="findUser" parameterType="HashMap" resultType="String">
+   	  select email, name
+   	  from member
+   	  where name=#{name} and email=#{email} and hp=#{hp}
+   </select>
+   
+   <!-- 임시 비밀번호로 현재 비밀번호 변경 -->
+   <update id="updatePwd" parameterType="HashMap">
+   	  update member set password=#{tempPassword} where email=#{email}
+   </update>
    
 </mapper>

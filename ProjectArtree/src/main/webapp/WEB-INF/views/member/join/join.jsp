@@ -252,8 +252,6 @@ span#allCheck_txt {
 <script type="text/javascript">
 	$(function() {
 		
-		console.log('${loginuser}');
-		
 		/* 로그인 제이쿼리 */
 		$(".layer").css("display", "none");
 		
@@ -346,11 +344,11 @@ span#allCheck_txt {
 	}); // end of function()
 	
 	// 뒤로가기 막기
-	window.history.forward();
+	/* window.history.forward();
 
 	function noBack() {
 		window.history.forward();
-	}
+	} */
 	
 	// 성별 선택하면 border 변경
 	function gender_chg(g) {
@@ -525,7 +523,7 @@ span#allCheck_txt {
 	
 </script>
 
-<body onload="noBack();" onpageshow="if(event.persisted) noBack();" onunload="">
+<body>
 	<div id="container_join" align="center">
 		<div id="join_input">
 			<div id="join_txt">

@@ -2,8 +2,10 @@ package masterpiece.exhibition.member.controller;
 
 import java.io.UnsupportedEncodingException;
 import java.security.GeneralSecurityException;
+import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Random;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -20,6 +22,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import masterpiece.exhibition.common.AES256;
 import masterpiece.exhibition.common.SHA256;
+import masterpiece.exhibition.mail.GoogleMail;
 import masterpiece.exhibition.member.model.MemberVO;
 import masterpiece.exhibition.member.service.InterMemberService;
 
@@ -34,77 +37,95 @@ public class MemberController {
 	@Autowired   
 	private AES256 aes;
 	
+	@Autowired
+	private GoogleMail mail;
+	
 	@RequestMapping(value="/join.at")
 	public String join(HttpServletRequest request, ModelAndView mav) {
 		return "member/join/join.tiles";
 		
 	} // end of join --------------------------------------------
 	
-	@RequestMapping(value="/joinInsert.at")
+	@RequestMapping(value="/joinInsert.at", method= {RequestMethod.POST})
 	public ModelAndView joinInsert(HttpServletRequest request, ModelAndView mav) {
 		
-		/////////////////// 회원가입 ////////////////////
-		String email = request.getParameter("email");
-		String name = request.getParameter("name");
-		String password = request.getParameter("password");
-		String agegroup = request.getParameter("agegroup");
-		String gender = request.getParameter("gender");
-		String area = request.getParameter("area");
-		String hp = request.getParameter("hp");
+		// POST로 접근했을 때만 허용
+		if("POST".equals(request.getMethod())) {
 		
-		// 클라이언트의 IP 주소 알아오기
-		String clientIP = request.getRemoteAddr();
-		
-		MemberVO mvo = new MemberVO();
-		mvo.setEmail(email);
-		mvo.setName(name);
-		mvo.setPassword(SHA256.encrypt(password));
-		mvo.setAgegroup(agegroup);
-		mvo.setGender(gender);
-		mvo.setArea(area);
-		
-		try {
-			mvo.setHp(aes.encrypt(hp));
-		} catch (UnsupportedEncodingException | GeneralSecurityException e) {
-			e.printStackTrace();
-		}
-		
-		mvo.setClientIP(clientIP);
-		
-		// 데이터베이스에 회원가입 데이터 insert
-		int n = service.joinInsert(mvo);
-		
-		if(n==1) {
+			/////////////////// 회원가입 ////////////////////
+			String email = request.getParameter("email");
+			String name = request.getParameter("name");
+			String password = request.getParameter("password");
+			String agegroup = request.getParameter("agegroup");
+			String gender = request.getParameter("gender");
+			String area = request.getParameter("area");
+			String hp = request.getParameter("hp");
 			
-			HashMap<String, String> paraMap = new HashMap<String, String>();
-			paraMap.put("email", email);
-			paraMap.put("password", SHA256.encrypt(password));
+			// 클라이언트의 IP 주소 알아오기
+			String clientIP = request.getRemoteAddr();
 			
-			MemberVO loginuser = service.getLoginMember(paraMap);
+			MemberVO mvo = new MemberVO();
+			mvo.setEmail(email);
+			mvo.setName(name);
+			mvo.setPassword(SHA256.encrypt(password));
+			mvo.setAgegroup(agegroup);
+			mvo.setGender(gender);
+			mvo.setArea(area);
 			
-			System.out.println("loginuser : "+loginuser);
+			try {
+				mvo.setHp(aes.encrypt(hp));
+			} catch (UnsupportedEncodingException | GeneralSecurityException e) {
+				e.printStackTrace();
+			}
 			
-			HttpSession session = request.getSession();
-			session.setAttribute("loginuser", loginuser);
+			mvo.setClientIP(clientIP);
 			
-			String msg = "회원가입 성공";
-			String loc = "/artree/joinEnd.at";
+			// 데이터베이스에 회원가입 데이터 insert
+			int n = service.joinInsert(mvo);
 			
-			mav.addObject("msg", msg);
-			mav.addObject("loc", loc);
+			if(n==1) {
+				
+				HashMap<String, String> paraMap = new HashMap<String, String>();
+				paraMap.put("email", email);
+				paraMap.put("password", SHA256.encrypt(password));
+				
+				MemberVO loginuser = service.getLoginMember(paraMap);
+				
+				System.out.println("loginuser : "+loginuser);
+				
+				HttpSession session = request.getSession();
+				session.setAttribute("loginuser", loginuser);
+				
+				String msg = "회원가입 성공";
+				String loc = "/artree/joinEnd.at";
+				
+				mav.addObject("msg", msg);
+				mav.addObject("loc", loc);
+				
+				mav.setViewName("msg");
+			}
 			
-			mav.setViewName("msg");
-		}
+			else {
+				String msg = "회원가입 실패";
+				String loc = "javascript:history.back()";
+				
+				mav.addObject("msg", msg);
+				mav.addObject("loc", loc);
+				
+				mav.setViewName("msg");
+			}
+			
+		} // end of if(post)
 		
 		else {
-			String msg = "회원가입 실패";
+			String msg = "비정상적인 경로로 접근하였습니다.";
 			String loc = "javascript:history.back()";
 			
 			mav.addObject("msg", msg);
 			mav.addObject("loc", loc);
 			
 			mav.setViewName("msg");
-		}	
+		}
 		
 		return mav;
 	} // end of joinInsert --------------------------------------------
@@ -144,7 +165,7 @@ public class MemberController {
 	} // end of joinEnd --------------------------------------------
 	
 	@ResponseBody
-	@RequestMapping(value="/joinEndInsert.at")
+	@RequestMapping(value="/joinEndInsert.at", method= {RequestMethod.POST})
 	public ModelAndView joinEndInsert(HttpServletRequest request, ModelAndView mav, MemberVO mvo) {
 		
 		String finalGender = request.getParameter("finalGender");
@@ -175,10 +196,9 @@ public class MemberController {
 		
 		return mav;
 		
-	} // end of joinEnd --------------------------------------------
+	} // end of joinEndInsert --------------------------------------------
 	
-	@ResponseBody
-	@RequestMapping(value="/loginEnd.at")
+	@RequestMapping(value="/loginEnd.at", method= {RequestMethod.POST})
 	public ModelAndView loginEnd(HttpServletRequest request, ModelAndView mav) {
 		
 		String email = request.getParameter("email_login");
@@ -282,16 +302,119 @@ public class MemberController {
 		return "member/login/idFind.tiles";
 	} // end of idFind --------------------------------------------
 	
-	@RequestMapping(value="/idFindEnd.at")
+	@RequestMapping(value="/idFindEnd.at", method= {RequestMethod.POST})
 	public String idFindEnd(HttpServletRequest request) {
 		
+		String name = request.getParameter("name");
+		String hp = request.getParameter("hp");
+		String gender = request.getParameter("gender");
+		String agegroup = request.getParameter("agegroup");
+		String area = request.getParameter("area");
+		
+		HashMap<String, String> paraMap = new HashMap<String, String>();
+		paraMap.put("name", name);
+		try {
+			paraMap.put("hp", aes.encrypt(hp));
+		} catch (UnsupportedEncodingException | GeneralSecurityException e) {
+			e.printStackTrace();
+		}
+		paraMap.put("gender", gender);
+		paraMap.put("agegroup", agegroup);
+		paraMap.put("area", area);
+		
+		// 이메일 찾기
+		String email = service.idFind(paraMap);
+		
+		request.setAttribute("email", email);
+		
 		return "member/login/idFindEnd.tiles";
-	} // end of idFind --------------------------------------------
+	} // end of idFindEnd --------------------------------------------
 	
 	@RequestMapping(value="/passwordFind.at")
 	public String passwordFind(HttpServletRequest request) {
 		
 		return "member/login/passwordFind.tiles";
+	} // end of passwordFind --------------------------------------------
+	
+	@ResponseBody
+	@RequestMapping(value="/passwordFindEnd.at", method= {RequestMethod.POST})
+	public ModelAndView passwordFindEnd(HttpServletRequest request, ModelAndView mav) {
+		
+		String name = request.getParameter("name");
+		String email = request.getParameter("email");
+		String hp = request.getParameter("hp");
+		
+		HashMap<String, String> paraMap = new HashMap<String, String>();
+		paraMap.put("name", name);
+		paraMap.put("email", email);
+		try {
+			paraMap.put("hp", aes.encrypt(hp));
+		} catch (UnsupportedEncodingException | GeneralSecurityException e) {
+			e.printStackTrace();
+		}
+		
+		// 입력한 name, email, hp에 맞는 사용자가 있는지 확인
+		String isExist = service.findUser(paraMap);
+		
+		int n = 1;
+		if(isExist != null) {
+			// 입력한 정보에 맞는 사용자가 있을 때 입력한 이메일로 임시 비밀번호를 메일을 보낸다.
+			
+			// 임시 비밀번호를 랜덤하게 생성
+			Random rnd = new Random();
+			
+			String tempPassword = "";  // 특수문자, 영문 대문자, 영문 소문자, 숫자 랜덤인 14글자 생성
+			
+			for (int i = 0; i < 14; i++) {
+			    int rIndex = rnd.nextInt(4);
+			    switch (rIndex) {
+			    case 0:
+			        // a-z
+			    	tempPassword += (char) ((int) (rnd.nextInt(26)) + 97);
+			        break;
+			    case 1:
+			        // A-Z
+			    	tempPassword += (char) ((int) (rnd.nextInt(26)) + 65);
+			        break;
+			    case 2:
+			        // 0-9
+			    	tempPassword += ((rnd.nextInt(10)));
+			        break;
+			    case 3:
+			    	// 특수문자
+			    	tempPassword += (char) ((int) (rnd.nextInt(6)) + 33);
+			    	break;
+			    }
+			}
+			
+
+			// 랜덤하게 생성한 임시 비밀번호를 비밀번호를 찾고자 하는 사용자의 email 로 전송시킨다.
+			try {
+				// 임시 비밀번호를 사용자가 입력한 email 주소로 전송
+				mail.sendmail(email, tempPassword);
+
+				HashMap<String, String> updateMap = new HashMap<String, String>();
+				updateMap.put("email", email);
+				updateMap.put("tempPassword", SHA256.encrypt(tempPassword));
+				
+				// 임시 비밀번호로 현재 비밀번호 변경
+		    	n = service.updatePwd(updateMap);
+		    	
+			} catch (Exception e) {
+				e.printStackTrace();
+				n = -1; // 메일 발송이 실패했을 때 : n이 1에서 -로 바뀐다.
+			}
+		}
+		
+		else {
+			// 입력한 정보에 맞는 사용자가 없을 때
+			n = -9999;
+		}
+		
+		mav.addObject("n", n);
+		mav.setViewName("jsonView");
+		
+		return mav;
 	} // end of passwordFind --------------------------------------------
 	
 	@RequestMapping(value="/mypage.at")

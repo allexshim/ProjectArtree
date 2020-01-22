@@ -20,10 +20,14 @@
 		margin: 0 auto;
 		text-align: center;
 		border: 1px solid #dcdcdc;
-		height: 450px;
+		height: 470px;
 		border-radius: 10px;
 		margin-top: 185px;
 		margin-bottom: 56px;
+	}
+	
+	div.pwdFind_container h2 {
+		margin-top: 65px;
 	}
 	
 	div.pwdFind_wrap {
@@ -31,25 +35,11 @@
 		margin: 0 auto;
 	}
 	
-	/* 성함 */
-	div.input_name {
-		border-bottom: 1px solid #DDD;
-		margin: 0 auto;
-		margin-top: 63px;
-	}
-	
-	input#find_name {
-		border: none;
-		width: 95%;
-		padding: 8px;
-		font-size: 14px;
-	}
-	
 	/* 이메일 */
 	div.input_email {
 		border-bottom: 1px solid #DDD;
 		margin: 0 auto;
-		margin-top: 32px;
+		margin-top: 50px;
 	}
 	
 	input#find_email {
@@ -59,14 +49,37 @@
 		font-size: 14px;
 	}
 	
-	/* 확인 버튼 */
-	div.btn_div {
-		width: 500px;
+	/* 성함 */
+	div.input_name {
+
+		border-bottom: 1px solid #DDD;
 		margin: 0 auto;
-		margin-top: 36px;
-		text-align: center;
+		margin-top: 20px;
 	}
 	
+	input#find_name {
+		border: none;
+		width: 95%;
+		padding: 8px;
+		font-size: 14px;
+	}
+	
+	/* 전화번호 */
+	div.input_hp {
+		border-bottom: 1px solid #DDD;
+		margin: 0 auto;
+		margin-top: 20px;
+		margin-bottom: 40px;
+	}
+	
+	input#find_hp {
+		border: none;
+		width: 95%;
+		padding: 8px;
+		font-size: 14px;
+	}
+	
+	/* 확인버튼 */
 	button.submit_btn {
 		background: #000;
 		width: 250px;
@@ -142,7 +155,51 @@
 	});
 	
 	function find_pw() {
-		layer_open('pw_layer');
+		
+		if($("#find_name").val().trim() == "") {
+			alert("성함을 입력해 주세요.");
+			$("#find_name").focus();
+			return;
+		}
+		else if($("#find_email").val().trim() == "") {
+			alert("이메일을 입력해 주세요.");
+			$("#find_email").focus();
+			return;
+		}
+		
+		var name = $("#find_name").val();
+		var email = $("#find_email").val();
+		var hp = $("#find_hp").val();
+		   
+	    $.ajax({
+		  url:"<%= request.getContextPath()%>/passwordFindEnd.at",
+		  data:{"name":name,
+			    "email":email,
+			    "hp":hp},
+		  type:"POST",
+		  dataType:"JSON",
+		  success:function(json){
+			  
+			  layer_open('pw_layer');
+			  
+			  if(json.n == 1) {
+				  // 메일 전송과 임시 비밀번호로 업데이트 성공
+				  $("#updateMsg").html("해당 메일로 임시 비밀번호가 전송되었습니다.");
+			  }
+			  if(json.n == -1) {
+				  $("#updateMsg").html("해당 메일로 임시 비밀번호 전송이 실패했습니다. 관리자에게 문의해 주세요.");
+			  }
+			  else {
+				  $("#updateMsg").html("입력하신 정보로 가입된 회원은 존재하지 않습니다.");
+			  }
+		  },
+		  
+		  error: function(request, status, error){
+				alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+		  }
+
+	   }); // end of ajax
+
 	}
 	
 	function layer_open(el) {
@@ -152,16 +209,6 @@
 		if(bg){
 			$('.'+el).fadeIn(); 
 		} 
-		/* temp.find('a.cbtn').click(function(e){
-			if(bg){
-				$('.'+el).fadeOut(); //'bg' 클래스가 존재하면 레이어를 사라지게 한다. 
-			}else{
-				temp.fadeOut();
-				$("#akeyword").val("");
-				$("#add_keyword").val("");
-			}
-			e.preventDefault();
-		}); */
 		$('.'+el+' .bg').click(function(e){	//배경을 클릭하면 레이어를 사라지게 하는 이벤트 핸들러
 			
 				$('.'+el).fadeOut();
@@ -177,12 +224,17 @@
 		<span>회원가입 시 가입한 항목을 입력해 주세요.</span>
 	
 		<div class="pwdFind_wrap">
-			<div class="input_name">
-				<input type="text" id="find_name" name="find_name" placeholder="성함"/>
-			</div>
+		<form name="pwdFindForm" id="pwdFindForm">
 			<div class="input_email">
 				<input type="text" id="find_email" name="find_email" placeholder="이메일"/>
 			</div>
+			<div class="input_name">
+				<input type="text" id="find_name" name="find_name" placeholder="성함"/>
+			</div>
+			<div class="input_hp">
+				<input type="text" id="find_hp" name="find_hp" placeholder="전화번호"/>
+			</div>
+		</form>
 		</div>
 		<div class="btn_div">
 			<button type="button" class="submit_btn" onClick="find_pw();">확인</button>
@@ -195,9 +247,9 @@
 		<div id="pw_layer" class="pop">
 			<div class="pop-container">
 				<div class="pop-conts">
-					<span>해당 메일로 비밀번호 변경 링크가 전송되었습니다.</span>
+					<span id="updateMsg"></span>
 					<div class="pop_btn">
-						<button type="button" class="btn_submit" id="pw_layer_btn" onClick="$('.pw_layer').fadeOut();">확인</button>
+						<button type="button" class="chgPwd_btn" id="pw_layer_btn" onClick="$('.pw_layer').fadeOut();">확인</button>
 					</div>
 				</div>
 			</div>

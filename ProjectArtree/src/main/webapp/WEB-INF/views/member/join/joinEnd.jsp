@@ -319,7 +319,7 @@ function confirm() {
 	}
 	
 	if(!(exhibitionno1 || galleryno1 || exhibitionno2 || galleryno2)) {
-		alert("작품을 선택해 주세요!sdfsdf");
+		alert("작품을 선택해 주세요!");
 		return false;
 	}
 
