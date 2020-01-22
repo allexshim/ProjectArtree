@@ -31,8 +31,6 @@
 		<constructor-arg index="0" ref="sqlSessionFactory" />
 	</bean>
 	
-
-	
 	<!-- ====  트랜잭션 처리를 위해서 아래와 같이 트랜잭션매니저 객체를 bean 으로 등록하고 등록된 bean이 트랜잭션 처리를 어노테이션으로 한다라고 설정한다. ==== 
 	           Maven Dependencies\spring-jdbc-4.3.4.RELEASE.jar 에 들어있음 -->
 	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
