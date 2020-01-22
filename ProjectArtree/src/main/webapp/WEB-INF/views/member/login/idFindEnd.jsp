@@ -29,12 +29,6 @@
 		margin: 0 auto;
 	}
 	
-	/* 드래그 시 색상변경 */
-	::selection {
-	    background-color: #6e1fff;
-	    color: #fff;
-	}
-	
 	/* h2 */
 	div.idFind_container h2 {
 		font-size: 35px;
@@ -51,7 +45,7 @@
 	}
 	
 	/* 로그인 버튼 */
-	button#login_btn {
+	button#login_find_btn {
 		background: #000;
 		width: 250px;
 		margin-top: 38px;
@@ -74,8 +68,8 @@
 <body>
 	<body>
 	<div class="idFind_container">
-		<h2>아이디 찾기</h2>
-		<span>회원님의 아이디는 <b>[이메일이메일@이메일이메일.이메일]</b>입니다.</span>
+		<h2>이메일 찾기</h2>
+		<span>회원님의 이메일은 <b>${email}</b>입니다.</span>
 		
 		<button type="button" id="login_find_btn" class="login_btn" onClick="javascript:layer_open()">로그인</button>
 	</div>

@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <%
 	String ctxPath = request.getContextPath();
@@ -31,10 +32,11 @@
 		float: right; 
 		width: 50%; 
 		text-align: center; 
-		padding: 8% 5% 0 5%;
+		padding: 5%;
+		height: 100%;
 	}
 	
-	#container_exh_detail .info_title {
+	#container_exh_detail .bigSpan {
 		display: block; 
 		font-size: 25pt; 
 		font-weight: bold;
@@ -90,12 +92,6 @@
 		padding: 5%; 
 		font-size: 13pt;
 	}
-
-	#container_exh_detail .btmInfo_time_noti {
-		display: block; 
-		font-size: 12pt; 
-		color: #b3b3b3;
-	}
 	
 	#container_exh_detail .btn1 {
 		position: relative;
@@ -104,7 +100,7 @@
 		background-color: #f2f2f2;
 		border: none;
 		border-radius: 2px;
-		padding: 5px 25px 0px 25px;
+		padding: 5px 10px 0 27px;
 	}
 
 	#container_exh_detail .buyBtn {
@@ -707,7 +703,7 @@
 			var geocoder = new kakao.maps.services.Geocoder();
 			
 			// 주소로 좌표를 검색합니다
-			geocoder.addressSearch('서울 마포구 연남동 566-55', function(result, status) {
+			geocoder.addressSearch('${exhDetailMap.DETAILADDRESS}', function(result, status) {
 
 			    // 정상적으로 검색이 완료됐으면 
 			     if (status === kakao.maps.services.Status.OK) {
@@ -741,8 +737,8 @@
 
 				// 커스텀 오버레이에 표출될 내용으로 HTML 문자열이나 document element가 가능합니다
 				var content = '<div class="customoverlay">' +
-				    '  <a href="https://map.kakao.com/link/search/서울 마포구 연남동 566-55" target="_blank">' +
-				    '    <span class="title">챕터투</span>' +
+				    '  <a href="https://map.kakao.com/link/search/${exhDetailMap.DETAILADDRESS}" target="_blank">' +
+				    '    <span class="title">${exhDetailMap.GALLERYNAME}</span>' +
 				    '  </a>' +
 				    '</div>';
 
@@ -769,29 +765,29 @@
 		
 	});
 
-	function share(sns){
+	function share(sns, eno){
 		
-		var title = "전시회 제목 - ARTREE";	
+		var title = "${exhDetailMap.EXHIBITIONNAME} - ARTREE";	
 			
 		if(sns == 'mail'){
-			window.open('mailto:?subject=sub&body=http://art-map.co.kr/exhibition/view.php?idx=5119');
+			window.open('mailto:?subject=sub&body=http://art-map.co.kr/exhibition/view.php?eno='+eno);
 		}
 		else if(sns == 'kakao'){
-			window.open('https://story.kakao.com/share?url=http://art-map.co.kr/exhibition/view.php?idx=5119'); 
+			window.open('https://story.kakao.com/share?url=http://art-map.co.kr/exhibition/view.php?eno='+eno); 
 		}
 		else if(sns == 'twitter'){
-			window.open('https://twitter.com/intent/tweet?text=TEXT&url=http://art-map.co.kr/exhibition/view.php?idx=5119');			
+			window.open('https://twitter.com/intent/tweet?text=TEXT&url=http://art-map.co.kr/exhibition/view.php?eno='+eno);			
 		}
 		else if(sns == 'facebook'){
-			window.open('http://www.facebook.com/sharer/sharer.php?u=http://art-map.co.kr/exhibition/view.php?idx=5119');
+			window.open('http://www.facebook.com/sharer/sharer.php?u=http://art-map.co.kr/exhibition/view.php?eno='+eno);
 		}
 		else if(sns == 'url'){
 			var IE=(document.all)?true:false;
 			if (IE) {
 			if(confirm("주소를 복사하시겠습니까?"))
-				window.clipboardData.setData("Text", 'http://art-map.co.kr/exhibition/view.php?idx=5119');
+				window.clipboardData.setData("Text", 'http://art-map.co.kr/exhibition/view.php?eno='+eno);
 			} else {
-				temp = prompt("Ctrl+C를 눌러 클립보드로 복사하세요", 'http://art-map.co.kr/exhibition/view.php?idx=5119');
+				temp = prompt("Ctrl+C를 눌러 클립보드로 복사하세요", 'http://art-map.co.kr/exhibition/view.php?eno='+eno);
 			}
 		}
 	} // end of share --------------------
@@ -806,356 +802,357 @@
 		<span class="lt">EXHIBITION</span>
 	</div>
 	
-	<div class="main_top">
-		<img class="main_img" src="<%= ctxPath%>/resources/images/exhibition/poster2.JPG">
-		<div class="info_top">
-			<span class="info_title">박수경 개인전 : 꿈의 집_원형 속 앙겔로스</span>
-			<span class="info_artist">박수경</span>
-			<div class="top_btn_area" align="center">
-				<button type="button" class="buyBtn btn1 forIco" onclick="">
-					BUY TICKETS
-					<img class="forMoving" src="<%= ctxPath%>/resources/images/exhibition/ico/right_arrow.png">
-				</button>
-				<button type="button" class="checkBtn forIco moving" >
-					CHECK THIS PRICE
-					<img class="ico1 forMoving" src="<%= ctxPath%>/resources/images/exhibition/ico/mouse.png">
-				</button>
-				<button type="button" class="addBtn btn1 forIco" onclick="">
-					ADD TO CART
-					<img class="forMoving" src="<%= ctxPath%>/resources/images/exhibition/ico/right_arrow.png">
-				</button>
-			</div>
-			<div class="special_area" style="margin-top: 30px;">
-				<a href="" style="margin-right: 10px;">
-					<img data-toggle="tooltip" title="전시회 관심 지정 !" data-placement="bottom" src="<%= ctxPath%>/resources/images/exhibition/ico/empty_heart.png">
-				</a>
-				<a href=""style="margin-right: 10px;">
-					<img data-toggle="tooltip" title="갤러리 관심 지정 !" data-placement="bottom" src="<%= ctxPath%>/resources/images/exhibition/ico/select.png">
-				</a>
-				<a href="" data-toggle="modal" data-target="#myModal">
-					<img src="<%= ctxPath%>/resources/images/exhibition/ico/ico_share.png">
-				</a>
-			</div>
-			<!-- Modal -->
-			<div class="modal fade" id="myModal" role="dialog">
-			  <div class="modal-dialog">
-			    <!-- Modal content-->
-			    <div class="modal-content">
-			      <div class="modal-body">
-			      	<span class="snsShare_title">공유하기</span>
-			      	<div class="shareArea">
-						<img class="shareImg" src="<%= ctxPath%>/resources/images/exhibition/ico/email.png" onclick="share('mail')">
-						<img class="shareImg" src="<%= ctxPath%>/resources/images/exhibition/ico/kakao.png" onclick="share('kakao')">
-						<img class="shareImg" src="<%= ctxPath%>/resources/images/exhibition/ico/twitter.png" onclick="share('twitter')">
-						<img class="shareImg" src="<%= ctxPath%>/resources/images/exhibition/ico/facebook.png" onclick="share('facebook')">
-						<img class="shareImg" src="<%= ctxPath%>/resources/images/exhibition/ico/url.png" onclick="share('url')" style="margin-right: 0px;">
+	<c:if test="${not empty exhDetailMap}">
+		<div class="main_top">
+			<img class="main_img" src="${exhDetailMap.MAINPOSTER}">
+			<div class="info_top">
+				<span class="bigSpan">${exhDetailMap.EXHIBITIONNAME}</span>
+				<span class="info_artist">${exhDetailMap.AUTHOR}</span>
+				
+				<c:if test="${exhDetailMap.PRICE ne 0}">
+					<div class="top_btn_area" align="center" style="top: 680px; left: 61%; position: absolute;">
+						<button type="button" class="buyBtn btn1 forIco" onclick="">
+							BUY TICKETS
+							<img class="forMoving" src="<%= ctxPath%>/resources/images/exhibition/ico/right_arrow.png">
+						</button>
+						<button type="button" class="checkBtn forIco moving" >
+							CHECK THIS PRICE
+							<img class="ico1 forMoving" src="<%= ctxPath%>/resources/images/exhibition/ico/mouse.png">
+						</button>
+						<button type="button" class="addBtn btn1 forIco" onclick="">
+							ADD TO CART
+							<img class="forMoving" src="<%= ctxPath%>/resources/images/exhibition/ico/right_arrow.png">
+						</button>
 					</div>
-					<div class="shareArea">
-						<span>MAIL</span>
-						<span>KAKAO</span>
-						<span>TWITTER</span>
-						<span>FACEBOOK</span>
-						<span>URL 복사</span>
+				</c:if>
+				
+				<c:if test="${exhDetailMap.PRICE eq 0}">
+					<div style="display: block;" align="center">
+						<span class="bigSpan" style="top: 750px; left: 66%; position: absolute;"> FREE </span>
 					</div>
-			      </div>
-			    </div>
-			  </div>
+				</c:if>
+				
+				<div class="special_area" style="margin-top: 30px; top: 890px; left: 65%; position: absolute;">
+					<a href="" style="margin-right: 10px;">
+						<img data-toggle="tooltip" title="전시회 관심 지정 !" data-placement="bottom" src="<%= ctxPath%>/resources/images/exhibition/ico/empty_heart.png">
+					</a>
+					<a href=""style="margin-right: 10px;">
+						<img data-toggle="tooltip" title="갤러리 관심 지정 !" data-placement="bottom" src="<%= ctxPath%>/resources/images/exhibition/ico/select.png">
+					</a>
+					<a href="" data-toggle="modal" data-target="#myModal">
+						<img src="<%= ctxPath%>/resources/images/exhibition/ico/ico_share.png">
+					</a>
+				</div>
+				<!-- Modal -->
+				<div class="modal fade" id="myModal" role="dialog">
+				  <div class="modal-dialog">
+				    <!-- Modal content-->
+				    <div class="modal-content">
+				      <div class="modal-body">
+				      	<span class="snsShare_title">공유하기</span>
+				      	<div class="shareArea">
+							<img class="shareImg" src="<%= ctxPath%>/resources/images/exhibition/ico/email.png" onclick="share('mail','${exhDetailMap.EXHIBITIONNO}')">
+							<img class="shareImg" src="<%= ctxPath%>/resources/images/exhibition/ico/kakao.png" onclick="share('kakao','${exhDetailMap.EXHIBITIONNO}')">
+							<img class="shareImg" src="<%= ctxPath%>/resources/images/exhibition/ico/twitter.png" onclick="share('twitter','${exhDetailMap.EXHIBITIONNO}')">
+							<img class="shareImg" src="<%= ctxPath%>/resources/images/exhibition/ico/facebook.png" onclick="share('facebook','${exhDetailMap.EXHIBITIONNO}')">
+							<img class="shareImg" src="<%= ctxPath%>/resources/images/exhibition/ico/url.png" onclick="share('url','${exhDetailMap.EXHIBITIONNO}')" style="margin-right: 0px;">
+						</div>
+						<div class="shareArea">
+							<span>MAIL</span>
+							<span>KAKAO</span>
+							<span>TWITTER</span>
+							<span>FACEBOOK</span>
+							<span>URL 복사</span>
+						</div>
+				      </div>
+				    </div>
+				  </div>
+				</div>
+				<!-- Modal -->
 			</div>
-			<!-- Modal -->
 		</div>
-	</div>
+		
+		<div class="main_btm" align="center">
+			<div class="btmInfo_left">
+			<a href="<%= ctxPath%>/galDetail.at?gno=${exhDetailMap.FK_GALLERYNO}" class="btmInfo_where forIco">${exhDetailMap.GALLERYNAME} | ${exhDetailMap.LOCATION}
+				<img class="ico1 forMoving" src="<%= ctxPath%>/resources/images/exhibition/ico/mouse.png">
+			</a>
+			<span class="btmInfo_date">${exhDetailMap.SCHEDULE}</span>
+			<span class="btmInfo_time1 span1">관람가능시간 | ${exhDetailMap.OPENCLOSETIME}</span>
+			</div>
+			<div class="btmInfo_right">
+				<span class="aboutExh">
+					${exhDetailMap.EXHIBITIONINFO}
+				</span>
+			</div>
+		</div>
 	
-	<div class="main_btm" align="center">
-		<div class="btmInfo_left">
-		<a href="<%= ctxPath%>/galDetail.at" class="btmInfo_where forIco">토스카나호텔/제주
-			<img class="ico1 forMoving" src="<%= ctxPath%>/resources/images/exhibition/ico/mouse.png">
-		</a>
-		<span class="btmInfo_date">2019.12.01 - 2020.01.27</span>
-		<span class="btmInfo_time1 span1">월 - 금 09 : 00 - 15 : 00</span>
-		<span class="btmInfo_time2 span1">토 09 : 00 - 13 : 00</span>
-		<span class="btmInfo_time_noti">호텔 로비 운영시간과 같음</span>
+		<%-- -------------------------------------슬라이드쇼 영역 --%>
+		<div class="selectWorks_area" style="margin-bottom: 300px; display: block;">
+			<div class="s1" style="text-align: center;"><span class="slideshow_title">SELECT WORKS</span></div>
+			<div class="slideshow">
+			  <div class="mySlides">
+			    <div class="numbertext" style="display: none;">1 / 3</div>
+			    <img class="slideView" src="${exhDetailMap.IMAGE1}">
+			    <div class="text">${exhDetailMap.IMAGE1INFO}</div>
+			  </div>
+			  
+			  <c:if test="${not empty exhDetailMap.IMAGE2}">
+				  <div class="mySlides">
+				    <div class="numbertext" style="display: none;">2 / 3</div>
+				    <img class="slideView" src="${exhDetailMap.IMAGE2}">
+				    <div class="text">${exhDetailMap.IMAGE2INFO}</div>
+				  </div>
+			  </c:if>
+			  
+			  <c:if test="${not empty exhDetailMap.IMAGE3}">
+				  <div class="mySlides">
+				    <div class="numbertext" style="display: none;">3 / 3</div>
+				    <img class="slideView" src="${exhDetailMap.IMAGE3}">
+				    <div class="text">${exhDetailMap.IMAGE3INFO}</div>
+				  </div>
+			  </c:if>
+			
+			  <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+			  <a class="next" onclick="plusSlides(1)">&#10095;</a>
+			</div>
+			<br>
+			
+			<div style="text-align:center;">
+			  <span class="dot" onclick="currentSlide(1)"></span>
+			  <c:if test="${not empty exhDetailMap.IMAGE2}">
+			  	<span class="dot" onclick="currentSlide(2)"></span>
+			  </c:if>
+			  <c:if test="${not empty exhDetailMap.IMAGE3}">
+			  	<span class="dot" onclick="currentSlide(3)"></span>
+			  </c:if>
+			</div>
 		</div>
-		<div class="btmInfo_right">
-			<span class="aboutExh">박수경작가의 집과 가족을 주제로 한 전작부터 최근작을 만날 수 있다. 작가는 유년시절 즐겨읽던 추리소설과 경험을 재조합하여 작업한다.
-
-아가사 크리스티의 추리소설 『꿈의 집』과 『비뚤어진 집』을 재구성 한 작품에서 에드거 엘런포의 『검은고양이』를 모티브로 한 작품까지 총 19점을 만날 수 있다.
-
-작가는 작업을 통해 한 사람으로서의 고독과 외로움, 가족에 대한 그리움을 표현하는 동시에 최근작 천사와 꽃 리스(wreathe)시리즈에서 작은 희망들, 잃어버린 무언가에 대한 새로운 희망을 찾고있다.
-박수경작가의 집과 가족을 주제로 한 전작부터 최근작을 만날 수 있다. 작가는 유년시절 즐겨읽던 추리소설과 경험을 재조합하여 작업한다.
-
-아가사 크리스티의 추리소설 『꿈의 집』과 『비뚤어진 집』을 재구성 한 작품에서 에드거 엘런포의 『검은고양이』를 모티브로 한 작품까지 총 19점을 만날 수 있다.
-
-작가는 작업을 통해 한 사람으로서의 고독과 외로움,박수경작가의 집과 가족을 주제로 한 전작부터 최근작을 만날 수 있다. 작가는 유년시절 즐겨읽던 추리소설과 경험을 재조합하여 작업한다.
-
-아가사 크리스티의 추리소설 『꿈의 집』과 『비뚤어진 집』을 재구성 한 작품에서 에드거 엘런포의 『검은고양이』를 모티브로 한 작품까지 총 19점을 만날 수 있다.
-
-작가는 작업을 통해 한 사람으로서의 고독과 외로움,
+		
+		<%-- ------------------------------------------------리뷰 영역 --%>
+		<div class="review_area">
+			<table class="basic_table">
+			<caption class="tableTitle">REVIEW</caption>
+				<thead>
+					<tr>
+						<th style="width: 65px;">NO</th>
+						<th>TITLE</th>
+						<th style="width: 180px;">NAME</th>
+					</tr>
+				</thead>
+				<tbody style="font-weight: bold;">
+					<tr>
+						<td>3</td>
+						<td>
+							<a href="javascript:void(0);" onclick="">딸이 아주 좋아합니다 ^^</a>
+						</td>
+						<td>서영학</td>
+						<td style="display: none;"></td>
+					</tr>
+					<tr>
+						<td>2</td>
+						<td>
+							<a href="javascript:void(0);" onclick="">정말 유익했던 시간...</a>
+						</td>
+						<td>김현지</td>
+						<td style="display: none;"></td>
+					</tr>
+					<tr>
+						<td>1</td>
+						<td>
+							<a href="javascript:void(0);" onclick="">어제 보고 왔어요 !</a>
+						</td>
+						<td>장하빈</td>
+						<td style="display: none;"></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		<div class="review_bottom" style="margin-top: 30px; width: 100%; text-align: right;">
+			<span class="board_btn_area"> 
+			<a href="javascript:void(0);" onclick="">
+				<img src="" alt="작성하기">
+			</a> 
+			<a href="">
+				<img src="" alt="모두보기">
+			</a>
 			</span>
 		</div>
-	</div>
-
-	<%-- -------------------------------------슬라이드쇼 영역 --%>
-	<div class="selectWorks_area" style="margin-bottom: 300px; display: block;">
-		<div class="s1" style="text-align: center;"><span class="slideshow_title">SELECT WORKS</span></div>
-		<div class="slideshow">
-		  <div class="mySlides">
-		    <div class="numbertext" style="display: none;">1 / 3</div>
-		    <img class="slideView" src="<%= ctxPath%>/resources/images/exhibition/sample_detail_main.png">
-		    <div class="text">Two Angels for Hotel TOSCANA | 캔버스에 아크릴, 혼합 재료 91x91cm 2019</div>
-		  </div>
-		  
-		  <div class="mySlides">
-		    <div class="numbertext" style="display: none;">2 / 3</div>
-		    <img class="slideView" src="<%= ctxPath%>/resources/images/exhibition/sample_detail_sw1.png">
-		    <div class="text">겹쳐진 시간 2 | 캔버스에 아크릴 162x261cm 2018</div>
-		  </div>
-		
-		  <div class="mySlides">
-		    <div class="numbertext" style="display: none;">3 / 3</div>
-		    <img class="slideView" src="<%= ctxPath%>/resources/images/exhibition/sample_detail_sw2.png">
-		    <div class="text">선물 | 캔버스에 아크릴 91x117cm 2018</div>
-		  </div>
-		  
-		  <div class="mySlides">
-		    <div class="numbertext" style="display: none;">3 / 3</div>
-		    <img class="slideView" src="<%= ctxPath%>/resources/images/exhibition/sample_detail_sw3.png">
-		    <div class="text">겹쳐진 시간 2 | 캔버스에 아크릴 162x261cm 2018</div>
-		  </div>
-		
-		  <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
-		  <a class="next" onclick="plusSlides(1)">&#10095;</a>
-		</div>
-		<br>
-		
-		<div style="text-align:center;">
-		  <span class="dot" onclick="currentSlide(1)"></span>
-		  <span class="dot" onclick="currentSlide(2)"></span>
-		  <span class="dot" onclick="currentSlide(3)"></span>
-		  <span class="dot" onclick="currentSlide(4)"></span>
-		</div>
-	</div>
-	
-	<%-- ------------------------------------------------리뷰 영역 --%>
-	<div class="review_area">
-		<table class="basic_table">
-		<caption class="tableTitle">REVIEW</caption>
-			<thead>
-				<tr>
-					<th style="width: 65px;">NO</th>
-					<th>TITLE</th>
-					<th style="width: 180px;">NAME</th>
-				</tr>
-			</thead>
-			<tbody style="font-weight: bold;">
-				<tr>
-					<td>3</td>
-					<td>
-						<a href="javascript:void(0);" onclick="">딸이 아주 좋아합니다 ^^</a>
-					</td>
-					<td>서영학</td>
-					<td style="display: none;"></td>
-				</tr>
-				<tr>
-					<td>2</td>
-					<td>
-						<a href="javascript:void(0);" onclick="">정말 유익했던 시간...</a>
-					</td>
-					<td>김현지</td>
-					<td style="display: none;"></td>
-				</tr>
-				<tr>
-					<td>1</td>
-					<td>
-						<a href="javascript:void(0);" onclick="">어제 보고 왔어요 !</a>
-					</td>
-					<td>장하빈</td>
-					<td style="display: none;"></td>
-				</tr>
-			</tbody>
-		</table>
-	</div>
-	<div class="review_bottom" style="margin-top: 30px; width: 100%; text-align: right;">
-		<span class="board_btn_area"> 
-		<a href="javascript:void(0);" onclick="">
-			<img src="" alt="작성하기">
-		</a> 
-		<a href="">
-			<img src="" alt="모두보기">
-		</a>
-		</span>
-	</div>
-	<div class="paginate">
-		페이지바영역
-	</div>
-	
-	<%-- ------------------------------------------기대평 영역 --%>
-	<div class="comment_area">
-		<table class="basic_table">
-		<caption class="tableTitle">COMMENT</caption>
-			<thead>
-				<tr>
-					<th style="width: 65px;">NO</th>
-					<th>TITLE</th>
-					<th style="width: 180px;">NAME</th>
-				</tr>
-			</thead>
-			<tbody style="font-weight: bold;">
-				<tr>
-					<td>3</td>
-					<td>
-						<a href="javascript:void(0);" onclick="">저번엔 시간이 없어서 못봤는데 이번엔 꼭 볼겁니다 !</a>
-					</td>
-					<td>심예은</td>
-					<td style="display: none;"></td>
-				</tr>
-				<tr>
-					<td>2</td>
-					<td>
-						<a href="javascript:void(0);" onclick="">너무 기대돼요 !</a>
-					</td>
-					<td>김민하</td>
-					<td style="display: none;"></td>
-				</tr>
-				<tr>
-					<td>1</td>
-					<td>
-						<a href="javascript:void(0);" onclick="">필기구들고갑니다 ~</a>
-					</td>
-					<td>박수연</td>
-					<td style="display: none;"></td>
-				</tr>
-			</tbody>
-		</table>
-	</div>
-	<div class="review_bottom" style="margin-top: 30px; width: 100%; text-align: right;">
-		<span class="board_btn_area"> 
-		<a href="javascript:void(0);" onclick="">
-			<img src="" alt="작성하기">
-		</a> 
-		<a href="">
-			<img src="" alt="모두보기">
-		</a>
-		</span>
-	</div>
-	<div class="paginate">
-		페이지바영역
-	</div>
-	
-	
-	<%-- -------------------------------------------아코디언 영역 --%>
-	<div class="detailInfo_area">
-		<span class="acc_title">INFORMATION</span>
-	
-		<button class="accordion">
-			<img class="ico2" src="<%= ctxPath%>/resources/images/exhibition/ico/chart.png">
-			WHO'S PICK?
-		</button>
-		<div class="panel chart_area" style="width: 100%;">
-   		  <div id="ageChart"></div>
-   		  <div id="genderChart"></div>
+		<div class="paginate">
+			페이지바영역
 		</div>
 		
-		<button class="accordion">
-			<img class="ico2" src="<%= ctxPath%>/resources/images/exhibition/ico/checklist.png">
-			CHECK LIST
-		</button>
-		<div class="panel check_area">
-		  <table>
-		  	<tr>
-		  		<td>입장시간</td>
-		  		<td>관람종료 30분전까지</td>
-		  	</tr>
-		  	<tr>
-		  		<td>식음료</td>
-		  		<td>해당없음</td>
-		  	</tr>
-		  	<tr>
-		  		<td>DSLR 카메라 및 휴대폰 촬영</td>
-		  		<td>해당없음</td>
-		  	</tr>
-		  	<tr>
-		  		<td>기타관람제한사항</td>
-		  		<td>해당없음</td>
-		  	</tr>
-		  </table>
+		<%-- ------------------------------------------기대평 영역 --%>
+		<div class="comment_area">
+			<table class="basic_table">
+			<caption class="tableTitle">COMMENT</caption>
+				<thead>
+					<tr>
+						<th style="width: 65px;">NO</th>
+						<th>TITLE</th>
+						<th style="width: 180px;">NAME</th>
+					</tr>
+				</thead>
+				<tbody style="font-weight: bold;">
+					<tr>
+						<td>3</td>
+						<td>
+							<a href="javascript:void(0);" onclick="">저번엔 시간이 없어서 못봤는데 이번엔 꼭 볼겁니다 !</a>
+						</td>
+						<td>심예은</td>
+						<td style="display: none;"></td>
+					</tr>
+					<tr>
+						<td>2</td>
+						<td>
+							<a href="javascript:void(0);" onclick="">너무 기대돼요 !</a>
+						</td>
+						<td>김민하</td>
+						<td style="display: none;"></td>
+					</tr>
+					<tr>
+						<td>1</td>
+						<td>
+							<a href="javascript:void(0);" onclick="">필기구들고갑니다 ~</a>
+						</td>
+						<td>박수연</td>
+						<td style="display: none;"></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		<div class="review_bottom" style="margin-top: 30px; width: 100%; text-align: right;">
+			<span class="board_btn_area"> 
+			<a href="javascript:void(0);" onclick="">
+				<img src="" alt="작성하기">
+			</a> 
+			<a href="">
+				<img src="" alt="모두보기">
+			</a>
+			</span>
+		</div>
+		<div class="paginate">
+			페이지바영역
 		</div>
 		
-		<button class="accordion">
-			<img class="ico2" data-toggle="checktip" title="클릭하여 확인해보세요 !" src="<%= ctxPath%>/resources/images/exhibition/ico/ico_ticket.png">
-			TICKET PRICE
-		</button>
-		<div class="panel price_area">
-		  <table>
-		  	<tr>
-		  		<th>연령</th>
-		  		<th>일반</th>
-		  		<th>Artree 회원가 10%</th>
-		  		<th>단체 10인 이상 30%</th>
-		  	</tr>
-		  	<tr>
-		  		<td>성인 | 만 19세 이상</td>
-		  		<td>12,000원</td>
-		  		<td>10,800원</td>
-		  		<td>8,400원</td>
-		  	</tr>
-		  	<tr>
-		  		<td>청소년 | 만 13 ~ 18세</td>
-		  		<td>9,600원</td>
-		  		<td>8,660원</td>
-		  		<td>7,640원</td>
-		  	</tr>
-		  	<tr>
-		  		<td>어린이 | 만 4 ~ 12세</td>
-		  		<td>6,000원</td>
-		  		<td>5,400원</td>
-		  		<td>4,200원</td>
-		  	</tr>
-		  	<tr>
-		  		<td>만 4세 미만</td>
-		  		<td colspan="3">무료</td>
-		  	</tr>
-		  </table>
-		  <div class="price_notice" style="width: 100%;">
-		  	<ul>
-		  		<li>모든 할인의 중복 적용은 불가하며 가장 높은 할인율의 가격을 기준으로 주문 및 결제됩니다.</li>
-		  		<li>할인 및 무료 입장시 증빙서류(주소 기재된 신분증, 유공자증, 복지카드 등)는 현장에서 확인 가능해야 하며 미지참시 차액 결제 후 관람 가능합니다.</li>
-		  		<li>청소년 또는 우대 할인 혜택은 현장 발권시 적용되며, 본인확인(신분증/복지카드 등)이 필요합니다.</li>
-		  		<li>티켓 배송은 불가하며 해당 전시회의 전시 기간 중 전시장 방문시 현장수령 가능합니다.</li>
-		  		<li>단체(10인 이상) 예약은 고객센터(02-6929-4460)로 문의 바랍니다.</li>
-		  		<li>예매 취소는 My티켓 > 예매/취소내역에서 직접 취소 또는 고객센터 (1544-1555)를 통해서 취소할 수 있습니다.</li>
-		  	</ul>
-		  </div>
-		</div>
 		
-		<button class="accordion">
-			<img class="ico2" src="<%= ctxPath%>/resources/images/exhibition/ico/map.png">
-			PLACE
-		</button>
-		<div class="panel place_area" style="width: 100%;">
-		  <div id="map"></div>
-		</div>
+		<%-- -------------------------------------------아코디언 영역 --%>
+		<div class="detailInfo_area">
+			<span class="acc_title">INFORMATION</span>
 		
-		<button class="accordion">
-			<img class="ico2" src="<%= ctxPath%>/resources/images/exhibition/ico/contact.png">
-			CONTACT US
-		</button>
-		<div class="panel contact_area" style="text-align: left;">
-		  <div class="cont_left defaultL" style="font-size: 13pt; font-weight: bold;">
-		  	<ul style="list-style: none;">
-		  		<li>ARTREE</li>
-		  		<li>000 - 123 - 4567</li>
-		  		<li>artree0213@gmail.com</li>
-		  	</ul>
+			<button class="accordion">
+				<img class="ico2" src="<%= ctxPath%>/resources/images/exhibition/ico/chart.png">
+				WHO'S PICK?
+			</button>
+			<div class="panel chart_area" style="width: 100%;">
+	   		  <div id="ageChart"></div>
+	   		  <div id="genderChart"></div>
+			</div>
+			
+			<button class="accordion">
+				<img class="ico2" src="<%= ctxPath%>/resources/images/exhibition/ico/checklist.png">
+				CHECK LIST
+			</button>
+			<div class="panel check_area">
+			  <table>
+			  	<tr>
+			  		<td>입장시간</td>
+			  		<td>관람종료 30분전까지</td>
+			  	</tr>
+			  	<tr>
+			  		<td>식음료</td>
+			  		<td>${exhDetailMap.FOODORDRINK}</td>
+			  	</tr>
+			  	<tr>
+			  		<td>DSLR 카메라 및 휴대폰 촬영</td>
+			  		<td>${exhDetailMap.PHOTO}</td>
+			  	</tr>
+			  	<tr>
+			  		<td>기타관람제한사항</td>
+			  		<td>${exhDetailMap.EXTRARESTRICTION}</td>
+			  	</tr>
+			  </table>
+			</div>
+			
+			<c:if test="${exhDetailMap.PRICE ne 0}">
+				<button class="accordion">
+					<img class="ico2" data-toggle="checktip" title="클릭하여 확인해보세요 !" src="<%= ctxPath%>/resources/images/exhibition/ico/ico_ticket.png">
+					TICKET PRICE
+				</button>
+				<div class="panel price_area">
+				    <table>
+					  	<tr>
+					  		<th>연령</th>
+					  		<th>일반</th>
+					  		<th>Artree 회원가 10%</th>
+					  		<th>단체 10인 이상 30%</th>
+					  	</tr>
+					  	<tr>
+					  		<td>성인 | 만 19세 이상</td>
+					  		<td>${exhDetailMap.PRICE}</td>
+					  		<td>${exhDetailMap.PRICE*0.9}</td>
+					  		<td>${exhDetailMap.PRICE*0.7}</td>
+					  	</tr>
+					  	<tr>
+					  		<td>청소년 | 만 13 ~ 18세</td>
+					  		<td>${exhDetailMap.PRICE*0.8}</td>
+					  		<td>${(exhDetailMap.PRICE*0.8)*0.9}</td>
+					  		<td>${(exhDetailMap.PRICE*0.8)*0.7}</td>
+					  	</tr>
+					  	<tr>
+					  		<td>어린이 | 만 4 ~ 12세</td>
+					  		<td>${exhDetailMap.PRICE*0.5}</td>
+					  		<td>${(exhDetailMap.PRICE*0.5)*0.9}</td>
+					  		<td>${(exhDetailMap.PRICE*0.5)*0.7}</td>
+					  	</tr>
+					  	<tr>
+					  		<td>만 4세 미만</td>
+					  		<td colspan="3">무료</td>
+					  	</tr>
+				    </table>
+				  <div class="price_notice" style="width: 100%;">
+				  	<ul>
+				  		<li>모든 할인의 중복 적용은 불가하며 가장 높은 할인율의 가격을 기준으로 주문 및 결제됩니다.</li>
+				  		<li>할인 및 무료 입장시 증빙서류(주소 기재된 신분증, 유공자증, 복지카드 등)는 현장에서 확인 가능해야 하며 미지참시 차액 결제 후 관람 가능합니다.</li>
+				  		<li>청소년 또는 우대 할인 혜택은 현장 발권시 적용되며, 본인확인(신분증/복지카드 등)이 필요합니다.</li>
+				  		<li>티켓 배송은 불가하며 해당 전시회의 전시 기간 중 전시장 방문시 현장수령 가능합니다.</li>
+				  		<li>단체(10인 이상) 예약은 고객센터(02-6929-4460)로 문의 바랍니다.</li>
+				  		<li>예매 취소는 My티켓 > 예매/취소내역에서 직접 취소 또는 고객센터 (1544-1555)를 통해서 취소할 수 있습니다.</li>
+				  	</ul>
+				  </div>
+				</div>
+			</c:if>
+			
+			<button class="accordion">
+				<img class="ico2" src="<%= ctxPath%>/resources/images/exhibition/ico/map.png">
+				PLACE
+			</button>
+			<div class="panel place_area" style="width: 100%;">
+			  <div id="map"></div>
+			</div>
+			
+			<button class="accordion">
+				<img class="ico2" src="<%= ctxPath%>/resources/images/exhibition/ico/contact.png">
+				CONTACT US
+			</button>
+			<div class="panel contact_area" style="text-align: left;">
+			  <div class="cont_left defaultL" style="font-size: 13pt; font-weight: bold;">
+			  	<ul style="list-style: none;">
+			  		<li>ARTREE</li>
+			  		<li>000 - 123 - 4567</li>
+			  		<li>artree0213@gmail.com</li>
+			  	</ul>
+			  </div>
+			  <div class="cont_right defaultR">
+			  	<ul style="list-style: none;">
+			  		<li>고객센터 휴무 - 주말 및 공휴일</li>
+			  		<li>문의가능 시간 - 13 : 30 ~ 19 : 00</li>
+			  		<li>고객센터 휴식시간 - 11 : 30 ~ 12 : 30</li>
+			  	</ul>
+			  </div>
+			</div>
 		  </div>
-		  <div class="cont_right defaultR">
-		  	<ul style="list-style: none;">
-		  		<li>고객센터 휴무 - 주말 및 공휴일</li>
-		  		<li>문의가능 시간 - 13 : 30 ~ 19 : 00</li>
-		  		<li>고객센터 휴식시간 - 11 : 30 ~ 12 : 30</li>
-		  	</ul>
-		  </div>
-		</div>
-	</div>
+		</c:if>
 </div>
 
 

@@ -3,8 +3,9 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="exhibits">
-
-	<resultMap type="HashMap" id="ExhMap">
+	
+	<!-- ////////////////// 전시회 목록 ////////////////// -->
+	<resultMap type="HashMap" id="ExhListMap">
 		<result property="EXHIBITIONNO" column="exhibitionno" javaType="int"/>
 		<result property="FK_GALLERYNO" column="fk_galleryno" javaType="string"/>
 		<result property="GALLERYNAME" column="galleryname" javaType="string"/>
@@ -15,7 +16,7 @@
 		<result property="MAINPOSTER" column="mainposter" javaType="string"/>
 	</resultMap>
 
-	<select id="getExhList" resultMap="ExhMap" parameterType="HashMap">
+	<select id="getExhList" resultMap="ExhListMap" parameterType="HashMap">
 		select *
 		from
 		(
@@ -28,7 +29,176 @@
 		left join exhibitiondetail D
 		on A.exhibitionno = d.fk_exhibitionno
 		) V
-		where RNO between #{page} and #{end}
+		where RNO between #{start} and #{end}
+	</select>
+	
+	<!-- ////////////////// 페이징처리를 위한 게시물 갯수 ////////////////// -->
+	<select id="getTotalCount" resultType="int" parameterType="HashMap">
+		select count(*) from
+		<choose>
+			<when test='check.equals("exh")'>
+				exhibition
+			</when>
+			<when test='check.equals("gal")'>
+				gallery
+				where status = 1
+			</when>
+		</choose>
+	</select>
+	
+	<!-- ////////////////// 전시회 디테일  ////////////////// -->
+	<resultMap type="HashMap" id="oneExhMap">
+		<result property="EXHIBITIONNO" column="exhibitionno" javaType="int"/>
+		<result property="EXHIBITIONNAME" column="exhibitionname" javaType="string"/>
+		<result property="AUTHOR" column="author" javaType="string"/>
+		<result property="FK_GALLERYNO" column="fk_galleryno" javaType="string"/>
+		<result property="EXHIBITIONINFO" column="exhibitioninfo" javaType="string"/>
+		<result property="OPENCLOSETIME" column="openclosetime" javaType="string"/>
+		<result property="FOODORDRINK" column="foodordrink" javaType="string"/>
+		<result property="EXTRARESTRICTION" column="extrarestriction" javaType="string"/>
+		<result property="PHOTO" column="photo" javaType="string"/>
+		<result property="PRICE" column="price" javaType="int"/>
+		<result property="SCHEDULE" column="schedule" javaType="string"/>
+		<result property="GALLERYNAME" column="galleryname" javaType="string"/>
+		<result property="LOCATION" column="location" javaType="string"/>
+		<result property="DETAILADDRESS" column="detailaddress" javaType="string"/>
+		<result property="MAINPOSTER" column="mainposter" javaType="string"/>
+		<result property="IMAGE1" column="image1" javaType="string"/>
+		<result property="IMAGE2" column="image2" javaType="string"/>
+		<result property="IMAGE3" column="image3" javaType="string"/>
+		<result property="IMAGE1INFO" column="image1info" javaType="string"/>
+		<result property="IMAGE2INFO" column="image2info" javaType="string"/>
+		<result property="IMAGE3INFO" column="image3info" javaType="string"/>		
+	</resultMap>
+	
+	<select id="getExhDetail" parameterType="String" resultMap="oneExhMap">
+		select exhibitionno, exhibitionname, author, fk_galleryno, exhibitioninfo, openclosetime
+		     , foodordrink, extrarestriction, photo, price
+		     , startdate ||' - '|| enddate AS schedule
+		     , B.galleryname, B.location, B.detailaddress
+		     , D.mainposter, D.image1, D.image2, D.image3
+		     , D.image1info, D.image2info, D.image3info
+		from exhibition A left join gallery B
+		on A.fk_galleryno = B.galleryno
+		left join exhibitiondetail D
+		on A.exhibitionno = d.fk_exhibitionno
+		where exhibitionno = #{eno}
+	</select>
+	
+	<!-- ////////////////// 갤러리 목록 ////////////////// -->
+	<resultMap type="HashMap" id="GalListMap">
+		<result property="GALLERYNO" column="galleryno" javaType="String"/>
+		<result property="GALLERYNAME" column="galleryname" javaType="String"/>
+		<result property="DETAILADDRESS" column="detailaddress" javaType="String"/>
+		<result property="MAINPICTURE" column="mainpicture" javaType="String"/>
+		<result property="LOCATION" column="location" javaType="String"/>
+		<result property="INTRODUCTION" column="introduction" javaType="String"/>
+	</resultMap>
+	
+	<select id="getGalList" parameterType="HashMap" resultMap="GalListMap">
+		select *
+		from
+		(
+		select row_number() over(order by galleryno desc) AS RNO
+		     , galleryno, galleryname, detailaddress, mainpicture, location
+		     , case when length(introduction) > 60 then substr(introduction, 1, 59)||'..' else introduction end AS introduction
+		from gallery
+		where status = 1
+		)
+		where RNO between #{start} and #{end} 
 	</select>
 
+	<!-- ////////////////// 갤러리 추천 공간 ////////////////// -->
+	<resultMap type="HashMap" id="GalRecomList">
+		<result property="GALLERYNO" column="galleryno" javaType="String"/>
+		<result property="GALLERYNAME" column="galleryname" javaType="String"/>
+		<result property="MAINPICTURE" column="mainpicture" javaType="String"/>
+		<result property="LOCATION" column="location" javaType="String"/>
+		<result property="OPENINGHOUR" column="openinghour" javaType="String"/>
+		<result property="HOLIDAY" column="holiday" javaType="String"/>
+		<result property="EXHIBITIONNAME" column="exhibitionname" javaType="String"/>
+		<result property="MAINPOSTER" column="mainposter" javaType="String"/>
+	</resultMap>
+	
+	<select id="getGalRecomList" resultMap="GalRecomList">
+		select *
+		from
+		(
+		select row_number() over(order by B.readcount desc) AS RNO
+		     , galleryno, galleryname, mainpicture, location, openinghour, holiday, B.exhibitionname, C.mainposter
+		from gallery A left join exhibition B
+		on A.galleryno = B.fk_galleryno
+		left join exhibitiondetail C
+		on B.exhibitionno = C.fk_exhibitionno
+		where A.status = 1 and exhibitionname is not null
+		order by RNO, galleryno asc
+		)
+		where RNO between 1 and 3
+	</select>
+	          
+	<!-- ////////////////////// 갤러리 상세 페이지 /////////////////////// -->
+	<resultMap type="HashMap" id="oneGalMap">
+		<result property="GALLERYNO" column="galleryno" javaType="String"/>
+		<result property="GALLERYNAME" column="galleryname" javaType="String"/>
+		<result property="DETAILADDRESS" column="detailaddress" javaType="String"/>
+		<result property="MAINPICTURE" column="mainpicture" javaType="String"/>
+		<result property="INTRODUCTION" column="introduction" javaType="String"/>
+		<result property="WESITE" column="wesite" javaType="String"/>
+		<result property="LOCATION" column="location" javaType="String"/>
+		<result property="OPENINGHOUR" column="openinghour" javaType="String"/>
+		<result property="HOLIDAY" column="holiday" javaType="String"/>
+		<result property="TEL" column="tel" javaType="String"/>
+		<result property="STATUS" column="status" javaType="int"/>
+	</resultMap>
+	
+	<select id="getGalDetail" parameterType="String" resultMap="oneGalMap">
+		select *
+		from gallery
+		where galleryno = #{gno}
+	</select>
+	
+	<!-- //////////////////////// 특정 갤러리의 전시중 전시회 목록 불러오기 //////////////////////// -->
+	<resultMap type="HashMap" id="IngExhMap">
+		<result property="EXHIBITIONNO" column="exhibitionno" javaType="int"/>
+		<result property="EXHIBITIONNAME" column="exhibitionname" javaType="String"/>
+		<result property="SCHEDULE" column="schedule" javaType="String"/>
+		<result property="MAINPOSTER" column="mainposter" javaType="String"/>
+	</resultMap>
+	
+	<select id="getIngExhListMap" parameterType="String" resultMap="IngExhMap">
+		select exhibitionno, exhibitionname, startdate ||' - '|| enddate AS schedule, B.mainposter
+		from exhibition A left join exhibitiondetail B
+		on A.exhibitionno = B.fk_exhibitionno
+		where fk_galleryno = #{gno} and status = '전시중'
+	</select>
+	
+	<!-- //////////////////////// 특정 갤러리의 전시예정 전시회 목록 불러오기 //////////////////////// -->
+	<resultMap type="HashMap" id="ComExhMap">
+		<result property="EXHIBITIONNO" column="exhibitionno" javaType="int"/>
+		<result property="EXHIBITIONNAME" column="exhibitionname" javaType="String"/>
+		<result property="SCHEDULE" column="schedule" javaType="String"/>
+		<result property="MAINPOSTER" column="mainposter" javaType="String"/>
+	</resultMap>
+	
+	<select id="getComExhListMap" parameterType="String" resultMap="ComExhMap">
+		select exhibitionno, exhibitionname, startdate ||' - '|| enddate AS schedule, B.mainposter
+		from exhibition A left join exhibitiondetail B
+		on A.exhibitionno = B.fk_exhibitionno
+		where fk_galleryno = #{gno} and status = '전시예정'
+	</select>
+	
+	<!-- //////////////////////// 특정 갤러리의 전시종료 전시회 목록 불러오기 //////////////////////// -->
+	<resultMap type="HashMap" id="EndExhMap">
+		<result property="EXHIBITIONNO" column="exhibitionno" javaType="int"/>
+		<result property="EXHIBITIONNAME" column="exhibitionname" javaType="String"/>
+		<result property="SCHEDULE" column="schedule" javaType="String"/>
+		<result property="MAINPOSTER" column="mainposter" javaType="String"/>
+	</resultMap>
+	
+	<select id="getEndExhListMap" parameterType="String" resultMap="EndExhMap">
+		select exhibitionno, exhibitionname, startdate ||' - '|| enddate AS schedule, B.mainposter
+		from exhibition A left join exhibitiondetail B
+		on A.exhibitionno = B.fk_exhibitionno
+		where fk_galleryno = #{gno} and status = '전시종료'
+	</select>
 </mapper>

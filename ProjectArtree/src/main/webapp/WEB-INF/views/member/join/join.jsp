@@ -29,12 +29,6 @@ button {
 	outline: none;
 }
 
-/* 드래그 시 색상변경 */
-::selection {
-    background-color: #6e1fff;
-    color: #fff;
-}
-
 /* 회원가입 입력  */
 div#join_input {
 	border: solid 1px #b7b7b7;
@@ -325,17 +319,36 @@ span#allCheck_txt {
 		
 		}); // end of checkbox[class=agree_chx].click
 		
-		
-		
+		// email 중복 확인
+		$("#email").keyup(function() {
+			var email = $("#email").val().trim();
+			
+			$.ajax({
+				url:"<%= request.getContextPath()%>/duplicateCheck.at",  
+				data: {"email" : email},
+				dataType:"json",
+				success: function(json) {  
+					
+					$("#error").css("display","");
+					$("#error").children("span").html(json.msg);
+					
+					$("#duplicate").val(json.bool);
+					
+				},
+				error: function(request, status, error){
+					alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+				}
+			});
+		});
 		
 	}); // end of function()
 	
 	// 뒤로가기 막기
-	window.history.forward();
+	/* window.history.forward();
 
 	function noBack() {
 		window.history.forward();
-	}
+	} */
 	
 	// 성별 선택하면 border 변경
 	function gender_chg(g) {
@@ -365,22 +378,24 @@ span#allCheck_txt {
 		
 		var hp = document.getElementById("hp");
 		var hp_bool = myHpCheck(hp.value);
-		  
+		
+		var duplicate = document.getElementById("duplicate");
+		
 		if( $("#email").val().trim() == "" ) {
 			  alert("이메일을 입력해 주세요.");
 			  $("#email").focus();
 			  return;
 		  }
-		  else if (!email_bool) {
+		 else if (!email_bool) {
 			  alert("올바른 형식의 이메일을 입력하세요.");
 			  $("#email").val("").focus();
 			  return;
-		  }
-		  /*  else if (!idDuplicate) {
-			  alert("이미 사용중인 아이디입니다.");
-			  $("#userid").val("").focus();
+		  } 	
+		 else if (duplicate) {
+			  alert("이미 사용중인 이메일입니다.");
+			  $("#email").val("").focus();
 			  return;
-		  }  */
+		 } 
 		  else if ( $("#name").val().trim() == "" ) {
 			  alert("이름을 입력해 주세요.");
 			  $("#name").focus();
@@ -426,10 +441,10 @@ span#allCheck_txt {
 			  alert("이용약관에 동의 하세요.");
 			  return;
 		  } 
-		 
+		
 		  var frm = document.joinForm;
 		  frm.method = "POST";
-		  frm.action = "<%= request.getContextPath()%>/joinEnd.at";
+		  frm.action = "<%= request.getContextPath()%>/joinInsert.at";
 		  frm.submit();
 	}
 	
@@ -468,7 +483,8 @@ span#allCheck_txt {
 		}
 	}; 
 	
-	// 로그인 스크립트
+	// ============================ 로그인 스크립트 ============================
+	// 클릭하면 로그인 창 띄우기
 	function layer_open(el) {
 		$("."+el).css("display", "");
 		var temp = $('#' + el);
@@ -485,9 +501,29 @@ span#allCheck_txt {
 		});
 	}
 	
+	// 로그인 버튼 클릭하면 로그인
+	function goLogin() {
+		// 빈 칸 있는지 검사
+		if( $("#email_login").val().trim() == "" ) {
+			  alert("이메일을 입력해 주세요.");
+			  $("#email_login").focus();
+			  return;
+		  }
+		else if( $("#password_login").val().trim() == "" ) {
+			 alert("비밀번호를 입력해 주세요.");
+			 $("#password_login").focus();
+			 return;
+		}
+		
+		var frm = document.loginForm;
+		  frm.method = "POST";
+		  frm.action = "<%= request.getContextPath()%>/loginEnd.at";
+		  frm.submit();
+	}
+	
 </script>
 
-<body onload="noBack();" onpageshow="if(event.persisted) noBack();" onunload="">
+<body>
 	<div id="container_join" align="center">
 		<div id="join_input">
 			<div id="join_txt">
@@ -498,6 +534,12 @@ span#allCheck_txt {
 				<tr>
 					<td>
 						<input type="text" placeholder="이메일" name="email" id="email" />
+					</td>
+				</tr>
+				<tr>
+					<td class="error" id="error" style="border: none; padding-top: 5px; text-align: right; color: gray; display: none;">
+						<span ></span>
+						<input type="hidden" id="duplicate"/>
 					</td>
 				</tr>
 				<tr>
@@ -627,6 +669,7 @@ span#allCheck_txt {
 		<%-- 로그인 버튼 --%>
 		<br/>
 		<a href="javascript:layer_open('layer')" id="login_main_btn" class="login_btn">로그인</a>
+		<input type="button" id="logout_btn" value="로그아웃" onClick="javascript:location.href='/artree/logout.at'"/>
 		</div>
 	
 	
@@ -645,10 +688,10 @@ span#allCheck_txt {
 				<input type="password" placeholder="비밀번호" name="password_login" id="password_login" class="login_input"/>
 				
 				<div class="login_find">
-					<a href="" class="find_btn">아이디 찾기&nbsp;&nbsp;|&nbsp;&nbsp;</a>
-					<a href="" class="find_btn">비밀번호 찾기</a>
+					<a href="/artree/idFind.at" class="find_btn">아이디 찾기&nbsp;&nbsp;|&nbsp;&nbsp;</a>
+					<a href="/artree/passwordFind.at" class="find_btn">비밀번호 찾기</a>
 				</div>
-				<input type="button" id="login_btn" value="로그인"/>
+				<input type="button" id="login_btn" value="로그인" onClick="goLogin()"/>
 			</div>
 			</form>
 		</div>

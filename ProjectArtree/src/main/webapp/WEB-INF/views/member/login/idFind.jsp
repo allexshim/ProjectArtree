@@ -20,9 +20,10 @@
 		margin: 0 auto;
 		text-align: center;
 		border: 1px solid #dcdcdc;
-		height: 581px;
+		height: 631px;
 		border-radius: 10px;
-		margin-top: 70px;
+		margin-top: 200px;
+		margin-bottom: 100px;
 	}
 	
 	div.idFind_wrap {
@@ -30,12 +31,6 @@
 		margin: 0 auto;
 	}
 	
-	/* 드래그 시 색상변경 */
-	::selection {
-	    background-color: #6e1fff;
-	    color: #fff;
-	}
-
 	/* 아이디 찾기 */
 	div.idFind_container h2 {
 		font-size: 35px;
@@ -63,14 +58,21 @@
 		font-size: 14px;
 	}
 	
+	input#hp {
+		border: none;
+		width: 95%;
+		padding: 8px;
+		font-size: 14px;
+	}
+	
 	/* 성별 */
 	div.gender_div {
-		margin-top: 21px;
+		margin-top: 25px;
 		height: 40px;
 		width: 100%;
 	}
 	
-	button#gender_male {
+	button#gender_1 {
 		float: left;
 		width: 50%;
 		cursor: pointer;
@@ -82,7 +84,7 @@
 		outline: none;
 	}
 	
-	button#gender_female {
+	button#gender_2 {
 		float: right;
 		width: 50%;
 		cursor: pointer;
@@ -159,10 +161,57 @@
 
 <script type="text/javascript" src="<%= ctxPath%>/resources/js/jquery-3.3.1.min.js"></script>
 <script type="text/javascript">
+	$(function() {
+		
+		$("#gender").val("1");
+		
+		$("#age_select").click(function() {
+			$("#agegroup").val($("#age_select option:selected").val());
+		}); 
+		
+		$("#area_select").click(function() {
+			$("#area").val($("#area_select option:selected").val());
+		});
+	});
+
 	function gender_chg(g) {
 		$(".gender").removeClass("on");
 		$("#gender_"+g).addClass("on");
 		$("#gender").val(g);
+	}
+	
+	function find_id() {
+		
+		if($("#name").val().trim() == "") {
+			alert("성함을 입력해 주세요.");
+			$("#name").focus();
+			return;
+		}	
+		else if($("#hp").val().trim() == "") {
+			alert("전화번호를 입력해 주세요.");
+			$("#hp").focus();
+			return;
+		}
+		else if($("#gender").val().trim() == "") {
+			alert("성별을 선택해 주세요.");
+			$("#gender").focus();
+			return;
+		}
+		else if($("#agegroup").val().trim() == "") {
+			alert("연령대를 선택해 주세요.");
+			$("#agegroup").focus();
+			return;
+		}
+		else if($("#area").val().trim() == "") {
+			alert("지역 선택해 주세요.");
+			$("#area").focus();
+			return;
+		}
+	
+		 var frm = document.idFind;
+		  frm.method = "POST";
+		  frm.action = "idFindEnd.at";
+		  frm.submit();
 	}
 </script>
 
@@ -170,14 +219,19 @@
 	<div class="idFind_container">
 		<h2>아이디 찾기</h2>
 		<span>회원가입 시 기입한 항목을 입력해 주세요.</span>
-		
+		<form name="idFind">
 		<div class="idFind_wrap">
 			<div class="input_div">
-				<input type="text" placeholder="성함" id="name"/>
+				<input type="text" placeholder="성함" name="name" id="name"/>
 			</div>
+			<div class="input_div" style="padding-top: 15px;">
+				<input type="text" placeholder="전화번호" name="hp" id="hp"/>
+			</div>
+			
 			<div class="gender_div">
-				<button type="button" id="gender_male" class="gender on" onclick="javascript:gender_chg('male')">남</button>
-				<button type="button" id="gender_female" class="gender" onclick="javascript:gender_chg('female')">여</button>
+				<button type="button" id="gender_1" class="gender on" onclick="javascript:gender_chg(1)">남</button>
+				<button type="button" id="gender_2" class="gender" onclick="javascript:gender_chg(2)">여</button>
+				<input type="hidden" name="gender" id="gender" />
 			</div>
 			<div class="age_div">
 				<select id="age_select">
@@ -189,39 +243,38 @@
 					<option value="50">50대</option>
 					<option value="60">60대이상</option>
 				</select>
+				<input type="hidden" name="agegroup" id="agegroup" />
 			</div>
 			<div class="area_div">
 				<select id="area_select">
 					<option value="">지역선택</option>
-					<option value="0">서울</option>
-					<option value="1">부산</option>
-					<option value="2">대구</option>
-					<option value="3">인천</option>
-					<option value="4">광주</option>
-					<option value="5">대전</option>
-					<option value="6">울산</option>
-					<option value="7">세종</option>
-					<option value="8">강원</option>
-					<option value="9">경기</option>
-					<option value="10">경남</option>
-					<option value="11">경북</option>
-					<option value="12">전남</option>
-					<option value="13">전북</option>
-					<option value="14">제주</option>
-					<option value="15">충남</option>
-					<option value="16">충북</option>
+						<option value="서울">서울</option>
+						<option value="부산">부산</option>
+						<option value="대구">대구</option>
+						<option value="인천">인천</option>
+						<option value="광주">광주</option>
+						<option value="대전">대전</option>
+						<option value="울산">울산</option>
+						<option value="세종">세종</option>
+						<option value="강원">강원</option>
+						<option value="경기">경기</option>
+						<option value="경남">경남</option>
+						<option value="경북">경북</option>
+						<option value="전남">전남</option>
+						<option value="전북">전북</option>
+						<option value="제주">제주</option>
+						<option value="충남">충남</option>
+						<option value="충북">충북</option>
 				</select>
+				<input type="hidden" name="area" id="area" />
 			</div>
 		</div>
+		</form>
 		<div class="blank">
 		</div>
 		<div class="btn_div">
-			<button type="button" id="submit_btn" onClick="find_id();">확인</button>
+			<button type="button" id="submit_btn" onClick="find_id()">확인</button>
 		</div>
 	</div>
 	
-	<!-- 이메일 찾기 -->
-	<form method="post" action="" id="find_form">
-		<input type="hidden" name="find_email" id="find_email">
-	</form>
 </body>

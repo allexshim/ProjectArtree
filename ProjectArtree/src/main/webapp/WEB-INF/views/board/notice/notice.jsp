@@ -23,13 +23,13 @@
 	}
 	
 	img#boardtop {
-		position : absolute;
+		/* position : absolute; */
 		width : 100%;
 		height : 540px;
 	}
 	
 	div#topText {
-		padding-top : 610px;
+		padding-top : 50px;
 		width : 500px;
 		text-align: left;
 		padding-left : 60px;

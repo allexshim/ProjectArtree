@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%
 	String ctxPath = request.getContextPath();
 %>
@@ -32,7 +32,8 @@
 		float: right; 
 		width: 50%; 
 		text-align: center; 
-		padding: 5% 5% 0 5%;
+		padding: 5%;
+		height: 100%;
 	}
 	
 	#container_gal_detail .specialArea {
@@ -50,7 +51,8 @@
 		margin-right: 10px;
 	}
 	
-	#container_gal_detail .specialArea img { width: 30px; height: 30px; margin-bottom: 5px;}
+	#container_gal_detail .ico1 { width: 30px; height: 30px; margin-bottom: 5px;}
+	#container_gal_detail .ico2 { width: 20px; height: 20px; margin-bottom: 5px;}
 	
 	#container_gal_detail .info_title {
 		display: block; 
@@ -59,25 +61,30 @@
 	}
 	
 	#container_gal_detail .info_aboutGal {
-		width: 100%;
 		border-collapse: collapse;
 		font-size: 13pt;
 		text-align: left;
 		margin-top: 40px;
 		color: #000;
+		bottom: -80px; 
+		left: 56%; 
+		position: absolute;
+		width: 400px;
 	}
 	
 	#container_gal_detail .info_aboutGal tr {
-		line-height: 300%;
+		line-height: 200%;
 		border-bottom: solid 1px #e6e6e6;
 	}
 	
 	#container_gal_detail .info_aboutGal tr td {
-		padding-left: 15px;
+		display: inline-table;
+    	line-height: 2.5;
 	}
 	
-	#container_gal_detail .info_aboutGal tr td:first-child {
+	#container_gal_detail .info_aboutGal tr td:first-child { 
 		font-weight: bold;
+		width: 80px; 
 	}
 	
 	<%-- 지도  --%>
@@ -166,36 +173,37 @@
 		width: 50%;
 	}
 	
-	#container_gal_detail .curExhList {
+	#container_gal_detail .ExhList {
 		width: 30%;
 		display: inline-block;
 		margin: 0 10px 20px 0;
 	}
 	
-	#container_gal_detail .curExhList a {
+	#container_gal_detail .ExhList a {
 		text-decoration: none;
 		color: #000;
 		transition: opacity 0.5s ease;
 	}
 	
-	#container_gal_detail .curExhList a:hover {
+	#container_gal_detail .ExhList a:hover {
 		opacity: 0.6;
 	}
 	
-	#container_gal_detail .curExhList .ExhTitle {
+	#container_gal_detail .ExhList .ExhTitle { 
 		font-size: 10pt;
 		font-weight: bold;
 		display: block;
 		margin-top: 10px;
 	}
 	
-	#container_gal_detail .curExhList .ExhDate {
+	#container_gal_detail .ExhList .ExhDate {
 		font-size: 9pt;
 		display: block;
 	}
 	
-	#container_gal_detail .curExhList img {
+	#container_gal_detail .ExhList img {
 		width: 100%;
+		height: 193px;
 	}
 	
 	#container_gal_detail #map {
@@ -208,7 +216,7 @@
 	#container_gal_detail .accordion {
 	  background-color: white;
 	  color: #222;
-	  width: 100%;
+	  width: 100%; 
 	  cursor: pointer;
 	  border: none;
 	  text-align: center;
@@ -216,7 +224,7 @@
 	  transition: 0.4s;
 	  font-weight: bold;
 	  outline: none;
-	  height: 160px;
+	  height: 160px; 
 	}
 
 	#container_gal_detail .accordion:hover {
@@ -235,6 +243,7 @@
 	  transition: max-height 0.3s ease-out;
 	  margin-bottom: 0;
 	  border: none;
+	  box-shadow: none;
 	}
 	
 	#container_gal_detail .accordion:after {
@@ -250,46 +259,37 @@
 	<%-- accordian end --%>
 	
 	#container_gal_detail .ExhList_Area {
-		position: relative;
-		max-width: 100%;
-		margin-top: 100px;
+		width: 100%;
+		margin-top: 50px;
+		margin-bottom: 50px;
 	}
 
-	#container_gal_detail .ExhList_Area a {
+	#container_gal_detail .ExhList_Area .exh_one {
 		text-decoration: none;
 		color: #0d0d0d;
 		cursor: pointer;
-		display: inline-block; 
+		display: inline-block;
 		width: 21%;
-		height: 450px;
-		margin-right: 3.7%;
-		margin-top: 20px;
+		height: 500px;
 		margin-bottom: 40px;
+		margin-right: 3.7%; 
 		border: solid 1px #e6e6e6;
-	}
-	
-	#container_gal_detail .ExhList_Area a img {
-		width: 100%;
-		margin-bottom: 20px;
-	}
-	
-	#container_gal_detail .ExhList_Area a .art_mainTitle {
-		display: block;
-		font-size: 18pt;
-		font-weight: bold;
-		margin: 3px 0 3px 0;
-		padding-left: 10px;
 		position: relative;
 	}
 	
-	#container_gal_detail .ExhList_Area a .InfoWhereWhen {
-		display: block;
-		font-size: 10pt;
-		padding-left: 10px;
+	#container_gal_detail .ExhList_Area .exh_one img {
+		width: 100%;
+		height: 300px;
+		margin-bottom: 10px;
 	}
 	
-	#container_gal_detail .ExhList_Area a span {
+	#container_gal_detail .ExhList_Area .exh_one .art_mainTitle {
+		font-size: 13pt;
+		font-weight: bold;
+		padding: 10px;
 		text-align: left;
+		display: table-cell;
+		position: relative;
 	}
 	
 	#container_gal_detail .Title_Area {
@@ -306,6 +306,11 @@
 		color: #000;
 	}
 
+	#container_gal_detail .noDecoA {
+		text-decoration: none;
+		color: #000;
+	}
+
 </style>  
 
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -317,11 +322,16 @@
 
 	$(document).ready(function(){
 		
-		$(".exh_one").hover(function(){
-			$(this).children(".art_mainTitle").stop().animate({top:'5px'});
+		goGetIngExhs('${galDetailMap.GALLERYNO}'); // 진행중 전시회 
+		goGetComExhs('${galDetailMap.GALLERYNO}'); // 예정 전시회
+		goGetEndExhs('${galDetailMap.GALLERYNO}'); // 지난 전시회
 
-		}, function(){
-			$(this).children(".art_mainTitle").stop().animate({top:'0px'});
+		$(document).on("mouseover", ".exh_one", function(){
+			$(this).find(".art_mainTitle").stop().animate({top:'5px'}, 180);
+		});
+		
+		$(document).on("mouseout", ".exh_one", function(){
+			$(this).find(".art_mainTitle").stop().animate({top:'0px'}, 180);
 		});
 		
 		 $('[data-toggle="tooltip"]').tooltip();   
@@ -350,7 +360,7 @@
 			var geocoder = new kakao.maps.services.Geocoder();
 			
 			// 주소로 좌표를 검색합니다
-			geocoder.addressSearch('서울 마포구 연남동 566-55', function(result, status) {
+			geocoder.addressSearch('${galDetailMap.DETAILADDRESS}', function(result, status) {
 
 			    // 정상적으로 검색이 완료됐으면 
 			     if (status === kakao.maps.services.Status.OK) {
@@ -384,8 +394,8 @@
 
 				// 커스텀 오버레이에 표출될 내용으로 HTML 문자열이나 document element가 가능합니다
 				var content = '<div class="customoverlay">' +
-				    '  <a href="https://map.kakao.com/link/search/서울 마포구 연남동 566-55" target="_blank">' +
-				    '    <span class="title">챕터투</span>' +
+				    '  <a href="https://map.kakao.com/link/search/${galDetailMap.DETAILADDRESS}" target="_blank">' +
+				    '    <span class="title">${galDetailMap.GALLERYNAME}</span>' +
 				    '  </a>' +
 				    '</div>';
 
@@ -426,6 +436,207 @@
 		<%-- accordian end --%>
 	});
 	
+	///////////// 진행중 전시회 불러오기 
+	function goGetIngExhs(gno){
+		
+		$.ajax({
+			
+			url: "<%=ctxPath%>/ingExhList.at",
+			data: {"gno":gno},
+			dataType: "JSON",
+			success:function(json){
+				
+				var html = "";
+				
+				if(json.length == 0){
+					// 각 영역에 준비중 띄우기
+				}
+				else {
+					
+					$.each(json, function(index, item){
+						
+						if((index+1)%3 != 0){
+							html += '<div class="ExhList">'
+								 + '<a href="/exhDetail.at?eno="'+item.EXHIBITIONNO+'>'
+								 + '<img src="'+item.MAINPOSTER+'">'
+								 + '<span class="ExhTitle">'+item.EXHIBITIONNAME+'</span>'
+								 + '<span class="ExhDate">'+item.SCHEDULE+'</span>'
+								 + '</a></div>';
+						}
+						else {
+							html += '<div class="ExhList">'
+								 + '<a href="/exhDetail.at?eno="'+item.EXHIBITIONNO+'>'
+								 + '<img src="'+item.MAINPOSTER+'">'
+								 + '<span class="ExhTitle">'+item.EXHIBITIONNAME+'</span>'
+								 + '<span class="ExhDate">'+item.SCHEDULE+'</span>'
+								 + '</a></div><br/>';
+						}
+						
+						$(".ingExh").append(html);
+					
+					});
+					
+				} // end of json if ~ else ------------------
+			},
+			error: function(request, status, error){
+				alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+			}
+			
+		});
+		
+	} // end of goGetIngExhs -------------------
+	
+	///////////////////// 예정 전시회 불러오기 
+	function goGetComExhs(gno){
+		
+		$.ajax({
+
+			url: "<%=ctxPath%>/comExhList.at",
+			data: {"gno":gno},
+			dataType: "JSON",
+			success:function(json){
+				
+				var html = "";
+				
+				if(json.length == 0){
+					// 각 영역에 준비중 띄우기
+				}
+				else {
+					
+					$.each(json, function(index, item){
+						
+						if((index+1)%3 != 0){
+							html += '<div class="ExhList">'
+								 + '<a href="/exhDetail.at?eno="'+item.EXHIBITIONNO+'>'
+								 + '<img src="'+item.MAINPOSTER+'">'
+								 + '<span class="ExhTitle">'+item.EXHIBITIONNAME+'</span>'
+								 + '<span class="ExhDate">'+item.SCHEDULE+'</span>'
+								 + '</a></div>';
+						}
+						else {
+							html += '<div class="ExhList">'
+								 + '<a href="/exhDetail.at?eno="'+item.EXHIBITIONNO+'>'
+								 + '<img src="'+item.MAINPOSTER+'">'
+								 + '<span class="ExhTitle">'+item.EXHIBITIONNAME+'</span>'
+								 + '<span class="ExhDate">'+item.SCHEDULE+'</span>'
+								 + '</a></div><br/>';
+						}
+						
+						$(".comExh").append(html);
+						
+					});
+					
+				} // end of json if ~ else ------------------
+			},
+			error: function(request, status, error){
+				alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+			}
+			
+		});
+		
+	}// end of goGetIngExhs --------------------
+	
+	///////////////////// 지난 전시회 불러오기
+	function goGetEndExhs(gno){
+		
+		$.ajax({
+
+			url: "<%=ctxPath%>/endExhList.at",
+			data: {"gno":gno},
+			dataType: "JSON",
+			success:function(json){
+				
+				if(json.length == 0){
+					// 각 영역에 준비중 띄우기
+				}
+				else {
+					
+					$.each(json, function(index, item){
+						
+						var year = item.SCHEDULE.substr(0,4);
+						
+						var tthtml = ''; var ttCnt = 0;
+						var nthtml = ''; var ntCnt = 0;
+						var ethtml = ''; var etCnt = 0;
+						var sthtml = ''; var stCnt = 0;
+						
+						if(year == '2020'){ ttCnt++;
+							
+							if(ttCnt%4 != 0){
+								tthtml += '<a class="exh_one" href="/exhDetail.at?eno='+item.EXHIBITIONNO+'">'
+									 	+ '<img class="exh_poster" src="'+item.MAINPOSTER+'"/>'
+										+ '<span class="art_mainTitle">'+item.EXHIBITIONNAME+'</span></a>';
+							}
+							else {
+								tthtml += '<a class="exh_one" href="/exhDetail.at?eno='+item.EXHIBITIONNO+'" style="margin-right: 0;">'
+										+ '<img class="exh_poster" src="'+item.MAINPOSTER+'"/>'
+										+ '<span class="art_mainTitle">'+item.EXHIBITIONNAME+'</span></a><br/>';
+							}
+							
+							$(".2020").append(tthtml);
+							
+						}
+						else if(year == '2019'){ ntCnt++;
+							
+							if(ntCnt%4 != 0){
+								nthtml += '<a class="exh_one" href="/exhDetail.at?eno='+item.EXHIBITIONNO+'">'
+									 	+ '<img class="exh_poster" src="'+item.MAINPOSTER+'"/>'
+									 	+ '<span class="art_mainTitle">'+item.EXHIBITIONNAME+'</span></a>';
+							}
+							else {
+								nthtml += '<a class="exh_one" href="/exhDetail.at?eno='+item.EXHIBITIONNO+'" style="margin-right: 0;">'
+								 		+ '<img class="exh_poster" src="'+item.MAINPOSTER+'"/>'
+								 		+ '<span class="art_mainTitle">'+item.EXHIBITIONNAME+'</span></a><br/>';
+							}
+							
+							$(".2019").append(nthtml);
+							
+						}
+						else if(year == '2018'){ etCnt++;
+							
+							if(etCnt%4 != 0){
+								ethtml += '<a class="exh_one" href="/exhDetail.at?eno='+item.EXHIBITIONNO+'">'
+									 	+ '<img class="exh_poster" src="'+item.MAINPOSTER+'"/>'
+									 	+ '<span class="art_mainTitle">'+item.EXHIBITIONNAME+'</span></a>';
+							}
+							else {
+								ethtml += '<a class="exh_one" href="/exhDetail.at?eno='+item.EXHIBITIONNO+'" style="margin-right: 0;">'
+							 		    + '<img class="exh_poster" src="'+item.MAINPOSTER+'"/>'
+							 		    + '<span class="art_mainTitle">'+item.EXHIBITIONNAME+'</span></a><br/>';
+							}
+							
+							$(".2018").append(ethtml);
+							
+						}
+						else if(year == '2017'){ stCnt++;
+							
+							if(stCnt%4 != 0){
+								sthtml += '<a class="exh_one" href="/exhDetail.at?eno='+item.EXHIBITIONNO+'">'
+									 	+ '<img class="exh_poster" src="'+item.MAINPOSTER+'"/>'
+									 	+ '<span class="art_mainTitle">'+item.EXHIBITIONNAME+'</span></a>';
+							}
+							else {
+								sthtml += '<a class="exh_one" href="/exhDetail.at?eno='+item.EXHIBITIONNO+'" style="margin-right: 0;">'
+								 		+ '<img class="exh_poster" src="'+item.MAINPOSTER+'"/>'
+								 		+ '<span class="art_mainTitle">'+item.EXHIBITIONNAME+'</span></a><br/>';
+							}
+							
+							$(".2017").append(sthtml);
+							
+						} // end of 2020 ~ 2017 if else -------------
+						
+					});
+					
+				} // end of json if ~ else ------------------
+			},
+			error: function(request, status, error){
+				alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+			}
+			
+		});
+		
+	} // end of goGetEndExhs --------------------
+
 </script>
 
 <div id="container_gal_detail">
@@ -434,36 +645,44 @@
 		<span class="lt">GALLERY</span>
 	</div>
 	
+	<c:if test="${not empty galDetailMap}">
 	<div class="main_top">
-		<img class="main_img" src="http://app.art-map.co.kr//upload/museum/museum_img_1446528609.JPG">
+		<img class="main_img" src="${galDetailMap.MAINPICTURE}">
 		<div class="info_top">
-			<span class="info_title">챕터투/서울</span>
+			<span class="info_title">${galDetailMap.GALLERYNAME} | ${galDetailMap.LOCATION}</span>
 			<div class="specialArea">
-				<span class="exhStatus">전시중</span>
+				<c:if test="${galDetailMap.STATUS == 1}"><span class="exhStatus">전시중</span></c:if>
+				<c:if test="${galDetailMap.STATUS == 0}"><span class="exhStatus">전시완료</span></c:if>
 				<a href="" data-toggle="tooltip" title="갤러리 관심 지정 !" data-placement="right"  style="margin-right: 10px;">
-					<img src="<%= ctxPath%>/resources/images/exhibition/ico/select.png">
+					<img class="ico1"src="<%= ctxPath%>/resources/images/exhibition/ico/select.png">
 				</a>
 			</div>
 			<table class="info_aboutGal">
 				<tr>
 					<td>주소</td>
-					<td>서울 마포구 연남동 566-55</td>
+					<td>${galDetailMap.DETAILADDRESS}</td>
 				</tr>
 				<tr>
 					<td>휴관일</td>
-					<td>일요일</td>
+					<td>${galDetailMap.HOLIDAY}</td>
 				</tr>
 				<tr>
 					<td>운영시간</td>
-					<td>10:00 - 18:00</td>
+					<td>${galDetailMap.OPENINGHOUR}</td>
 				</tr>
 				<tr>
 					<td>연락처</td>
-					<td>070-4895-1031.</td>
+					<td>${galDetailMap.TEL}</td>
 				</tr>
 				<tr>
 					<td>홈페이지</td>
-					<td>http://chapterii.org</td>
+					<td>
+						<c:if test="${galDetailMap.WEBSITE != null}">
+							<a class="noDecoA" href="${galDetailMap.WEBSITE}">${galDetailMap.WEBSITE}&nbsp;
+							<img class="ico2" src="<%=ctxPath%>/resources/images/exhibition/ico/input.png">
+							</a>
+						</c:if>
+					</td>
 				</tr>
 			</table>
 		</div>	
@@ -475,15 +694,7 @@
 		</div>
 		<div class="">
 			<span class="intro_content">
-				2448 문파인아츠(2448 MOON Fine Arts)는 1982년 그림과 공예전문점으로부터 시작하여,<br/>
-				1989년에 판화 전문화랑인 문 갤러리(MOON Gallery)를 오픈하였습니다.<br/><br/>
-				그림이라는 것이 특별한 사람들만 소장할 수 있는 예술품이 아닌,<br/>
-				마음의 여유를 갖는다면 누구나 가능한 일이라는 생각을 가지고,<br/>
-				국내외 작가들의 판화를 전시 기획하여 왔고,<br/>
-				2006년 10월에는 새로워진 전시장과 2448 문파인아츠(2448 MOON Fine Arts)라는 새 이름으로 거듭나면서,<br/>
-				풍요로운 삶을 위한 영혼의 양식인 예술이 우리의 일상에 항상 자리할 수 있도록<br/>
-				현재 활발히 활동하고 있는 국내의 신진 및 중견작가들,<br/>
-				그리고 아직 화단에 잘 알려지지 않은 좋은 작가 발굴에 힘쓰고 있습니다.
+				${galDetailMap.INTRODUCTION}
 			</span>
 		</div>
 	</div>
@@ -491,155 +702,24 @@
 	<div class="info_exhs divComCss">
 		<div class="curExh">
 			<span class="spanTitle">진행중 전시회</span>
-			<!-- <div class="intro_content">진행중인 전시회가 없습니다.</div> -->
-			<div class="intro_content">
-				<div class="curExhList">
-					<a href=""><%-- 타이틀 제목 길면 디비에서 읽어올때 짤라오기 ... --%>
-						<img src="<%= ctxPath%>/resources/images/exhibition/artmap_20200102_9426350.jpg">
-						<span class="ExhTitle">많은 섬들의 나라, 우산타</span>
-						<span class="ExhDate">2019.11.20 - 2020.13.20</span>
-					</a>
-				</div>
-				<div class="curExhList">
-					<a href="">
-						<img src="<%= ctxPath%>/resources/images/exhibition/artmap_20200102_9426350.jpg">
-						<span class="ExhTitle">많은 섬들의 나라, 우산타</span>
-						<span class="ExhDate">2019.11.20 - 2020.13.20</span>
-					</a>
-				</div>
-				<div class="curExhList" style="margin: 0 0 20px 0;">
-					<a href="">
-						<img src="<%= ctxPath%>/resources/images/exhibition/artmap_20200102_9426350.jpg">
-						<span class="ExhTitle">많은 섬들의 나라, 우산타</span>
-						<span class="ExhDate">2019.11.20 - 2020.13.20</span>
-					</a>
-				</div>
-				<br/>
-				<div class="curExhList">
-					<a href="">
-						<img src="<%= ctxPath%>/resources/images/exhibition/artmap_20200102_9426350.jpg">
-						<span class="ExhTitle">많은 섬들의 나라, 우산타</span>
-						<span class="ExhDate">2019.11.20 - 2020.13.20</span>
-					</a>
-				</div>
-				<div class="curExhList">
-					<a href="">
-						<img src="<%= ctxPath%>/resources/images/exhibition/artmap_20200102_9426350.jpg">
-						<span class="ExhTitle">많은 섬들의 나라, 우산타</span>
-						<span class="ExhDate">2019.11.20 - 2020.13.20</span>
-					</a>
-				</div>
-				<div class="curExhList">
-					<a href="">
-						<img src="<%= ctxPath%>/resources/images/exhibition/artmap_20200102_9426350.jpg">
-						<span class="ExhTitle">많은 섬들의 나라, 우산타</span>
-						<span class="ExhDate">2019.11.20 - 2020.13.20</span>
-					</a>
-				</div>
+			<div class="intro_content ingExh">
 			</div>
 		</div>
 		<div class="comExh">
 			<span class="spanTitle">예정중 전시회</span>
-			<!-- <div class="intro_content"> 예정중인 전시회가 없습니다.</div> -->
-			<div class="intro_content">
-				<div class="curExhList">
-					<a href="">
-						<img src="<%= ctxPath%>/resources/images/exhibition/exhPoster.jpg">
-						<span class="ExhTitle">이주서사</span>
-						<span class="ExhDate">2019.11.20 - 2020.13.20</span>
-					</a>
-				</div>
-				<div class="curExhList">
-					<a href="">
-						<img src="<%= ctxPath%>/resources/images/exhibition/exhPoster.jpg">
-						<span class="ExhTitle">이주서사</span>
-						<span class="ExhDate">2019.11.20 - 2020.13.20</span>
-					</a>
-				</div>
-				<div class="curExhList" style="margin: 0 0 20px 0;">
-					<a href="">
-						<img src="<%= ctxPath%>/resources/images/exhibition/exhPoster.jpg">
-						<span class="ExhTitle">이주서사</span>
-						<span class="ExhDate">2019.11.20 - 2020.13.20</span>
-					</a>
-				</div>
-				<br/>
-				<div class="curExhList">
-					<a href="">
-						<img src="<%= ctxPath%>/resources/images/exhibition/exhPoster.jpg">
-						<span class="ExhTitle">이주서사</span>
-						<span class="ExhDate">2019.11.20 - 2020.13.20</span>
-					</a>
-				</div>
-				<div class="curExhList">
-					<a href="">
-						<img src="<%= ctxPath%>/resources/images/exhibition/exhPoster.jpg">
-						<span class="ExhTitle">이주서사</span>
-						<span class="ExhDate">2019.11.20 - 2020.13.20</span>
-					</a>
-				</div>
-				<div class="curExhList">
-					<a href="">
-						<img src="<%= ctxPath%>/resources/images/exhibition/exhPoster.jpg">
-						<span class="ExhTitle">이주서사</span>
-						<span class="ExhDate">2019.11.20 - 2020.13.20</span>
-					</a>
-				</div>
+			<div class="intro_content comExh">
 			</div>
 		</div>
 	</div>
 	<div class="lastExh divComCss">
 		<span class="spanTitle">지난 전시회</span>
-		<!-- <div class="intro_content">지난 전시회가 없습니다.</div> -->
 		<div class="intro_content">
 			<div class="forLastExhAcc">
 				<button class="accordion" style="padding-top: 0;">
 					2020
 				</button>
 				<div class="panel" style="width: 100%;">
-					<div class="ExhList_Area" align="center">
-						<a class="exh_one" onclick="exhDetail()">
-							<img class="exh_poster" src="<%= ctxPath%>/resources/images/exhibition/artmap_20200102_9426350.jpg"/>
-							<span class="art_info_aboutLoca InfoWhereWhen">전북도립미술관 | 전북</span>
-							<span class="art_mainTitle">그녀의 이름은</span>		
-						</a>
-						<a class="exh_one" onclick="exhDetail()">
-							<img class="exh_poster" src="<%= ctxPath%>/resources/images/exhibition/artmap_20200102_9426350.jpg"/>
-							<span class="art_info_aboutLoca InfoWhereWhen">전북도립미술관 | 전북</span>
-							<span class="art_mainTitle">그녀의 이름은</span>		
-						</a>
-						<a class="exh_one" onclick="exhDetail()">
-							<img class="exh_poster" src="<%= ctxPath%>/resources/images/exhibition/artmap_20200102_9426350.jpg"/>
-							<span class="art_info_aboutLoca InfoWhereWhen">전북도립미술관 | 전북</span>
-							<span class="art_mainTitle">그녀의 이름은</span>		
-						</a>
-						<a class="exh_one" onclick="exhDetail()" style="margin-right: 0;">
-							<img class="exh_poster" src="<%= ctxPath%>/resources/images/exhibition/artmap_20200102_9426350.jpg"/>
-							<span class="art_info_aboutLoca InfoWhereWhen">전북도립미술관 | 전북</span>
-							<span class="art_mainTitle">그녀의 이름은</span>		
-						</a>
-						<br/>
-						<a class="exh_one" onclick="exhDetail()">
-							<img class="exh_poster" src="<%= ctxPath%>/resources/images/exhibition/artmap_20200102_9426350.jpg"/>
-							<span class="art_info_aboutLoca InfoWhereWhen">전북도립미술관 | 전북</span>
-							<span class="art_mainTitle">그녀의 이름은</span>		
-						</a>
-						<a class="exh_one" onclick="exhDetail()">
-							<img class="exh_poster" src="<%= ctxPath%>/resources/images/exhibition/artmap_20200102_9426350.jpg"/>
-							<span class="art_info_aboutLoca InfoWhereWhen">전북도립미술관 | 전북</span>
-							<span class="art_mainTitle">그녀의 이름은</span>		
-						</a>
-						<a class="exh_one" onclick="exhDetail()">
-							<img class="exh_poster" src="<%= ctxPath%>/resources/images/exhibition/artmap_20200102_9426350.jpg"/>
-							<span class="art_info_aboutLoca InfoWhereWhen">전북도립미술관 | 전북</span>
-							<span class="art_mainTitle">그녀의 이름은</span>		
-						</a>
-						<a class="exh_one" onclick="exhDetail()" style="margin-right: 0;">
-							<img class="exh_poster" src="<%= ctxPath%>/resources/images/exhibition/artmap_20200102_9426350.jpg"/>
-							<span class="art_info_aboutLoca InfoWhereWhen">전북도립미술관 | 전북</span>
-							<span class="art_mainTitle">그녀의 이름은</span>		
-						</a>
-						<br/>
+					<div class="ExhList_Area 2020">
 					</div>
 				</div>
 	
@@ -647,23 +727,30 @@
 					2019
 				</button>
 				<div class="panel" style="width: 100%;">
+					<div class="ExhList_Area 2019">
+					</div>
 				</div>
 				
 				<button class="accordion">
 					2018
 				</button>
 				<div class="panel" style="width: 100%;">
+					<div class="ExhList_Area 2018">
+					</div>
 				</div>
 				
 				<button class="accordion">
 					2017
 				</button>
 				<div class="panel" style="width: 100%;">
+					<div class="ExhList_Area 2017">
+					</div>
 				</div>
 			</div>
 		</div>
 	</div>
 	
 	<%-- -------------------------------------지도 영역 --%>
-	<div id="map">ㄴㅇㄹㄴㅇㄹㄴㅇㄹ</div>
+	<div id="map"></div>
+	</c:if>
 </div>

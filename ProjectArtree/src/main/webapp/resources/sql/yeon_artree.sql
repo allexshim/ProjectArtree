@@ -108,6 +108,7 @@ create table test_member
 );
 -- Table TEST_MEMBER이(가) 생성되었습니다.
 
+
 create sequence test_seq_member
 start with 1
 increment by 1
@@ -123,11 +124,26 @@ insert into test_member(idx, email, name, password, agegroup, gender, area, hp, 
 select *
 from test_member;
 
+
+select *
+from test_wishList;
+
+delete from test_wishList purge;
+
 delete from test_member purge;
 commit;
 
+drop table test_member purge;
+
+drop table test_wishList purge;
+
+drop sequence test_seq_wishList_wishNo;
+
+drop sequence test_seq_member;
+
 select *
 from tabs;
+
 
 select *
 from gallery;
@@ -145,7 +161,77 @@ where exhibitionno = 1506;
 
 select *
 from EXHIBITIONDETAIL
-where fk_exhibitionno = 1096;
+where fk_exhibitionno = 1506;
 
 select *
-from wishlist
+from test_wishlist;
+
+select genre, tag
+from exhibition
+where exhibitionno = 1506 or exhibitionno = 1096;
+
+create table test_wishList
+(wishNo             number          not null
+,fk_idx             number          not null
+,fk_galleryNo       varchar2(100)   not null
+,fk_exhibitionNo    number          not null
+,favorTag           Nvarchar2(20)   not null
+,favorGenre         Nvarchar2(100)  not null
+,constraint PK_test_wishNo  primary key(wishNo)
+,constraint FK_test_fk_idx foreign key(fk_idx) references test_member(idx)
+,constraint FK_test_fk_galleryNo foreign key(fk_galleryNo) references gallery(galleryNo)
+,constraint FK_test_fk_exhibitionNo foreign key(fk_exhibitionNo) references exhibition(exhibitionNo)
+);
+
+create sequence test_seq_wishList_wishNo
+start with 1
+increment by 1
+nomaxvalue
+nominvalue
+nocycle
+nocache;
+
+
+
+-- 작품이미지1, 전시회이름, 전시회작가 select
+select D.image1, E.exhibitionname, E.author
+from exhibition E join exhibitiondetail D
+on E.exhibitionno = D.fk_exhibitionno
+where E.exhibitionno = 1506;
+
+CREATE FUNCTION get_wishno RETURN NUMBER IS
+
+BEGIN
+
+     RETURN test_seq_wishList_wishNo.nextval;
+
+END;
+
+CREATE FUNCTION get_wishno RETURN NUMBER IS
+
+BEGIN
+
+     RETURN seq_wishList_wishNo.nextval;
+
+END;
+
+drop function get_wishno;
+
+
+      
+SELECT A.uniqueness,
+       b.*
+  FROM ALL_INDEXES a,
+       ALL_IND_COLUMNS b
+ WHERE a.index_name = b.index_name
+   AND a.table_name=upper('gallery');
+
+SELECT * FROM USER_INDEXES where status='UNUSABLE';
+
+select *
+from member;
+
+
+
+select *
+from seq;

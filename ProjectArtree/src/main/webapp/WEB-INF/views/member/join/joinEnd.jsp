@@ -25,12 +25,7 @@ button {
 	outline: none;
 }
 
-/* 드래그 시 색상변경 */
-::selection {
-    background-color: #6e1fff;
-    color: #fff;
-}
-
+/* ===== 회원가입 완료 첫 번째 페이지 ===== */
 div.joinEnd_wrap {
 	border: solid 1px #b7b7b7;
 	border-radius: 8px;
@@ -76,7 +71,7 @@ div.joinEnd_content table td {
 }
 
 /* 성별 */
-button#gender_male { 
+button#gender_1 { 
 	float: left;
 	width: 50%;
 	cursor: pointer;
@@ -87,7 +82,7 @@ button#gender_male {
 	border: 1px solid #e7e7e7;
 }
 
-button#gender_female {
+button#gender_2 {
 	float: right;
 	width: 50%;
 	cursor: pointer;
@@ -128,8 +123,8 @@ div.favor_header {
 }
 
 div.img_wrap {
-		display: inline-block;
-		width: 100%;
+	display: inline-block;
+	width: 100%;
 }
 
 div.img_wrap img {
@@ -140,7 +135,11 @@ div.img_wrap img {
 }
 
 div.img_wrap img:hover {
-	border:5px solid black;
+	border: 5px solid black;
+}
+
+div.display {
+	display: none;
 }
 
 img.img_margin {
@@ -149,7 +148,86 @@ img.img_margin {
 
 
 /* 확인 버튼 */
-#next_btn {
+#confirm_btn {
+	padding: 10px 40px;
+    background: #000;
+    color: #fff;
+    font-size: 18px;
+    border-radius: 5px;
+    margin: 0 auto;
+    border: 0;
+    cursor: pointer;
+   	font-weight: 600;
+   	margin: 20px 0 30px 0;
+}
+
+/* ===== 회원가입완료 두 번째 페이지 ===== */
+/* header */
+div.joinEndTwo_header {
+    padding: 10px 0px;
+    text-align: center;
+    font-weight: 600; 
+    line-height: 36px;
+}
+
+div.joinEndTwo_header h2 {
+	font-size: 20px;
+}
+
+/* 선택한 작품 */
+div.pick {
+	display: inline-block;
+	width: 49%;
+}
+
+div.pick img {
+	width: 190px;
+	height: 190px;
+	margin-bottom: 10px;
+}
+
+div.pick_desc span {
+	display: block;
+	font-size: 11px;
+	text-align: left;
+	font-weight: 500;
+	line-height: 16px;
+	padding-left: 30px;
+}
+
+/* 워드클라우드 */
+div.joinEndTwo_chart {
+	margin-top: 30px;
+}
+
+div.joinEndTwo_chart span {
+	display: block;
+	color: #A6A6A6;
+	text-align: right;
+	padding: 5px 5px;
+	font-size: 12px;
+}
+
+div.word_chart {
+	width: 100%;
+	height: 234px;
+	background-color: #f5f5f5;
+	text-align: center;
+	margin-top: 10px;
+}
+
+/* 푸터 설명 */
+div.joinEndTwo_footer {
+	text-align: left;
+	margin: 40px 0 10px 30px;
+}
+
+div.joinEndTwo_footer span {
+	display: block;
+}
+
+/* 확인 버튼 */
+#start_btn {
 	padding: 10px 40px;
     background: #000;
     color: #fff;
@@ -163,34 +241,138 @@ img.img_margin {
 }
 
 
-
 </style>
 
 <script type="text/javascript" src="<%= ctxPath%>/resources/js/jquery-3.3.1.min.js"></script>
 
 <script type="text/javascript">
 
-// 뒤로가기 막기
-window.history.forward();
+	$(function() {
 
-function noBack() {
-	window.history.forward();
-}
+		$("#gender_"+${loginuser.getGender()}).addClass("on");
+		$("#gender").val(+${loginuser.getGender()});
+		
+		$("#agegroup").val(${loginuser.getAgegroup()});
+		$("#age_select option[value='${loginuser.getAgegroup()}']").attr("selected", true);
+		$("#area").val('${loginuser.getArea()}');
+		$("#area_select option[value='${loginuser.getArea()}']").attr("selected", true);
+		
+		
+		$("#age_select").click(function() {
+			$("#agegroup").val($("#age_select option:selected").val());
+		}); 
+		
+		$("#area_select").click(function() {
+			$("#area").val($("#area_select option:selected").val());
+		});
+		
+		
+	}); // end of function() --------------
 
+// 성별 선택하면 css 변경
 function gender_chg(g) {
 	$(".gender").removeClass("on");
 	$("#gender_"+g).addClass("on");
 	$("#gender").val(g);
 }
+
+// 작품 선택1, 작품 선택2
+// favor_step1 (tagImg 뒤에 올 숫자, exhibitionno, galleryno)
+function favor_step1(n, e, g) {
+	$("#exhibitionno1").val(e);
+	$("#galleryno1").val(g);
+	$("#tagImg").fadeOut( 300 );
+	setTimeout(function(){ $("#tagImg"+n).fadeIn( 300 ); }, 300);
+}
+
+// favor_step2 (exhibitionno, galleryno)
+function favor_step2(e, g){
+	$("#exhibitionno2").val(e);
+	$("#galleryno2").val(g);
+	$("#comp").html("'확인'을 눌러 완료해 주시기 바랍니다.");
+}
+
+// 작품 선택1, 2 완료하면 선택한 작품 보여주기
+function confirm() {
+	// 성별, 나이대, 지역 다 선택했는지 확인
+	var gender = $("#gender").val();
+	var agegroup = $("#age_select :selected").val();
+	var area = $("#area").val();
+	var exhibitionno1 = $("#exhibition1").val();
+	var galleryno1 = $("#galleryno1").val();
+	var exhibitionno2 = $("#exhibition2").val();
+	var galleryno2 = $("#galleryno2").val();
 	
+	if(!gender) {
+		alert("성별을 선택해 주세요!");
+		return false;
+	}
+	
+	if(!agegroup) {
+		alert("연령대를 선택해 주세요!");
+		return false;
+	}
+	
+	if(!area) {
+		alert("지역을 선택해 주세요!");
+		return false;
+	}
+	
+	if(!(exhibitionno1 || galleryno1 || exhibitionno2 || galleryno2)) {
+		alert("작품을 선택해 주세요!");
+		return false;
+	}
+
+	var join_data = $("form[name=joinFinalForm]").serialize(); // form 태그에 있는 모든 것들이 name을 가지고 간다.
+	   
+    $.ajax({
+	  url:"<%= request.getContextPath()%>/joinEndInsert.at",
+	  data:join_data,
+	  type:"POST",
+	  dataType:"JSON",
+	  success:function(json){
+		  var html = "";
+		  var data = json.myFavorList;
+
+		 
+		  for(var i=0; i<data.length; i++) {
+			  
+			  html += "<div class='pick'>";
+			  html += "<div class='pickImg_wrap'>";
+			  html += "<img src='"+data[i]["image1"]+"'/>";
+			  html += "</div>";
+			  html += "<div class='pick_desc'>";
+			  html += "<span>"+data[i]["exhibitionname"]+"</span>";
+			  html += "<span>"+data[i]["author"]+"</span>";
+			  html += "</div>";
+			  html += "</div>";
+		  }
+		  
+		  $("#point").html(html);
+		  
+		  $("#st1").css("display", "none");
+		  $("#st2").css("display", "");
+		  $("#st2").css("align", "center");
+		  
+	  },
+	  
+	  error: function(request, status, error){
+			alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+	  }
+	  
+	  
+   }); // end of ajax
+}
+
 </script>
 
-<body onload="noBack();" onpageshow="if(event.persisted) noBack();" onunload="">
+<body>
 	<div class="container_joinEnd" align="center">
-		<div class="joinEnd_wrap">
-		<form>
+		<%-- ========================================================================= -->
+		<%-- 회원가입완료 처음 페이지 --%>
+		<div class="joinEnd_wrap" id="st1">
 			<div class="joinEnd_header">
-				<span>${name}님, 환영합니다.</span>
+				<span>${loginuser.getName()}님, 환영합니다.</span>
 			</div>
 			<div class="joinEnd_content">
 				<span id="fisrt_info">큐레이션 중심, 메타데이터 분석 기반 서비스로<br/>미술작품과 가까워질 수 있어요.</span>
@@ -202,8 +384,8 @@ function gender_chg(g) {
 					<tr>
 						<th>성별</th>
 						<td>
-							<button type="button" id="gender_male" class="gender" onclick="javascript:gender_chg('male')">남</button>
-							<button type="button" id="gender_female" class="gender" onclick="javascript:gender_chg('female')">여</button>
+							<button type="button" id="gender_1" class="gender" onclick="javascript:gender_chg(1)">남</button>
+							<button type="button" id="gender_2" class="gender" onclick="javascript:gender_chg(2)">여</button>
 						</td>
 					</tr>
 					
@@ -225,47 +407,120 @@ function gender_chg(g) {
 						<th>지역</th>
 						<td>
 							<select id="area_select">
-								<option value="0">서울</option>
-								<option value="1">부산</option>
-								<option value="2">대구</option>
-								<option value="3">인천</option>
-								<option value="4">광주</option>
-								<option value="5">대전</option>
-								<option value="6">울산</option>
-								<option value="7">세종</option>
-								<option value="8">강원</option>
-								<option value="9">경기</option>
-								<option value="10">경남</option>
-								<option value="11">경북</option>
-								<option value="12">전남</option>
-								<option value="13">전북</option>
-								<option value="14">제주</option>
-								<option value="15">충남</option>
-								<option value="16">충북</option>
+								<option value="서울">서울</option>
+								<option value="부산">부산</option>
+								<option value="대구">대구</option>
+								<option value="인천">인천</option>
+								<option value="광주">광주</option>
+								<option value="대전">대전</option>
+								<option value="울산">울산</option>
+								<option value="세종">세종</option>
+								<option value="강원">강원</option>
+								<option value="경기">경기</option>
+								<option value="경남">경남</option>
+								<option value="경북">경북</option>
+								<option value="전남">전남</option>
+								<option value="전북">전북</option>
+								<option value="제주">제주</option>
+								<option value="충남">충남</option>
+								<option value="충북">충북</option>
 							</select>
 						</td>
 					</tr>
 				</table>
 			</div>
 			
-			<div class="content_favor">
+			<div class="content_favor" id="set_favor">
 				<div class="favor_header">
 					<span>마음에 드는 작품을 선택해 주세요.</span>
 				</div>
-				<div class="favor_content">
-					<div class="img_wrap" id="tag1">
-						<img class="img_margin" src="http://www.art-map.co.kr/img/fav/1.png" onClick="(fav('1', '1'))"/>
-						<img src="http://www.art-map.co.kr/img/fav/2.png" onClick="(favo('2', '1'))"/>
-						<br/>
-						<img class="img_margin" src="http://www.art-map.co.kr/img/fav/3.png" onClick="(fav('3', '1'))"/>
-						<img src="http://www.art-map.co.kr/img/fav/4.png" onClick="(favo('4', '1'))"/>
+				<div id="comp" style="text-align:center; font-weight:500; font-size:13px; margin-top:15px; color:#005766;"></div>
+				<%-- 첫 번째 작품설정 --%>
+				<div class="favor_content1">
+				<div class="img_wrap" id="tagImg">
+                  <img class="img_margin" src="<%= ctxPath%>/resources/images/member/1.png" onClick="favor_step1(1, '1066', '983')"/>
+                  <img src="<%= ctxPath%>/resources/images/member/2.png" onClick="favor_step1(2, '1094', '2007')"/>
+                  <br/>
+                  <img class="img_margin" src="<%= ctxPath%>/resources/images/member/3.png" onClick="favor_step1(3, '1240', '9')"/>
+                  <img src="<%= ctxPath%>/resources/images/member/4.png" onClick="favor_step1(4, '1367', '2583')"/>
+               </div>
+               
+               <%-- 두 번째 작품설정 --%>
+               <div class="img_wrap display" id="tagImg1">
+                  <img class="img_margin" src="<%= ctxPath%>/resources/images/member/1A.png" onClick="favor_step2('1096', '2023')"/>
+                  <img src="<%= ctxPath%>/resources/images/member/1B.png" onClick="favor_step2('1229', '339')"/>
+                  <br/>
+                  <img class="img_margin" src="<%= ctxPath%>/resources/images/member/1C.png" onClick="favor_step2('1332', '725')"/>
+                  <img src="<%= ctxPath%>/resources/images/member/1D.png" onClick="favor_step2('1353', '1126')"/>
+               </div>
+               
+               <div class="img_wrap display" id="tagImg2">
+                  <img class="img_margin" src="<%= ctxPath%>/resources/images/member/2A.png" onClick="favor_step2('1218', '722')"/>
+                  <img src="<%= ctxPath%>/resources/images/member/2B.png" onClick="favor_step2('1296', '298')"/>
+                  <br/>
+                  <img class="img_margin" src="<%= ctxPath%>/resources/images/member/2C.png" onClick="favor_step2('1374', '270')"/>
+                  <img src="<%= ctxPath%>/resources/images/member/2D.png" onClick="favor_step2('1418', '272')"/>
+               </div>
+               
+               <div class="img_wrap display" id="tagImg3">
+                  <img class="img_margin" src="<%= ctxPath%>/resources/images/member/3A.png" onClick="favor_step2('1077', '459')"/>
+                  <img src="<%= ctxPath%>/resources/images/member/3B.png" onClick="favor_step2('1241', '45')"/>
+                  <br/>
+                  <img class="img_margin" src="<%= ctxPath%>/resources/images/member/3C.png" onClick="favor_step2('1380', '725')"/>
+                  <img src="<%= ctxPath%>/resources/images/member/3D.png" onClick="favor_step2('1509', '9')"/>
+               </div>
+               
+               <div class="img_wrap display" id="tagImg4">
+                  <img class="img_margin" src="<%= ctxPath%>/resources/images/member/4A.png" onClick="favor_step2('1088', '312')"/>
+                  <img src="<%= ctxPath%>/resources/images/member/4B.png" onClick="favor_step2('1216', '267')"/>
+                  <br/>
+                  <img class="img_margin" src="<%= ctxPath%>/resources/images/member/4C.png" onClick="favor_step2('1328', '267')"/>
+                  <img src="<%= ctxPath%>/resources/images/member/4D.png" onClick="favor_step2('1506', '864')"/>
+               </div>
+               </div>
+            	
+               <button type="button" id="confirm_btn" onClick="confirm()">확인</button>
+			</div>
+	</div>	
+	
+	<%-- ========================================================================= -->
+	<%-- 작품설정 완료 후 회원가입완료 두 번째 페이지 --%>
+	<div class="joinEnd_wrap" id="st2" style="display: none;">
+		<div class="favor_content2">
+			<div class="joinEndTwo_header">
+				<h2>선택작품으로 분석된 회원님의 취향입니다.</h2>
+			</div>
+			<div class="joinEndTwo_content">
+				<div id="point">
+				</div>
+				<div class="joinEndTwo_chart">
+					<span>* 마이페이지 - 작품컬렉션에서 확인하실 수 있습니다.</span>
+					<div class="word_chart">
+						차트차트차트
+						차트차트차트
+						차트차트차트
 					</div>
+				</div>
+				
+				<div class="joinEndTwo_footer">
+					<span style="font-weight: 600;">취향 분석은 회원님의 활동에 따라 변화합니다.</span>
+					<span>마음에드는 작품, 좋아하는 작가, 전시회에 대한 호감 표현이</span>
+					<span>많아질수록 정확한 큐레이션을 제공해 드립니다.</span>
 				</div>
 			</div>
 		
-
-			<button type="button" id="next_btn" onClick="javascript:location.href='<%= request.getContextPath()%>/joinEndTwo.at'">확인</button>
-		</form>
+		<button type="button" id="start_btn" onClick="javascript:location.href='<%= request.getContextPath()%>/search.at'">아트맵 시작하기</button>
+		</div>	
+	</div>	
+	<form name="joinFinalForm">
+		<input type="hidden" name="finalGender" id="gender"/>
+		<input type="hidden" name="finalAgegroup" id="agegroup"/>
+		<input type="hidden" name="finalArea" id="area"/>
+		<input type="hidden" name="exhibitionno1" id="exhibitionno1">
+		<input type="hidden" name="galleryno1" id="galleryno1">
+		<input type="hidden" name="exhibitionno2" id="exhibitionno2">
+		<input type="hidden" name="galleryno2" id="galleryno2">
+	</form>
+		
 		</div>
-	</div>
 </body>
