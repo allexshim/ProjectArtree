@@ -17,9 +17,117 @@
 
 	<select id="getAllExhibition" resultMap="allMap">
 		select detailAddress, exhibitionName, galleryName, startDate, endDate, mainPoster, exhibitionno
-		from (select * from exhibition E join exhibitionDetail D on E.exhibitionno = D.fk_exhibitionno) V
+        from (
+        select * from 
+        (select * from exhibition where status='전시중') E join exhibitionDetail D 
+        on E.exhibitionno = D.fk_exhibitionno
+        ) V
 		join (select * from gallery where status = 1) G
 		on V.fk_galleryNo = G.galleryNo
+		order by startdate
 	</select>
 
+	<!-- 해당 월의 전시회 정보를 받아온다. -->
+	<resultMap type="HashMap" id="monthMap">
+		<result property="exhibitionno"   column="exhibitionno" 	javaType="String"/> 
+	 	<result property="fk_galleryno"   column="fk_galleryno" 	javaType="String"/>
+	 	<result property="exhibitionname" column="exhibitionname" 	javaType="String"/>
+	 	<result property="author"  		  column="author" 			javaType="String"/>
+	 	<result property="startdate"  	  column="startdate" 		javaType="String"/>
+	 	<result property="enddate"   	  column="enddate" 			javaType="String"/>
+	 	<result property="mainposter"     column="mainposter" 		javaType="String"/>
+	 	<result property="galleryname"    column="galleryname" 		javaType="String"/>
+	 	<result property="galleryno"      column="galleryno" 		javaType="String"/>
+	 	<result property="location"       column="location" 		javaType="String"/>
+	</resultMap>
+	
+	<select id="getExhibitionbyMonth" parameterType="String" resultMap="monthMap" >
+		select exhibitionno, fk_galleryno, exhibitionname, author, startdate, enddate, mainposter, galleryname, galleryno, location
+        from 
+        (
+        select *
+		from
+		(
+		    select *
+		    from exhibition
+		    where <![CDATA[to_date(enddate) >= to_date(#{month})]]> 
+		    	  <![CDATA[and to_date(enddate) <= last_day( #{month} )]]> 
+		    order by to_date(enddate)
+		) V join exhibitionDetail D
+		on V.exhibitionno = D.fk_exhibitionno
+        ) E join gallery G
+        on E.fk_galleryno = G.galleryno
+        order by startdate
+	</select>
+	
+	<!-- 해당 날짜의 전시회 조회 -->
+	<select id="getExhibitionbyDate" parameterType="String" resultMap="monthMap" >
+		select exhibitionno, fk_galleryno, exhibitionname, author, startdate, enddate, mainposter, galleryname, galleryno, location
+        from 
+        (
+        select *
+		from
+		(
+		    select *
+		    from exhibition
+		    where <![CDATA[to_date(enddate) >= to_char(to_date( #{date}, 'mm/dd/yyyy'),'yyyy-mm-dd')]]> 
+		    order by to_date(enddate)
+		) V join exhibitionDetail D
+		on V.exhibitionno = D.fk_exhibitionno
+        ) E join gallery G
+        on E.fk_galleryno = G.galleryno
+        order by startdate
+	</select>
+	
+	<resultMap type="HashMap" id="themeMap">
+		<result property="exhibitionno"   column="exhibitionno" 	javaType="String"/> 
+	 	<result property="fk_galleryno"   column="fk_galleryno" 	javaType="String"/>
+	 	<result property="exhibitionname" column="exhibitionname" 	javaType="String"/>
+	 	<result property="author"  		  column="author" 			javaType="String"/>
+	 	<result property="startdate"  	  column="startdate" 		javaType="String"/>
+	 	<result property="enddate"   	  column="enddate" 			javaType="String"/>
+	 	<result property="mainposter"     column="mainposter" 		javaType="String"/>
+	 	<result property="galleryname"    column="galleryname" 		javaType="String"/>
+	 	<result property="galleryno"      column="galleryno" 		javaType="String"/>
+	 	<result property="location"       column="location" 		javaType="String"/>
+	 	<result property="tag"      	  column="tag" 				javaType="String"/>
+	</resultMap>
+	
+	<!-- 전시회 테마 조회 (전체) -->
+	<select id="getExhibitionbyTheme" resultMap="themeMap" >
+	 	select exhibitionno, fk_galleryno, exhibitionname, author, startdate, enddate, mainposter, galleryname, galleryno, location, tag
+        from 
+        (
+        select *
+		from
+		(
+		    select *
+		    from exhibition
+		    where <![CDATA[to_date(enddate) >= sysdate]]>
+		    order by to_date(enddate)
+		) V join exhibitionDetail D
+		on V.exhibitionno = D.fk_exhibitionno
+        ) E join gallery G
+        on E.fk_galleryno = G.galleryno
+        order by startdate
+	</select>
+	
+	<select id="getExhibitionbySelectTheme" parameterType="String" resultMap="themeMap" >
+		select exhibitionno, fk_galleryno, exhibitionname, author, startdate, enddate, mainposter, galleryname, galleryno, location, tag
+        from 
+        (
+        select *
+		from
+		(
+		    select *
+		    from exhibition
+		    where tag like '%'|| #{tag} || '%'
+		    order by to_date(enddate)
+		) V join exhibitionDetail D
+		on V.exhibitionno = D.fk_exhibitionno
+        ) E join gallery G
+        on E.fk_galleryno = G.galleryno
+        order by startdate
+	</select>
+	
 </mapper>

@@ -29,12 +29,6 @@
 		margin: 0 auto;
 	}
 	
-	/* 드래그 시 색상변경 */
-	::selection {
-	    background-color: #6e1fff;
-	    color: #fff;
-	}
-	
 	/* h2 */
 	div.idFind_container h2 {
 		font-size: 35px;

@@ -22,7 +22,8 @@
 		border: 1px solid #dcdcdc;
 		height: 581px;
 		border-radius: 10px;
-		margin-top: 70px;
+		margin-top: 200px;
+		margin-bottom: 100px;
 	}
 	
 	div.idFind_wrap {
@@ -30,12 +31,6 @@
 		margin: 0 auto;
 	}
 	
-	/* 드래그 시 색상변경 */
-	::selection {
-	    background-color: #6e1fff;
-	    color: #fff;
-	}
-
 	/* 아이디 찾기 */
 	div.idFind_container h2 {
 		font-size: 35px;
@@ -63,9 +58,16 @@
 		font-size: 14px;
 	}
 	
+	input#hp {
+		border: none;
+		width: 95%;
+		padding: 8px;
+		font-size: 14px;
+	}
+	
 	/* 성별 */
 	div.gender_div {
-		margin-top: 21px;
+		margin-top: 25px;
 		height: 40px;
 		width: 100%;
 	}
@@ -173,8 +175,12 @@
 		
 		<div class="idFind_wrap">
 			<div class="input_div">
-				<input type="text" placeholder="성함" id="name"/>
+				<input type="text" placeholder="성함" name="name" id="name"/>
 			</div>
+			<div class="input_div" style="padding-top: 15px;">
+				<input type="text" placeholder="전화번호" name="hp" id="hp"/>
+			</div>
+			
 			<div class="gender_div">
 				<button type="button" id="gender_male" class="gender on" onclick="javascript:gender_chg('male')">남</button>
 				<button type="button" id="gender_female" class="gender" onclick="javascript:gender_chg('female')">여</button>

@@ -8,5 +8,67 @@
 	<insert id="joinInsert" parameterType="masterpiece.exhibition.member.model.MemberVO"> 
       insert into member(idx, email, name, password, agegroup, gender, area, hp, status, registerday, lastLoginDate, lastPasswordDate, clientIP)
       values(seq_member.nextval, #{email}, #{name}, #{password}, #{agegroup}, #{gender}, #{area}, #{hp}, default, default, default, default, #{clientIP})
+    </insert>
+   
+    <!-- 이메일 중복 체크 -->
+    <select id="duplicateCheck" parameterType="String" resultType="String">
+    	select email
+    	from member
+    	where email = #{email}
+    </select>
+    
+    <!-- 로그인 처리 -->
+    <select id="getLoginMember" parameterType="HashMap" resultType="masterpiece.exhibition.member.model.MemberVO">
+      select idx, email, name, gender, agegroup, area
+          , trunc( months_between(sysdate, lastLoginDate) ) AS lastlogindategap 
+          , trunc( months_between(sysdate, lastPasswordDate) ) AS pwdchangegap 
+      from member
+      where status = 1 and 
+            email = #{email} and
+            password = #{password}
+    </select>
+   
+   <!-- member 테이블에 성별, 연령대, 지역 확정 insert -->
+   <update id="infoUpdate" parameterType="HashMap">
+   	  update member set gender = ${gender}, agegroup = ${agegroup}, area = '${area}' where idx = ${idx}
+   </update>
+   
+   
+   <!-- 받아온 exhibitionno, galleryno로 작품 태그, 장르 select -->
+   <resultMap type="HashMap" id="favorMap">
+	 	<result property="tag" 		column="tag" 	javaType="String"/>
+	 	<result property="genre" 	column="genre" 	javaType="String"/>
+   </resultMap>
+   
+   <select id="myFavorTagGenre" parameterType="HashMap" resultMap="favorMap">
+   	  select genre, tag
+   	  from exhibition
+   	  where exhibitionno = #{exhibitionno1} or exhibitionno = #{exhibitionno2}
+   </select>
+   
+   <!-- wishList 테이블에 선호작품 insert -->
+   <insert id="favorInsert" parameterType="HashMap">
+   	  insert all
+   	  into wishList(wishNo, fk_idx, fk_galleryNo, fk_exhibitionNo, favorTag, favorGenre) 
+   	  values(get_wishno, #{idx}, #{galleryno1}, #{exhibitionno1}, #{favorTag1}, #{favorGenre1})
+   	  into wishList(wishNo, fk_idx, fk_galleryNo, fk_exhibitionNo, favorTag, favorGenre) 
+   	  values(get_wishno, #{idx}, #{galleryno2}, #{exhibitionno2}, #{favorTag2}, #{favorGenre2})
+   	  select *
+	  from dual
    </insert>
+   
+   <!-- 작품 이름, 작가, 작품이미지 select -->
+   <resultMap type="HashMap" id="favorDescMap">
+	 	<result property="exhibitionname" 	column="exhibitionname" javaType="String"/>
+	 	<result property="author" 			column="author" 		javaType="String"/>
+	 	<result property="image1" 			column="image1" 		javaType="String"/>
+   </resultMap>
+   
+   <select id="myFavorDesc" parameterType="HashMap" resultMap="favorDescMap">
+   	  select E.exhibitionname, E.author, D.image1
+	  from exhibition E join exhibitiondetail D
+	  on E.exhibitionno = D.fk_exhibitionno
+	  where E.exhibitionno = #{exhibitionno1} or E.exhibitionno = #{exhibitionno2}
+   </select>
+   
 </mapper>
