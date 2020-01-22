@@ -5,12 +5,58 @@
 
 <mapper namespace="admin">
 
-	<insert id="addExhibition" parameterType="masterpiece.exhibition.admin.model.AppliedExhibitionVO">
-		insert into appliedExhibits ( applyingNo, fk_galleryNo, exhibitionName, applier, author, startDate, endDate
+	<insert id="addExhibition" parameterType="HashMap">
+		insert into appliedExhibits ( seq_appliedExhibits.nextval, fk_galleryNo, exhibitionName, applier, author, startDate, endDate
 			, email, tel, genre, tag, authorInfo, exhibitionInfo, price, foodorDrink, extraRestriction, photo, openCloseTime )
 		values ( applyingNoSeq.nextval, ${ fk_galleryNo }, ${ exhibitionName }, ${ applier }, ${ author }, ${ startDate }, ${ endDate }
 			, ${ email }, ${ tel }, ${ genre }, ${ tag }, ${ authorInfo }, ${ exhibitionInfo }, ${ price }, ${ foodorDrink }, ${ extraRestriction }
 			, ${ photo }, ${ openCloseTime } )
 	</insert>
+	
+	<insert id="addExhibitimage" parameterType="HashMap">
+		insert into appliedDetail(appliedimgseq, fk_applyingNo, imagefilename, imageorgFilename, imagefileSize, imageInfo, thumbnailFileName) 
+		values(seq_appliedDetail.nextval, #{fk_applyingNo}, #{imagefilename}, #{imageorgFilename}, #{imagefileSize}, #{ imageinfo }, #{thumbnailFileName})
+	</insert>
+	
+	<!-- tag 가져오기 - categories -->
+	<select id="getTypes" resultType="String">
+		select distinct type from tag
+	</select>
+	
+	<!-- tag 가져오기 - keywords -->
+	<select id="getKeywords" parameterType="String" resultType="String">
+		select keyword from tag where type = #{ type }
+	</select>
+	
+	<!-- gallery 가져오기 -->
+	<select id="getGalleries" resultType="masterpiece.exhibition.admin.model.GalleryVO" parameterType="HashMap">
+		select galleryno, location, galleryname, detailaddress, tel from Gallery 
+		where galleryname != '-'
+		<if test='searchWord != ""'>
+		    and galleryname like '%' || #{ searchWord } || '%'
+		</if>
+		<if test='galleryLocation != ""'>
+			and location = #{ galleryLocation }
+		</if>
+		order by location, galleryname
+	</select>
+	
+	<!-- gallery location 가져오기 -->
+	<select id="getGalleryLocations" resultType="String">
+		select distinct location from gallery where location != '-' order by location
+	</select>
+	
+	<!-- gallery 검색 -->
+	<select id="wordSearchShow" resultType="masterpiece.exhibition.admin.model.GalleryVO" parameterType="HashMap">
+		select galleryno, location, galleryname, detailaddress, tel from Gallery 
+		where galleryname != '-'
+		<if test='searchWord != ""'>
+		    and galleryname like '%' || #{ searchWord } || '%' or detailaddress like '%' || #{ searchWord } || '%'
+		</if>
+		<if test='galleryLocation != ""'>
+			and location = #{ galleryLocation }
+		</if>
+		order by location, galleryname
+	</select>
 
 </mapper>

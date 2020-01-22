@@ -1,7 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>   
+
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %> 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
 <%
 	String ctxPath = request.getContextPath();
 %>
@@ -22,11 +24,36 @@
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 
+<%-- spinner 사용을 위한 라이브러리 --%>
+<link rel="stylesheet" type="text/css" href="<%= request.getContextPath() %>/resources/jquery-ui-1.11.4.custom/jquery-ui.css" />
+<script type="text/javascript" src="<%= request.getContextPath() %>/resources/jquery-ui-1.11.4.custom/jquery-ui.js"></script>
+  
+
 <style type="text/css">
 @import url(//fonts.googleapis.com/earlyaccess/notosanskr.css);
 
 	body {
 		font-family: 'Noto Sans Kr', sans-serif;
+	}
+	
+	#galleryModal {
+		height: 70vh;
+		overflow: scroll;
+		margin: 10vh auto;
+		
+	}
+	
+	table#galleryListTable > tbody > tr:hover {
+		background-color: #f1f1f1;
+		cursor: pointer;
+	}
+	
+	table#galleryListTable > tbody > tr td:first-child {
+		font-weight: normal !important;
+	}
+	
+	table#galleryListTable > td:first-child {
+		width: 60px !important;
 	}
 	
 	#detailContainer {	
@@ -91,7 +118,7 @@
 		margin : 0 auto;
 	}
 	
-	table#detailTable tr td, table#extraInfoTable tr td{
+	table#detailTable tr td, table#extraInfoTable tr td {
 		padding-top : 4px;
 		padding-bottom :4px;
 		font-size : 12pt;
@@ -160,6 +187,7 @@
 		height: 200px;
 		width: 200px;
 		overflow: hidden;
+		margin: 0 10px;
 	}
 	
 	div#myImages div#bigImage {
@@ -332,6 +360,16 @@
 		font-size : 10pt;
 	}
 	
+	/* spinner color */
+	
+	.ui-widget-content {
+		background : white !important; 
+	}
+	
+	.ui-spinner-button {
+		background : #fce373 !important;
+	}
+	
 </style>
 
 <script type="text/javascript">
@@ -345,23 +383,20 @@
 		$(".ui-datepicker").css('border','none');
 		$(".ui-state-active").css('background','#ccb3ff');
 		
-		// 상단 대표 포스터
-		$("#posterInput").on("change", handleImgFileSelect);
+		if( ${ paraMap != null } ) {
+			$("#galleryLocation").val("${ paraMap.galleryLocation }");
+			$("#searchWord").val("${ paraMap.searchWord }");
+		}
 		
-		// 하단 작품 전경
-		$(".image-input").on("change", handleSubImgFileSelect);
-
-		$("#myCarousel").carousel({interval: false});
+		$("#searchWord").keydown(function(){
 			
-		// Enable Carousel Controls
-		$(".left").click(function(){
-		    $("#myCarousel").carousel("prev");
+			if(event.keyCode==13) {
+				event.preventDefault();
+				searchGallery();
+			}
+			
 		});
 		
-		$(".right").click(function(){
-		    $("#myCarousel").carousel("next");
-		});	
-	
 		// 가격 정보 입력 버튼 --------------------------------------------
 		$(".freeBtn").on("click", function(){
 			
@@ -400,6 +435,93 @@
 		});
 		// 가격 정보 입력 버튼 끝 --------------------------------------------
 		
+		// ------------------ 작품전경, 썸네일, 파일첨부, 타이틀과 설명 인풋 spinner ------------------ //
+		
+		$("#spinnerOqty").spinner({
+			spin: function( event, ui ) {
+				if( ui.value > 3 ) {
+					$( this ).spinner( "value", 0 ); 
+					return false;
+				} 
+				else if ( ui.value < 0 ) {
+					$( this ).spinner( "value", 3 );
+					return false;
+				}
+			}
+		});
+		
+		$("#spinnerOqty").bind("spinstop", function(){
+			
+			let thumbnail = "";
+			let carousel = "";
+			let file = "";
+			let table = "";
+			
+			let spinnerOqtyVal = $("#spinnerOqty").val();
+			
+			if(spinnerOqtyVal == "0") {
+				
+				$("#imgInfoTable").empty();
+				$("#thumbNail-container").empty();
+				$("#image-wrap").empty();
+				$("#imageInput-container").empty();
+				
+			} else {
+				
+				for(var i=0; i<parseInt(spinnerOqtyVal); i++) {
+					thumbnail += "<div class='thumbNail-wrap' style='margin: 0 10px;'>";
+					thumbnail += "<img class='thumbNail' src='' alt='' style='border:none;' /></div>";
+					
+					file += "<input type='file' class='image-input' name='imageInput' id='imageInput" + (i + 1) + "' />";
+					table += "<tr><td style='width : 170px; font-weight: bold; padding-top : 4px; padding-bottom :4px; font-size : 12pt;'>이미지 " + (i + 1) + " 설명</td>";
+					table += "<td style='padding-top : 4px; padding-bottom :4px; font-size : 12pt;'>";
+					table += "<input type='text' class='extraInfo' name='imageinfo' id='image" + (i + 1) + "info' /></td></tr>";
+					
+					if(i == 0) {
+						carousel += "<div class='item active'><img src='' alt=''></div>";
+					} else {
+						carousel += "<div class='item'><img src='' alt=''></div>";
+					}
+					
+				}
+				
+				$("#imgInfoTable").empty();
+				$("#thumbNail-container").empty();
+				$("#image-wrap").empty();
+				$("#imageInput-container").empty();
+				
+				$("#imgInfoTable").append(table);
+				$("#thumbNail-container").append(thumbnail);
+				$("#image-wrap").append(carousel);
+				$("#imageInput-container").append(file);
+				
+			}
+			
+		});
+		
+		// ------------------------------------ spinner 끝 ---------------------------------- //
+		
+		// 상단 대표 포스터
+		$("#posterInput").on("change", handleImgFileSelect);
+		
+		// 하단 작품 전경
+	//	$(".image-input").on("change", handleSubImgFileSelect);
+		$(document).on("change", ".image-input", function(e){
+			handleSubImgFileSelect(e);
+		});
+		
+
+		$("#myCarousel").carousel({interval: false});
+			
+		// Enable Carousel Controls
+		$(".left").click(function(){
+		    $("#myCarousel").carousel("prev");
+		});
+		
+		$(".right").click(function(){
+		    $("#myCarousel").carousel("next");
+		});	
+	
 		
 		/* 태그 input에 focus했을때 태그 선택 div 보이게 함*/
 		$("input#tag").focus(function(){
@@ -423,7 +545,7 @@
 				alert("신청자 이름을 입력하세요.");
 				$(this).focus();
 			} 
-			else if($("#exhibitionTitle").val().trim()==""){
+			else if($("#exhibitionName").val().trim()==""){
 				alert("전시회 이름을 입력하세요.");
 				$(this).focus();
 			} 
@@ -495,10 +617,11 @@
 				alert("태그를 입력하세요.");
 				$(this).focus();
 			}
+			
 			else {
 				let frm = document.addExhibitionFrm;
 				frm.method = "POST";
-				frm.action = "*.at";
+				frm.action = "/artree/addEndExhibition.at";
 				frm.submit();
 			}
 			
@@ -506,6 +629,76 @@
 		/* --------- 유효성 검사 끝--------------------------------------- */
 		
 	}); // --------------------------------------------------------------
+	
+	function searchGallery() {
+		
+		var wordLength = $("#searchWord").val().length;
+		
+		if(wordLength == 0) {
+			
+		} else {
+			
+			$.ajax({
+				
+				url: "<%= ctxPath %>/wordSearchShow.at",
+				type: "GET",
+				data: { "galleryLocation":$("#galleryLocation").val()
+					   ,"searchWord":$("#searchWord").val() },
+				dataType: "JSON",
+				success: function(json){
+					
+				//	console.log(json);
+				
+					$("#galleryListTable").empty();				
+					
+					var html ="";
+					
+					html += "<thead>";
+					html += "<tr class='adminTableTR'>";
+					html += "<th>지역</th>";
+					html += "<th>갤러리명</th>";
+					html += "<th>주소</th>";
+					html += "<th>전화번호</th>";
+					html += "</tr>";
+					html += "</thead>";
+					html += "<tbody>";
+					
+					if(json.length == 0) {
+						html += "<tr class='' style='cursor: pointer;' onclick='goCustomerDetail();'>";
+						html += "<td colspan='4'>";
+						html += "조회된 갤러리가 없습니다.";
+						html += "</td>";
+						html += "</tr>";
+					}
+					
+					else {
+						
+						$.each(json, function(index, item) {						
+								
+								html += "<tr style='cursor: pointer;'>";
+								html += "<td style='width: 60px !important'>" +item.location+ "</td>";
+								html += "<td>" +item.galleryname+ "</td>";
+								html += "<td>" +item.detailaddress+ "</td>";
+								html += "<td style='width: 130px !important'>" +item.tel+ "</td>";
+								html += "</tr>";
+						
+						});					
+					}
+					
+					html += "</tbody>";
+					
+					$("#galleryListTable").html(html);
+				
+				},
+				error: function(request, status, error){
+					alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+				}
+				
+			});
+			
+		}
+		
+	}
 	
 	function handleImgFileSelect(e) {
 		
@@ -531,7 +724,6 @@
 	
 
 	function handleSubImgFileSelect(e) {
-	
 		let files = e.target.files;
 		let filesArr = Array.prototype.slice.call(files);
 		
@@ -583,7 +775,7 @@
 
 </head>
 <body>
-	<form name="addExhibitionFrm">
+	<form name="addExhibitionFrm" enctype="multipart/form-data">
 	<div id="detailContainer">
 		<div class="Title_Area">
 			<span class="st">Exhibition</span>
@@ -602,11 +794,11 @@
 			<table id="detailTable">
 				<tr>
 					<td>신청자 이름</td>
-					<td><input type="text" name="applierName" id="applierName" /></td> <!-- ${session.loginuser.username} -->
+					<td><input type="text" name="applier" id="applier" /></td> <!-- ${session.loginuser.username} -->
 				<tr>
 				<tr>
 					<td>전시회명</td>
-					<td><input type="text" name="exhibitionTitle" id="exhibitionTitle" /></td>
+					<td><input type="text" name="exhibitionName" id="exhibitionName" /></td>
 				<tr>
 				<tr>
 					<td>작가명</td>
@@ -628,20 +820,23 @@
 				<tr>
 				<tr>
 					<td>전시관</td>
-					<td><input type="text" name="gallery" id="gallery" /></td>
+					<td>
+						<input type="text" name="gallery" id="gallery" data-toggle="modal" data-target="#myModal" />
+
+					</td>
 				<tr>
 				<tr>
 					<td>일정</td>
-					<td><input style="width:100px;" class="pickDate" type="text" name="startDate" id="startDate" />
+					<td><input style="width:130px;" class="pickDate" type="text" name="startDate" id="startDate" />
 						- 
-						<input style="width:100px;" class="pickDate" type="text" name="endDate" id="endDate" />
+						<input style="width:130px;" class="pickDate" type="text" name="endDate" id="endDate" />
 					</td>
 				<tr>
 				<tr>
 					<td>운영시간</td>
-					<td><input style="width:100px;" type="text" name="openTime" id="openTime" />
+					<td><input style="width:130px;" type="text" name="openTime" id="openTime" />
 						- 
-						<input style="width:100px;" type="text" name="closeTime" id="closeTime" />
+						<input style="width:130px;" type="text" name="closeTime" id="closeTime" />
 					</td>
 				<tr>
 				<tr>
@@ -680,12 +875,17 @@
 		<div id="myImages" align="center">
 			<h2 style="font-weight:bold">작품전경</h2> 
 			
-			<!--  썸네일 아직 안배워서 일단 이렇게 처리 -->
-			<div style="width:700px; height:200px; overflow:hidden;">
-				<div class="thumbNail-wrap"><img class="thumbNail" src="" alt="" style="border:none;"/></div>
-				<div class="thumbNail-wrap"><img class="thumbNail" src="" alt="" style="border:none;"/></div>
-				<div class="thumbNail-wrap"><img class="thumbNail" src="" alt="" style="border:none;"/></div>
+			<div style="margin: 20px;">
+				<label for="spinnerOqty">파일갯수 : </label>
+				<input id="spinnerOqty" value="0" style="width: 30px; height: 20px;">
 			</div>
+			
+			<!--  썸네일 아직 안배워서 일단 이렇게 처리 -->
+			<div id="thumbNail-container" style="width:700px; height:200px; overflow:hidden;">
+				<div class="thumbNail-wrap"><img class="thumbNail" src="" alt="" style="border:none;" /></div>
+<!-- 				<div class="thumbNail-wrap"><img class="thumbNail" src="" alt="" style="border:none;" /></div>
+				<div class="thumbNail-wrap"><img class="thumbNail" src="" alt="" style="border:none;" /></div>
+			 --></div>
 			<div id="myCarousel" class="carousel slide"  style="display:inline-block; overflow:hidden;">
 				<div id="bigImage" align="center" style="display:inline-block; vertical-align: middle;">
 					<a class="left" style="display:inline-block;">
@@ -693,15 +893,16 @@
 					</a>
 					
 					<div id="image-wrap" class="carousel-inner" role="listbox" align="center">
-					    <div class="item active">
+ 					    <div class="item active">
+					      <img src="" alt="">
+					    </div>
+					    <!--
+ 					    <div class="item">
 					      <img src="" alt="">
 					    </div>
 					    <div class="item">
 					      <img src="" alt="">
-					    </div>
-					    <div class="item">
-					      <img src="" alt="">
-					    </div>
+					    </div> -->
 				 	</div>
 
 					<a class="right" style="display:inline-block;">
@@ -711,39 +912,21 @@
 			</div>
 		</div>	
 			
-			<div align="center" style="margin: 0 auto;">
-				<input type="file" class="image-input" name="imageInput1" id="imageInput1" />
-				<input type="file" class="image-input" name="imageInput2" id="imageInput2" />
-				<input type="file" class="image-input" name="imageInput3" id="imageInput3" />
+			<div id="imageInput-container" align="center" style="margin: 0 auto;">
+<!-- 				<input type="file" class="image-input" name="imageInput1" id="imageInput1" />
+ 				<input type="file" class="image-input" name="imageInput2" id="imageInput2" />
+				<input type="file" class="image-input" name="imageInput3" id="imageInput3" /> -->
 			</div>
 		
 		<div id="extraInfo">
-			<table id="extraInfoTable">
-				<tr>
-					<td>이미지 1 타이틀</td>
-					<td><input type="text" class="extraInfo" name="image1title" id="image1title" /></td>
-				</tr>
-				<tr>
-					<td>이미지 1 설명</td>
-					<td><input type="text" class="extraInfo" name="image1info" id="image1info" /></td>
-				</tr>
-				<tr>
-					<td>이미지 2 타이틀</td>
-					<td><input type="text" class="extraInfo" name="image2title" id="image2title" /></td>
-				</tr>
-				<tr>
-					<td>이미지 2 설명</td>
-					<td><input type="text" class="extraInfo" name="image2info" id="image2info" /></td>
-				</tr>
-				<tr>
-					<td>이미지 3 타이틀</td>
-					<td><input type="text" class="extraInfo" name="image3title" id="image3title" /></td>
-				</tr>
-				<tr>
-					<td>이미지 3 설명</td>
-					<td><input type="text" class="extraInfo" name="image3info" id="image3info" /></td>
-				</tr>
-				<tr>
+			<table id="imgInfoTable" style="width: 95%; margin: 0 auto;">
+<!-- 				<tr>
+					<td>이미지 설명</td>
+					<td><input type="text" class="extraInfo" name="imageInfo" id="imageInfo" /></td>
+				</tr> -->
+			</table>
+			<table id="extraInfoTable">	
+	 			<tr>
 					<td>식음료 반입 가능 여부</td>
 					<td><input type="text" class="extraInfo" name="foodorDrink" id="foodorDrink" /></td>
 				</tr>
@@ -778,60 +961,93 @@
 				<tr>
 			</table>
 			
+									<div class="container" id="modalContainer">
+							<!-- Modal -->
+							<div class="modal fade" id="myModal" role="dialog">
+								<div class="modal-dialog">
+								    
+									<!-- Modal content-->
+									<div class="modal-content" id="galleryModal">
+										<div class="modal-header">
+											<button type="button" class="close" data-dismiss="modal">&times;</button>
+											<h4 class="modal-title">갤러리 검색</h4>
+										</div>
+										<div class="modal-body">
+										
+											<div id="searchArea" align="center" style="margin-top: 3vh">
+												<select id="galleryLocation" name="galleryLocation">
+													<option value="" >지역선택</option>
+													<c:forEach items="${ galleryLocationList }" var="locations" varStatus="status">
+														<option value="${ status.index }">${ locations }</option>
+													</c:forEach>
+												</select>
+												<input type="text" name="searchWord" id="searchWord" style="width: 40%; margin-left: 10px;" autocomplete="off" placeholder="갤러리명으로 검색" />
+											</div>
+											
+											<div id="listArea" style="margin-top: 5vh">
+												<table id="galleryListTable" class="table">
+													<thead style="font-weight: bold">
+														<tr>
+															<td>지역</td>
+															<td>갤러리명</td>
+															<td>주소</td>
+															<td>전화번호</td>
+														</tr>
+													</thead>
+													
+													<tbody>
+														<c:if test="${ not empty galleryList  }">
+														<c:forEach var="gallery" items="${ galleryList }" varStatus="status">
+															<tr>
+																<td style="width: 60px !important">${ gallery.location }</td> 
+																<td>${ gallery.galleryname }</td>
+																<td>${ gallery.detailaddress }</td>
+																<td style="width: 130px !important">${ gallery.tel }</td>
+															</tr>
+															
+														</c:forEach>
+														</c:if>
+														<c:if test="${ empty galleryList }">
+															<tr><td>없어</td>
+															</tr>
+														</c:if>
+													</tbody>
+												</table>
+											</div>
+										</div>
+										<div class="modal-footer">
+											<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+										</div>
+									</div>
+								      
+								</div>
+							</div>
+						</div>
+			
 			<div id="selectTag">
 				<div id="byExpression">
 					<h4>#표현별</h4>
-				<%-- 	<c:forEach test="{}"> --%>
-					<span>거친</span>&nbsp;<span>자연의</span><br/>
-					<span>사실적인</span>&nbsp;<span>거친</span>&nbsp;<span>자연의</span><br/>
-					<span>거친</span>&nbsp;<span>자연의</span><br/>
-					<span>사실적인</span>&nbsp;<span>거친</span>&nbsp;<span>자연의</span><br/>
-					<span>거친</span>&nbsp;<span>자연의</span><br/>
-					<span>사실적인</span>&nbsp;<span>거친</span>&nbsp;<span>자연의</span><br/>
-					<span>거친</span>&nbsp;<span>자연의</span><br/>
-					<span>사실적인</span>&nbsp;<span>거친</span>&nbsp;<span>자연의</span><br/>
-					<span>거친</span>&nbsp;<span>자연의</span><br/>
-					<span>사실적인</span>&nbsp;<span>거친</span>&nbsp;<span>자연의</span><br/>
-				<%-- 	</c:forEach> --%>
+					<c:forEach items="${ expression }" var="expression">
+						<span>${ expression }</span>&nbsp;
+					</c:forEach>
 				</div>
 				<div id="byGenre">
 					<h4>#장르별</h4>
-					<span>거친</span>&nbsp;<span>자연의</span><br/>
-					<span>사실적인</span>&nbsp;<span>거친</span>&nbsp;<span>자연의</span><br/>
-					<span>거친</span>&nbsp;<span>자연의</span><br/>
-					<span>사실적인</span>&nbsp;<span>거친</span>&nbsp;<span>자연의</span><br/>
-					<span>거친</span>&nbsp;<span>자연의</span><br/>
-					<span>사실적인</span>&nbsp;<span>거친</span>&nbsp;<span>자연의</span><br/>
-					<span>거친</span>&nbsp;<span>자연의</span><br/>
-					<span>사실적인</span>&nbsp;<span>거친</span>&nbsp;<span>자연의</span><br/>
-					<span>거친</span>&nbsp;<span>자연의</span><br/>
-					<span>사실적인</span>&nbsp;<span>거친</span>&nbsp;<span>자연의</span><br/>
+					<c:forEach items="${ genre }" var="genre">
+						<span>${ genre }</span>&nbsp;
+					</c:forEach>
 				</div>
 				<div id="byAdjective">
 					<h4>#형용별</h4>
-					<span>거친</span>&nbsp;<span>자연의</span><br/>
-					<span>사실적인</span>&nbsp;<span>거친</span>&nbsp;<span>자연의</span><br/>
-					<span>거친</span>&nbsp;<span>자연의</span><br/>
-					<span>사실적인</span>&nbsp;<span>거친</span>&nbsp;<span>자연의</span><br/>
-					<span>거친</span>&nbsp;<span>자연의</span><br/>
-					<span>사실적인</span>&nbsp;<span>거친</span>&nbsp;<span>자연의</span><br/>
-					<span>거친</span>&nbsp;<span>자연의</span><br/>
-					<span>사실적인</span>&nbsp;<span>거친</span>&nbsp;<span>자연의</span><br/>
-					<span>거친</span>&nbsp;<span>자연의</span><br/>
-					<span>사실적인</span>&nbsp;<span>거친</span>&nbsp;<span>자연의</span><br/>
+					<c:forEach items="${ adjective }" var="adjective">
+						<span>${ adjective }</span>&nbsp;
+					</c:forEach>
 				</div>
 				<div id="byColor">
 					<h4>#색상별</h4>
-					<span>거친</span>&nbsp;<span>자연의</span><br/>
-					<span>사실적인</span>&nbsp;<span>거친</span>&nbsp;<span>자연의</span><br/>
-					<span>거친</span>&nbsp;<span>자연의</span><br/>
-					<span>사실적인</span>&nbsp;<span>거친</span>&nbsp;<span>자연의</span><br/>
-					<span>거친</span>&nbsp;<span>자연의</span><br/>
-					<span>사실적인</span>&nbsp;<span>거친</span>&nbsp;<span>자연의</span><br/>
-					<span>거친</span>&nbsp;<span>자연의</span><br/>
-					<span>사실적인</span>&nbsp;<span>거친</span>&nbsp;<span>자연의</span><br/>
-					<span>거친</span>&nbsp;<span>자연의</span><br/>
-					<span>사실적인</span>&nbsp;<span>거친</span>&nbsp;<span>자연의</span><br/>
+					<c:forEach items="${ color }" var="color">
+						<span>${ color }</span>&nbsp;
+					</c:forEach>
 				</div>
 			</div>
 			
