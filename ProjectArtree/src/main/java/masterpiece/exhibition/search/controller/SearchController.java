@@ -62,21 +62,38 @@ public class SearchController {
 	} // end of locationSearch ---------------------------------------
 	
 	@ResponseBody
-	@RequestMapping(value="/locationJSON.at", produces="text/plain;charset=UTF-8")
-//	public String locationJSON(HttpServletRequest request, @RequestParam(value="coordsArr[]") String[] coordsArr) {
-	public String locationJSON(HttpServletRequest request) {	
+	@RequestMapping(value="/locationJSON.at", produces="text/plain;charset=UTF-8", method=RequestMethod.POST)
+//	public String locationJSON(HttpServletRequest request, @RequestParam(value="coordsArr[]") List<HashMap<String,String>> coordsArr) {
+	public String locationJSON(HttpServletRequest request) {
 		
-		String str_coordsArr = request.getParameter("coordsArr");
+		String[] coordsArr = request.getParameterValues("coordsArr");
+		/*System.out.println("controller coordsArr.length : "+coordsArr.length);*/ //221
 		
 		JSONObject jsobj = new JSONObject();
-		jsobj.put("positions", str_coordsArr);
 		
-		System.out.println("~~~~~~~ jsobj.toString() : " + jsobj.toString());
+		JSONArray jsArr = new JSONArray();
+		for(int i=0; i<coordsArr.length; i++) {
+			/*System.out.println("coordsArr[i] : "+coordsArr[i]);*/
+			// {"lat":35.20459722797615,"lng":129.21270222887753}
+			int latstart = coordsArr[i].indexOf(":");
+			int latend = coordsArr[i].indexOf(",");
+			String lat = coordsArr[i].substring(latstart+1, latend);
+			
+			int lngstart = coordsArr[i].lastIndexOf(":");
+			int lngend = coordsArr[i].lastIndexOf("}");
+			String lng = coordsArr[i].substring(lngstart+1, lngend);
+			
+			JSONObject singlecoord = new JSONObject();
+			singlecoord.put("lat", lat);
+			singlecoord.put("lng", lng);
+			jsArr.put(singlecoord);				
+		}
+		jsobj.put("positions", jsArr);
+		/*System.out.println("result :"+jsobj.toString());*/
 		
 		return jsobj.toString();
 		
 	} // end of locationJSON ---------------------------------------
-	
 	
 	
 	// 해당 월에 열리는 전시회 목록을 가져온다.

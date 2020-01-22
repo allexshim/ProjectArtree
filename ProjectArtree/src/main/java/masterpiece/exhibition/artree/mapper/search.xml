@@ -24,7 +24,7 @@
         ) V
 		join (select * from gallery where status = 1) G
 		on V.fk_galleryNo = G.galleryNo
-		order by startdate
+		order by to_date(startdate)
 	</select>
 
 	<!-- 해당 월의 전시회 정보를 받아온다. -->
@@ -57,7 +57,7 @@
 		on V.exhibitionno = D.fk_exhibitionno
         ) E join gallery G
         on E.fk_galleryno = G.galleryno
-        order by startdate
+        order by to_date(startdate)
 	</select>
 	
 	<!-- 해당 날짜의 전시회 조회 -->
@@ -76,7 +76,7 @@
 		on V.exhibitionno = D.fk_exhibitionno
         ) E join gallery G
         on E.fk_galleryno = G.galleryno
-        order by startdate
+        order by to_date(startdate)
 	</select>
 	
 	<resultMap type="HashMap" id="themeMap">
@@ -109,7 +109,7 @@
 		on V.exhibitionno = D.fk_exhibitionno
         ) E join gallery G
         on E.fk_galleryno = G.galleryno
-        order by startdate
+        order by to_date(startdate)
 	</select>
 	
 	<select id="getExhibitionbySelectTheme" parameterType="String" resultMap="themeMap" >
@@ -127,7 +127,7 @@
 		on V.exhibitionno = D.fk_exhibitionno
         ) E join gallery G
         on E.fk_galleryno = G.galleryno
-        order by startdate
+        order by to_date(startdate)
 	</select>
 	
 </mapper>

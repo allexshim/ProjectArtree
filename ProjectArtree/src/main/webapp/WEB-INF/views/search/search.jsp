@@ -392,19 +392,59 @@
 		        map: map, // 마커들을 클러스터로 관리하고 표시할 지도 객체
 		        averageCenter: true, // 클러스터에 포함된 마커들의 평균 위치를 클러스터 마커 위치로 설정
 		        minLevel: 10, // 클러스터 할 최소 지도 레벨
-		        disableClickZoom: true // 클러스터 마커를 클릭했을 때 지도가 확대되지 않도록 설정한다
+		        calculator: [10, 30, 50],
+		        disableClickZoom: true, // 클러스터 마커를 클릭했을 때 지도가 확대되지 않도록 설정한다
+		        styles: [{ // calculator 각 사이 값 마다 적용될 스타일을 지정한다
+	                width : '30px', height : '30px',
+	                background: 'rgb(112, 171, 158)', /*현지 연두*/
+	                borderRadius: '15px',
+	                color: '#000',
+	                textAlign: 'center',
+	                fontWeight: 'bold',
+	                lineHeight: '31px'
+	            },
+	            {
+	                width : '40px', height : '40px',
+	                background: '#fce373', /* 현지 노랑 */
+	                borderRadius: '20px',
+	                color: '#000',
+	                textAlign: 'center',
+	                fontWeight: 'bold',
+	                lineHeight: '41px'
+	            },
+	            {
+	                width : '50px', height : '50px',
+	                background: '#a385bd', /*현지 보라 */
+	                borderRadius: '25px',
+	                color: '#000',
+	                textAlign: 'center',
+	                fontWeight: 'bold',
+	                lineHeight: '51px'
+	            },
+	            {
+	                width : '60px', height : '60px',
+	                background: 'rgb(247, 181, 184)', /*현지 분홍*/
+	                borderRadius: '30px',
+	                color: '#000',
+	                textAlign: 'center',
+	                fontWeight: 'bold',
+	                lineHeight: '61px'
+	            }
+	        ]
 		});
 		
 	   /*  var markers = []; */
 	   // 데이터를 가져오기 위해 jQuery를 사용합니다
 	   // ajax로 데이터를 가져옵니다.
-	   var coordsArr = new Array();
 	    $.ajax({ 
 	    	  url:"<%=request.getContextPath()%>/locationSearch.at",
 	          type:"GET",
-	          /* async:false, */
+	          async:false, 
 	          dataType:"JSON",
+	          
 	          success: function(json) {
+	        	 var coordsArr = [];
+	        	  
 	        	// 주소-좌표 변환 객체를 생성합니다
         	   	 var geocoder = new kakao.maps.services.Geocoder();
         			 
@@ -416,52 +456,58 @@
 	       	   	      // 정상적으로 검색이 완료됐으면 
 	       	   	       if (status === kakao.maps.services.Status.OK) {
 	
-	       	   	    	   var coord = new kakao.maps.LatLng(result[0].y, result[0].x);
-	
-	       	   	           // 결과값으로 받은 위치를 마커로 표시합니다
-	       	   	           var marker = new kakao.maps.Marker({
-	       	   	               map: map,
-	       	   	               position: coord
-	       	   	           });
+	       	   	    	  var coord = new kakao.maps.LatLng(result[0].y, result[0].x);
 	       	   	  
 	       	   	          var coords = new Object();
 	       	       	      coords.lat = coord.Ha;
 	       	       	      coords.lng = coord.Ga; // {"lat":na.Ga, "lng":na.Ha}
 	
-	       	   	          coordsArr.push(coords);
+	       	   	          coordsArr.push(JSON.stringify(coords));
 	       	   	          }
         	       	  }); 		        	
         	   	  }); // end of $.each --------------------------------------  
         	   	  
-	        	   	window.setTimeout(function(){
-	        	   		console.log("~~~~ 원하는것. coordsArr.length => " + coordsArr.length);
+        	   	  window.setTimeout(function(){
+	        	   		//console.log("~~~~ 원하는것. coordsArr.length => " + coordsArr.length);
 	        	   		
-	        	     	var data = {"coordsArr":JSON.stringify(coordsArr)};
+	        	     	var data =  {"coordsArr":coordsArr};
 	        				
 	        				$.ajaxSettings.traditional = true;
 	        	     		$.ajax({ 
 	        	 	    	  url:"<%=request.getContextPath()%>/locationJSON.at",
-	        	 	          type:"GET",
+	        	 	          type:"POST",
 	        	 	          data : data,
 	        	 	          dataType:"json",
 	        	 	          success: function(data) {
-	        	 	        	  /* console.log(data); */
-	        	 	        	  // 데이터에서 좌표 값을 가지고 마커를 표시합니다
-	        	 	              // 마커 클러스터러로 관리할 마커 객체는 생성할 때 지도 객체를 설정하지 않습니다
-	        	 	              var markers = $(data.positions).map(function(i, position) {
-	        	 	                  return new kakao.maps.Marker({
-	        	 	                      position : new kakao.maps.LatLng(position.lat, position.lng)
-	        	 	                  });
-	        	 	              });
-	        						 /*  console.log(markers); */
-	        	 	              // 클러스터러에 마커들을 추가합니다
-	        	 	              clusterer.addMarkers(markers);
+
+	        	 	        	/*  console.log(data); */
+	        	 	        	 var markers = $(data.positions).map(function(i, position) {
+	        	 	                return new kakao.maps.Marker({
+	        	 	                    position : new kakao.maps.LatLng(position.lat, position.lng)
+	        	 	                });
+	        	 	            });
+
+	        	 	            // 클러스터러에 마커들을 추가합니다
+	        	 	            clusterer.addMarkers(markers);
+	        	 	            
+	        	 	        	// 마커 클러스터러에 클릭이벤트를 등록합니다
+	        	 	           // 마커 클러스터러를 생성할 때 disableClickZoom을 true로 설정하지 않은 경우
+	        	 	           // 이벤트 헨들러로 cluster 객체가 넘어오지 않을 수도 있습니다
+	        	 	           kakao.maps.event.addListener(clusterer, 'clusterclick', function(cluster) {
+
+	        	 	               // 현재 지도 레벨에서 1레벨 확대한 레벨
+	        	 	               var level = map.getLevel()-1;
+
+	        	 	               // 지도를 클릭된 클러스터의 마커의 위치를 기준으로 확대합니다
+	        	 	               map.setLevel(level, {anchor: cluster.getCenter()});
+	        	 	           	});
+
 	        	 	          },
 	        	 	          error: function(request, status, error){
 	        		               alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
 	        		          }
 	        	     	  }); 
-	        	   	}, 5000);
+	        	   	}, 3000);
 	         	 },
 	          error: function(request, status, error){
 	                alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
@@ -489,7 +535,7 @@
 		          success: function(json) { 
 		        	  // 차트 만들기
 		        	  getThemeChart("${allTag}");
-		        	  
+		        	 /*  console.log("${allTag}"); */
 		        	  // 모든 전시회 정보 뿌리기
 		        	  listofExhibition(json);
 		          },
