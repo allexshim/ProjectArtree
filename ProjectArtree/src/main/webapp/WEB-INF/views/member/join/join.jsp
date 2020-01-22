@@ -689,7 +689,7 @@ span#allCheck_txt {
 				
 				<div class="login_find">
 					<a href="/artree/idFind.at" class="find_btn">아이디 찾기&nbsp;&nbsp;|&nbsp;&nbsp;</a>
-					<a href="/artree/passwordFind" class="find_btn">비밀번호 찾기</a>
+					<a href="/artree/passwordFind.at" class="find_btn">비밀번호 찾기</a>
 				</div>
 				<input type="button" id="login_btn" value="로그인" onClick="goLogin()"/>
 			</div>

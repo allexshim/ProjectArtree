@@ -396,7 +396,7 @@ public class MemberController {
 				HashMap<String, String> updateMap = new HashMap<String, String>();
 				updateMap.put("email", email);
 				updateMap.put("tempPassword", SHA256.encrypt(tempPassword));
-				
+				  
 				// 임시 비밀번호로 현재 비밀번호 변경
 		    	n = service.updatePwd(updateMap);
 		    	

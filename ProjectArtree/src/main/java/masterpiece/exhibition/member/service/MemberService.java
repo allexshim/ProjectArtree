@@ -96,13 +96,13 @@ public class MemberService implements InterMemberService {
 	public String idFind(HashMap<String, String> paraMap) {
 		String email = dao.idFind(paraMap);
 		return email;
-	}
+	} 
 
 	// 비밀번호 찾기 - 입력한 name, email, hp에 맞는 사용자가 있는지 확인
 	@Override
 	public String findUser(HashMap<String, String> paraMap) {
 		String isExist = dao.findUser(paraMap);
-		return isExist;
+		return isExist; 
 	}
 
 	// 임시 비밀번호로 현재 비밀번호 변경

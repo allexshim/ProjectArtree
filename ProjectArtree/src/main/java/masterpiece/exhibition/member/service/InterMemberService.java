@@ -21,6 +21,4 @@ public interface InterMemberService {
 
 	int updatePwd(HashMap<String, String> updateMap); // 임시 비밀번호로 현재 비밀번호 변경
 
-	
-
 }
