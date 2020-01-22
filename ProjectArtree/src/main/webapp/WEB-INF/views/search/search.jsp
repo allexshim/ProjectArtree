@@ -411,7 +411,7 @@
 	                textAlign: 'center',
 	                fontWeight: 'bold',
 	                lineHeight: '41px'
-	            },
+	            }, 
 	            {
 	                width : '50px', height : '50px',
 	                background: '#a385bd', /*현지 보라 */
