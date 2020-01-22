@@ -84,6 +84,7 @@
 		padding-top : 10px;
 		width : 200px;
 		height : 250px;
+		color : black !important;
 	}
 	
 	.singleExhibition {
@@ -93,6 +94,10 @@
 	.singleExhibition .title {
 		font-size : 12pt;
 		font-weight : bold;
+	}
+	
+	.singleExhibition:hover {
+		opacity : 0.8;
 	}
 	
 	/* 검색조건 선택 ------------------------------------------------------*/
@@ -199,6 +204,7 @@
 	}
 	
 /* --------------- 테마 차트 ------------------------------------------------- */
+ 
 
 </style>
 
@@ -223,9 +229,20 @@
 		
 		$("#testDatepicker").datepicker({			
 			dayNamesMin : ['월','화','수','목','금','토','일'],			
-			monthNames: ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월']
+			monthNames: ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'],
+			/* altField: '#calendar-date',
+			dateFormat: 'yy-mm-dd', */
+			minDate: 0,
+			onChangeMonthYear: function (year, month, inst) {
+				// 년 또는 월이 변경시 이벤트 발생
+				getListByMonth(year,month);
+			} ,
+			onSelect: function (dateText, inst) {
+    			// 일자 선택된 후 이벤트 발생
+				getListByDate(dateText);
+            }
 		});	
-		
+
 		// 화면이 로딩되면 지역별로 전시회 리스트를 가져오는 ajax function을 실행시킨다.
 		getListByLocation();
 		
@@ -244,40 +261,86 @@
 				$(this).removeClass("currentCondition");
 			});
 			$(this).addClass("currentCondition");
-			getListByDate();
+			getListByDateAll();
 		});
-		
+	
 		// 테마별 검색 클릭
 		$(".byTheme").click(function(){
 			$(".condition").each(function(){
 				$(this).removeClass("currentCondition");
 			});
 			$(this).addClass("currentCondition");
-			getListByTheme();
+			getListByAllTheme();
 		});
 		
 	}); // end of document.ready -----------------------------------------------
-	
-	// 날짜별로 리스트를 가져오는 함수
-	function getListByDate(){
+
+	// 날짜별로 리스트를 가져오는 함수 ---------------------------------------------------------
+	function getListByDateAll(){
 		$("#map").css('display','none');
 		$("#theme").css('display','none');
 		$("#date").css('display','inline-block');
-		// ajax....
-	} //----------------------------------------
+		
+		// 각 월별 전시회 목록을 불러오는 ajax를 함수로 빼서 사용 (초기값 2020년 1월로)
+		getListByMonth("2020","1");
+	} //----------------------------------------------------------------------------
 	
-	// 테마별로 리스트를 가져오는 함수
-	function getListByTheme(){
-		$("#map").css('display','none');
-		$("#date").css('display','none');
-		$("#theme").css('display','inline-block');
-		// ajax ........
-	} //----------------------------------------
+	function getListByMonth(year,month){ // 해당 달에 열리는 전시회목록을 가져온다.------------
+		$.ajax({ 
+	    	  url:"<%=request.getContextPath()%>/monthSearch.at",
+	          type:"GET",
+	          data : {"year":year,"month":month},
+	          dataType:"JSON",
+	          success: function(json) { 
+	        	  listofExhibition(json);
+	          },
+	          error: function(request, status, error){
+	                alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+	          }
+	       });
+	} // end of getListByMonth ------------------------------------------------
 	
-	// 나중에 exhDetail함수에 전시회 코드를 parameter로 넣습니다.
-	function exhDetail(){ // .at?code=code 와 같이 전송해서 해당 이벤트의 전시회 상세페이지로 이동합니다.
-		location.href="<%= ctxPath%>/exhDetail.at";
-	}
+	// 선택한 날짜에 열리는 전시회 목록을 가져온다.------------------------------------------
+	function getListByDate(dateText){
+		
+		$.ajax({ 
+	    	  url:"<%=request.getContextPath()%>/dateSearch.at",
+	          type:"GET",
+	          data : {"date":dateText},
+	          dataType:"JSON",
+	          success: function(json) { 
+	        	  listofExhibition(json);
+	          },
+	          error: function(request, status, error){
+	                alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+	          }
+	       });
+	} // end of getListByDate ----------------------------------------------------
+	
+	// 받아온 json 데이터를 view단에 뿌리는 함수----------------------------------------
+	function listofExhibition(json){
+		var html = "";
+		 $("#exhibitionList").empty();
+		 $.each(json, function(index, item) { // 링크 해결하세요
+				 html += "<a href='/artree/exhDetail.at?exhibitionno="+item.exhibitionno+"'><div class='singleExhibition'>";
+				 html += "<img src='"+item.mainposter+"' />";
+				 html += "<span class='infoContainer'>";
+				 html += "<span class='title' style='font-size:13pt;'>"+item.exhibitionname+"</span><br/><br/>";
+				 html += "<span class='gallery'>"+item.galleryname+"/"+item.location+"</span><br/>";
+				 html += "<span class='period'>"+item.startdate+" - "+item.enddate+"</span><br/>";			
+				 html += "</span></div></a>";		
+			 $("#exhibitionList").append(html);
+			 html = "";
+		});
+
+		if($("#exhibitionList").html()==""){
+			 html += "<div class='singleExhibition'>"+
+				     "<span style='font-size:20px; text-align:middle;'>해당 기간에 열리는 전시회가 없습니다.</span></div>"; 
+			 $("#exhibitionList").append(html);
+		}
+		
+	} // end of listofExhibition -----------------------------------------------
+	  
 </script>
 
 <div id="container_exhibition">
@@ -292,55 +355,8 @@
 		<span class="condition byTheme">테마별</span>
 	</div>
 	
-	<div id="exhibitionList">
-		<div class="singleExhibition">
-			<img src="<%= ctxPath%>/resources/images/exhibition/artmap_20200102_9426350.jpg" />
-			<span class="infoContainer">
-				<span class="title">박기훈 초대전 : 공존 (共存)박기훈 초대전 : 공존 (共存박기훈 초대전 : 공존 (共存)박기훈 초대전 : 공존 (共存</span><br/><br/>
-				<span class="gallery">갤러리화이트원/서울</span><br/><br/>
-				<span class="period">2020.01.15 - 2020.02.12</span><br/>
-			</span>
-		</div>
-		<div class="singleExhibition">
-			<img src="<%= ctxPath%>/resources/images/exhibition/artmap_20200102_9426350.jpg" />
-			<span class="infoContainer">
-				<span class="title">박기훈 초대전 : 공존 (共存)</span><br/><br/>
-				<span class="gallery">갤러리화이트원/서울</span><br/><br/>
-				<span class="period">2020.01.15 - 2020.02.12</span><br/>
-			</span>
-		</div>
-		<div class="singleExhibition">
-			<img src="<%= ctxPath%>/resources/images/exhibition/artmap_20200102_9426350.jpg" />
-			<span class="infoContainer">
-				<span class="title">박기훈 초대전 : 공존 (共存)박기훈 초대전 : 공존 (共存박기훈 초대전 : 공존 (共存)박기훈 초대전 : 공존 (共存</span><br/><br/>
-				<span class="gallery">갤러리화이트원/서울</span><br/><br/>
-				<span class="period">2020.01.15 - 2020.02.12</span><br/>
-			</span>
-		</div>
-		<div class="singleExhibition">
-			<img src="<%= ctxPath%>/resources/images/exhibition/artmap_20200102_9426350.jpg" />
-			<span class="infoContainer">
-				<span class="title">박기훈 초대전 : 공존 (共存)</span><br/><br/>
-				<span class="gallery">갤러리화이트원/서울</span><br/><br/>
-				<span class="period">2020.01.15 - 2020.02.12</span><br/>
-			</span>
-		</div>
-		<div class="singleExhibition">
-			<img src="<%= ctxPath%>/resources/images/exhibition/artmap_20200102_9426350.jpg" />
-			<span class="infoContainer">
-				<span class="title">박기훈 초대전 : 공존 (共存)</span><br/><br/>
-				<span class="gallery">갤러리화이트원/서울</span><br/><br/>
-				<span class="period">2020.01.15 - 2020.02.12</span><br/>
-			</span>
-		</div>
-		<div class="singleExhibition">
-			<img src="<%= ctxPath%>/resources/images/exhibition/artmap_20200102_9426350.jpg" />
-			<span class="infoContainer">
-				<span class="title">박기훈 초대전 : 공존 (共存)박기훈 초대전 : 공존 (共存박기훈 초대전 : 공존 (共存)박기훈 초대전 : 공존 (共存</span><br/><br/>
-				<span class="gallery">갤러리화이트원/서울</span><br/><br/>
-				<span class="period">2020.01.15 - 2020.02.12</span><br/>
-			</span>
-		</div>
+	<!-- 전시회 정보가 들어가는 곳 -->
+	<div id="exhibitionList">	
 	</div>	
 	
 	<div id="map"></div>
@@ -357,15 +373,14 @@
 <!-- services와 clusterer, drawing 라이브러리 불러오기 -->
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=9125653427d4cb8c3684192e44579a28&libraries=services,clusterer,drawing"></script>
 <script type="text/javascript">
+
 	//지역별로 리스트를 가져오는 함수
 	function getListByLocation(){
 		$("#date").css('display','none');
 		$("#theme").css('display','none');
 		$("#map").css('display','inline-block');
-		// ajax.........
-	
-	/* ----------------------- 카카오 지도 API -----------------------------*/	
-	////////////////////////////////////////////////////////////////////////////////
+		
+		/* ----------------------- 카카오 지도 API -----------------------------*/	
 		 var map = new kakao.maps.Map(document.getElementById('map'), { 
 			 // 지도를 표시할 div
 	       center : new kakao.maps.LatLng(36.2683, 127.6358), 
@@ -373,70 +388,181 @@
 	       level : 13 // 지도의 확대 레벨 
 	   });
 	   
-	   // 마커 클러스터러를 생성합니다 
-	   var clusterer = new kakao.maps.MarkerClusterer({
-	       map: map, // 마커들을 클러스터로 관리하고 표시할 지도 객체 
-	       averageCenter: true, // 클러스터에 포함된 마커들의 평균 위치를 클러스터 마커 위치로 설정 
-	       minLevel: 10 // 클러스터 할 최소 지도 레벨 
-	   });
-	
-	   var coordsArr = {"positions":[]};
+		var clusterer = new kakao.maps.MarkerClusterer({
+		        map: map, // 마커들을 클러스터로 관리하고 표시할 지도 객체
+		        averageCenter: true, // 클러스터에 포함된 마커들의 평균 위치를 클러스터 마커 위치로 설정
+		        minLevel: 10, // 클러스터 할 최소 지도 레벨
+		        calculator: [10, 30, 50],
+		        disableClickZoom: true, // 클러스터 마커를 클릭했을 때 지도가 확대되지 않도록 설정한다
+		        styles: [{ // calculator 각 사이 값 마다 적용될 스타일을 지정한다
+	                width : '30px', height : '30px',
+	                background: 'rgb(112, 171, 158)', /*현지 연두*/
+	                borderRadius: '15px',
+	                color: '#000',
+	                textAlign: 'center',
+	                fontWeight: 'bold',
+	                lineHeight: '31px'
+	            },
+	            {
+	                width : '40px', height : '40px',
+	                background: '#fce373', /* 현지 노랑 */
+	                borderRadius: '20px',
+	                color: '#000',
+	                textAlign: 'center',
+	                fontWeight: 'bold',
+	                lineHeight: '41px'
+	            }, 
+	            {
+	                width : '50px', height : '50px',
+	                background: '#a385bd', /*현지 보라 */
+	                borderRadius: '25px',
+	                color: '#000',
+	                textAlign: 'center',
+	                fontWeight: 'bold',
+	                lineHeight: '51px'
+	            },
+	            {
+	                width : '60px', height : '60px',
+	                background: 'rgb(247, 181, 184)', /*현지 분홍*/
+	                borderRadius: '30px',
+	                color: '#000',
+	                textAlign: 'center',
+	                fontWeight: 'bold',
+	                lineHeight: '61px'
+	            }
+	        ]
+		});
+		
+	   /*  var markers = []; */
 	   // 데이터를 가져오기 위해 jQuery를 사용합니다
 	   // ajax로 데이터를 가져옵니다.
 	    $.ajax({ 
 	    	  url:"<%=request.getContextPath()%>/locationSearch.at",
 	          type:"GET",
+	          async:false, 
 	          dataType:"JSON",
+	          
 	          success: function(json) {
-	        	 // 주소-좌표 변환 객체를 생성합니다
-	        	 var geocoder = new kakao.maps.services.Geocoder();
-				 
-	        	  $.each(json, function(index, item){
-	        		  // console.log(item.detailAddress);
-	        		  
-	        		  // 주소로 좌표를 검색합니다
-		        	  geocoder.addressSearch(item.detailAddress, function(result, status) {
-		        	      // 정상적으로 검색이 완료됐으면 
-		        	       if (status === kakao.maps.services.Status.OK) {
+	        	 var coordsArr = [];
+	        	  
+	        	// 주소-좌표 변환 객체를 생성합니다
+        	   	 var geocoder = new kakao.maps.services.Geocoder();
+        			 
+        	   	  $.each(json, function(index, item) {
+	       	   		  // console.log(item.detailAddress);
+	       	   		  
+	       	   		  // 주소로 좌표를 검색합니다
+	       	       	  geocoder.addressSearch(item.detailAddress, function(result, status) {
+	       	   	      // 정상적으로 검색이 완료됐으면 
+	       	   	       if (status === kakao.maps.services.Status.OK) {
+	
+	       	   	    	  var coord = new kakao.maps.LatLng(result[0].y, result[0].x);
+	       	   	  
+	       	   	          var coords = new Object();
+	       	       	      coords.lat = coord.Ha;
+	       	       	      coords.lng = coord.Ga; // {"lat":na.Ga, "lng":na.Ha}
+	
+	       	   	          coordsArr.push(JSON.stringify(coords));
+	       	   	          }
+        	       	  }); 		        	
+        	   	  }); // end of $.each --------------------------------------  
+        	   	  
+        	   	  window.setTimeout(function(){
+	        	   		//console.log("~~~~ 원하는것. coordsArr.length => " + coordsArr.length);
+	        	   		
+	        	     	var data =  {"coordsArr":coordsArr};
+	        				
+	        				$.ajaxSettings.traditional = true;
+	        	     		$.ajax({ 
+	        	 	    	  url:"<%=request.getContextPath()%>/locationJSON.at",
+	        	 	          type:"POST",
+	        	 	          data : data,
+	        	 	          dataType:"json",
+	        	 	          success: function(data) {
 
-		        	          var na = new kakao.maps.LatLng(result[0].y, result[0].x);
-		        	          //console.log(na); // na {Ga: 128.6063345323323, Ha: 35.85594989300081}
-		        	       
-		        	          var coords = {"lat":na.Ga,"lng":na.Ha};
-		        	          coordsArr.positions.push(coords);
-		        	          // console.log(coords);
-		        	          /* {"lat": 37.27943075229118,"lng": 127.01763998406159} */
-		        	          }
-			        	  }); 
-		        	  });  
-	        	  },
+	        	 	        	/*  console.log(data); */
+	        	 	        	 var markers = $(data.positions).map(function(i, position) {
+	        	 	                return new kakao.maps.Marker({
+	        	 	                    position : new kakao.maps.LatLng(position.lat, position.lng)
+	        	 	                });
+	        	 	            });
+
+	        	 	            // 클러스터러에 마커들을 추가합니다
+	        	 	            clusterer.addMarkers(markers);
+	        	 	            
+	        	 	        	// 마커 클러스터러에 클릭이벤트를 등록합니다
+	        	 	           // 마커 클러스터러를 생성할 때 disableClickZoom을 true로 설정하지 않은 경우
+	        	 	           // 이벤트 헨들러로 cluster 객체가 넘어오지 않을 수도 있습니다
+	        	 	           kakao.maps.event.addListener(clusterer, 'clusterclick', function(cluster) {
+
+	        	 	               // 현재 지도 레벨에서 1레벨 확대한 레벨
+	        	 	               var level = map.getLevel()-1;
+
+	        	 	               // 지도를 클릭된 클러스터의 마커의 위치를 기준으로 확대합니다
+	        	 	               map.setLevel(level, {anchor: cluster.getCenter()});
+	        	 	           	});
+
+	        	 	          },
+	        	 	          error: function(request, status, error){
+	        		               alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+	        		          }
+	        	     	  }); 
+	        	   	}, 3000);
+	         	 },
 	          error: function(request, status, error){
 	                alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
-	            }
-	       });
-	   
-	    	// console.log(coordsArr); --> 카카오 api에서 클러스터러를 사용하기 위해 요구하는 데이터 type
-		  $.get(coordsArr, function(data) {
-	        // 데이터에서 좌표 값을 가지고 마커를 표시합니다
-	        // 마커 클러스터러로 관리할 마커 객체는 생성할 때 지도 객체를 설정하지 않습니다
-	        var markers = $(data.positions).map(function(i, position) {
-	            return new kakao.maps.Marker({
-	                position : new kakao.maps.LatLng(position.lat, position.lng)
-	            });
-	        });
-	
-		        // 클러스터러에 마커들을 추가합니다
-		        clusterer.addMarkers(markers);
-		 	 }); 
-	}; //----------------------------------------end of searchbyLocation
-		/////////////////////////////////////////////////////////////////////////////
-		/* ----------------------- 카카오 지도 API -----------------------------*/
+	           }
+	       });	
 
-///////////////////////////////////////////////////////////////////////////////////////	
-		/* ----------- 테마별 word chart --------------------------------------------*/
+	    
+	}; //----------------------------------------end of searchbyLocation
+
+   	
+	/* ----------------------- 카카오 지도 API -----------------------------*/
+
+	/* ----------- 테마별 word chart --------------------------------------------*/
+			
+		// 테마별로 리스트를 가져오는 함수-------------------------------------------------------
+		function getListByAllTheme(){ 
+		// 가장 처음, 모든 전시회의 태그를 String으로 연결해서 가져오고, 모든 전시회 정보를 가져온다.
+			$("#map").css('display','none');
+			$("#date").css('display','none');
+			$("#theme").css('display','inline-block');
+			$.ajax({
+				  url:"<%=request.getContextPath()%>/allThemeSearch.at",
+		          type:"GET",
+		          dataType:"JSON",
+		          success: function(json) { 
+		        	  // 차트 만들기
+		        	  getThemeChart("${allTag}");
+		        	 /*  console.log("${allTag}"); */
+		        	  // 모든 전시회 정보 뿌리기
+		        	  listofExhibition(json);
+		          },
+		          error: function(request, status, error){
+		                alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+		          }
+			});
+		} //------------------------------------------------------------------------------
+	
+		// 선택한 테마에 해당하는 전시회만 보여주기
+		function getListBySelectTheme(tag){
+			$.ajax({
+				  url:"<%=request.getContextPath()%>/selectThemeSearch.at",
+		          type:"GET",
+		          data : {"tag":tag },
+		          dataType:"JSON",
+		          success: function(json) { 
+		        	  // 선택해온 전시회 정보 뿌리기
+		        	  listofExhibition(json);
+		          },
+		          error: function(request, status, error){
+		                alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+		          }
+			});
+		}
 		
-		// 아래 text는 샘플 텍스트이므로 추후 수정
-		var text = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean bibendum erat ac justo sollicitudin, quis lacinia ligula fringilla. Pellentesque hendrerit, nisi vitae posuere condimentum, lectus urna accumsan libero, rutrum commodo mi lacus pretium erat. Phasellus pretium ultrices mi sed semper. Praesent ut tristique magna. Donec nisl tellus, sagittis ut tempus sit amet, consectetur eget erat. Sed ornare gravida lacinia. Curabitur iaculis metus purus, eget pretium est laoreet ut. Quisque tristique augue ac eros malesuada, vitae facilisis mauris sollicitudin. Mauris ac molestie nulla, vitae facilisis quam. Curabitur placerat ornare sem, in mattis purus posuere eget. Praesent non condimentum odio. Nunc aliquet, odio nec auctor congue, sapien justo dictum massa, nec fermentum massa sapien non tellus. Praesent luctus eros et nunc pretium hendrerit. In consequat et eros nec interdum. Ut neque dui, maximus id elit ac, consequat pretium tellus. Nullam vel accumsan lorem.';
+		function getThemeChart(text){
 		var lines = text.split(/[,\. ]+/g),
 		    data = Highcharts.reduce(lines, function (arr, word) {
 		        var obj = Highcharts.find(arr, function (obj) {
@@ -454,32 +580,35 @@
 		        return arr;
 		    }, []);
 		
-		/*
-		data ~ 예시 배열 : 아래같은 데이터 배열을 ajax로 들고와서 아래 data에 넣어주면 될듯!
-		0: {name: "Lorem", weight: 1}
-		1: {name: "ipsum", weight: 1}
-		*/
-		
-		Highcharts.chart('themeContainer', {
-		    accessibility: {
-		        screenReaderSection: {
-		            beforeChartFormat: ''
-		        }
-		    },
-		    chart: {
-		        type: 'String',
-		        width: 500,
-		        height: 800,
-		    },
-		    series: [{
-		        type: 'wordcloud',
-		        data: data,
-		        name: 'Occurrences'
-		    }],
-		    title: {
-		        text: ''
-		    }
-		});
-		
+			
+			Highcharts.chart('themeContainer', {
+			    accessibility: {
+			        screenReaderSection: {
+			            beforeChartFormat: ''
+			        }
+			    },
+			    chart: {
+			        type: 'String',
+			        width: 500,
+			        height: 800,
+			    },
+			    series: [{
+			        type: 'wordcloud',
+			        data: data,
+			        name: 'Occurrences',
+			        cursor: 'pointer',
+			        events: {
+		                click: function (event) {
+		                	getListBySelectTheme(event.target.textContent);
+		                }
+		            }
+			    }],
+			    title: {
+			        text: ''
+			    }
+			});
+		}
 		/* ------------------------------------------------------------------------ */
+
+		
 </script>

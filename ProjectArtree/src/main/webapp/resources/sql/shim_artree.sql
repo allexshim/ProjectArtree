@@ -32,30 +32,80 @@ insert into tag(type, keyword) values('표현별','여름');	insert into tag(typ
 insert into tag(type, keyword) values('표현별','정원');	insert into tag(type, keyword) values('장르별','판화');	insert into tag(type, keyword) values('형용별','생동감');	insert into tag(type, keyword) values('색상별','황금');
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+select detailAddress, exhibitionName, galleryName, startDate, endDate, mainPoster, exhibitionno
+		from (select * from exhibition E join exhibitionDetail D on E.exhibitionno = D.fk_exhibitionno) V
+		join (select * from gallery where status = 1) G
+		on V.fk_galleryNo = G.galleryNo;
+
 
 select * from gallery order by to_number(galleryno) desc;
 
 select * from exhibition;
 select * from exhibitionDetail;
 
-select exhibitionName, galleryName, startDate, endDate, mainPoster, exhibitionno
-		from (select * from exhibition E join exhibitionDetail D on E.exhibitionno = D.fk_exhibitionno) V
-		join gallery G
-		on V.fk_galleryNo = G.galleryNo;
-        
-        select detailAddress, exhibitionName, galleryName, startDate, endDate, mainPoster, exhibitionno
-		from (select * from exhibition E join exhibitionDetail D on E.exhibitionno = D.fk_exhibitionno) V
-		join gallery G
-		on V.fk_galleryNo = G.galleryNo;
-        
-        select count(*)
-       from
-       ( select detailAddress, exhibitionName, galleryName, startDate, endDate, mainPoster, exhibitionno
+select *
+from exhibition E join exhibitionDetail D
+on E.exhibitionno = D.fk_exhibitionno;
+
+select detailAddress, exhibitionName, galleryName, startDate, endDate, mainPoster, exhibitionno
 		from (select * from exhibition E join exhibitionDetail D on E.exhibitionno = D.fk_exhibitionno) V
 		join (select * from gallery where status = 1) G
-		on V.fk_galleryNo = G.galleryNo
-        );
+		on V.fk_galleryNo = G.galleryNo;
+-------------------------------------- 해당 월에 개최되는 전시회 조회하기 ----------------------------------------------------------------------------------------------------------
+select exhibitionno, fk_galleryno, exhibitionname, author, startdate, enddate, mainposter
+from
+(
+    select *
+    from exhibition
+    where to_date(enddate) >= to_date(to_char(ADD_MONTHS(LAST_DAY('2020-01-01')+1,-1),'YYYYMMDD')) and to_date(enddate) <= last_day('2020-01-01')
+    order by to_date(enddate)
+) V join exhibitionDetail D
+on V.exhibitionno = D.fk_exhibitionno;
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+	    select exhibitionno, fk_galleryno, exhibitionname, author, startdate, enddate, mainposter, galleryname, galleryno, location, tag
+        from 
+        (
+        select *
+		from
+		(
+		    select *
+		    from exhibition
+		    where tag like '%초록%'
+		    order by to_date(enddate)
+		) V join exhibitionDetail D
+		on V.exhibitionno = D.fk_exhibitionno
+        ) E join gallery G
+        on E.fk_galleryno = G.galleryno
+        order by startdate;
         
+        select exhibitionno, fk_galleryno, exhibitionname, author, startdate, enddate, mainposter, galleryname, galleryno, location, tag
+        from 
+        (
+        select *
+		from
+		(
+		    select *
+		    from exhibition
+		    where to_date(enddate) >= sysdate
+		    order by to_date(enddate)
+		) V join exhibitionDetail D
+		on V.exhibitionno = D.fk_exhibitionno
+        ) E join gallery G
+        on E.fk_galleryno = G.galleryno;
+        
+        select * from gallery;
+        desc gallery;
+        
+        select detailAddress, exhibitionName, galleryName, startDate, endDate, mainPoster, exhibitionno
+        from (
+        select * from 
+        (select * from exhibition where status='전시중') E join exhibitionDetail D 
+        on E.exhibitionno = D.fk_exhibitionno
+        ) V
+		join (select * from gallery where status = 1) G
+		on V.fk_galleryNo = G.galleryNo
+		order by startdate;
+
 
 /*
 전시회 이름
