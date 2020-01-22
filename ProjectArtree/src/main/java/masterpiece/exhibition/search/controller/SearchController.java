@@ -10,8 +10,15 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
+
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import masterpiece.exhibition.search.service.InterSearchService;
 
@@ -40,17 +47,54 @@ public class SearchController {
 		
 		for(HashMap<String,String> single :exhibitionList) {
 			JSONObject jsobj = new JSONObject();
-     
-			// exhibitionList에 데이터가 저장은 다 되어있는데 지도 부분이 미완성이라 2개만 저장한 것
-			// 나중에 수정해야함!
+			//  detailAddress, exhibitionName, galleryName, startDate, endDate, mainPoster, exhibitionno
 			jsobj.put("detailAddress",single.get("detailAddress"));
 			jsobj.put("exhibitionName",single.get("exhibitionName"));
+			jsobj.put("galleryName",single.get("galleryName"));
+			jsobj.put("startdate",single.get("startdate"));
+			jsobj.put("enddate",single.get("enddate"));
+			jsobj.put("mainposter",single.get("mainposter"));
+			jsobj.put("exhibitionno",single.get("exhibitionno"));
 
 			jsarr.put(jsobj);
 		}
-		
 		return jsarr.toString();
 	} // end of locationSearch ---------------------------------------
+	
+	@ResponseBody
+	@RequestMapping(value="/locationJSON.at", produces="text/plain;charset=UTF-8", method=RequestMethod.POST)
+//	public String locationJSON(HttpServletRequest request, @RequestParam(value="coordsArr[]") List<HashMap<String,String>> coordsArr) {
+	public String locationJSON(HttpServletRequest request) {
+		
+		String[] coordsArr = request.getParameterValues("coordsArr");
+		/*System.out.println("controller coordsArr.length : "+coordsArr.length);*/ //221
+		
+		JSONObject jsobj = new JSONObject();
+		
+		JSONArray jsArr = new JSONArray();
+		for(int i=0; i<coordsArr.length; i++) {
+			/*System.out.println("coordsArr[i] : "+coordsArr[i]);*/
+			// {"lat":35.20459722797615,"lng":129.21270222887753}
+			int latstart = coordsArr[i].indexOf(":");
+			int latend = coordsArr[i].indexOf(",");
+			String lat = coordsArr[i].substring(latstart+1, latend);
+			
+			int lngstart = coordsArr[i].lastIndexOf(":");
+			int lngend = coordsArr[i].lastIndexOf("}");
+			String lng = coordsArr[i].substring(lngstart+1, lngend);
+			
+			JSONObject singlecoord = new JSONObject();
+			singlecoord.put("lat", lat);
+			singlecoord.put("lng", lng);
+			jsArr.put(singlecoord);				
+		}
+		jsobj.put("positions", jsArr);
+		/*System.out.println("result :"+jsobj.toString());*/
+		
+		return jsobj.toString();
+		
+	} // end of locationJSON ---------------------------------------
+	
 	
 	// 해당 월에 열리는 전시회 목록을 가져온다.
 	@ResponseBody
