@@ -155,7 +155,7 @@ left join exhibitiondetail C
 on B.exhibitionno = C.fk_exhibitionno
 select *
 from gallery
-where galleryno = 174
+where galleryno = 941
 galleryno galleryname detailaddress mainpicture introduction wesite location openinghour holiday tel status
 
 SELECT exhibitionno, exhibitionname, startdate ||' - '|| enddate AS schedule, status, B.mainposter
