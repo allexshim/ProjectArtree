@@ -91,8 +91,6 @@ public class MemberController {
 				
 				MemberVO loginuser = service.getLoginMember(paraMap);
 				
-				System.out.println("loginuser : "+loginuser);
-				
 				HttpSession session = request.getSession();
 				session.setAttribute("loginuser", loginuser);
 				
@@ -191,6 +189,16 @@ public class MemberController {
 		
 		List<HashMap<String, String>> myFavorList = service.joinFinalInsert(paraMap);
 		
+		String text = "";
+		
+		for(HashMap<String, String> map : myFavorList) {
+			text += map.get("tag")+",";
+			text += map.get("genre")+",";
+		}
+		
+		text = text.substring(0, text.length()-1);
+		
+		mav.addObject("text", text);
 		mav.addObject("myFavorList", myFavorList);
 		mav.setViewName("jsonView");  
 		
@@ -204,6 +212,9 @@ public class MemberController {
 		String email = request.getParameter("email_login");
 		String password = request.getParameter("password_login");
 		
+		System.out.println("email: "+email);
+		System.out.println("email: "+password);
+		
 		HashMap<String, String> paraMap = new HashMap<String, String>();
 		
 		paraMap.put("email", email);
@@ -211,6 +222,7 @@ public class MemberController {
 		
 		// 로그인 확인
 		MemberVO loginuser = service.getLoginMember(paraMap);
+		System.out.println(loginuser);
 		
 		HttpSession session = request.getSession();
 		
@@ -285,13 +297,12 @@ public class MemberController {
 		HttpSession session = request.getSession();
 	    session.invalidate();
 		
-	    String msg = "로그아웃 성공!!";
-		String loc = "/artree";
+	    String loc = "/artree";
 	    
-	    mav.addObject("msg", msg);
-		mav.addObject("loc", loc);
+	    mav.addObject("loc", loc);
 	    
-		mav.setViewName("msg");
+	    mav.setViewName("msg");
+	    
 		return mav;
 	} // end of logout --------------------------------------------
 
