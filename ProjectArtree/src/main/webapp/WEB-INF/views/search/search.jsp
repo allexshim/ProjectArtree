@@ -321,7 +321,8 @@
 	function listofExhibition(json){
 		var html = "";
 		 $("#exhibitionList").empty();
-		 $.each(json, function(index, item) { // 링크 해결하세요
+		 // exhibitionno, fk_galleryno, exhibitionname, author, startdate, enddate, mainposter, galleryname, galleryno, location
+		 $.each(json, function(index, item) { 
 				 html += "<a href='/artree/exhDetail.at?exhibitionno="+item.exhibitionno+"'><div class='singleExhibition'>";
 				 html += "<img src='"+item.mainposter+"' />";
 				 html += "<span class='infoContainer'>";
@@ -459,6 +460,7 @@
 	       	   	    	  var coord = new kakao.maps.LatLng(result[0].y, result[0].x);
 	       	   	  
 	       	   	          var coords = new Object();
+	       	   	          coords.galleryName = item.galleryName;
 	       	       	      coords.lat = coord.Ha;
 	       	       	      coords.lng = coord.Ga; // {"lat":na.Ga, "lng":na.Ha}
 	
@@ -479,18 +481,59 @@
 	        	 	          data : data,
 	        	 	          dataType:"json",
 	        	 	          success: function(data) {
-
+									
 	        	 	        	/*  console.log(data); */
 	        	 	        	 var markers = $(data.positions).map(function(i, position) {
-	        	 	                return new kakao.maps.Marker({
-	        	 	                    position : new kakao.maps.LatLng(position.lat, position.lng)
+	        	 	        		// 마커 생성
+	        	 	        		var marker = new kakao.maps.Marker({
+	        	 	        			position : new kakao.maps.LatLng(position.lat, position.lng),
+	        	 	                    title : position.galleryName
 	        	 	                });
+	   
+	        	 	        	    // 마커 클릭 이벤트
+	        	 	        	    kakao.maps.event.addListener(marker, "click", function (event) {
+	        	 	                   // alert(this.getTitle());
+	        	 	                   $.ajax({ 
+				        	 	    	  url:"<%=request.getContextPath()%>/selectedLocationSearch.at",
+				        	 	          type:"GET",
+				        	 	          data : {"galleryName": this.getTitle()},
+				        	 	          dataType:"json",
+				        	 	          success: function(clickdata) {
+				        	 	        	 console.log(clickdata);
+				        	 	        	// 해당하는 전시회 정보 뿌리기
+				        		        	listofExhibition(clickdata); 
+				        	 	          },
+								          error: function(request, status, error){
+								                alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+								         }          
+		        	 	        	}); 
+	        	 	        	   });  //end addListener
+	        	 	        	    
+	        	 	        	   return marker;
 	        	 	            });
-
-	        	 	            // 클러스터러에 마커들을 추가합니다
-	        	 	            clusterer.addMarkers(markers);
+	        	 	        	   
+	        	 	        	// 클러스터러에 마커들을 추가합니다
+		        	 	        clusterer.addMarkers(markers);
+	        	 	        	
 	        	 	            
-	        	 	        	// 마커 클러스터러에 클릭이벤트를 등록합니다
+	        	 	            //////////////////////////////////////////////////////////////////////////
+	        	 	            
+	        	 	            // 일단 현재 날짜 기준으로 전시중인 모든 전시회 정보를 가져옵니다.
+	        	 	      		$.ajax({
+								  url:"<%=request.getContextPath()%>/allSearch.at",
+						          type:"GET",
+						          dataType:"JSON",
+						          success: function(json) { 
+						        	  // 모든 전시회 정보 뿌리기
+						        	  listofExhibition(json);
+						          },
+						          error: function(request, status, error){
+						                alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+						         }
+	        	 	      		});// end of third ajax......................
+	        	 	            
+						       /////////////////////////////////////////////////////////////////////// 
+	        	 	           // 마커 클러스터러에 클릭이벤트를 등록합니다
 	        	 	           // 마커 클러스터러를 생성할 때 disableClickZoom을 true로 설정하지 않은 경우
 	        	 	           // 이벤트 헨들러로 cluster 객체가 넘어오지 않을 수도 있습니다
 	        	 	           kakao.maps.event.addListener(clusterer, 'clusterclick', function(cluster) {
@@ -517,7 +560,7 @@
 	    
 	}; //----------------------------------------end of searchbyLocation
 
-   	
+
 	/* ----------------------- 카카오 지도 API -----------------------------*/
 
 	/* ----------- 테마별 word chart --------------------------------------------*/
@@ -529,7 +572,7 @@
 			$("#date").css('display','none');
 			$("#theme").css('display','inline-block');
 			$.ajax({
-				  url:"<%=request.getContextPath()%>/allThemeSearch.at",
+				  url:"<%=request.getContextPath()%>/allSearch.at",
 		          type:"GET",
 		          dataType:"JSON",
 		          success: function(json) { 
@@ -563,6 +606,7 @@
 		}
 		
 		function getThemeChart(text){
+/* 			console.log(text); */
 		var lines = text.split(/[,\. ]+/g),
 		    data = Highcharts.reduce(lines, function (arr, word) {
 		        var obj = Highcharts.find(arr, function (obj) {
