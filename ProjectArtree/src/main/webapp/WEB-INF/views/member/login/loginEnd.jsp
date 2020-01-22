@@ -8,11 +8,9 @@
 	var gobackURL = "${requestScope.gobackURL}";
 	
 	  if(loginuser != null && (gobackURL == null || gobackURL == "") ) {
-	      alert("로그인 성공!!");
 	      location.href="/artree";
 	   }
-	   else if(loginuser != null && (gobackURL != null && gobackURL != "") ) { 
-	      alert("로그인 성공!!");
+	   else if(loginuser != null && (gobackURL != null && gobackURL != "") ) {
 	      location.href=gobackURL;
 	   }
 	

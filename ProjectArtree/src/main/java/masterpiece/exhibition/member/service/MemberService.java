@@ -18,14 +18,14 @@ public class MemberService implements InterMemberService {
 	@Autowired   // Type에 따라 알아서 Bean 을 주입해준다.
 	private InterMemberDAO dao;
 	
-	// 회원가입 insert
+	// ========= 회원가입 insert =========
 	@Override
 	public int joinInsert(MemberVO mvo) {
 		int n = dao.joinInsert(mvo);
 		return n;
-	}
+	} 
 	
-	// 사용중인 이메일 체크
+	// ========= 사용중인 이메일 체크 =========
 	@Override
 	public boolean duplicateCheck(String email) {
 		
@@ -40,14 +40,14 @@ public class MemberService implements InterMemberService {
 		return isExistEmail;
 	}
 	
-	// 로그인 처리
+	// ========= 로그인 처리 =========
 	@Override
 	public MemberVO getLoginMember(HashMap<String, String> paraMap) {
 		MemberVO loginuser = dao.getLoginMember(paraMap);
 		return loginuser;
 	}
 
-	// 회원가입 완료, 선호작품설정
+	// ========= 회원가입 완료, 선호작품설정 =========
 	@Override
 	@Transactional(propagation=Propagation.REQUIRED, isolation= Isolation.READ_COMMITTED, rollbackFor={Throwable.class})
 	public List<HashMap<String, String>> joinFinalInsert(HashMap<String, String> paraMap) {
@@ -89,23 +89,23 @@ public class MemberService implements InterMemberService {
 		System.out.println("작품 이름, 작가, 작품이미지 select : "+myFavorList);
 		
 		return myFavorList;
-	}
+	} 
 
-	// 이메일 찾기
+	// ========= 이메일 찾기 =========
 	@Override
 	public String idFind(HashMap<String, String> paraMap) {
 		String email = dao.idFind(paraMap);
 		return email;
 	} 
 
-	// 비밀번호 찾기 - 입력한 name, email, hp에 맞는 사용자가 있는지 확인
+	// ========= 비밀번호 찾기 - 입력한 name, email, hp에 맞는 사용자가 있는지 확인 =========
 	@Override
 	public String findUser(HashMap<String, String> paraMap) {
 		String isExist = dao.findUser(paraMap);
 		return isExist; 
 	}
 
-	// 임시 비밀번호로 현재 비밀번호 변경
+	// ========= 임시 비밀번호로 현재 비밀번호 변경 =========
 	@Override
 	public int updatePwd(HashMap<String, String> updateMap) {
 		int n = dao.updatePwd(updateMap);

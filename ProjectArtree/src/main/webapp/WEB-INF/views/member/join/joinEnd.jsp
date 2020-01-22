@@ -243,6 +243,13 @@ div.joinEndTwo_footer span {
 
 </style>
 
+<%-- word chart --%>
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/wordcloud.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
+<script src="https://code.highcharts.com/modules/export-data.js"></script>
+<script src="https://code.highcharts.com/modules/accessibility.js"></script>
+
 <script type="text/javascript" src="<%= ctxPath%>/resources/js/jquery-3.3.1.min.js"></script>
 
 <script type="text/javascript">
@@ -333,10 +340,10 @@ function confirm() {
 	  success:function(json){
 		  var html = "";
 		  var data = json.myFavorList;
-
-		 
+			
+		  var text = json.text;
+		  
 		  for(var i=0; i<data.length; i++) {
-			  
 			  html += "<div class='pick'>";
 			  html += "<div class='pickImg_wrap'>";
 			  html += "<img src='"+data[i]["image1"]+"'/>";
@@ -347,6 +354,10 @@ function confirm() {
 			  html += "</div>";
 			  html += "</div>";
 		  }
+		  
+		  console.log(text);
+		  
+		  getGenreTag(text);
 		  
 		  $("#point").html(html);
 		  
@@ -363,6 +374,42 @@ function confirm() {
 	  
    }); // end of ajax
 }
+
+// word_chart
+function getGenreTag(text) {
+
+	var lines = text.split(/[,\. ]+/g),
+    data = Highcharts.reduce(lines, function (arr, word) {
+        var obj = Highcharts.find(arr, function (obj) {
+            return obj.name === word;
+        });
+        if (obj) {
+            obj.weight += 1;
+        } else {
+            obj = {
+                name: word,
+                weight: 1
+            };
+            arr.push(obj);
+        }
+        return arr;
+    }, []);
+	
+	Highcharts.chart('word_chart', {
+	    accessibility: {
+	        screenReaderSection: {
+	            beforeChartFormat: ''
+	        }
+	    },
+	    series: [{
+	        type: 'wordcloud',
+	        data: data
+	    }],
+	    title: {
+	        text: ''
+	    }
+	}); 
+} // end of getGenreTag
 
 </script>
 
@@ -495,10 +542,7 @@ function confirm() {
 				</div>
 				<div class="joinEndTwo_chart">
 					<span>* 마이페이지 - 작품컬렉션에서 확인하실 수 있습니다.</span>
-					<div class="word_chart">
-						차트차트차트
-						차트차트차트
-						차트차트차트
+					<div class="word_chart" id="word_chart">
 					</div>
 				</div>
 				
@@ -521,6 +565,5 @@ function confirm() {
 		<input type="hidden" name="exhibitionno2" id="exhibitionno2">
 		<input type="hidden" name="galleryno2" id="galleryno2">
 	</form>
-		
 		</div>
 </body>

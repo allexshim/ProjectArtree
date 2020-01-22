@@ -19,11 +19,11 @@
     
     <!-- 로그인 처리 -->
     <select id="getLoginMember" parameterType="HashMap" resultType="masterpiece.exhibition.member.model.MemberVO">
-      select idx, email, name, gender, agegroup, area
+      select idx, email, name, gender, agegroup, area, status
           , trunc( months_between(sysdate, lastLoginDate) ) AS lastlogindategap 
           , trunc( months_between(sysdate, lastPasswordDate) ) AS pwdchangegap 
       from member
-      where status = 1 and 
+      where (status = 1 or status = 2) and 
             email = #{email} and
             password = #{password}
     </select>
@@ -62,11 +62,13 @@
 	 	<result property="exhibitionname" 	column="exhibitionname" javaType="String"/>
 	 	<result property="author" 			column="author" 		javaType="String"/>
 	 	<result property="image1" 			column="image1" 		javaType="String"/>
+	 	<result property="tag" 				column="tag" 			javaType="String"/>
+	 	<result property="genre" 			column="genre" 			javaType="String"/>
    </resultMap>
    
    <!-- 사용중인 이메일 체크 -->
    <select id="myFavorDesc" parameterType="HashMap" resultMap="favorDescMap">
-   	  select E.exhibitionname, E.author, D.image1
+   	  select E.exhibitionname, E.author, E.genre, E.tag, D.image1
 	  from exhibition E join exhibitiondetail D
 	  on E.exhibitionno = D.fk_exhibitionno
 	  where E.exhibitionno = #{exhibitionno1} or E.exhibitionno = #{exhibitionno2}
