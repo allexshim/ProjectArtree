@@ -45,15 +45,9 @@
 
 <script>			
 	
-	$(function(){			
+	$(function(){	
+		var total = 0;		
 		
-		if ( ${totalBin != null}) {
-			var totalbin = ${totalBin};
-			$("#Subtotal").html("&#8361;"+totalbin.toLocaleString());
-			$("#total").html("&#8361;"+totalbin.toLocaleString());		
-			$("#orderpri").val(totalbin);		
-			sessionStorage.setItem("order", totalbin)
-		}				
 		$.fn.bmdIframe = function( options ) {
 	        var self = this;
 	        var settings = $.extend({
@@ -76,14 +70,48 @@
 	        return this;
 	 	};  
 	  
-		$("#myModal").bmdIframe();		
+		$("#myModal").bmdIframe();	
+						
+		cartList();
 		
-	});	
+		// 장바구니 삭제		
+		$(document).on("click",".delCart",function(){
+			$.ajax({
+				url:"<%=request.getContextPath()%>/delCart.at",				
+				type:"POST",					
+				data:{"delCartNo":$(this).find("input[name=delCartNo]").val()},
+				async:false,
+				dataType:"JSON",
+				success:function(json){																
+					
+				}, 
+				error:function(request,status,error) {
+					alert("code = "+ request.status + " message = " + request.responseText + " error = " + error);
+				}				
+			});							
+			cartList();
+		}); 
+		
+		$(".n").each(function(){
+			total += Number($(this).find($("input[name=n]")).val());
+		});
+		
+		alert(total);
+		
+		if ( total != 0) {
+			var totalbin = total;
+			$("#Subtotal").html("&#8361;"+totalbin.toLocaleString());
+			$("#total").html("&#8361;"+totalbin.toLocaleString());		
+			$("#orderpri").val(totalbin);		
+			sessionStorage.setItem("order", totalbin)
+		} 
+		
+	});	// ready
 	
-	function discountBin() {		
+	/* function discountBin() {		
 		if($("#promo").val()=="하빈"){			
-			if ( ${totalBin != null}) {
-				var totalbin = ${totalBin};
+			if ( ${total != null}) {
+				var totalbin = ${total};
 				var discount = totalbin * 0.5;
 				$("#Discount").html("&#8361;"+discount.toLocaleString());
 				var total = totalbin - discount;
@@ -91,18 +119,98 @@
 				sessionStorage.setItem("order", total)							
 			}	
 		}				
-	}	
+	}	 */
 	
+	function cartList() {		
+		// 장바구니 리스트 출력
+		var formdata = $("form[name=order]").serialize();	
+		$.ajax({
+			url:"<%=request.getContextPath()%>/cartList.at",			
+			type:"POST",							
+			data:formdata,	
+			async:false,
+			dataType:"JSON",
+			success:function(json){
+				var html = "";
+				var n = 0;								
+				$.each(json, function(index, item){
+					var cartNo = item.cartNo;					
+					var dday = item.dday;
+					var exnameList = item.exname;
+					$("#cartNo").val(cartNo);	
+					
+					var formdata2 = $("form[name=order]").serialize();
+					$.ajax({
+						url:"<%=request.getContextPath()%>/cartDetailList.at",
+						type:"POST",							
+						data:formdata2,
+						async:false,
+						dataType:"JSON",
+						success:function(json3){    
+							$.each(json3, function(index3, item3){								
+								var qtList = item3.qt;								
+								var priceList = item3.price;																	
+								n += qtList * priceList;								
+							});																	
+						},
+						error:function(request,status,error) {
+							alert("code = "+ request.status + " message = " + request.responseText + " error = " + error);
+						}				
+					});	
+					html += "<div style=\"overflow: hidden;\">";
+					html += "<div style=\"float: left; font-weight: bold;\">"+exnameList+"</div>";
+					html += "<div class=\"delCart\" style=\"float: right; cursor:pointer; margin-left: 2%; line-height: 1;\"><img style=\"width: 25px; height: 25px;\" src=\"<%=ctxPath%>/resources/images/order/clear.png\"><input hidden=\"hidden\" value=\""+cartNo+"\" name=\"delCartNo\"></div>";							
+					html += "<div class=\"n\" style=\"float: right; font-weight: bold;\">&#8361;"+n.toLocaleString()+"<input hidden=\"hidden\" value=\""+n+"\" name=\"n\"></div>";
+					html += "";					
+					n=0;
+					html += "</div>	";
+					html += "<div style=\"padding: 1% 0;\">"+dday+"</div>";
+					html += "<div style=\"margin: 1% 0 3% 0;\">";					
+					html += "";
+					
+					var formdata3 = $("form[name=order]").serialize();
+					$.ajax({
+						url:"<%=request.getContextPath()%>/cartDetailList.at",
+						type:"POST",								
+						data:formdata3,
+						async:false,
+						dataType:"JSON",
+						success:function(json2){    
+							$.each(json2, function(index2, item2){									
+								var qtList = item2.qt;
+								var typeList = item2.purtype;
+								var priceList = Number(item2.price);									
+								html += "<div style='border-bottom: 1px solid white; color:#666; font-size:14px; padding:4px 10px; overflow: hidden; background-color: #f3f3f4;'>";
+								html += "<div style='float: left; width: 25%; text-align: left;'>"+typeList+"</div>";
+								html += "<div style='float: left;'>"+qtList+"&nbsp;Item(s)</div>";
+								html += "<div style='float: right;'>&#8361;"+priceList.toLocaleString()+"</div>";								
+								html += "</div>	";								
+							});																	
+						},
+						error:function(request,status,error) {
+							alert("code = "+ request.status + " message = " + request.responseText + " error = " + error);
+						}				
+					});							
+					html += "</div>";					
+				});									
+				$("#cartList").html(html);	
+				
+			},
+			error:function(request,status,error) {
+				alert("code = "+ request.status + " message = " + request.responseText + " error = " + error);
+			}				
+		});	
+	}
+		
 </script>
 <body>
-	<form name="order">
+	<form name="order">	
 	<div style="padding-right:60px; width: 100%; margin: 0 auto;" align="center">
 	<div style="padding: 3%;">
-	
+		
 		<div style="padding-bottom:2%; padding-top: 1%; font-size: 25px;">
 			PAYMENT
 		</div>			
-		 
 		<div style="overflow:hidden; text-align: right;">
 			<div onclick="discountBin()" style="color:black; background:white; cursor:pointer; float: right; border: solid 2px #EDEBEB; text-align:center; padding:6px 12px; border-radius: 4px; width: 10%; font-size: 15px;">Submit</div>
 			<div style="margin-right:1%; font-size:15px; float:right;"><input id="promo" style="width:10em; padding:6px 12px;" type="text" size="2" placeholder="Promo code"></div>
@@ -114,20 +222,13 @@
 			
 		<hr>
 		
-		<div style="font-size: 25px; text-align: left;">CART</div>
+		<div style="font-size: 25px; text-align: left;">CART</div>					
 		
 		<div style="margin-top:2%; text-align:left; font-size:18px; padding: 27px; border: 1px solid #EDEBEB;">
-		
-			<div style="overflow: hidden;">
-				<div style="float: left; font-weight: bold;">${exhibitionname }</div>
-				<div style="float: right; font-weight: bold;">${n }</div>
-			</div>
-				
-			<div style="padding: 1% 0;">${dateBin}</div>
 			
-			<div style="margin: 1% 0 3% 0;">	
-				${html}										
-			</div>
+			<div id="cartList">							
+			</div>	
+			<input id="cartNo" hidden="hidden" value="" name="cartNo">																			
 			
 			<div style="overflow: hidden;">								
 				<div id="Subtotal" style="float: right; width: 10%; text-align: right;"></div>
@@ -145,8 +246,7 @@
 				<input hidden="hidden" id="orderpri" name="orderpri" value="">		
 			</div>
 		
-		</div>			
-		
+		</div>					
 		<div style="overflow: hidden;">
 			<div onclick="location.href='<%= ctxPath %>/ticketsbin.at'" style="color:black; background:white; cursor:pointer; float: left; border: solid 1px black; border-radius: 4px; width: 5%; margin-top: 1%; padding: 0.3%;">이전</div>
 			<div data-target="#myModal" data-bmdSrc="<%=ctxPath%>/paymentGatebin.at" data-toggle="modal" class="bmd-modalButton" style="color:black; background:white; cursor:pointer; float: right; border: solid 1px black; border-radius: 4px; width: 5%; margin-top: 1%; padding: 0.3%;">결제하기</div>			 			

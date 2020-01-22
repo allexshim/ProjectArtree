@@ -136,7 +136,9 @@
 			else {
 				$(".totalBin").html("");
 			}
-		});							
+		});
+		
+		
 	});			
 	
 	function goCtrl() {
