@@ -20,5 +20,58 @@
 			where exhibitionno = #{no}		
 		</if>
 	</select>
+	
+	<insert id="inserCart">
+		insert into cart
+		values(cartNo.nextval, #{no}, #{idx}, default, #{date}, #{exname})		
+	</insert>
+
+	<select id="selectCartNo" resultType="String">
+		select max(cartno) from cart
+	</select>
+	
+	<insert id="insertCartDetail">
+		insert into cartDetail
+		values(cartDetailNo.nextval, #{cartNo}, #{type}, #{qt}, default, #{price})	
+	</insert>
+
+	<resultMap type="HashMap" id="cartMap">
+		<result property="cartno" column="cartno" javaType="String"></result>
+		<result property="fk_exhibitionno" column="fk_exhibitionno" javaType="String"></result>
+		<result property="fk_idx" column="fk_idx" javaType="String"></result>
+		<result property="dday" column="dday" javaType="String"></result>
+		<result property="status" column="status" javaType="String"></result>
+		<result property="exname" column="exname" javaType="String"></result>		
+	</resultMap>
+
+	<select id="selectCartNoList" parameterType="HashMap" resultMap="cartMap">
+		select *
+		from cart			
+		where fk_idx = #{idx}
+		order by cartno desc
+	</select>
+	
+	<resultMap type="HashMap" id="cartDetailMap">
+		<result property="cartdetailno" column="cartdetailno" javaType="String"></result>
+		<result property="fk_cartno" column="fk_cartno" javaType="String"></result>
+		<result property="purtype" column="purtype" javaType="String"></result>
+		<result property="qt" column="qt" javaType="String"></result>
+		<result property="status" column="status" javaType="String"></result>
+		<result property="price" column="price" javaType="String"></result>		
+	</resultMap>
+
+	<select id="cartDetailList" resultMap="cartDetailMap">
+		select * from cartDetail	
+		where fk_cartno = #{string}
+		order by fk_cartno desc
+	</select>
+	
+	<delete id="delCartDetail">		
+		delete from cartDetail where fk_cartno = #{cartNo}			
+	</delete>
+	
+	<delete id="delCart">		
+		delete from cart where cartno = #{cartNo}			
+	</delete>
 
 </mapper>
