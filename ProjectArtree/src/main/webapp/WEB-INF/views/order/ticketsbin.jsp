@@ -144,7 +144,7 @@
 	function goCtrl() {
 		var frm = document.reposiBin;	
 		frm.method="POST";
-		frm.action="<%=ctxPath %>/paymentbin.at";		
+		frm.action="<%=ctxPath %>/insertCart.at";		
 		frm.submit();
 	}
 	
@@ -183,7 +183,7 @@
 			${startdate } - ${enddate }
 		</div>
 		
-		<div><img style="width: 100%; height: 100%;" src="<%=ctxPath%>/resources/images/order/${img}"></div>
+		<div style="width: 80%; height: 400px;"><img style="width: 100%; height: 100%;" src="${mainposter}"></div>
 		
 		<div style="margin:2% 0; font-size: 22px; font-weight: bold; text-align: left;">
 			${exhibitionname}<input hidden="hidden" name="exhibitionname" value="${exhibitionname}">

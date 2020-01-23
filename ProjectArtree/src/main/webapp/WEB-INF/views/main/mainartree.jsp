@@ -15,7 +15,9 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 <style type="text/css">
    
-  
+ body::-webkit-scrollbar { 
+    display: none; 
+}
    
    .main-container { 
    		margin: 0 auto;
@@ -46,7 +48,7 @@
 		width: 50%;
 		height: 100%
 		text-align: center; 
-		padding: 15% 5% 0 5%;
+		padding: 10% 5% 0 5%;
 	}
 	
 	.recom-info {
@@ -78,7 +80,7 @@
 		width: 50%; 
 		height: 100%
 		text-align: center; 
-		padding: 15% 5% 0 5%;
+		padding: 10% 5% 0 5%;
 	}
 	
 	.hot-title {
@@ -228,22 +230,84 @@
 		margin: 10px;
 	}
 	
+	.event-morebtn {
+		cursor: pointer;
+		color: black;
+	}
+	
+	.event-morebtn:hover {
+		text-decoration: none;
+		color: black;
+	}
+	
+	.return-top {
+		color: black;
+		text-decoration: none;
+		cursor: pointer;
+	}
+	
+	.return-top:hover {
+		color: black;
+		text-decoration: none;
+	}
+	
    
 </style>
 	
 <script type="text/javascript">
-	
-	$(document).ready(function(){
-		
-		$(".new-one").hover(function(){
-			$(this).children(".new-exp").stop().animate({top:'7px'}, 180);
 
-		}, function(){
-			$(this).children(".new-exp").stop().animate({top:'0px'}, 180);
-		});
-		
-		
+$(".return-top").hide(); // 탑 버튼 숨김
+$(function () {
+            
+	$(window).scroll(function () {
+		if ($(this).scrollTop() > 100) { // 스크롤 내릴 표시
+			$('.navigation').fadeIn();
+		} else {
+			$('.navigation').fadeOut();
+		}
 	});
+           
+	$('.return-top').click(function () {
+		$('body,html').animate({
+			scrollTop: 0
+		}, 800);  // 탑 이동 스크롤 속도
+		return false;
+	});
+	
+	$(".tabContent").on("click", function (e) {
+		e.preventDefault();//anchor이벤트의 기본동작을 막는다.
+		var thisTarget = $(this).attr("href");
+		$(window).scrollTop($(thisTarget).offset().top);
+	});
+	
+	$(".hot-info1").hover(function(){
+		$(this).find(".hot-content").stop().animate({left:'5px'}, 'fast');
+
+	}, function(){
+		$(this).find(".hot-content").stop().animate({left:'0px'}, 'fast');
+	});
+	
+});
+
+var ovf, slider;
+
+$(function(){
+    ovf = this.getElementById("overflow");
+    slider = this.getElementById("slider");
+    winResize();
+    $(window).bind({resize: winResize, scroll: winScroll});
+});
+
+function winResize(){  
+    ovf.style.top = slider.offsetHeight + "px";
+}
+
+function winScroll(){
+    var op = 1 - (window.pageYOffset / slider.offsetHeight);
+    slider.style.opacity = op; 
+}
+	
+
 	
 	
 
@@ -251,7 +315,7 @@
    
     
 
-	<div style="width: 100%; height: 800px; display: inline-block;">
+	<div id="slider" style="width: 100%; height: 800px; display: inline-block;">
        	<div style="background-size: cover; width:100%; height:100%; z-index:1000; margin-top:0; background-image: url('<%= ctxPath%>/resources/images/main/mainImg1.jpg')">
        		 <div class="main-logo" style="z-index: 5; width: 400px; height: 300px;">
        			<img style="-webkit-transform:translate(270px,330px);" alt="로고이미지" src="<%= ctxPath%>/resources/images/main/logo_black_new.png" />
@@ -260,9 +324,9 @@
 	</div>
 	
 	
-	<div class="main-container" style="margin-bottom: 500px;">
+	<div id="overflow" class="main-container" style="margin-bottom: 500px;">
 		<div class="hot-exh">
-			<div style="float:center; margin:0 auto; transform:translate(100px,20px);">
+			<div id="div1" style="float:center; margin:0 auto; transform:translate(100px,20px);">
 				<h2>인기 전시회</h2>
 			</div>
 			<div class="hot-exh-L">
@@ -345,7 +409,7 @@
 			
 			</div>
 			
-			<div class="recom-exh-title" style="float: center; transform:translate(0,-580px);">
+			<div id="div2" class="recom-exh-title" style="float: center; transform:translate(0,-580px);">
 				<h2>추천 전시회</h2>
 				<span>ARTREE 추천전시회를 보여줍니다.</span>
 			</div>
@@ -359,13 +423,14 @@
 		</div>
 	</div>
 	
-	<hr color="#f2f2f2;" style="transform:translate(0, 100px);" />
+	<hr color="#f2f2f2;" style=" transform:translate(0, 100px);" />
 
 	
 	<div class="newNend">
-		<div class="new-title" style="float: left; -webkit-transform:translate(58px, 180px);">
+		<div id="div3" class="new-title" style="float: left; -webkit-transform:translate(58px, 180px);">
 			<h2>신규 전시회</h2>
 		</div>
+		<hr color="black;" style="width:90%; transform:translate(62px,245px);" />
 		<div class="new-exh">
 			<a href="#" class="new-one">
 				<img class="new_poster" src="<%= ctxPath%>/resources/images/exhibition/artmap_20200102_9426350.jpg"/>
@@ -389,10 +454,11 @@
 			</a>
 		</div>
 		
-		<div class="new-title" style="float: right; -webkit-transform:translate(-58px, 370px);">
+		<div id="div4" class="new-title" style="float: right; -webkit-transform:translate(-58px, 370px);">
 			<h2>종료임박 전시회</h2>
 		</div>
-		<div class="end-exh" style="transform:translate(0, 100px);">
+		<hr color="black;" style="width:90%; transform:translate(64px,420px);" />
+		<div class="end-exh" style="transform:translate(0, 90px);">
 			<a href="#" class="end-one">
 				<img class="end_poster" src="<%= ctxPath%>/resources/images/exhibition/artmap_20200102_9426350.jpg"/>
 				<span class="end-exp">전시회명</span>
@@ -419,12 +485,13 @@
 	<hr color="#f2f2f2;" style="transform:translate(0, 250px);" />
 	
 	
-	<div class="event-title" style="float: left; transform:translate(35px, 180px);">
-		<h2 style="float: left;">EVENT</h2>
+	<div id="div5" class="event-title" style=" float: left; transform:translate(35px, 180px);">
+		<h2>EVENT</h2>
 	</div>
 	<div class="event-more" style="float: right; transform:translate(-35px, 420px);">
 		<a class="event-morebtn" href="<%= ctxPath%>/eventList.at">더보기+</a>
 	</div>
+	<hr color="black;" style="width:94%; transform:translate(38px,445px);" />
        	<div class="event-div" style="transform:translate(0, 200px);">
            	<a href="#" class="event_one" >
 				<img class="event_poster" src="<%= ctxPath%>/resources/images/exhibition/artmap_20200102_9426350.jpg"/>
@@ -442,8 +509,9 @@
 
 </div>
 
-
-
+<div class="navigation" style="display: block; right:50px; bottom: 20%; position:fixed; z-index:9999;">
+	<a class="return-top" href="#">[TOP]</a>
+</div>
 <script type="text/javascript">
 
 	var slideIndex = 0;

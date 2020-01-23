@@ -67,5 +67,23 @@ public class OrderDAO implements InterOrderDAO {
 		sqlsession.delete("order.delCart",cartNo);		
 	}
 
+	@Override
+	public int insertReser(HashMap<String, String> map) {
+		int n = sqlsession.insert("order.insertReser",map);	
+		return n;
+	}
+	
+	//예매번호 조회
+	@Override
+	public String selectReserNo(HashMap<String, String> map) {
+		String selectReserNo = sqlsession.selectOne("order.selectReserNo",map);
+		return selectReserNo;
+	}
+
+	@Override
+	public int insertReserDetail(HashMap<String, String> map2) {
+		int n = sqlsession.insert("order.insertReserDetail",map2);	
+		return n;
+	}
 	
 }

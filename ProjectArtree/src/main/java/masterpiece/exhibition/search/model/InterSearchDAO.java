@@ -20,4 +20,10 @@ public interface InterSearchDAO {
 	// 선택한 태그에 해당하는 전시회 정보를 받아온다.
 	List<HashMap<String, String>> getExhibitionbySelectTheme(String tag);
 
+	// 해당 갤러리 이름에 해당하는 galleryNo를 받아온다.
+	String getGalleryNobyName(String galleryName);
+
+	// 해당 galleryNo를 fk로 가지는 exhibiton정보를 받아온다.
+	List<HashMap<String, String>> getExhibitionbyLocation(String galleryNo);
+
 }

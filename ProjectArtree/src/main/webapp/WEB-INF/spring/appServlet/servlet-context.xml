@@ -29,8 +29,6 @@
     
         spring annotation-driven 시 bean name 중복(충돌,conflicts)을 해결하기 위해서 사용하는 커스트마이징된 BeanNameGenerator 이다. 
    --> 
-   
-
 
 	<!-- === 파일다운로드 === bean을 아래처럼 등록해주세요. -->
 	<!-- <beans:bean id="excelDownloadView" class="masterpiece.exhibition.??"/> -->

@@ -20,8 +20,6 @@ public interface InterOrderService {
 	void delCartDetail(String cartNo); // 장바구니 상세 삭제
 	void delCart(String cartNo); // 장바구니 삭제
 
-
-	
-	
+	int order(HashMap<String, String> map); // 트랜잭션 장바구니 삭제, 주문완료, 주문내역
 
 }

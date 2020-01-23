@@ -87,24 +87,17 @@ html,body{
 }
 
 
-/* Show the dropdown menu on hover */
-.dropdown:hover .dropdown-content {
-	display: block;
-	z-index: 100; 
-	
-}
-
 /* Dropdown Content (Hidden by Default) */
 .dropdown-content-R1 {
   font-weight: bold;
   text-align: center;
   font-size: 12px;
-  margin: 50px 0 0 0;
-  -webkit-transform:translate(12px,0);
+  -webkit-transform:translate(12px,48px);
   display: none;
   position: absolute;
   background-color: white;
   min-width: 120px;
+  border: solid 1px #f2f2f2;
   
 }
 
@@ -117,24 +110,17 @@ html,body{
 }
 
 
-/* Show the dropdown menu on hover */
-.dropdown:hover .dropdown-content-R1 {
-	display: block;
-	z-index: 100;
-	
-}
-
 /* Dropdown Content (Hidden by Default) */
 .dropdown-content-R2 {
   font-weight: bold;
   text-align: center;
   font-size: 12px;
-  margin: 50px 0 0 0;
   display: none;
   position: absolute;
   background-color: white;
   min-width: 120px;
-  -webkit-transform:translate(-5px,0);
+  -webkit-transform:translate(-5px,48px);
+  border: solid 1px #f2f2f2;
   
 }
 
@@ -146,14 +132,14 @@ html,body{
   display: block;
 }
 
-
-/* Show the dropdown menu on hover */
+/* 
+// Show the dropdown menu on hover 
 .dropdown:hover .dropdown-content-R2 {
 	display: block;
 	z-index: 100;
 	
 }
-
+ */
 .loginNadmin {
 	padding-top: 10px;
 }
@@ -232,6 +218,36 @@ input#login_btn {
 <script type="text/javascript" src="<%= ctxPath%>/resources/js/jquery-3.3.1.min.js"></script>
 <script type="text/javascript">
 
+$(document).ready(function(){
+    $(".dds").hover(            
+        function() {
+            $('.dropdown-content', this).slideDown("300");
+        },
+        function() {
+            $('.dropdown-content', this).slideUp("200");
+        }
+    );
+    
+    $(".ddl").hover(            
+            function() {
+                $('.dropdown-content-R1', this).slideDown("300");
+            },
+            function() {
+                $('.dropdown-content-R1', this).slideUp("200");
+            }
+    ); 
+    
+     $(".ddm").hover(            
+            function() {
+                $('.dropdown-content-R2', this).slideDown("300");
+            },
+            function() {
+                $('.dropdown-content-R2', this).slideUp("200");
+            }
+    );
+});
+
+
 //============================ 로그인 스크립트 ============================
 // 클릭하면 로그인 창 띄우기
 function layer_open(el) {
@@ -275,13 +291,13 @@ function goLogin() {
 		<div class="row">
 		<div class="col-sm-2"></div>
 			<div class="col-sm-8" style="float: center;">
-				<a class="active header-nav" href="<%=ctxPath%>/galList.at">GALLARY</a>
-				<a class="header-nav" href="<%=ctxPath%>/exhList.at">EXHIBITION</a>
+				<a class="active header-nav" href="<%=ctxPath%>/galHome.at">GALLARY</a>
+				<a class="header-nav" href="<%=ctxPath%>/exhHome.at">EXHIBITION</a>
 				<a class="header-nav" href="<%=ctxPath%>/mainartree.at"><img style="height: 60px;" src="<%=ctxPath %>/resources/images/main/logo_black1.jpg" /></a>
 				<a class="header-nav" href="<%=ctxPath%>/aboutbin.at">ABOUT ARTREE</a>
-					<div class="dropdown">
-					  <a class="dropbtn header-nav">SERVICE</a>
-					  <div class="dropdown-content">
+					<div class="dropdown dds">
+					  <a class="dropbtn header-nav" data-toggle="dropdown">SERVICE</a>
+					  <div class="dropdown-content" role="menu">
 					    <a href="<%=ctxPath%>/notice.at">Notice</a>
 					    <a href="<%=ctxPath%>/reviewList.at">Review</a>
 					    <a href="<%=ctxPath%>/previewList.at">Preview</a>
@@ -293,8 +309,8 @@ function goLogin() {
 		 	<!-- 오른쪽메뉴 -->
 		 <div class="loginNadmin col-sm-2" style="position: relative;">
 			
-			<div class="dropdown" >
-				  <a class="dropbtn login" style="padding-top: 0px; -webkit-transform:translate(20px,0);"><img src="<%= ctxPath %>/resources/images/main/mainheader-account-login.png" /></a>
+			<div class="dropdown ddl" >
+				  <a class="dropbtn login" style=" padding-top: 0px; -webkit-transform:translate(20px,0);"><img src="<%= ctxPath %>/resources/images/main/mainheader-account-login.png" /></a>
 				  <div class="dropdown-content-R1">
 				  	<c:if test="${sessionScope.loginuser == null}">
 					    <a href="javascript:layer_open('layer')">로그인</a>
@@ -307,7 +323,7 @@ function goLogin() {
 				  
 				  
 			</div>
-			<div class="dropdown" >
+			<div class="dropdown ddm" >
 				 	<a class="dropbtn menu" style="padding-top: 0px; -webkit-transform:translate(20px,0);"><img src="<%= ctxPath %>/resources/images/main/mainheader-menu.png" /></a>
 				    <div class="dropdown-content-R2">
 					    <a href="<%=ctxPath%>/mypage.at">마이페이지</a>

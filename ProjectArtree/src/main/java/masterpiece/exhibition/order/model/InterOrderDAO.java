@@ -18,8 +18,12 @@ public interface InterOrderDAO {
 	List<HashMap<String, String>> cartDetailList(String string); // 장바구니 상세 조회
 
 	void delCartDetail(String cartNo); // 장바구니 상세 삭제
-	void delCart(String cartNo); // 장바구니 삭제
+	void delCart(String cartNo); // 장바구니 삭제	
 
-	
+	int insertReser(HashMap<String, String> map); // 예매 입력
+
+	String selectReserNo(HashMap<String, String> map); // 예매번호 조회
+
+	int insertReserDetail(HashMap<String, String> map2); // 예매 상세 입력 
 
 }

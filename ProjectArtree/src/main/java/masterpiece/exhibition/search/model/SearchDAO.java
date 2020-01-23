@@ -50,6 +50,21 @@ public class SearchDAO implements InterSearchDAO {
 		List<HashMap<String,String>> ExhibitionList = sqlsession.selectList("search.getExhibitionbySelectTheme",tag);
 		return ExhibitionList;
 	}
+
+	// 해당 갤러리 이름에 해당하는 galleryNo를 받아온다.
+	@Override
+	public String getGalleryNobyName(String galleryName) {
+		String galleryNo = sqlsession.selectOne("search.getGalleryNobyName",galleryName);
+		return galleryNo;
+	}
+
+	// 해당 galleryNo를 fk로 가지는 exhibiton정보를 받아온다.
+	@Override
+	public List<HashMap<String, String>> getExhibitionbyLocation(String galleryNo) {
+		List<HashMap<String,String>> ExhibitionList = sqlsession.selectList("search.getExhibitionbyLocation",galleryNo);
+		return ExhibitionList;
+	}
+	
 	
 	
 	
