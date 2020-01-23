@@ -472,10 +472,10 @@
 								 + '<span class="ExhDate">'+item.SCHEDULE+'</span>'
 								 + '</a></div><br/>';
 						}
-						
-						$(".ingExh").append(html);
 					
 					});
+					
+					$(".ingExh").append(html);
 					
 				} // end of json if ~ else ------------------
 			},
@@ -523,9 +523,9 @@
 								 + '</a></div><br/>';
 						}
 						
-						$(".comExh").append(html);
-						
 					});
+					
+					$(".comExh").append(html);
 					
 				} // end of json if ~ else ------------------
 			},

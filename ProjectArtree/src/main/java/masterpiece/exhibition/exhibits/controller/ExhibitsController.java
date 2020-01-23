@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import masterpiece.exhibition.exhibits.service.InterExhibitsService;
+import masterpiece.exhibition.member.model.MemberVO;
 
 @Controller
 public class ExhibitsController {
@@ -97,11 +100,11 @@ public class ExhibitsController {
 	///////////////////// 전시회 상세페이지 /////////////////////
 	@RequestMapping(value="/exhDetail.at")
 	public String exhDetail(HttpServletRequest request) {
-		
+
 		String eno = request.getParameter("eno");
 		
-		HashMap<String, String> exhDetailMap = service.getExhDetail(eno);
-		
+		HashMap<String, String> exhDetailMap = service.getExhDetail(eno); // 해당전시회정보
+
 		request.setAttribute("exhDetailMap", exhDetailMap);
 		return "exhibits/exhDetail.tiles";
 	}
@@ -289,5 +292,114 @@ public class ExhibitsController {
 		
 		return jsonArr.toString();
 	}
+	
+	/////////////////////////// 전시회 좋아요 체크 유무 확인 ///////////////////////////
+	@ResponseBody
+	@RequestMapping(value="/checkExhLike.at", produces="text/plain;charset=UTF-8")
+	public String checkExhLike(HttpServletRequest request) {
+		
+		String eno = request.getParameter("eno");
+		
+		HttpSession session = request.getSession();
+		MemberVO loginuser = (MemberVO)session.getAttribute("loginuser");
+		
+		String idx = "";
+		if(loginuser != null) {
+			idx = loginuser.getIdx();
+		}
+		
+		HashMap<String, String> paraMap = new HashMap<String, String>();
+		paraMap.put("idx", idx);
+		paraMap.put("eno", eno);
+		
+		int ckExhLike = service.getCheckExhLike(paraMap);
+		
+		JSONObject jobj = new JSONObject();
+		jobj.put("ckExhLike", ckExhLike);
 
+		return jobj.toString();
+	}
+	
+	/////////////////////////// 갤러리 좋아요 체크 유무 확인 ///////////////////////////
+	@ResponseBody
+	@RequestMapping(value="/checkGalLike.at", produces="text/plain;charset=UTF-8")
+	public String checkGalLike(HttpServletRequest request) {
+		
+		String gno = request.getParameter("gno");
+		
+		HttpSession session = request.getSession();
+		MemberVO loginuser = (MemberVO)session.getAttribute("loginuser");
+		
+		String idx = "";
+		if(loginuser != null) {
+			idx = loginuser.getIdx();
+		}
+		
+		HashMap<String, String> paraMap = new HashMap<String, String>();
+		paraMap.put("idx", idx);
+		paraMap.put("gno", gno);
+		
+		int ckGalLike = service.getCheckGalLike(paraMap);
+		
+		JSONObject jobj = new JSONObject();
+		jobj.put("ckGalLike", ckGalLike);
+
+		return jobj.toString();
+	}
+	
+	/////////////////////////// 전시회 좋아요 지정 및 해제 ////////////////////////////
+	@ResponseBody
+	@RequestMapping(value="/ExhLike.at", produces="text/plain;charset=UTF-8")
+	public String requireLogin_exhLike(HttpServletRequest request, HttpServletResponse response) {
+		
+		String eno = request.getParameter("eno");
+		String gno = request.getParameter("gno");
+		String tag = request.getParameter("tag");
+		String gen = request.getParameter("gen");
+		
+		HttpSession session = request.getSession();
+		MemberVO loginuser = (MemberVO)session.getAttribute("loginuser");
+		String idx = loginuser.getIdx();
+		
+		HashMap<String, String> paraMap = new HashMap<String, String>();
+		paraMap.put("eno", eno);
+		paraMap.put("gno", gno);
+		paraMap.put("tag", tag);
+		paraMap.put("gen", gen);
+		paraMap.put("idx", idx);
+		
+		int CkEcnt = service.goCheckExhLikeDis(paraMap);
+
+		JSONObject jobj = new JSONObject();
+		jobj.put("CkEcnt", CkEcnt);
+		
+		return jobj.toString();
+		
+	}
+	
+	
+	/////////////////////////// 갤러리 좋아요 지정 및 해제 ////////////////////////////
+	@ResponseBody
+	@RequestMapping(value="/GalLike.at", produces="text/plain;charset=UTF-8")
+	public String requireLogin_galLike(HttpServletRequest request, HttpServletResponse response) {
+		
+		String gno = request.getParameter("gno");
+		
+		HttpSession session = request.getSession();
+		MemberVO loginuser = (MemberVO)session.getAttribute("loginuser");
+		String idx = loginuser.getIdx();
+		
+		HashMap<String, String> paraMap = new HashMap<String, String>();
+		paraMap.put("gno", gno);
+		paraMap.put("idx", idx);
+		
+		int CkGcnt = service.goCheckGalLikeDis(paraMap);
+
+		JSONObject jobj = new JSONObject();
+		jobj.put("CkGcnt", CkGcnt);
+
+		return jobj.toString();
+		
+	}
+	
 }

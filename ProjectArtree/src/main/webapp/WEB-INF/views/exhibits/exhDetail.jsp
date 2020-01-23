@@ -562,6 +562,9 @@
 
 	$(document).ready(function(){
 		
+		goCheckLikeExh('${exhDetailMap.EXHIBITIONNO}');
+		goCheckLikeGal('${exhDetailMap.FK_GALLERYNO}');
+		
 		$(".forIco").hover(function(){
 			$(this).children(".forMoving").stop().animate({left:'5px'}, 'fast');
 	
@@ -764,33 +767,134 @@
 			
 		<%-- http://apis.map.kakao.com/web/guide/ 카카오 지도 스크립트 --%>
 		
+	}); // end of document ready ---------------------------------
+	
+	////////////////////////// 전시회 좋아요 체크 유무 확인 /////////////////////
+	function goCheckLikeExh(eno){
 		
-		
-	});
+		$.ajax({
+			
+			url: "<%=ctxPath%>/checkExhLike.at",
+			data: {"eno":eno},
+			dataType: "JSON",
+			success: function(json){
 
+				var html = "";
+			
+				if(json.ckExhLike == 1){
+					html += "<img data-toggle='tooltip' title='전시회 관심 지정 !' data-placement='bottom' src='<%= ctxPath%>/resources/images/exhibition/ico/fav_heart.png'>";
+				}
+				else {
+					html += "<img data-toggle='tooltip' title='전시회 관심 지정 !' data-placement='bottom' src='<%= ctxPath%>/resources/images/exhibition/ico/empty_heart.png'>";
+				}
+				
+				$(".A_heart").html(html);
+			},
+			error: function(request, status, error){
+				alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+			}
+		});
+	}
+	
+	///////////////////////// 갤러리 좋아요 체크 유무 확인 //////////////////////
+	function goCheckLikeGal(gno){
+		
+		$.ajax({
+			
+			url: "<%=ctxPath%>/checkGalLike.at",
+			data: {"gno":gno},
+			dataType: "JSON",
+			success: function(json){
+				
+				var html = "";
+				
+				if(json.ckGalLike == 1){
+					html += "<img data-toggle='tooltip' title='갤러리 관심 지정 !' data-placement='bottom' src='<%= ctxPath%>/resources/images/exhibition/ico/selected.png'>";
+				}
+				else {
+					html += "<img data-toggle='tooltip' title='갤러리 관심 지정 !' data-placement='bottom' src='<%= ctxPath%>/resources/images/exhibition/ico/select.png'>";
+				}
+				
+				$(".A_select").html(html);
+			},
+			error: function(request, status, error){
+				alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+			}
+		});
+	}
+	
+	////////////////////////// 전시회 좋아요 지정 및 해제 ////////////////////////
+	function exhLike(eno, gno, tag, gen){
+		
+		$.ajax({
+			
+			url: "<%=ctxPath%>/ExhLike.at",
+			type: 'POST',
+			data: {"eno":eno, "gno":gno, "tag":tag, "gen":gen},
+			dataType: "JSON",
+			success: function(json){
+				if(json.CkEcnt == 1){
+					
+				}
+				else {
+					
+				}
+			},
+			error: function(request, status, error){
+				alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+			}
+		});
+		
+	}
+	
+	////////////////////////// 갤러리 좋아요 지정 및 해제 ////////////////////////
+	function galLike(gno){
+		$.ajax({
+			
+			url: "<%=ctxPath%>/GalLike.at",
+			type: 'POST',
+			data: {"gno":gno},
+			dataType: "JSON",
+			success: function(json){
+				if(json.CkGcnt == 1){
+					
+				}
+				else {
+					
+				}
+			},
+			error: function(request, status, error){
+				alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+			}
+		});
+	}
+	
+	
+	///////////////////////////// SNS 공유하기 ////////////////////////////
 	function share(sns, eno){
 		
 		var title = "${exhDetailMap.EXHIBITIONNAME} - ARTREE";	
-			
+		var URL = window.location.href;
+		
 		if(sns == 'mail'){
-			window.open('mailto:?subject=sub&body=http://art-map.co.kr/exhibition/view.php?eno='+eno);
+			window.open('mailto:?subject='+title+'&body='+URL);
 		}
 		else if(sns == 'kakao'){
-			window.open('https://story.kakao.com/share?url=http://art-map.co.kr/exhibition/view.php?eno='+eno); 
+			window.open('https://story.kakao.com/share?url='+URL); 
 		}
 		else if(sns == 'twitter'){
-			window.open('https://twitter.com/intent/tweet?text=TEXT&url=http://art-map.co.kr/exhibition/view.php?eno='+eno);			
+			window.open('https://twitter.com/intent/tweet?text='+title+'&url='+URL);			
 		}
 		else if(sns == 'facebook'){
-			window.open('http://www.facebook.com/sharer/sharer.php?u=http://art-map.co.kr/exhibition/view.php?eno='+eno);
+			window.open('http://www.facebook.com/sharer/sharer.php?u='+URL);
 		}
 		else if(sns == 'url'){
 			var IE=(document.all)?true:false;
 			if (IE) {
 			if(confirm("주소를 복사하시겠습니까?"))
-				window.clipboardData.setData("Text", 'http://art-map.co.kr/exhibition/view.php?eno='+eno);
+				window.clipboardData.setData("Text", URL);
 			} else {
-				temp = prompt("Ctrl+C를 눌러 클립보드로 복사하세요", 'http://art-map.co.kr/exhibition/view.php?eno='+eno);
+				temp = prompt("Ctrl+C를 눌러 클립보드로 복사하세요", URL);
 			}
 		}
 	} // end of share --------------------
@@ -834,13 +938,11 @@
 						<span class="bigSpan" style="top: 780px; left: 63.3%; position: absolute;"> FREE </span>
 					</div>
 				</c:if>
-				
+
 				<div class="special_area" style="margin-top: 30px; top: 920px; left: 62.5%; position: absolute;">
-					<a href="" style="margin-right: 10px;">
-						<img data-toggle="tooltip" title="전시회 관심 지정 !" data-placement="bottom" src="<%= ctxPath%>/resources/images/exhibition/ico/empty_heart.png">
+					<a href="javascript:void(0)" class="A_heart" onclick="exhLike('${exhDetailMap.EXHIBITIONNO}','${exhDetailMap.FK_GALLERYNO}','${exhDetailMap.TAG}','${exhDetailMap.GENRE}')" style="margin-right: 10px;">
 					</a>
-					<a href=""style="margin-right: 10px;">
-						<img data-toggle="tooltip" title="갤러리 관심 지정 !" data-placement="bottom" src="<%= ctxPath%>/resources/images/exhibition/ico/select.png">
+					<a href="javascript:void(0)" class="A_select" onclick="galLike('${exhDetailMap.FK_GALLERYNO}')" style="margin-right: 10px;">
 					</a>
 					<a href="" data-toggle="modal" data-target="#myModal">
 						<img src="<%= ctxPath%>/resources/images/exhibition/ico/ico_share.png">

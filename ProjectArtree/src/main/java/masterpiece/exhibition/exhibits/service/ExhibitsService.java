@@ -77,4 +77,52 @@ public class ExhibitsService implements InterExhibitsService {
 		return EndExhListMap;
 	}
 
+	/////////////////////// 전시회 좋아요 체크 유무 확인 ////////////////////////
+	@Override
+	public int getCheckExhLike(HashMap<String, String> paraMap) {
+		int CheckExhLike = dao.getCheckExhLike(paraMap);
+		return CheckExhLike;
+	}
+
+	/////////////////////// 갤러리 좋아요 체크 유무 확인 ////////////////////////
+	@Override
+	public int getCheckGalLike(HashMap<String, String> paraMap) {
+		int CheckGalLike = dao.getCheckGalLike(paraMap);
+		return CheckGalLike;
+	}
+
+	/////////////////////// 전시회 좋아요 지정 및 해제  /////////////////////
+	@Override
+	public int goCheckExhLikeDis(HashMap<String, String> paraMap) {
+		int check = dao.getCheckExhLike(paraMap);
+		
+		int result = 0;
+		
+		if(check == 1) {
+			result = dao.goCheckDislikeExh(paraMap);
+		}
+		else {
+			result = dao.goCheckLikeExh(paraMap);
+		}
+		
+		return result;
+	}
+
+	/////////////////////// 갤러리 좋아요 지정 및 해제  /////////////////////
+	@Override
+	public int goCheckGalLikeDis(HashMap<String, String> paraMap) {
+		int check = dao.getCheckGalLike(paraMap);
+		
+		int result = 0;
+		
+		if(check == 1) {
+			result = dao.goCheckDislikeGal(paraMap);
+		}
+		else {
+			result = dao.goCheckLikeGal(paraMap);
+		}
+		
+		return result;
+	}
+
 }

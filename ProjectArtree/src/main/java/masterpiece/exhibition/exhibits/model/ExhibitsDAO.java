@@ -76,4 +76,46 @@ public class ExhibitsDAO implements InterExhibitsDAO {
 		return EndExhListMap;
 	}
 
+	////////////////////////////// 전시회 좋아요 체크 유무 확인 /////////////////////////////////
+	@Override
+	public int getCheckExhLike(HashMap<String, String> paraMap) {
+		int CheckExhLike = sql.selectOne("exhibits.getCheckExhLike", paraMap);
+		return CheckExhLike;
+	}
+
+	////////////////////////////// 갤러리 좋아요 체크 유무 확인 /////////////////////////////////
+	@Override
+	public int getCheckGalLike(HashMap<String, String> paraMap) {
+		int CheckGalLike = sql.selectOne("exhibits.getCheckGalLike", paraMap);
+		return CheckGalLike;
+	}
+
+	//////////////////////////// 전시회 좋아요 지정 해제 ///////////////////////////
+	@Override
+	public int goCheckDislikeExh(HashMap<String, String> paraMap) {
+		int CheckDislikeExh = sql.delete("exhibits.goCheckDislikeExh", paraMap);
+		return CheckDislikeExh;
+	}
+
+	//////////////////////////// 전시회 좋아요 지정 ///////////////////////////
+	@Override
+	public int goCheckLikeExh(HashMap<String, String> paraMap) {
+		int CheckLikeExh = sql.insert("exhibits.goCheckLikeExh", paraMap);
+		return CheckLikeExh;
+	}
+
+	//////////////////////////// 갤러리 좋아요 지정 해제 ///////////////////////////
+	@Override
+	public int goCheckDislikeGal(HashMap<String, String> paraMap) {
+		int CheckDislikeGal = sql.delete("exhibits.goCheckDislikeGal", paraMap);
+		return CheckDislikeGal;
+	}
+
+	//////////////////////////// 갤러리 좋아요 지정  ///////////////////////////
+	@Override
+	public int goCheckLikeGal(HashMap<String, String> paraMap) {
+		int CheckLikeGal = sql.insert("exhibits.goCheckLikeGal", paraMap);
+		return CheckLikeGal;
+	}
+
 }

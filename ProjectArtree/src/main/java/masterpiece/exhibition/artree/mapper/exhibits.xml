@@ -58,6 +58,8 @@
 		<result property="EXTRARESTRICTION" column="extrarestriction" javaType="string"/>
 		<result property="PHOTO" column="photo" javaType="string"/>
 		<result property="PRICE" column="price" javaType="int"/>
+		<result property="TAG" column="tag" javaType="string"/>
+		<result property="GENRE" column="genre" javaType="string"/>
 		<result property="SCHEDULE" column="schedule" javaType="string"/>
 		<result property="GALLERYNAME" column="galleryname" javaType="string"/>
 		<result property="LOCATION" column="location" javaType="string"/>
@@ -73,7 +75,7 @@
 	
 	<select id="getExhDetail" parameterType="String" resultMap="oneExhMap">
 		select exhibitionno, exhibitionname, author, fk_galleryno, exhibitioninfo, openclosetime
-		     , foodordrink, extrarestriction, photo, price
+		     , foodordrink, extrarestriction, photo, price, tag, genre
 		     , startdate ||' - '|| enddate AS schedule
 		     , B.galleryname, B.location, B.detailaddress
 		     , D.mainposter, D.image1, D.image2, D.image3
@@ -201,4 +203,38 @@
 		on A.exhibitionno = B.fk_exhibitionno
 		where fk_galleryno = #{gno} and status = '전시종료'
 	</select>
+	
+	<!-- ///////////////////////////// 전시회 좋아요 체크 //////////////////////////// -->
+	<select id="getCheckExhLike" parameterType="HashMap" resultType="int">		
+		select count(*)
+		from wishlist
+		where fk_idx = #{idx} and fk_exhibitionno = #{eno}
+	</select>
+	
+	<!-- ///////////////////////////// 갤러리 좋아요 체크 //////////////////////////// -->
+	<select id="getCheckGalLike" parameterType="HashMap" resultType="int">
+		select count(*)
+		from galwishlist
+		where fk_idx = #{idx} and fk_galleryno = #{gno}
+	</select>
+	
+	<!-- ////////////////////// 전시회 좋아요 지정, 전시회 좋아요 지정 해제 //////////////////// -->
+	<insert id="goCheckLikeExh" parameterType="HashMap">
+		insert into wishlist(wishno, fk_idx, fk_exhibitionno, fk_galleryno, favortag, favorgenre)
+		values(seq_wishlist_wishno.nextval, #{idx}, #{eno}, #{gno}, #{tag}, #{gen})
+	</insert>
+	
+	<delete id="goCheckDislikeExh" parameterType="HashMap">
+		delete from wishlist where fk_idx = #{idx} and fk_exhibitionno = #{eno}
+	</delete>
+	
+	<!-- ////////////////////// 갤러리 좋아요 지정, 전시회 좋아요 지정 해제 //////////////////// -->
+	<insert id="goCheckLikeGal" parameterType="HashMap">
+		insert into galwishlist(wishno, fk_idx, fk_galleryno)
+		values(seq_galwishlist.nextval, #{idx}, #{gno})
+	</insert>
+	
+	<delete id="goCheckDislikeGal" parameterType="HashMap">
+		delete from galwishlist where fk_idx = #{idx} and fk_galleryno = #{gno}
+	</delete>
 </mapper>
