@@ -138,6 +138,7 @@
 <script type="text/javascript">
 	$(document).ready(function(){ 
 		
+		
 		// 이전글 클릭시 이벤트
 		$(".prev").click(function(){
 			
@@ -181,6 +182,7 @@
 			}
 		});
 		
+		
 	}); // end of $(document).ready -------------------------------------
 
 </script>
@@ -211,11 +213,11 @@
 				<tr>
 				<tr>
 					<td>작성자</td>
-					<td>심예은</td> <!-- $ {loginuser.getUserName} -->
+					<td>${loginuser.getName}</td>
 				<tr>
 				<tr>
 					<td>작성일자</td>
-					<td>2020-01-07 21:21</td>
+					<td>${writeDay}</td>
 				<tr>
 				<tr>
 					<td colspan="2">
