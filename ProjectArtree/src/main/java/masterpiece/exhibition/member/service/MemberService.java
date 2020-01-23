@@ -18,6 +18,7 @@ public class MemberService implements InterMemberService {
 	@Autowired   // Type에 따라 알아서 Bean 을 주입해준다.
 	private InterMemberDAO dao;
 	
+	// *********************** 회원가입/로그인 *********************** //
 	// ========= 회원가입 insert =========
 	@Override
 	public int joinInsert(MemberVO mvo) {
@@ -110,6 +111,30 @@ public class MemberService implements InterMemberService {
 	public int updatePwd(HashMap<String, String> updateMap) {
 		int n = dao.updatePwd(updateMap);
 		return n;
+	}
+
+	// ========= 하트 눌렀을 때 가고싶어요 select =========
+	@Override
+	public List<HashMap<String, String>> selectWannaGo(String idx) {
+		List<HashMap<String, String>> wantList = dao.selectWannaGo(idx);
+		return wantList;
+	}
+
+	// *********************** 마이페이지 *********************** //
+	// ========= 책갈피 눌렀을 때 다녀왔어요 select =========
+	@Override
+	public List<HashMap<String, String>> selectGo(String idx) {
+		List<HashMap<String, String>> goList = dao.selectGo(idx);
+		return goList;
+	}
+
+	// ========= 마이페이지 - 작품 재설정 =========
+	@Override
+	@Transactional(propagation=Propagation.REQUIRED, isolation= Isolation.READ_COMMITTED, rollbackFor={Throwable.class})
+	public int updateFavor(HashMap<String, String> paraMap) {
+		int n = dao.updateFavor1(paraMap);
+		int m = dao.updateFavor2(paraMap);
+		return n+m;
 	}
 
 
