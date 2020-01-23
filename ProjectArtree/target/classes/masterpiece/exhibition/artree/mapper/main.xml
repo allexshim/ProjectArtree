@@ -65,14 +65,14 @@
         ) F ) Z where rno <![CDATA[<=]]> 3
 	</select>
 	
-	 <!-- 해당 회원이 선호하는 태그를 가져온다  -->
+	 <!-- 해당 회원이 선호하는 태그를 가져온다  : String을 파라미터로 가져와서 if절에 넣으면 에러가 나서 아래처럼 value로 지정-->
 	<select id="getPreferTag" parameterType="String" resultType="String" >
 		select favortag
         from (
         	select * 
         	from member 
-        	<if test='!idx.equals("") and idx != null '>
-        	where idx= #{idx}
+        	<if test=' value != null '>
+        	where idx= #{ value }
         	</if>
         ) M join wishlist W
         on M.idx = W.fk_idx
@@ -107,7 +107,7 @@
         from
         (select * from 
         (select * from exhibition
-        where tag like '%' || #{favorTag} || '%') V 
+        where tag like '%' || #{ favorTag,jdbcType=INTEGER } || '%' ) V 
         join exhibitionDetail D
         on V.exhibitionno = D.fk_exhibitionno) 
         E join gallery G
@@ -120,11 +120,11 @@
 	<resultMap type="HashMap" id="eventMap">
 	<!-- fk_exhibitionNo, eventName, content, startDate, endDate, mainPoster  -->
 		<result property="fk_exhibitionNo"   column="fk_exhibitionNo" 	javaType="String"/> 
-	 	<result property="eventName"       	column="eventName" 		javaType="String"/>
-	 	<result property="content"   		column="content" 	javaType="String"/> 
-	 	<result property="startDate"       column="startDate" 		javaType="String"/>
-	 	<result property="endDate"   column="endDate" 	javaType="String"/> 
-	 	<result property="mainPoster"       column="mainPoster" 		javaType="String"/>
+	 	<result property="eventName"         column="eventName" 		javaType="String"/>
+	 	<result property="content"   		 column="content" 			javaType="String"/> 
+	 	<result property="startDate"         column="startDate" 		javaType="String"/>
+	 	<result property="endDate"  		 column="endDate" 			javaType="String"/> 
+	 	<result property="mainPoster"        column="mainPoster" 		javaType="String"/>
 	</resultMap>
 	
 	<!-- 새 이벤트 가져오기 -->
@@ -133,9 +133,10 @@
 		from (
 		select rownum as rno, no, fk_exhibitionNo, eventName, content, startDate, endDate, mainPoster
 		from (
-		select no, fk_exhibitionNo, eventName, content, startDate, endDate, mainPoster
-		from event
-		order by no desc ) V order by rno asc ) Z where rno <![CDATA[<=]]> 4
+		select E.no, E.fk_exhibitionNo, eventName, E.content, E.startDate, E.endDate, X.mainPoster
+        from ( event E join (select * from (exhibition A join exhibitionDetail B on A.exhibitionno = B.fk_exhibitionno) )X 
+        on E.fk_exhibitionNo = X.exhibitionno)
+		order by E.no desc ) V order by rno asc ) Z where rno <![CDATA[<=]]> 4
 	</select>
 	
 </mapper>

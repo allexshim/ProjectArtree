@@ -41,12 +41,12 @@ public class MainService implements InterMainService {
 		
 		// 로그인한 회원/ 전체 회원의 선호 태그 알아오기
 		String preferTag = dao.getPreferTag(idx);
-		
+
 		// 가져온 선호 태그를 split으로 자른 후, 가장 선호하는 태그 1개를 가져온다.
-		String FavorTag = dao.getFavorTag(preferTag);
+		String favorTag = dao.getFavorTag(preferTag);
 
 		// 가장 선호하는 태그와 일치하는 전시회 중, 조회수가 높은 순으로 3개 가져온다.
-	    List<HashMap<String,String>> ExhibitionList = dao.getFavorExhibition(FavorTag);
+	    List<HashMap<String,String>> ExhibitionList = dao.getFavorExhibition(favorTag);
 		return ExhibitionList;
 	}
 

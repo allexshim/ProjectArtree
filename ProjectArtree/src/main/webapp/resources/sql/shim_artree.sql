@@ -159,6 +159,8 @@ nominvalue -- minimun을 정하지 않겠다. (ex/ minvalue 10 , start with i에
 nocycle -- cycle n : start number부터 증가하여 maximun에 도달한 후 minvalue(ex/10)에서 다시 시작해서 n만큼 반복한다. (start with i에서 i는 처음 한번만 사용된다.)
 nocache;
 
+drop sequence seq_event;
+
 commit;
 
 create table event
@@ -178,7 +180,7 @@ no	number	NOT NULL
 select * from exhibition;
 select * from exhibitionDetail;
 
-
+commit;
 select * from event;
 insert into event(no, fk_exhibitionNo, eventName, content, startDate, endDate, mainPoster, eventView)
 values (seq_event.nextval, 4924, '이벤트 샘플1(나중에 삭제부탁합니다)', '메인 테스트용 이벤트 내용1',  '2020.01.12', '2020.01.30', 'http://app.art-map.co.kr/upload/exhibition/artmap_20200102_11934700.png', '3');
@@ -192,12 +194,19 @@ values (seq_event.nextval, 4930, '이벤트 샘플3(나중에 삭제부탁합니
 insert into event(no, fk_exhibitionNo, eventName, content, startDate, endDate, mainPoster, eventView)
 values (seq_event.nextval, 4920, '이벤트 샘플4(나중에 삭제부탁합니다)', '메인 테스트용 이벤트 내용2',  '2020.01.01', '2020.02.15', 'http://app.art-map.co.kr/upload/exhibition/artmap_20200102_11934700.png', '8');
 
+select rno, no, fk_exhibitionNo, eventName, content, startDate, endDate, mainPoster
+from (
 select rownum as rno, no, fk_exhibitionNo, eventName, content, startDate, endDate, mainPoster
 from (
 select no, fk_exhibitionNo, eventName, content, startDate, endDate, mainPoster
 from event
-order by no desc ) V order by rno asc;
+order by no desc ) V order by rno asc ) Z where rno <= 4;
 
+
+select * from member 
+where idx= to_number( '2' );
+
+desc member;
 -------------------------------------------------------------
         select readCount, rno, exhibitionno, fk_galleryno, exhibitionname, author, startdate, enddate, mainposter, galleryname, galleryno, location
         from (
@@ -290,5 +299,43 @@ order by no desc ) V order by rno asc;
     order by CNT desc ) Y
     ) Z where RNO = 1;
 
+-----------
+
+        select rno, no, fk_exhibitionNo, eventName, content, startDate, endDate, mainPoster
+		from (
+		select rownum as rno, no, fk_exhibitionNo, eventName, content, startDate, endDate, mainPoster
+		from (
+		select E.no, E.fk_exhibitionNo, eventName, E.content, E.startDate, E.endDate, X.mainPoster
+        from ( event E join (select * from (exhibition A join exhibitionDetail B on A.exhibitionno = B.fk_exhibitionno) )X 
+        on E.fk_exhibitionNo = X.exhibitionno)
+		order by E.no desc ) V order by rno asc ) Z where rno <= 4;
+
+select * from event;
+
+delete event; commit;
 
 
+select rno, exhibitionno, fk_galleryno, exhibitionname, author, startdate, enddate, mainposter, galleryname, galleryno, location
+        from
+        (select rownum as rno, readcount, exhibitionno, fk_galleryno, exhibitionname, author, startdate, enddate, mainposter, galleryname, galleryno, location 
+        from
+        (select readCount, exhibitionno, fk_galleryno, exhibitionname, author, startdate, enddate, mainposter, galleryname, galleryno, location
+        from
+        (select * from 
+        (select * from exhibition
+        where tag like '%' || '초록' || '%') V 
+        join exhibitionDetail D
+        on V.exhibitionno = D.fk_exhibitionno) 
+        E join gallery G
+        on E.fk_galleryno = G.galleryno
+        order by readcount desc
+        ) X ) Z where rno <= 3;
+        
+        select favortag
+        from (
+        	select * 
+        	from member 
+--        	where idx = '6'
+        ) M join wishlist W
+        on M.idx = W.fk_idx;
+        

@@ -37,10 +37,12 @@ public class MainDAO implements InterMainDAO {
 	// 해당 회원/ 전체회원의 선호 태그를 알아온다.
 	@Override
 	public String getPreferTag(String idx) {
-		List<String> TagMap = sqlsession.selectOne("main.getPreferTag", idx);
+		
+		List<String> TagMap = sqlsession.selectList("main.getPreferTag", idx);
 		String preferTag = "";
-		for(String tag : TagMap) {
-			preferTag += ","+tag;
+		for(int n=0; n<TagMap.size(); n++) {
+			String str = (n==0)?"":",";
+			preferTag += str+TagMap.get(n);
 		}
 		return preferTag;
 	}

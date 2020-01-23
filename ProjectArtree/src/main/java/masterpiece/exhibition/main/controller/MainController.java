@@ -40,15 +40,19 @@ public class MainController {
 		
 		for(HashMap<String,String> single :exhibitionList) {
 			JSONObject jsobj = new JSONObject();
-			//  detailAddress, exhibitionName, galleryName, startDate, endDate, mainPoster, exhibitionno
-			jsobj.put("detailAddress",single.get("detailAddress"));
-			jsobj.put("exhibitionName",single.get("exhibitionName"));
-			jsobj.put("galleryName",single.get("galleryName"));
+			/*exhibitionno, fk_galleryno, exhibitionname, author, startdate, enddate, 
+			mainposter, galleryname, galleryno, location*/
+			jsobj.put("exhibitionno",single.get("exhibitionno"));
+			jsobj.put("fk_galleryno",single.get("fk_galleryno"));
+			jsobj.put("exhibitionname",single.get("exhibitionname"));
+			jsobj.put("author",single.get("author"));
 			jsobj.put("startdate",single.get("startdate"));
 			jsobj.put("enddate",single.get("enddate"));
 			jsobj.put("mainposter",single.get("mainposter"));
-			jsobj.put("exhibitionno",single.get("exhibitionno"));
-
+			jsobj.put("galleryname",single.get("galleryname"));
+			jsobj.put("galleryno",single.get("galleryno"));
+			jsobj.put("location",single.get("location"));
+			
 			jsarr.put(jsobj);
 		}
 		return jsarr.toString();
@@ -67,14 +71,18 @@ public class MainController {
 		
 		for(HashMap<String,String> single :exhibitionList) {
 			JSONObject jsobj = new JSONObject();
-			//  detailAddress, exhibitionName, galleryName, startDate, endDate, mainPoster, exhibitionno
-			jsobj.put("detailAddress",single.get("detailAddress"));
-			jsobj.put("exhibitionName",single.get("exhibitionName"));
-			jsobj.put("galleryName",single.get("galleryName"));
+			/*exhibitionno, fk_galleryno, exhibitionname, author, startdate, enddate, 
+			mainposter, galleryname, galleryno, location*/
+			jsobj.put("exhibitionno",single.get("exhibitionno"));
+			jsobj.put("fk_galleryno",single.get("fk_galleryno"));
+			jsobj.put("exhibitionname",single.get("exhibitionname"));
+			jsobj.put("author",single.get("author"));
 			jsobj.put("startdate",single.get("startdate"));
 			jsobj.put("enddate",single.get("enddate"));
 			jsobj.put("mainposter",single.get("mainposter"));
-			jsobj.put("exhibitionno",single.get("exhibitionno"));
+			jsobj.put("galleryname",single.get("galleryname"));
+			jsobj.put("galleryno",single.get("galleryno"));
+			jsobj.put("location",single.get("location"));
 
 			jsarr.put(jsobj);
 		}
@@ -94,14 +102,18 @@ public class MainController {
 		
 		for(HashMap<String,String> single :exhibitionList) {
 			JSONObject jsobj = new JSONObject();
-			//  detailAddress, exhibitionName, galleryName, startDate, endDate, mainPoster, exhibitionno
-			jsobj.put("detailAddress",single.get("detailAddress"));
-			jsobj.put("exhibitionName",single.get("exhibitionName"));
-			jsobj.put("galleryName",single.get("galleryName"));
+			/*exhibitionno, fk_galleryno, exhibitionname, author, startdate, enddate, 
+			mainposter, galleryname, galleryno, location*/
+			jsobj.put("exhibitionno",single.get("exhibitionno"));
+			jsobj.put("fk_galleryno",single.get("fk_galleryno"));
+			jsobj.put("exhibitionname",single.get("exhibitionname"));
+			jsobj.put("author",single.get("author"));
 			jsobj.put("startdate",single.get("startdate"));
 			jsobj.put("enddate",single.get("enddate"));
 			jsobj.put("mainposter",single.get("mainposter"));
-			jsobj.put("exhibitionno",single.get("exhibitionno"));
+			jsobj.put("galleryname",single.get("galleryname"));
+			jsobj.put("galleryno",single.get("galleryno"));
+			jsobj.put("location",single.get("location"));
 
 			jsarr.put(jsobj);
 		}
@@ -118,11 +130,11 @@ public class MainController {
 		HttpSession session = request.getSession();
 		MemberVO loginuser = (MemberVO)session.getAttribute("loginuser");
 		
-		String idx = "";
+		String idx = null;
 		if(loginuser != null) {
 			idx = loginuser.getIdx(); // 현재 로그인한 사용자의 idx
 		}
-	
+		
 		// ajax로 호출, 사용자가 선호하는 태그가 들어간 전시회를 조회수 높은 순으로 3개 가져오기
 		JSONArray jsarr = new JSONArray();
 		List<HashMap<String,String>> exhibitionList =  null;
@@ -130,14 +142,18 @@ public class MainController {
 		
 		for(HashMap<String,String> single :exhibitionList) {
 			JSONObject jsobj = new JSONObject();
-			//  detailAddress, exhibitionName, galleryName, startDate, endDate, mainPoster, exhibitionno
-			jsobj.put("detailAddress",single.get("detailAddress"));
-			jsobj.put("exhibitionName",single.get("exhibitionName"));
-			jsobj.put("galleryName",single.get("galleryName"));
+			/*exhibitionno, fk_galleryno, exhibitionname, author, startdate, enddate, 
+			mainposter, galleryname, galleryno, location*/
+			jsobj.put("exhibitionno",single.get("exhibitionno"));
+			jsobj.put("fk_galleryno",single.get("fk_galleryno"));
+			jsobj.put("exhibitionname",single.get("exhibitionname"));
+			jsobj.put("author",single.get("author"));
 			jsobj.put("startdate",single.get("startdate"));
 			jsobj.put("enddate",single.get("enddate"));
 			jsobj.put("mainposter",single.get("mainposter"));
-			jsobj.put("exhibitionno",single.get("exhibitionno"));
+			jsobj.put("galleryname",single.get("galleryname"));
+			jsobj.put("galleryno",single.get("galleryno"));
+			jsobj.put("location",single.get("location"));
 
 			jsarr.put(jsobj);
 		}
@@ -154,7 +170,7 @@ public class MainController {
 		JSONArray jsarr = new JSONArray();
 		List<HashMap<String,String>> eventList =  null;
 		eventList = service.getNewEvent();
-		
+	
 		for(HashMap<String,String> single :eventList) {
 			JSONObject jsobj = new JSONObject();
 			//  fk_exhibitionNo, eventName, content, startDate, endDate, mainPoster
