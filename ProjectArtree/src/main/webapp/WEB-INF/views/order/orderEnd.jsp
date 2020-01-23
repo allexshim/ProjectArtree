@@ -86,27 +86,6 @@
   margin-left: 1%;
 }
 
-.active, .dot:hover {
-  background-color: #717171;
-}
-/* 
-.fade {
-  -webkit-animation-name: fade;
-  -webkit-animation-duration: 1.5s;
-  animation-name: fade;
-  animation-duration: 1.5s;
-}
-
-@-webkit-keyframes fade {
-  from {opacity: .4} 
-  to {opacity: 1}
-}
-
-@keyframes fade {
-  from {opacity: .4} 
-  to {opacity: 1}
-} */
-
 /* On smaller screens, decrease text size */
 @media only screen and (max-width: 300px) {
   .prev, .next,.text {font-size: 11px}
@@ -182,7 +161,7 @@
 		
 		${html }				
 		
-		<div id="accordion">		
+		<div style="margin-top: 5%;" id="accordion">		
 			<h3 style="padding:2%; text-align: left; font-size: 22px; font-weight: bold;">예매 취소 시 유의사항</h3>
 			<div style="height:325px !important;">
 				<div>

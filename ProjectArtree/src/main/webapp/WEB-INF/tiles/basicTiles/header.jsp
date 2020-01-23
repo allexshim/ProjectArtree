@@ -280,6 +280,26 @@ function goLogin() {
 	  frm.submit();
 }
 
+function goMypage() {	
+	var loginuser = "${sessionScope.loginuser}";
+	if(loginuser != "") {
+		location.href="<%=ctxPath%>/mypage.at"
+	}
+	else {
+		location.href="javascript:layer_open('layer')"
+	}
+}
+
+function goCart() {
+	var loginuser = "${sessionScope.loginuser}";
+	if(loginuser != "") {
+		location.href="<%=ctxPath%>/paymentbin.at"
+	}
+	else {
+		location.href="javascript:layer_open('layer')"
+	}	
+}
+
 </script>
 
 		<div class="row">
@@ -322,8 +342,8 @@ function goLogin() {
 			<div class="dropdown ddm" >
 				 	<a class="dropbtn menu" data-toggle="dropdown" style="padding-top: 0px; -webkit-transform:translate(0,0);"><img src="<%= ctxPath %>/resources/images/main/mainheader-menu.png" /></a>
 				    <div class="dropdown-content-R2 dropdown-menu" role="menu">
-					    <a href="<%=ctxPath%>/mypage.at">마이페이지</a>
-					    <a href="#">장바구니</a>
+					    <a onclick="goMypage()">마이페이지</a>
+					    <a onclick="goCart()">장바구니</a>
 					    <c:if test="${sessionScope.loginuser.status == 2}">
 					    	<a href="<%=ctxPath%>/admin.at">관리자페이지</a>
 				    	</c:if>
