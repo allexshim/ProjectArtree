@@ -12,13 +12,16 @@
 	#container_exh_detail {
 		font-family: 'Noto Sans Kr', sans-serif;
 		margin: 0 auto;
+		margin-top: 100px;
 		width: 70%;
 	}
 	
 	#container_exh_detail .main_top {
-		display: inline-block;
-		width: 100%; 
-		height: 600px; 
+		margin: 0 auto;
+		margin-top: 100px;
+		width: 90%; 
+		display: block;
+		height: 550px; 
 		border: solid 1px #e6e6e6;
 	}
 	
@@ -318,7 +321,7 @@
 	  background-color: white;
 	  max-height: 0;
 	  overflow: hidden;
-	  transition: max-height 0.3s ease-out;
+	  transition: max-height 0.3s ease;
 	  margin-bottom: 0;
 	  border: none;
 	  box-shadow: none;
@@ -810,7 +813,7 @@
 				<span class="info_artist">${exhDetailMap.AUTHOR}</span>
 				
 				<c:if test="${exhDetailMap.PRICE ne 0}">
-					<div class="top_btn_area" align="center" style="top: 680px; left: 61%; position: absolute;">
+					<div class="top_btn_area" align="center" style="top: 720px; left: 58%; position: absolute;">
 						<button type="button" class="buyBtn btn1 forIco" onclick="">
 							BUY TICKETS
 							<img class="forMoving" src="<%= ctxPath%>/resources/images/exhibition/ico/right_arrow.png">
@@ -828,11 +831,11 @@
 				
 				<c:if test="${exhDetailMap.PRICE eq 0}">
 					<div style="display: block;" align="center">
-						<span class="bigSpan" style="top: 750px; left: 66%; position: absolute;"> FREE </span>
+						<span class="bigSpan" style="top: 780px; left: 63.3%; position: absolute;"> FREE </span>
 					</div>
 				</c:if>
 				
-				<div class="special_area" style="margin-top: 30px; top: 890px; left: 65%; position: absolute;">
+				<div class="special_area" style="margin-top: 30px; top: 920px; left: 62.5%; position: absolute;">
 					<a href="" style="margin-right: 10px;">
 						<img data-toggle="tooltip" title="전시회 관심 지정 !" data-placement="bottom" src="<%= ctxPath%>/resources/images/exhibition/ico/empty_heart.png">
 					</a>

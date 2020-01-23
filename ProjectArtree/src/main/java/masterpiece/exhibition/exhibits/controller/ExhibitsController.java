@@ -3,9 +3,7 @@ package masterpiece.exhibition.exhibits.controller;
 import java.util.HashMap;
 import java.util.List;
 
-import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 import org.json.JSONArray;
 import org.json.JSONObject;

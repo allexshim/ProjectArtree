@@ -161,7 +161,7 @@
 		text-align: left;
 		display: block;
 		float: left;
-		width: 87%;
+		width: 90%;
 	}
 	
 	#container_gal_detail .curExh {
@@ -297,7 +297,7 @@
 		width: 100%;
 		display: inline-block; 
 		text-align: center;
-		margin: 100px 0 100px 0;
+		margin: 200px 0 200px 0;
 	}
 	
 	#container_gal_detail .Title_Area .lt {
@@ -576,7 +576,7 @@
 							
 						}
 						else if(year == '2019'){ ntCnt++;
-							
+
 							if(ntCnt%4 != 0){
 								nthtml += '<a class="exh_one" href="<%=ctxPath%>/exhDetail.at?eno='+item.EXHIBITIONNO+'">'
 									 	+ '<img class="exh_poster" src="'+item.MAINPOSTER+'"/>'
@@ -612,7 +612,7 @@
 							}
 							else {
 								sthtml += '<a class="exh_one" href="<%=ctxPath%>/exhDetail.at?eno='+item.EXHIBITIONNO+'" style="margin-right: 0;">'
-								 		+ '<img class="exh_poster" src="'+item.MAINPOSTER+'"/>'
+										+ '<img class="exh_poster" src="'+item.MAINPOSTER+'"/>'
 								 		+ '<span class="art_mainTitle">'+item.EXHIBITIONNAME+'</span></a><br/>';
 							}
 							
