@@ -316,8 +316,7 @@ function goLogin() {
 				 	<a class="dropbtn menu" data-toggle="dropdown" style="padding-top: 0px; -webkit-transform:translate(0,0);"><img src="<%= ctxPath %>/resources/images/main/mainheader-menu.png" /></a>
 				    <div class="dropdown-content-R2 dropdown-menu" role="menu">
 					    <a href="<%=ctxPath%>/mypage.at">마이페이지</a>
-					    <a href="<%=ctxPath%>/mypage.at">장바구니</a>
-					    <a href="<%=ctxPath%>/mypage.at">마이페이지</a>
+					    <a href="<%=ctxPath%>/cartList.at">장바구니</a>
 					    <c:if test="${sessionScope.loginuser.status == 2}">
 					    	<a href="<%=ctxPath%>/admin.at">관리자페이지</a>
 				    	</c:if>
