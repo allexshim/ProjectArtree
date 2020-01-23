@@ -23,4 +23,16 @@ public interface InterExhibitsDAO {
 
 	List<HashMap<String, String>> getEndExhListMap(String gno); // 특정 갤러리의 전시종료 전시회 목록 불러오기
 
+	int getCheckExhLike(HashMap<String, String> paraMap); // 전시회 좋아요 체크 유무 확인
+ 
+	int getCheckGalLike(HashMap<String, String> paraMap); // 갤러리 좋아요 체크 유무 확인
+
+	int goCheckDislikeExh(HashMap<String, String> paraMap); // 전시회 좋아요 지정 해제
+
+	int goCheckLikeExh(HashMap<String, String> paraMap); // 전시회 좋아요 지정
+
+	int goCheckDislikeGal(HashMap<String, String> paraMap); // 갤러리 좋아요 지정 해제
+
+	int goCheckLikeGal(HashMap<String, String> paraMap); // 갤러리 좋아요 지정 
+
 }

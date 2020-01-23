@@ -43,10 +43,9 @@
 	
 </style>
 
-<script>			
-	
-	$(function(){	
-		var total = 0;		
+<script>		
+	var total = 0;
+	$(function(){
 		
 		$.fn.bmdIframe = function( options ) {
 	        var self = this;
@@ -71,7 +70,7 @@
 	 	};  
 	  
 		$("#myModal").bmdIframe();	
-						
+			
 		cartList();
 		
 		// 장바구니 삭제		
@@ -83,43 +82,102 @@
 				async:false,
 				dataType:"JSON",
 				success:function(json){																
-					
+					cartList();
+					totalpri(); 			
+					orderpri();
+					discount();
+					if (total == 0) {
+						$("#order").hide();
+					}					
 				}, 
 				error:function(request,status,error) {
 					alert("code = "+ request.status + " message = " + request.responseText + " error = " + error);
 				}				
-			});							
-			cartList();
+			});										
 		}); 
 		
-		$(".n").each(function(){
-			total += Number($(this).find($("input[name=n]")).val());
+		totalpri(); 			
+		orderpri();		
+		
+		$("#promo").keydown(function(key){			
+			if(key.keyCode==13){
+				$("#submit").click();
+			}
 		});
+		 
+		$("#submit").click(function(a){	
+			discount();			
+		});	
 		
-		alert(total);
+		if(total = 0) {
+			$("#order").hide();
+			$("#Discount").html("&#8361;"+total.toLocaleString());
+			$("#total").html("&#8361;"+total.toLocaleString());
+		}
 		
+	});	// ready
+	
+	function discount() {
+		var habin = $("#habin").val()
+		if($("#promo").val()=="하빈"){			
+			if ( habin != 0) {					
+				var totalbin = habin;					
+				var discount = totalbin * 0.5;				
+				$("#Discount").html("&#8361;"+discount.toLocaleString());
+				var totala = totalbin - discount;
+				$("#total").html("&#8361;"+totala.toLocaleString());		
+				sessionStorage.setItem("order", totala)				
+				$("#inSubtotal ").val(habin);
+				$("#inDiscount ").val(discount);
+				$("#orderpri").val(habin);
+			}
+			else {
+				$("#Discount").html("&#8361;"+habin.toLocaleString());
+				$("#total").html("&#8361;"+habin.toLocaleString());
+				$("#inSubtotal ").val(habin);
+				$("#inDiscount ").val(0);
+				$("#orderpri").val(habin);	
+			}
+		}	
+	}
+	
+	function orderpri() {		
 		if ( total != 0) {
 			var totalbin = total;
 			$("#Subtotal").html("&#8361;"+totalbin.toLocaleString());
-			$("#total").html("&#8361;"+totalbin.toLocaleString());		
+			$("#total").html("&#8361;"+totalbin.toLocaleString());
+			$("#inSubtotal ").val(totalbin);
+			$("#inDiscount ").val(0);
 			$("#orderpri").val(totalbin);		
 			sessionStorage.setItem("order", totalbin)
 		} 
 		
-	});	// ready
+		else {
+			var totalbin = total;
+			$("#Subtotal").html("&#8361;"+totalbin.toLocaleString());
+			$("#total").html("&#8361;"+totalbin.toLocaleString());
+			$("#inSubtotal ").val(totalbin);
+			$("#inDiscount ").val(0);
+			$("#orderpri").val(totalbin);		
+			sessionStorage.setItem("order", totalbin)
+		}	
+	}	
 	
-	/* function discountBin() {		
-		if($("#promo").val()=="하빈"){			
-			if ( ${total != null}) {
-				var totalbin = ${total};
-				var discount = totalbin * 0.5;
-				$("#Discount").html("&#8361;"+discount.toLocaleString());
-				var total = totalbin - discount;
-				$("#total").html("&#8361;"+total.toLocaleString());		
-				sessionStorage.setItem("order", total)							
-			}	
-		}				
-	}	 */
+	function orderEnd() {
+		var frm = document.order;		
+		frm.method="POST";
+		frm.action="<%=ctxPath%>/orderEnd.at";		
+		frm.submit();	
+	}
+	
+	function totalpri() {
+		total = 0;
+		$(".n").each(function(){			
+			value = Number($(this).find($("input[name=n]")).val());			
+			total += value;			
+		});		
+		$("#habin").val(total);
+	}	
 	
 	function cartList() {		
 		// 장바구니 리스트 출력
@@ -212,12 +270,8 @@
 			PAYMENT
 		</div>			
 		<div style="overflow:hidden; text-align: right;">
-			<div onclick="discountBin()" style="color:black; background:white; cursor:pointer; float: right; border: solid 2px #EDEBEB; text-align:center; padding:6px 12px; border-radius: 4px; width: 10%; font-size: 15px;">Submit</div>
-			<div style="margin-right:1%; font-size:15px; float:right;"><input id="promo" style="width:10em; padding:6px 12px;" type="text" size="2" placeholder="Promo code"></div>
-			<div style="width:9%; padding:6px 12px; font-weight:bold; margin-right:3%; overflow:hidden; font-size:15px; border:2px solid black; float:right;">
-				<div style="float:left;" >Cart</div>
-				<div style="float:right;"><img style="width: 15px; height: 15px;" src="<%=ctxPath%>/resources/images/order/cart.png"></div>
-			</div>		
+			<div id="submit" style="color:black; background:white; cursor:pointer; float: right; border: solid 2px #EDEBEB; text-align:center; padding:6px 12px; border-radius: 4px; width: 10%; font-size: 15px;">Submit</div>
+			<div style="margin-right:1%; font-size:15px; float:right;"><input id="promo" style="width:10em; padding:6px 12px;" type="text" size="2" placeholder="Promo code"></div>			
 		</div>
 			
 		<hr>
@@ -228,16 +282,19 @@
 			
 			<div id="cartList">							
 			</div>	
-			<input id="cartNo" hidden="hidden" value="" name="cartNo">																			
+			<input id="cartNo" hidden="hidden" value="" name="cartNo">
+			<input id="habin" hidden="hidden" value="" name="habin">																			
 			
 			<div style="overflow: hidden;">								
 				<div id="Subtotal" style="float: right; width: 10%; text-align: right;"></div>
-				<div style="margin-right:5%; float:right;">Subtotal</div>		
+				<div style="margin-right:5%; float:right;">Subtotal</div>
+				<input hidden="hidden" id="inSubtotal" name="Subtotal" value="">		
 			</div>
 			
 			<div style="overflow: hidden;">								
 				<div id="Discount" style="float: right; width: 10%; text-align: right;">&#8361;0</div>
-				<div style="margin-right:5%; float:right;">Discount</div>		
+				<div style="margin-right:5%; float:right;">Discount</div>	
+				<input hidden="hidden" id="inDiscount" name="Discount" value="">	
 			</div>
 			
 			<div style="overflow: hidden;">								
@@ -249,7 +306,7 @@
 		</div>					
 		<div style="overflow: hidden;">
 			<div onclick="location.href='<%= ctxPath %>/ticketsbin.at'" style="color:black; background:white; cursor:pointer; float: left; border: solid 1px black; border-radius: 4px; width: 5%; margin-top: 1%; padding: 0.3%;">이전</div>
-			<div data-target="#myModal" data-bmdSrc="<%=ctxPath%>/paymentGatebin.at" data-toggle="modal" class="bmd-modalButton" style="color:black; background:white; cursor:pointer; float: right; border: solid 1px black; border-radius: 4px; width: 5%; margin-top: 1%; padding: 0.3%;">결제하기</div>			 			
+			<div id="order" data-target="#myModal" data-bmdSrc="<%=ctxPath%>/paymentGatebin.at" data-toggle="modal" class="bmd-modalButton" style="color:black; background:white; cursor:pointer; float: right; border: solid 1px black; border-radius: 4px; width: 5%; margin-top: 1%; padding: 0.3%;">결제하기</div>			 			
 		</div>	
 	</div>
 	</div>		
