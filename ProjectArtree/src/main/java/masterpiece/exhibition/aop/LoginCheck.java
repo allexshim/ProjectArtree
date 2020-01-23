@@ -37,15 +37,15 @@ public class LoginCheck {
 			if(session.getAttribute("loginuser") == null) {
 				try {
 					String msg = "먼저 로그인하세요!"; 
-					String loc = request.getContextPath()+"/mainartree.at";
+					String loc = "/artree";
 					
 					request.setAttribute("msg", msg);
 					request.setAttribute("loc", loc);
 					
 					// 로그인 한 후 로그인 하기 전 페이지로 돌아가는 작업 : goBackURL
 					// === 현재 페이지의 주소(URL) 알아내기 ===
-					String url = MyUtil.getCurrentURL(request);
-					session.setAttribute("gobackURL", url); // 세션에 url 정보를 저장시킨다.
+					// String url = MyUtil.getCurrentURL(request);
+					// session.setAttribute("gobackURL", url); // 세션에 url 정보를 저장시킨다.
 					
 					RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/msg.jsp");
 					
