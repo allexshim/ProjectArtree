@@ -301,41 +301,46 @@ desc member;
 
 -----------
 
-        select rno, no, fk_exhibitionNo, eventName, content, startDate, endDate, mainPoster
-		from (
-		select rownum as rno, no, fk_exhibitionNo, eventName, content, startDate, endDate, mainPoster
-		from (
-		select E.no, E.fk_exhibitionNo, eventName, E.content, E.startDate, E.endDate, X.mainPoster
-        from ( event E join (select * from (exhibition A join exhibitionDetail B on A.exhibitionno = B.fk_exhibitionno) )X 
-        on E.fk_exhibitionNo = X.exhibitionno)
-		order by E.no desc ) V order by rno asc ) Z where rno <= 4;
+create table community
+(boardNo number	NOT NULL
+,no	number	NOT NULL
+,fk_exhibitionNo	number	NOT NULL
+,title	VARCHAR2(30)	NOT NULL
+,content	VARCHAR2(300)	NOT NULL
+,writeDay	VARCHAR2(30)	NOT NULL
+,commentCount	number	NOT NULL
+,fk_idx	number	NOT NULL
+,readcount	number	NULL
+,constraint PK_community_no primary key(no)
+,constraint FK_community_fk_exhibitionNo foreign key(fk_exhibitionNo) 
+                                                        references exhibition(exhibitionno)
+,constraint FK_community_fk_idx foreign key(fk_idx) 
+                                                        references member(idx)                                                      
+);
 
-select * from event;
+commit; 
 
-delete event; commit;
+desc comment;
 
+create sequence seq_community
+start with 1 -- 대기번호의 출발번호를 1번부터 하겠다.
+increment by 1 -- 1번 이후로 1씩 증가시킨다.
+nomaxvalue -- maximun값을 정하지 않겠다. (ex/ maxvalue 100 : 100까지만 번호를 부여한다.), nomaxvalue의 경우 도달할 값이 없으므로 nominvalue, nocycle
+nominvalue -- minimun을 정하지 않겠다. (ex/ minvalue 10 , start with i에서 i보다 같거나 작아야한다.)
+nocycle -- cycle n : start number부터 증가하여 maximun에 도달한 후 minvalue(ex/10)에서 다시 시작해서 n만큼 반복한다. (start with i에서 i는 처음 한번만 사용된다.)
+nocache;
 
-select rno, exhibitionno, fk_galleryno, exhibitionname, author, startdate, enddate, mainposter, galleryname, galleryno, location
-        from
-        (select rownum as rno, readcount, exhibitionno, fk_galleryno, exhibitionname, author, startdate, enddate, mainposter, galleryname, galleryno, location 
-        from
-        (select readCount, exhibitionno, fk_galleryno, exhibitionname, author, startdate, enddate, mainposter, galleryname, galleryno, location
-        from
-        (select * from 
-        (select * from exhibition
-        where tag like '%' || '초록' || '%') V 
-        join exhibitionDetail D
-        on V.exhibitionno = D.fk_exhibitionno) 
-        E join gallery G
-        on E.fk_galleryno = G.galleryno
-        order by readcount desc
-        ) X ) Z where rno <= 3;
-        
-        select favortag
-        from (
-        	select * 
-        	from member 
---        	where idx = '6'
-        ) M join wishlist W
-        on M.idx = W.fk_idx;
-        
+-- 내가 2번!!!!!!!!!!!!
+create table board_comment
+(commentNo	number	NOT NULL
+,boardNo	number	NOT NULL
+,fk_idx	number	NOT NULL
+,comContent	VARCHAR2(200)	NOT NULL
+,comwriteDay	DATE	NOT NULL
+,constraint PK_cmt_commentNo primary key(commentNo)
+,constraint CK_cmt_boardNo check(boardNo in ('1', '2'))
+,constraint FK_cmt_fk_idx foreign key(fk_idx) 
+                                                        references member(idx)                         
+);
+
+drop table  comment purge;

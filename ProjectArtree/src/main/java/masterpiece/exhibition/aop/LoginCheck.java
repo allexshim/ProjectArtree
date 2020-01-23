@@ -13,6 +13,7 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.stereotype.Component;
+import org.springframework.web.servlet.ModelAndView;
 
 import masterpiece.exhibition.common.MyUtil;
 
@@ -26,7 +27,7 @@ public class LoginCheck {
 		
 		// === Before Advice를 구현한다 === //
 		@Before("requireLogin()")
-		public void before(JoinPoint joinpoint) {
+		public ModelAndView before(JoinPoint joinpoint, ModelAndView mav) {
 			// joinpoint : 포인트 컷 된 주업무의 method
 			
 			// 로그인 유무 확인 ~ 주업무 메소드의 parameter, request를 얻어온다.
@@ -39,8 +40,9 @@ public class LoginCheck {
 					String msg = "먼저 로그인하세요!"; 
 					String loc = request.getContextPath()+"/mainartree.at";
 					
-					request.setAttribute("msg", msg);
-					request.setAttribute("loc", loc);
+					mav.addObject("msg",msg);
+					mav.addObject("loc",loc);		
+					mav.setViewName("msg");
 					
 					// 로그인 한 후 로그인 하기 전 페이지로 돌아가는 작업 : goBackURL
 					// === 현재 페이지의 주소(URL) 알아내기 ===
@@ -54,5 +56,6 @@ public class LoginCheck {
 					e.printStackTrace();
 				} 
 			} // end of if ------------------------------------------------	
+			return mav;
 		} // end of before ----------------------------------------------------------
 }
