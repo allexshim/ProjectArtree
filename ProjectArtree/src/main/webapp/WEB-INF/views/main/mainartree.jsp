@@ -13,6 +13,12 @@
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="https://unpkg.com/swiper/css/swiper.css">
+<link rel="stylesheet" href="https://unpkg.com/swiper/css/swiper.min.css">
+
+<script src="https://unpkg.com/swiper/js/swiper.js"></script>
+<script src="https://unpkg.com/swiper/js/swiper.min.js"></script>
+
 <style type="text/css">
    
  body::-webkit-scrollbar { 
@@ -65,13 +71,6 @@
 		padding: 10% 5% 0 5%;
 	}
 	
-	.recom-info {
-		float: right; 
-		width: 50%;
-		height: 100%
-		text-align: center; 
-		padding: 15% 5% 0 5%;
-	}
 	
 	.hot-exh-R {
 		margin-top: 50px;
@@ -115,13 +114,12 @@
 	
 	.recom-exh {
 		-webkit-transform:translate(100px,0);
-  		margin-top: 450px;
+		margin-top: 450px;
   		float: center;
   		text-align: center;
 		display: inline-block;
 		width: 85%; 
-		height: 450px; 
-		border: solid 1px #f2f2f2;
+		height: 550px;
 	}
 	
 	
@@ -141,8 +139,8 @@
 	}
 	
 	.slide-img { 
-		width: 35%;
-		height: 450px;
+		width: 90%;
+		height: 350px;
 	}
 
 	
@@ -170,9 +168,6 @@
 		height: 350px;
 	}
 	
-	.recom-info {
-		width: 100%;
-	}
 	
 	.event-title {
 		margin-top: 200px;
@@ -307,6 +302,34 @@
 			opacity: 1;
 		}
 	}
+	
+	
+	/*  */
+	.swiper-container {
+		
+      width: 100%;
+      height: 100%;
+    }
+    .swiper-slide {
+      top: 0;
+      text-align: center;
+      font-size: 18px;
+      background: #fff;
+
+      /* Center slide text vertically */
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: -webkit-flex;
+      display: flex;
+      -webkit-box-pack: center;
+      -ms-flex-pack: center;
+      -webkit-justify-content: center;
+      justify-content: center;
+      -webkit-box-align: center;
+      -ms-flex-align: center;
+      -webkit-align-items: flex-start;
+      align-items: flex-start;
+    }
    
 </style>
 	
@@ -446,80 +469,48 @@ function winScroll(){
 	<hr color="#f2f2f2;" style="transform:translate(0,700px);" />
 	
 	<div class="recom-exh">	
-		
-		<div class="recom-exhList">
-			<div class="slideshow">
-			  <div class="mySlides">
-			    
-			    <a class="flash" href="#"><img class="slide-img" src="<%= ctxPath%>/resources/images/exhibition/poster2.JPG"></a>
-			    	<div class="hot-info1" style="padding-top: 5%;">
-						<span class="hot-title">전시회명</span>
-						<span class="hot-content">작가명</span>
-						<span class="hot-content">전시위치</span>
-						<span class="hot-content">2020-01-20~2020-01-22</span>
-						<button type="button" class="moreBtn btn hover-left" onclick="">
-							자세히 보기
-							<img class="forMoving" style="position:relative;" src="<%= ctxPath%>/resources/images/exhibition/ico/right_arrow.png">
-						</button>
-					</div>
+		<div class="swiper-container">
+		    <div class="swiper-wrapper">
+		      <div class="swiper-slide">
+			  	<a class="flash" href="#">
+			  		<img class="slide-img" src="<%= ctxPath%>/resources/images/exhibition/poster3.JPG">
+			  		
+						<span class="recom-title">전시회명</span>
+						<span class="recom-content">작가명</span>
+						<span class="recom-content">전시위치</span>
+						<span class="recom-content">2020-01-20~2020-01-22</span>
+						
+			  	</a>
+			    	
 			  </div>
-			  
-			  <div class="mySlides">
-			    <a class="flash" href="#"><img class="slide-img" src="<%= ctxPath%>/resources/images/exhibition/poster1.JPG"></a>
-			   		<div class="hot-info1" style="padding-top: 5%;">
-						<span class="hot-title">전시회명</span>
-						<span class="hot-content">작가명</span>
-						<span class="hot-content">전시위치</span>
-						<span class="hot-content">2020-01-20~2020-01-22</span>
-						<button type="button" class="moreBtn btn hover-left" onclick="">
-							자세히 보기
-							<img class="forMoving" style="position:relative;" src="<%= ctxPath%>/resources/images/exhibition/ico/right_arrow.png">
-						</button>
-					</div>
-			  </div>
+		      <div class="swiper-slide">Slide 2</div>
+		      <div class="swiper-slide">Slide 3</div>
+		      <div class="swiper-slide">Slide 4</div>
+		      <div class="swiper-slide">Slide 5</div>
+		      <div class="swiper-slide">Slide 6</div>
+		      <div class="swiper-slide">Slide 7</div>
+		      <div class="swiper-slide">Slide 8</div>
+		      <div class="swiper-slide">Slide 9</div>
+		    </div>
+		    <!-- Add Pagination -->
+		    <div class="swiper-pagination"></div>
+		    <!-- Add Arrows -->
+		    <div class="swiper-button-next"></div>
+		    <div class="swiper-button-prev"></div>
+		  </div>
 			
-			  <div class="mySlides">
-			    <a class="flash" href="#"><img class="slide-img" src="<%= ctxPath%>/resources/images/exhibition/poster2.JPG"></a>
-			    	<div class="hot-info1" style="padding-top: 5%;">
-						<span class="hot-title">전시회명</span>
-						<span class="hot-content">작가명</span>
-						<span class="hot-content">전시위치</span>
-						<span class="hot-content">2020-01-20~2020-01-22</span>
-						<button type="button" class="moreBtn btn hover-left" onclick="">
-							자세히 보기
-							<img class="forMoving" style="position:relative;" src="<%= ctxPath%>/resources/images/exhibition/ico/right_arrow.png">
-						</button>
-					</div>
-			  </div>
-			  
-			  <div class="mySlides">
-			    <a class="flash" href="#"><img class="slide-img" src="<%= ctxPath%>/resources/images/exhibition/poster3.JPG"></a>
-			    	<div class="hot-info1" style="padding-top: 5%;">
-						<span class="hot-title">전시회명</span>
-						<span class="hot-content">작가명</span>
-						<span class="hot-content">전시위치</span>
-						<span class="hot-content">2020-01-20~2020-01-22</span>
-						<button type="button" class="moreBtn btn hover-left" onclick="">
-							자세히 보기
-							<img class="forMoving" style="position:relative;" src="<%= ctxPath%>/resources/images/exhibition/ico/right_arrow.png">
-						</button>
-					</div>
-			  </div>
-			
-			</div>
-			
-			<div id="div2" class="recom-exh-title" style="float: center; transform:translate(0,-580px);">
+			<div id="div2" class="recom-exh-title" style="float: center; transform:translate(0,-680px);">
 				<h2>추천 전시회</h2>
 				<span>ARTREE 추천전시회를 보여줍니다.</span>
 			</div>
-			<hr color="black;" style="width:100%; transform:translate(0,-590px);" />
+			<hr color="black;" style="width:100%; transform:translate(0,-680px);" />
 			<div style="text-align:center; display: none;">
 			  <span class="dot"></span>
 			  <span class="dot"></span>
 			  <span class="dot"></span>
 			  <span class="dot"></span>
 			</div>
-		</div>
+		
 	</div>
 	
 	<hr color="#f2f2f2;" style=" transform:translate(0, 100px);" />
@@ -645,3 +636,22 @@ function winScroll(){
 
 
 </script>
+
+<!-- Initialize Swiper -->
+  <script>
+    var swiper = new Swiper('.swiper-container', {
+      slidesPerView: 3,
+      spaceBetween: 30,
+      slidesPerGroup: 3,
+      loop: true,
+      loopFillGroupWithBlank: true,
+      pagination: {
+        el: '.swiper-pagination',
+        clickable: true,
+      },
+      navigation: {
+        nextEl: '.swiper-button-next',
+        prevEl: '.swiper-button-prev',
+      },
+    });
+  </script>
