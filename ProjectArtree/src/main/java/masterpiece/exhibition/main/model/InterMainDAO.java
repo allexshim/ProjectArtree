@@ -23,4 +23,7 @@ public interface InterMainDAO {
 	// 가장 선호하는 태그와 일치하는 전시회 중, 조회수가 높은 순으로 3개 가져온다.
 	List<HashMap<String, String>> getFavorExhibition(String favorTag);
 
+	// ajax로 호출, 이벤트 등록 빠른순으로 3개 가져오기
+	List<HashMap<String, String>> getNewEvent();
+
 }

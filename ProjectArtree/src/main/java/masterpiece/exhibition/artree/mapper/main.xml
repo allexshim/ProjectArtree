@@ -116,4 +116,26 @@
         ) X ) Z where rno <![CDATA[<=]]> 3
 	</select>
 	
+	<!-- 이벤트 정보 가져오기 -->
+	<resultMap type="HashMap" id="eventMap">
+	<!-- fk_exhibitionNo, eventName, content, startDate, endDate, mainPoster  -->
+		<result property="fk_exhibitionNo"   column="fk_exhibitionNo" 	javaType="String"/> 
+	 	<result property="eventName"       	column="eventName" 		javaType="String"/>
+	 	<result property="content"   		column="content" 	javaType="String"/> 
+	 	<result property="startDate"       column="startDate" 		javaType="String"/>
+	 	<result property="endDate"   column="endDate" 	javaType="String"/> 
+	 	<result property="mainPoster"       column="mainPoster" 		javaType="String"/>
+	</resultMap>
+	
+	<!-- 새 이벤트 가져오기 -->
+	<select id="getNewEvent" resultMap="eventMap" >
+		select rno, no, fk_exhibitionNo, eventName, content, startDate, endDate, mainPoster
+		from (
+		select rownum as rno, no, fk_exhibitionNo, eventName, content, startDate, endDate, mainPoster
+		from (
+		select no, fk_exhibitionNo, eventName, content, startDate, endDate, mainPoster
+		from event
+		order by no desc ) V order by rno asc ) Z where rno <![CDATA[<=]]> 4
+	</select>
+	
 </mapper>

@@ -17,4 +17,7 @@ public interface InterMainService {
 	// ajax ~ 사용자가 선호하는 태그가 들어간 전시회를 조회수 높은 순으로 3개 가져오기
 	List<HashMap<String, String>> getPreference(String idx);
 
+	// ajax로 호출, 이벤트 등록 빠른순으로 3개 가져오기
+	List<HashMap<String, String>> getNewEvent();
+
 }

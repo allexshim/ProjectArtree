@@ -58,6 +58,13 @@ public class MainDAO implements InterMainDAO {
 		List<HashMap<String,String>> ExhibitionList = sqlsession.selectList("main.getFavorExhibition", favorTag);
 		return ExhibitionList;
 	}
+
+	// ajax로 호출, 이벤트 등록 빠른순으로 3개 가져오기
+	@Override
+	public List<HashMap<String, String>> getNewEvent() {
+		List<HashMap<String,String>> eventList = sqlsession.selectList("main.getNewEvent");
+		return eventList;
+	}
 	
 	
 	

@@ -144,4 +144,32 @@ public class MainController {
 		return jsarr.toString();
 	} // end of getPreference ---------------------------------------
 	
+	// ajax ~ 이벤트 등록 빠른순으로 3개 가져오기
+	// 이벤트 정보 가져오기
+	@ResponseBody
+	@RequestMapping(value="/getNewEvent.at", produces="text/plain;charset=UTF-8")
+	public String getNewEvent() {
+		
+		// ajax로 호출, 이벤트 등록 빠른순으로 3개 가져오기
+		JSONArray jsarr = new JSONArray();
+		List<HashMap<String,String>> eventList =  null;
+		eventList = service.getNewEvent();
+		
+		for(HashMap<String,String> single :eventList) {
+			JSONObject jsobj = new JSONObject();
+			//  fk_exhibitionNo, eventName, content, startDate, endDate, mainPoster
+			jsobj.put("exhibitionNo",single.get("fk_exhibitionNo"));
+			jsobj.put("eventName",single.get("eventName"));
+			jsobj.put("content",single.get("content"));
+			jsobj.put("startDate",single.get("startDate"));
+			jsobj.put("endDate",single.get("endDate"));
+			jsobj.put("mainPoster",single.get("mainPoster"));
+			
+			jsarr.put(jsobj);
+		}
+		return jsarr.toString();
+	} // end of getNewEvent ---------------------------------------
+	
+	
+	
 }

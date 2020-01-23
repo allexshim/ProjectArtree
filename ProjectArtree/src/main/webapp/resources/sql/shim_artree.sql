@@ -151,8 +151,13 @@ select exhibitionno, fk_galleryno, exhibitionname, author, startdate, enddate, m
         order by to_date(startdate);
 -----------------------------------------------------------
 -- 이벤트 관련 --
-
-select * from exhibition;
+create sequence seq_event
+start with 1 -- 대기번호의 출발번호를 1번부터 하겠다.
+increment by 1 -- 1번 이후로 1씩 증가시킨다.
+nomaxvalue -- maximun값을 정하지 않겠다. (ex/ maxvalue 100 : 100까지만 번호를 부여한다.), nomaxvalue의 경우 도달할 값이 없으므로 nominvalue, nocycle
+nominvalue -- minimun을 정하지 않겠다. (ex/ minvalue 10 , start with i에서 i보다 같거나 작아야한다.)
+nocycle -- cycle n : start number부터 증가하여 maximun에 도달한 후 minvalue(ex/10)에서 다시 시작해서 n만큼 반복한다. (start with i에서 i는 처음 한번만 사용된다.)
+nocache;
 
 commit;
 
@@ -170,7 +175,28 @@ no	number	NOT NULL
 ,constraint FK_event_fk_exhibitionNo foreign key(fk_exhibitionNo) 
                                                         references exhibition(exhibitionno)
 );
+select * from exhibition;
+select * from exhibitionDetail;
 
+
+select * from event;
+insert into event(no, fk_exhibitionNo, eventName, content, startDate, endDate, mainPoster, eventView)
+values (seq_event.nextval, 4924, '이벤트 샘플1(나중에 삭제부탁합니다)', '메인 테스트용 이벤트 내용1',  '2020.01.12', '2020.01.30', 'http://app.art-map.co.kr/upload/exhibition/artmap_20200102_11934700.png', '3');
+
+insert into event(no, fk_exhibitionNo, eventName, content, startDate, endDate, mainPoster, eventView)
+values (seq_event.nextval, 4935, '이벤트 샘플2(나중에 삭제부탁합니다)', '메인 테스트용 이벤트 내용2',  '2020.01.12', '2020.02.30', 'http://app.art-map.co.kr/upload/exhibition/artmap_20200102_11934700.png', '10');
+
+insert into event(no, fk_exhibitionNo, eventName, content, startDate, endDate, mainPoster, eventView)
+values (seq_event.nextval, 4930, '이벤트 샘플3(나중에 삭제부탁합니다)', '메인 테스트용 이벤트 내용2',  '2020.01.01', '2020.02.15', 'http://app.art-map.co.kr/upload/exhibition/artmap_20200102_11934700.png', '8');
+
+insert into event(no, fk_exhibitionNo, eventName, content, startDate, endDate, mainPoster, eventView)
+values (seq_event.nextval, 4920, '이벤트 샘플4(나중에 삭제부탁합니다)', '메인 테스트용 이벤트 내용2',  '2020.01.01', '2020.02.15', 'http://app.art-map.co.kr/upload/exhibition/artmap_20200102_11934700.png', '8');
+
+select rownum as rno, no, fk_exhibitionNo, eventName, content, startDate, endDate, mainPoster
+from (
+select no, fk_exhibitionNo, eventName, content, startDate, endDate, mainPoster
+from event
+order by no desc ) V order by rno asc;
 
 -------------------------------------------------------------
         select readCount, rno, exhibitionno, fk_galleryno, exhibitionname, author, startdate, enddate, mainposter, galleryname, galleryno, location
