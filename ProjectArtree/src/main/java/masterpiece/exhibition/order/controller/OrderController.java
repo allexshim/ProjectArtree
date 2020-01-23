@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 import masterpiece.exhibition.order.service.InterOrderService;
 
@@ -35,8 +36,7 @@ public class OrderController {
 		
 		map.put("no", no);
 		
-		List<HashMap<String, String>> exList = service.getEx(map);
-		
+		List<HashMap<String, String>> exList = service.getEx(map);		
 		
 		// 키값 꺼내서 리퀘스트셋
 		Set key = exList.get(0).keySet();
@@ -82,7 +82,12 @@ public class OrderController {
 	}	
 	
 	@RequestMapping(value="/paymentbin.at")
-	public String paymentbin(HttpServletRequest request) {
+	public String paymentbin(HttpServletRequest request) {		
+		return "order/paymentbin.tiles";
+	}
+		
+	@RequestMapping(value="/insertCart.at")
+	public ModelAndView insertCart(HttpServletRequest request, ModelAndView mav) {
 		
 		HttpSession session = request.getSession();
 		HashMap<String,String> map = new HashMap<String,String>();	
@@ -124,14 +129,18 @@ public class OrderController {
 					}							
 				}											
 			}					
-		}	
-		
-									
+		}											
 										
 		session.setAttribute("exhibitionname", exname);
 		session.setAttribute("dateBin", dateBin);					
-		
-		return "order/paymentbin.tiles";
+					
+		String msg = null;
+		String loc = request.getContextPath()+"/paymentbin.at";
+						
+		mav.addObject("msg",msg);
+		mav.addObject("loc",loc);		
+		mav.setViewName("msg");
+		return mav;
 	}
 	
 	@RequestMapping(value="/paymentGatebin.at")
@@ -144,8 +153,19 @@ public class OrderController {
 		return "order/paymentGateway";
 	}
 	
-	@RequestMapping(value="/orderEnd.at")
-	public String orderEnd(HttpServletRequest request) {
+	@RequestMapping(value="/orderEnd.at") // 여기서 트랜잭션
+	public String orderEnd(HttpServletRequest request, HashMap<String,String> map) {
+		
+		String Subtotal = (String)request.getAttribute("Subtotal");
+		String Discount = (String)request.getAttribute("Discount");
+		String orderpri = (String)request.getAttribute("orderpri");
+		map.put("Subtotal", Subtotal);
+		map.put("Discount", Discount);
+		map.put("orderpri", orderpri);
+		
+		String idx = "1";
+		map.put("idx", idx);
+		int n = service.order(map);		
 		
 		HttpSession session = request.getSession();		
 		String totalBin = (String)session.getAttribute("totalBin");		
@@ -157,7 +177,7 @@ public class OrderController {
 	}	
 	
 	@RequestMapping(value="/refundBin.at")
-	public String refundBin(HttpServletRequest request) {
+	public String refundBin(HttpServletRequest request) {				
 		
 		HttpSession session = request.getSession();		
 		String totalBin = (String)session.getAttribute("totalBin");		
@@ -174,8 +194,7 @@ public class OrderController {
 		String jsonStr = "";
 		JSONObject jsonObj = new JSONObject();
 		JSONArray jsonArr = new JSONArray();		
-		String delCartNo = request.getParameter("delCartNo");	
-		System.out.println(delCartNo);
+		String delCartNo = request.getParameter("delCartNo");			
 		service.delCartDetail(delCartNo);
 		service.delCart(delCartNo);									    	
     	jsonArr.put(jsonObj);

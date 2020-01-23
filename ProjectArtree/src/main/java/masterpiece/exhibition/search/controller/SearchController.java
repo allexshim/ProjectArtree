@@ -74,9 +74,15 @@ public class SearchController {
 		JSONArray jsArr = new JSONArray();
 		for(int i=0; i<coordsArr.length; i++) {
 			/*System.out.println("coordsArr[i] : "+coordsArr[i]);*/
-			// {"lat":35.20459722797615,"lng":129.21270222887753}
-			int latstart = coordsArr[i].indexOf(":");
-			int latend = coordsArr[i].indexOf(",");
+			// {"galleryName":item.galleryName, "lat":35.20459722797615,"lng":129.21270222887753}
+			
+			// "\"KT&G 상상마당 춘천 아트센터 갤러리\""
+			int galleryNamestart = coordsArr[i].indexOf(":");
+			int galleryNameend = coordsArr[i].indexOf(",");
+			String galleryName = coordsArr[i].substring(galleryNamestart+1, galleryNameend);
+			
+			int latstart = coordsArr[i].indexOf(":", galleryNamestart+1);
+			int latend = coordsArr[i].indexOf(",", galleryNameend+1);
 			String lat = coordsArr[i].substring(latstart+1, latend);
 			
 			int lngstart = coordsArr[i].lastIndexOf(":");
@@ -84,6 +90,7 @@ public class SearchController {
 			String lng = coordsArr[i].substring(lngstart+1, lngend);
 			
 			JSONObject singlecoord = new JSONObject();
+			singlecoord.put("galleryName", galleryName);
 			singlecoord.put("lat", lat);
 			singlecoord.put("lng", lng);
 			jsArr.put(singlecoord);				
@@ -94,6 +101,41 @@ public class SearchController {
 		return jsobj.toString();
 		
 	} // end of locationJSON ---------------------------------------
+	
+	// 클릭한 갤러리 이름에 해당하는 전시회 목록을 가져온다.
+	@ResponseBody
+	@RequestMapping(value="/selectedLocationSearch.at", produces="text/plain;charset=UTF-8")
+	public String selectedLocationSearch(HttpServletRequest request) {
+		
+		String galleryName = request.getParameter("galleryName");
+		galleryName = galleryName.substring(1, galleryName.length()-1);
+		
+		// System.out.println("galleryName : "+galleryName);
+		
+		// ajax로 호출, 선택한 갤러리에서 열리는 전시회를 가지고 옵니다.
+		JSONArray jsarr = new JSONArray();
+		List<HashMap<String,String>> exhibitionList =  null;
+		exhibitionList = service.getExhibitionByLocation(galleryName);
+
+		for(HashMap<String,String> single :exhibitionList) {
+			JSONObject jsobj = new JSONObject();
+
+			jsobj.put("exhibitionno",single.get("exhibitionno"));
+			jsobj.put("fk_galleryno",single.get("fk_galleryno"));
+			jsobj.put("exhibitionname",single.get("exhibitionname"));
+			jsobj.put("author",single.get("author"));
+			jsobj.put("startdate",single.get("startdate"));
+			jsobj.put("enddate",single.get("enddate"));
+			jsobj.put("mainposter",single.get("mainposter"));
+			jsobj.put("galleryname",single.get("galleryname"));
+			jsobj.put("galleryno",single.get("galleryno"));
+			jsobj.put("location",single.get("location"));
+
+			jsarr.put(jsobj);
+		}
+		return jsarr.toString();
+	} // end of selectedLocationSearch ---------------------------------------
+	
 	
 	
 	// 해당 월에 열리는 전시회 목록을 가져온다.
@@ -167,7 +209,7 @@ public class SearchController {
 	
 	// 모든 전시회의 테마를 가져온다. (오늘 기준으로 전시중인 전시회만)
 	@ResponseBody
-	@RequestMapping(value="/allThemeSearch.at", produces="text/plain;charset=UTF-8")
+	@RequestMapping(value="/allSearch.at", produces="text/plain;charset=UTF-8")
 	public String allThemeSearch(HttpServletRequest request) {
 		JSONArray jsarr = new JSONArray();
 		List<HashMap<String,String>> exhibitionList =  null;
