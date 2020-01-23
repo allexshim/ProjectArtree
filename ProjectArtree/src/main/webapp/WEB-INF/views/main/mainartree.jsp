@@ -109,7 +109,10 @@
 		margin: 20px 0 0 0;
 	}
 	
-	
+	.recom-a:hover {
+		color: black;
+		text-decoration: none;
+	}
 	
 	
 	.recom-exh {
@@ -330,6 +333,28 @@
       -webkit-align-items: flex-start;
       align-items: flex-start;
     }
+    
+    .recom-title {
+    	font-size: 20pt;
+    	text-decoration: none;
+    	color: black;
+    }
+    
+    .recom-content {
+    	margin: 10px;
+    	text-decoration: none;
+    	color: black;
+    }
+    
+    .recom-title:hover {
+    	text-decoration: none;
+    	color: black;
+    }
+    
+    .recom-content:hover {
+    	text-decoration: none;
+    	color: black;
+    }
    
 </style>
 	
@@ -401,9 +426,6 @@ function winScroll(){
 }
 	
 
-	
-	
-
 </script>
    
     
@@ -472,14 +494,15 @@ function winScroll(){
 		<div class="swiper-container">
 		    <div class="swiper-wrapper">
 		      <div class="swiper-slide">
-			  	<a class="flash" href="#">
+			  	<a class="recom-a flash hover-top" href="#">
 			  		<img class="slide-img" src="<%= ctxPath%>/resources/images/exhibition/poster3.JPG">
-			  		
-						<span class="recom-title">전시회명</span>
-						<span class="recom-content">작가명</span>
-						<span class="recom-content">전시위치</span>
-						<span class="recom-content">2020-01-20~2020-01-22</span>
-						
+		  			<br/>
+		  			<br/>
+					<span class="recom-title forMoving">전시회명</span><br/>
+					<span class="recom-content forMoving">작가명</span><br/>
+					<span class="recom-content forMoving">전시위치</span><br/>
+					<span class="recom-content forMoving">2020-01-20~2020-01-22</span>
+					
 			  	</a>
 			    	
 			  </div>
