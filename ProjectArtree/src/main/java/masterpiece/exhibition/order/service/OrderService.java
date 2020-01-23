@@ -1,10 +1,15 @@
 package masterpiece.exhibition.order.service;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import masterpiece.exhibition.order.model.InterOrderDAO;
 
@@ -66,6 +71,35 @@ public class OrderService implements InterOrderService {
 	@Override
 	public void delCart(String cartNo) {
 		dao.delCart(cartNo);		
+	}
+
+	// 주문 완료, 장바구니12 삭제, 주문123 인설트 
+	@Override
+	@Transactional(propagation=Propagation.REQUIRED, isolation= Isolation.READ_COMMITTED, rollbackFor={Throwable.class})
+	public int order(HashMap<String, String> map) {	
+		int n=0;
+		int m=0;
+		List<HashMap<String, String>> cart = dao.selectCartNoList(map);
+		for (int i=0; i<cart.size(); i++ ) {
+			// 키값 꺼내서 리퀘스트셋
+			Set key = cart.get(i).keySet();
+			Iterator iterator = key.iterator();		
+			for (iterator = key.iterator(); iterator.hasNext();) {
+			   String keyName = (String) iterator.next();		   		   
+			   map.put(keyName, cart.get(0).get(keyName));
+			}
+			String cartno = cart.get(i).get("cartno");			
+			String idx = cart.get(i).get("fk_idx");
+			map.put("idx", idx);
+			List<HashMap<String, String>> cartDetail = dao.cartDetailList(cartno);
+			
+			n = dao.insertReser(map);
+			String reserNo = dao.selectReserNo(map);
+			map.put("reserNo", reserNo);
+			m = dao.insertReserDetail(map);
+		}			
+					
+		return n*m;
 	}
 
 	

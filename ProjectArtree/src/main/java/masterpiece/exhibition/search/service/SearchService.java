@@ -49,6 +49,18 @@ public class SearchService implements InterSearchService {
 		return ExhibitionList;
 	}
 	
+	// ajax로 호출, 선택한 갤러리에서 열리는 전시회를 가지고 옵니다.
+	@Override
+	public List<HashMap<String, String>> getExhibitionByLocation(String galleryName) {
+		
+		// 해당 갤러리 이름에 해당하는 galleryNo를 받아온다.
+		String galleryNo = dao.getGalleryNobyName(galleryName);
+		// 해당 galleryNo를 fk로 가지는 exhibiton정보를 받아온다.
+		List<HashMap<String,String>> ExhibitionList = dao.getExhibitionbyLocation(galleryNo);
+		
+		return ExhibitionList;
+	}
+	
 	
 	
 	

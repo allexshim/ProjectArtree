@@ -69,7 +69,7 @@ a:hover + p.arrow_box {
   </a>
   <p class="arrow_box" style="color: white; text-align: center;">채팅</p>
   
-  <a href="/search.at">
+  <a href="<%=ctxPath%>/search.at">
   	<img alt="검색" src="<%= ctxPath %>/resources/images/main/mainside-ticket.png" />
   </a>
   <p class="arrow_box" style="color: white; text-align: center;">예매</p>

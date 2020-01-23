@@ -20,4 +20,7 @@ public interface InterSearchService {
 	// 선택한 태그에 해당하는 전시회 정보를 받아온다.
 	List<HashMap<String, String>> getExhibitionbySelectTheme(String tag);
 
+	// ajax로 호출, 선택한 갤러리에서 열리는 전시회를 가지고 옵니다.
+	List<HashMap<String, String>> getExhibitionByLocation(String galleryName);
+
 }
