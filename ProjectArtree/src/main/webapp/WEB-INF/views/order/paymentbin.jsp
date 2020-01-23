@@ -129,7 +129,7 @@
 				sessionStorage.setItem("order", totala)				
 				$("#inSubtotal ").val(habin);
 				$("#inDiscount ").val(discount);
-				$("#orderpri").val(habin);
+				$("#orderpri").val(totala);
 			}
 			else {
 				$("#Discount").html("&#8361;"+habin.toLocaleString());
@@ -167,7 +167,7 @@
 		var frm = document.order;		
 		frm.method="POST";
 		frm.action="<%=ctxPath%>/orderEnd.at";		
-		frm.submit();	
+		frm.submit();				
 	}
 	
 	function totalpri() {
@@ -262,7 +262,7 @@
 		
 </script>
 <body>
-	<form name="order">	
+	<form name="order">		
 	<div style="padding-right:60px; width: 100%; margin: 0 auto;" align="center">
 	<div style="padding: 3%;">
 		
@@ -302,7 +302,7 @@
 				<div style="margin-right:5%; font-weight:bold; float:right;">Total</div>
 				<input hidden="hidden" id="orderpri" name="orderpri" value="">		
 			</div>
-		
+			
 		</div>					
 		<div style="overflow: hidden;">
 			<div onclick="location.href='<%= ctxPath %>/ticketsbin.at'" style="color:black; background:white; cursor:pointer; float: left; border: solid 1px black; border-radius: 4px; width: 5%; margin-top: 1%; padding: 0.3%;">이전</div>

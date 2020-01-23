@@ -48,8 +48,7 @@ $(document).ready(function() {
 	   
        // 결제시 
 	   if ( rsp.success ) {
-		   parent.document.location.href="orderEnd.at";
-		   alert("1"+rsp.imp_uid +"2"+ rsp.merchant_uid +"3"+rsp.apply_num );
+		   parent.document.location.href="orderEnd.at";		   
 		   //1 imp_101725519638 2merchant_1579246724245 353164033
 	   }        
 	   // 실패시

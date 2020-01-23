@@ -19,7 +19,8 @@ public class BoardController {
 
 		if(currentShowPageNo == null) {
 			currentShowPageNo = "1";	
-		}
+		}	
+		
 		// 해당하는 주문 개수/보여줄 개수 == 전체 페이지 개수
 		int totalPage = 100; // 뷰단 생성
 

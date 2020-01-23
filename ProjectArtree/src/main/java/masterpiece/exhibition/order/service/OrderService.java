@@ -79,29 +79,80 @@ public class OrderService implements InterOrderService {
 	public int order(HashMap<String, String> map) {	
 		int n=0;
 		int m=0;
-		List<HashMap<String, String>> cart = dao.selectCartNoList(map);
-		for (int i=0; i<cart.size(); i++ ) {
+		int a=0;
+		int c=0;
+		int d=0;
+		int result=1;		
+		List<HashMap<String, String>> cart = dao.selectCartNoList(map);		
+		for (int i=0; i<cart.size(); i++ ) {					
+			
 			// 키값 꺼내서 리퀘스트셋
 			Set key = cart.get(i).keySet();
 			Iterator iterator = key.iterator();		
 			for (iterator = key.iterator(); iterator.hasNext();) {
 			   String keyName = (String) iterator.next();		   		   
-			   map.put(keyName, cart.get(0).get(keyName));
+			   map.put(keyName, cart.get(i).get(keyName));
 			}
+			
 			String cartno = cart.get(i).get("cartno");			
 			String idx = cart.get(i).get("fk_idx");
 			map.put("idx", idx);
-			List<HashMap<String, String>> cartDetail = dao.cartDetailList(cartno);
 			
-			n = dao.insertReser(map);
-			String reserNo = dao.selectReserNo(map);
-			map.put("reserNo", reserNo);
-			m = dao.insertReserDetail(map);
-		}			
-					
-		return n*m;
+			if (i==0) {
+				n = dao.insertReser(map);
+				result *= n;
+				String reserNo = dao.selectReserNo(map);
+				map.put("reserNo", reserNo);
+			}
+			
+			m = dao.insertReserDetail(map);	
+			result *= m;
+			String reserDetailNo = dao.selectReserDetailNo(map);
+			map.put("reserDetailNo", reserDetailNo);
+			
+			List<HashMap<String, String>> cartDetail = dao.cartDetailList(cartno);
+			for(int b=0; b<cartDetail.size(); b++) {
+								
+				// 키값 꺼내서 리퀘스트셋
+				Set key2 = cartDetail.get(b).keySet();
+				Iterator iterator2 = key2.iterator();		
+				for (iterator2 = key2.iterator(); iterator2.hasNext();) {
+				   String keyName = (String) iterator2.next();		   		
+				   map.put(keyName, cartDetail.get(b).get(keyName));				   			
+				}								
+				a = dao.insertEx(map);
+				result *= a;
+			}	
+			d = dao.delCartDetail(cartno);
+			result *= d;
+			c = dao.delCart(cartno);
+			result *= c;
+			
+		}				
+		return result;
+	}
+	
+	@Override
+	public String selectReserNo(HashMap<String, String> map) {
+		String reserNo = dao.selectReserNo(map);
+		return reserNo;
 	}
 
-	
-	
+	@Override
+	public List<HashMap<String, String>> selectReser(HashMap<String, String> map) {
+		List<HashMap<String, String>> reserList = dao.selectReser(map);
+		return reserList;
+	}
+
+	@Override
+	public List<HashMap<String, String>> selectReserDetail(HashMap<String, String> map) {
+		List<HashMap<String, String>> selectReserDetail = dao.selectReserDetail(map);
+		return selectReserDetail;
+	}
+
+	@Override
+	public List<HashMap<String, String>> selectReserEx(HashMap<String, String> map) {
+		List<HashMap<String, String>> selectReserEx = dao.selectReserEx(map);
+		return selectReserEx;		
+	}
 }

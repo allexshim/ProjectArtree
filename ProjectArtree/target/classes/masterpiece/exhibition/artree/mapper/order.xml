@@ -43,14 +43,16 @@
 		<result property="fk_idx" column="fk_idx" javaType="String"></result>
 		<result property="dday" column="dday" javaType="String"></result>
 		<result property="status" column="status" javaType="String"></result>
-		<result property="exname" column="exname" javaType="String"></result>		
+		<result property="exname" column="exname" javaType="String"></result>
+		<result property="mainposter" column="mainposter" javaType="String"></result>		
 	</resultMap>
 
 	<select id="selectCartNoList" parameterType="HashMap" resultMap="cartMap">
 		select *
-		from cart			
+		from cart a left join exhibitionDetail b	
+		on a.fk_exhibitionno = b.fk_exhibitionno		
 		where fk_idx = #{idx}
-		order by cartno desc
+		order by cartno desc		
 	</select>
 	
 	<resultMap type="HashMap" id="cartDetailMap">
@@ -81,13 +83,60 @@
 		values(reserNo.nextval, default, #{Subtotal}, #{Discount}, #{orderpri}, '신용카드', default, #{idx})	
 	</insert>
 	
-	<insert id="insertReserDetail">
-		insert into reserDetail
-		values(reserDetailNo.nextval, #{reserNo}, #{fk_exhibitionno}, #{dday}, default, #{exname}, '미사용', #{mainImg})	
-	</insert>
-
 	<select id="selectReserNo" resultType="String">
 		select max(reserno) from reser
+	</select>
+	
+	<insert id="insertReserDetail">
+		insert into reserDetail
+		values(reserDetailNo.nextval, #{reserNo}, #{fk_exhibitionno}, #{dday}, default, #{exname}, '미사용', #{mainposter})	
+	</insert>
+
+	<select id="selectReserDetailNo" resultType="String">
+		select max(reserdetailno) from reserDetail
+	</select>
+	
+	<insert id="insertEx">
+		insert into reserEx
+		values(reserExNo.nextval, #{reserDetailNo}, #{purtype}, #{qt}, default, #{price})	
+	</insert>
+	
+	<resultMap type="HashMap" id="reserMap">
+		<result property="RESERTOTAL" column="RESERTOTAL" javaType="String"></result>
+		<result property="RESERDISCOUNT" column="RESERDISCOUNT" javaType="String"></result>
+		<result property="RESERSUBTOTAL" column="RESERSUBTOTAL" javaType="String"></result>
+		<result property="RESERNO" column="RESERNO" javaType="String"></result>
+		<result property="PAYMENTOP" column="PAYMENTOP" javaType="String"></result>
+		<result property="RESERDATE" column="RESERDATE" javaType="String"></result>			
+	</resultMap>
+					
+	<select id="selectReser" resultMap="reserMap">
+		select * from reser
+		where reserno = #{reserNo}
+	</select>
+	
+	<resultMap type="HashMap" id="reserDetailMap">
+		<result property="RESERDETAILNO" column="RESERDETAILNO" javaType="String"></result>
+		<result property="EXNAME" column="EXNAME" javaType="String"></result>
+		<result property="RESERSTAT" column="RESERSTAT" javaType="String"></result>
+		<result property="MAINIMG" column="MAINIMG" javaType="String"></result>
+		<result property="DDAY" column="DDAY" javaType="String"></result>			
+	</resultMap>
+	
+	<select id="selectReserDetail" resultMap="reserDetailMap">		
+		select RESERDETAILNO, FK_RESERNO, FK_EXHIBITIONNO, TO_CHAR(TO_DATE(dday, 'YY/MM/DD'), 'YYYY-MM-DD') as dday, STATUS, EXNAME, RESERSTAT, MAINIMG from reserDetail where fk_reserno = #{RESERNO}
+	</select>
+	
+	<resultMap type="HashMap" id="reserExMap">
+		<result property="RESEREXNO" column="RESEREXNO" javaType="String"></result>
+		<result property="FK_RESERDETAILNO" column="FK_RESERDETAILNO" javaType="String"></result>
+		<result property="PURTYPE" column="PURTYPE" javaType="String"></result>
+		<result property="QT" column="QT" javaType="String"></result>
+		<result property="PRICE" column="PRICE" javaType="String"></result>				
+	</resultMap>
+	
+	<select id="selectReserEx" resultMap="reserExMap">		
+		select * from reserEx where fk_reserdetailno = #{RESERDETAILNO}
 	</select>
 	
 </mapper>

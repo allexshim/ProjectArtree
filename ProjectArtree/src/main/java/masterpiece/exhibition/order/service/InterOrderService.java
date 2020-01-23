@@ -22,4 +22,12 @@ public interface InterOrderService {
 
 	int order(HashMap<String, String> map); // 트랜잭션 장바구니 삭제, 주문완료, 주문내역
 
+	String selectReserNo(HashMap<String, String> map); // 가장 최근 예매번호
+
+	List<HashMap<String, String>> selectReser(HashMap<String, String> map); // 예매번호 조회
+
+	List<HashMap<String, String>> selectReserDetail(HashMap<String, String> map); // 예매상세 조회
+
+	List<HashMap<String, String>> selectReserEx(HashMap<String, String> map); // 예매전시 조회
+
 }

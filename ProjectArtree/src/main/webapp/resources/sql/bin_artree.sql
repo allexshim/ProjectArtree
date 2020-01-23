@@ -3,11 +3,10 @@ show user
 select * 
 from tab
 
-select count(*)
-from exhibition
-
-select count(*)
-from exhibitionDetail
+select *
+		from cart			
+		where fk_idx = 1
+		order by cartno desc
 
 select *
 from exhibition
@@ -58,8 +57,10 @@ select * from cart where fk_idx = 1 ;
 select max(cartno) from cart;
 select * from cartDetail 
 order by fk_cartno desc
+
 select * 
-from cart a left join 
+from cart a left join exhibitionDetail b
+on a.fk_exhibitionno = b.fk_exhibitionno
 where fk_idx = 1
 order by cartno desc
 
@@ -100,7 +101,11 @@ create table reser (
         , constraint CK_reser_STATUS check ( status in ('0','1'))
         ); 
 select * from reser;
-select * from reserDetail;
+select * from reserDetail where fk_reserno = 12;
+select * from reserEx ;
+select * from cart;
+select TO_CHAR(TO_DATE('20180823', 'YYYYMMDD'), 'YYYY-MM-DD') from cart;
+select * from cartDetail;
 select max(reserno) from reser;
 -- 예매상세        
 create table reserDetail ( 
