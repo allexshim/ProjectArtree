@@ -306,7 +306,7 @@ function goLogin() {
 					    <a href="<%=ctxPath%>/join.at">회원가입</a>
 					</c:if>
 				    <c:if test="${sessionScope.loginuser != null}">
-				    	<a href="/artree/logout.at">로그아웃</a>
+				    	<a href="<%=ctxPath%>/logout.at">로그아웃</a>
 				    </c:if>
 				  </div>
 				  
@@ -316,7 +316,7 @@ function goLogin() {
 				 	<a class="dropbtn menu" data-toggle="dropdown" style="padding-top: 0px; -webkit-transform:translate(0,0);"><img src="<%= ctxPath %>/resources/images/main/mainheader-menu.png" /></a>
 				    <div class="dropdown-content-R2 dropdown-menu" role="menu">
 					    <a href="<%=ctxPath%>/mypage.at">마이페이지</a>
-					    <a href="<%=ctxPath%>/cartList.at">장바구니</a>
+					    <a href="#">장바구니</a>
 					    <c:if test="${sessionScope.loginuser.status == 2}">
 					    	<a href="<%=ctxPath%>/admin.at">관리자페이지</a>
 				    	</c:if>

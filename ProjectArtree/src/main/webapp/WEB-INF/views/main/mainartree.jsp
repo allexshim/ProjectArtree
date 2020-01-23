@@ -19,6 +19,20 @@
     display: none; 
 }
    
+   .btn1 {
+   		text-align: center;
+		font-weight: bold;
+		background-color: #f2f2f2;
+		border: none;
+		border-radius: 2px;
+		margin-top: 30px;
+	}
+	
+	.buyBtn {
+		margin-bottom: 10px;
+		font-size: 18pt;
+	}
+   
    .main-container { 
    		margin: 0 auto;
    		padding-top: 100px;
@@ -46,7 +60,7 @@
 	.hot-info1 {
 		float: right; 
 		width: 50%;
-		height: 100%
+		height: 100%;
 		text-align: center; 
 		padding: 10% 5% 0 5%;
 	}
@@ -251,18 +265,33 @@
 		text-decoration: none;
 	}
 	
+	#mysideinfo {
+		display: none;
+	}
    
 </style>
 	
 <script type="text/javascript">
 
-$(".return-top").hide(); // 탑 버튼 숨김
+$("#myheader").hide();
+$(".navigation").hide(); // 탑 버튼 숨김
 $(function () {
+	
+	$(".forIco").hover(function(){
+		$(this).children(".forMoving").stop().animate({left:'5px'}, 'fast');
+
+	}, function(){
+		$(this).children(".forMoving").stop().animate({left:'0px'}, 'fast');
+	});
             
 	$(window).scroll(function () {
 		if ($(this).scrollTop() > 100) { // 스크롤 내릴 표시
+			$("#myheader").fadeIn();
+			$("#mysideinfo").fadeIn();
 			$('.navigation').fadeIn();
 		} else {
+			$("#myheader").fadeOut();
+			$("#mysideinfo").fadeOut();
 			$('.navigation').fadeOut();
 		}
 	});
@@ -336,6 +365,10 @@ function winScroll(){
 					<span class="hot-content">작가명</span>
 					<span class="hot-content">전시위치</span>
 					<span class="hot-content">2020-01-20~2020-01-22</span>
+					<button type="button" class="buyBtn btn1 forIco" onclick="">
+							자세히 보기
+							<img class="forMoving" src="<%= ctxPath%>/resources/images/exhibition/ico/right_arrow.png">
+					</button>
 				</div>
 			</div>
 			
@@ -399,7 +432,7 @@ function winScroll(){
 			  
 			  <div class="mySlides">
 			    <a href="#"><img class="slide-img" src="<%= ctxPath%>/resources/images/exhibition/poster3.JPG"></a>
-			    	<div class="hot-info1" style="padding-top: 10%;">
+			    	<div class="hot-info1" style="padding-top: 5%;">
 						<span class="hot-title">전시회명</span>
 						<span class="hot-content">작가명</span>
 						<span class="hot-content">전시위치</span>
@@ -495,15 +528,23 @@ function winScroll(){
        	<div class="event-div" style="transform:translate(0, 200px);">
            	<a href="#" class="event_one" >
 				<img class="event_poster" src="<%= ctxPath%>/resources/images/exhibition/artmap_20200102_9426350.jpg"/>
+				<span class="end-exp">이벤트이름</span>
+				<span class="end-exp">이벤트기간</span>
 			</a>
 			<a href="#" class="event_one" >
 				<img class="event_poster" src="<%= ctxPath%>/resources/images/exhibition/artmap_20200102_9426350.jpg"/>
+				<span class="end-exp">이벤트명</span>
+				<span class="end-exp">이벤트기간</span>
 			</a>
 			<a href="#" class="event_one" >
 				<img class="event_poster" src="<%= ctxPath%>/resources/images/exhibition/artmap_20200102_9426350.jpg"/>
+				<span class="end-exp">이벤트명</span>
+				<span class="end-exp">이벤트기간</span>
 			</a>
 			<a href="#" class="event_one" >
 				<img class="event_poster" src="<%= ctxPath%>/resources/images/exhibition/artmap_20200102_9426350.jpg"/>
+				<span class="end-exp">이벤트명</span>
+				<span class="end-exp">이벤트기간</span>
 			</a>
        	</div>
 
