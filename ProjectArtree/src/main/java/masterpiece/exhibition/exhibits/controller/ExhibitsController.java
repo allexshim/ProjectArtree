@@ -11,6 +11,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -350,7 +351,7 @@ public class ExhibitsController {
 	/////////////////////////// 전시회 좋아요 지정 및 해제 ////////////////////////////
 	@ResponseBody
 	@RequestMapping(value="/ExhLike.at", produces="text/plain;charset=UTF-8")
-	public String requireLogin_exhLike(HttpServletRequest request, HttpServletResponse response) {
+	public String ajaxRequireLogin_exhLike(HttpServletRequest request) {
 		
 		String eno = request.getParameter("eno");
 		String gno = request.getParameter("gno");
@@ -359,7 +360,11 @@ public class ExhibitsController {
 		
 		HttpSession session = request.getSession();
 		MemberVO loginuser = (MemberVO)session.getAttribute("loginuser");
-		String idx = loginuser.getIdx();
+		String idx = "";
+		if(loginuser != null) {
+			idx = loginuser.getIdx();
+		}
+				
 		
 		HashMap<String, String> paraMap = new HashMap<String, String>();
 		paraMap.put("eno", eno);
@@ -387,7 +392,11 @@ public class ExhibitsController {
 		
 		HttpSession session = request.getSession();
 		MemberVO loginuser = (MemberVO)session.getAttribute("loginuser");
-		String idx = loginuser.getIdx();
+		String idx = "";
+		if(loginuser != null) {
+			idx = loginuser.getIdx();
+		}
+			
 		
 		HashMap<String, String> paraMap = new HashMap<String, String>();
 		paraMap.put("gno", gno);
@@ -397,7 +406,7 @@ public class ExhibitsController {
 
 		JSONObject jobj = new JSONObject();
 		jobj.put("CkGcnt", CkGcnt);
-
+		
 		return jobj.toString();
 		
 	}
