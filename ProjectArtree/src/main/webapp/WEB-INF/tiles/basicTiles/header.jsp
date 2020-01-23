@@ -220,6 +220,13 @@ input#login_btn {
 <script type="text/javascript">
 
 $(document).ready(function(){
+	
+	$("#password_login").keydown(function(key){			
+		if(key.keyCode==13){
+			$("#login_btn").click();
+		}
+	});
+	
 	$(".dropdown").hover(            
 	        function() {
 	            $('.dropdown-menu', this).not('.in .dropdown-menu').stop( true, true ).slideDown("300");
