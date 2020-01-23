@@ -27,8 +27,8 @@ public class AdminService implements InterAdminService {
 	
 	// 전시회 이미지 등록
 	@Override
-	public int addExhibitimage(HashMap<String, String> hashMap) {
-		int n = dao.addExhibitimage(hashMap);
+	public int addExhibitImage(HashMap<String, String> hashMap) {
+		int n = dao.addExhibitImage(hashMap);
 		return n;
 	}
 
@@ -47,9 +47,8 @@ public class AdminService implements InterAdminService {
 
 	// gallery 가져오기
 	@Override
-	public List<GalleryVO> getGalleries(HashMap<String,String> paraMap) {
-
-		List<GalleryVO> allGalleries = dao.getGalleries(paraMap);
+	public List<GalleryVO> getGalleries() {
+		List<GalleryVO> allGalleries = dao.getGalleries();
 		return allGalleries;
 	}
 
@@ -65,6 +64,14 @@ public class AdminService implements InterAdminService {
 	public List<GalleryVO> wordSearchShow(HashMap<String, String> paraMap) {
 		List<GalleryVO> result = dao.wordSearchShow(paraMap);
 		return result;
+	}
+
+	// 새로 등록할 전시회번호 채번해오기 
+	@Override
+	public int getApplyingno() {
+		int applyingno = dao.getApplyingno();
+		
+		return applyingno;
 	}
 
 

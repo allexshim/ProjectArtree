@@ -23,8 +23,8 @@ public class AdminDAO implements InterAdminDAO {
 
 	// 전시회 이미지 등록
 	@Override
-	public int addExhibitimage(HashMap<String, String> hashMap) {
-		int n = sqlsession.insert("admin.addExhibitimage", hashMap);
+	public int addExhibitImage(HashMap<String, String> hashMap) {
+		int n = sqlsession.insert("admin.addExhibitImage", hashMap);
 		return n;
 	}
 	
@@ -48,8 +48,8 @@ public class AdminDAO implements InterAdminDAO {
 
 	// gallery 가져오기
 	@Override
-	public List<GalleryVO> getGalleries(HashMap<String,String> paraMap) {
-		List<GalleryVO> galleries = sqlsession.selectList("admin.getGalleries", paraMap);
+	public List<GalleryVO> getGalleries() {
+		List<GalleryVO> galleries = sqlsession.selectList("admin.getGalleries");
 		return galleries;
 	}
 
@@ -65,6 +65,13 @@ public class AdminDAO implements InterAdminDAO {
 	public List<GalleryVO> wordSearchShow(HashMap<String, String> paraMap) {
 		List<GalleryVO> result = sqlsession.selectList("admin.wordSearchShow", paraMap);
 		return result;
+	}
+
+	// 새로 등록할 전시회번호 채번해오기 
+	@Override
+	public int getApplyingno() {
+		int applyingno = sqlsession.selectOne("admin.getApplyingno");
+		return applyingno;
 	}
 
 

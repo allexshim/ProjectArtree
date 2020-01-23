@@ -9,19 +9,22 @@ public interface InterAdminDAO {
 	int addExhibition(HashMap<String, String> newExhibitMap);
 
 	// 전시회 이미지 등록
-	int addExhibitimage(HashMap<String, String> hashMap);
+	int addExhibitImage(HashMap<String, String> hashMap);
 	
 	// tag 가져오기
 	HashMap<String, List<String>> getAllTags();
 
 	// gallery 가져오기
-	List<GalleryVO> getGalleries(HashMap<String,String> paraMap);
+	List<GalleryVO> getGalleries();
 
 	// gallery location 가져오기
 	List<String> getGalleryLocations();
 
 	// gallery 검색
 	List<GalleryVO> wordSearchShow(HashMap<String, String> paraMap);
+
+	// 새로 등록할 전시회번호 채번해오기 
+	int getApplyingno();
 
 	
 

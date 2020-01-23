@@ -125,33 +125,10 @@ public class AdminController {
 		// --------- gallery 가져오기 --------- //
 		
 		// 갤러리 목록
-		List<GalleryVO> galleryList = null;
+		List<GalleryVO> galleryList = service.getGalleries();
 		
 		// 갤러리 지역 선택옵션
 		List<String> galleryLocationList = service.getGalleryLocations();
-		
-		// --------- gallery 검색 --------- //
-		
-		String galleryLocation = request.getParameter("galleryLocation");
-		String searchWord = request.getParameter("searchWord");
-		
-		if(searchWord == null || searchWord.trim().isEmpty() ) {
-			searchWord = "";
-		}
-		
-		if(galleryLocation == null || galleryLocation.trim().isEmpty() ) {
-			galleryLocation = "";
-		}
-		
-		HashMap<String,String> paraMap = new HashMap<String,String>(); 
-		paraMap.put("galleryLocation", galleryLocation);
-		paraMap.put("searchWord", searchWord);
-		
-		galleryList = service.getGalleries(paraMap);
-		
-		if(!"".equals(searchWord)) {
-			request.setAttribute("paraMap", paraMap);
-		}
 		
 		request.setAttribute("galleryList", galleryList);
 		request.setAttribute("galleryLocationList", galleryLocationList);
@@ -162,8 +139,8 @@ public class AdminController {
 	@RequestMapping(value="/addEndExhibition.at", method=RequestMethod.POST)
 	public String addEndExhibition(HttpServletRequest request, HttpServletResponse response, MultipartHttpServletRequest req) {
 		
-		String applyingNo = request.getParameter("applyingNo");
-		String fk_galleryNo = request.getParameter("fk_galleryNo");	// 갤러리번호를 어디서 받아오고 테이블에는 어떻게 넣지..?
+		String applyingno = String.valueOf(service.getApplyingno());
+		String fk_galleryno = request.getParameter("galleryno");
 		String exhibitionName = request.getParameter("exhibitionName");
 		String applier = request.getParameter("applier");
 		String author = request.getParameter("author");
@@ -179,12 +156,12 @@ public class AdminController {
 		String foodorDrink = request.getParameter("foodorDrink");
 		String extraRestriction = request.getParameter("extraRestriction");
 		String photo = request.getParameter("photo");
-		String openCloseTime = request.getParameter("openCloseTime");
+		String openCloseTime = request.getParameter("openTime") + " - " + request.getParameter("closeTime");
 		
 		// 1 개의 전시회
 		HashMap<String, String> newExhibitMap = new HashMap<String, String>();
-		newExhibitMap.put("applyingNo", applyingNo);
-		newExhibitMap.put("fk_galleryNo", fk_galleryNo);
+		newExhibitMap.put("applyingno", applyingno);
+		newExhibitMap.put("fk_galleryno", fk_galleryno);
 		newExhibitMap.put("exhibitionName", exhibitionName);
 		newExhibitMap.put("applier", applier);
 		newExhibitMap.put("author", author);
@@ -205,7 +182,7 @@ public class AdminController {
 		// 다중이미지 첨부파일
 		List<MultipartFile> imgMap = req.getFiles("imageInput");
 		
-		// 
+		// 이미지맵리스트
 		List<HashMap<String, String>> exhibitsImgMapList = new ArrayList<HashMap<String, String>>();
 		
 		if(imgMap != null) {  // 이미지첨부 다중파일을 받아왔다라면 
@@ -224,6 +201,7 @@ public class AdminController {
 			String thumbnailFileName = "";  // WAS 디스크에 저장될 thumbnail 파일명 
 			
 			for(int i=0; i < imgMap.size(); i++) { 
+				
 				try {
 					 bytes = imgMap.get(i).getBytes(); // 첨부파일의 내용물(byte)을 읽어옴.
 					 
@@ -240,11 +218,11 @@ public class AdminController {
 					 HashMap<String, String> imageMap = new HashMap<String, String>();
 					// 제품1개에 딸린 다중 이미지
 					 
-					 imageMap.put("fk_galleryNo", fk_galleryNo);
-					 imageMap.put("IMAGEFILENAME", newFileName);
-					 imageMap.put("IMAGEORGFILENAME", imgMap.get(i).getOriginalFilename());
-					 imageMap.put("IMAGEFILESIZE", String.valueOf(fileSize));
-					 imageMap.put("THUMBNAILFILENAME", thumbnailFileName);
+					 imageMap.put("fk_applyingno", applyingno);
+					 imageMap.put("imagefilename", newFileName);
+					 imageMap.put("imageorgfilename", imgMap.get(i).getOriginalFilename());
+					 imageMap.put("imagefilesize", String.valueOf(fileSize));
+					 imageMap.put("thumbnailfilename", thumbnailFileName);
 					 
 					 // 이미지 설명 넣기
 					 String imageinfo = request.getParameter("imageinfo");
@@ -252,6 +230,8 @@ public class AdminController {
 					 imageMap.put("imageinfo", imageinfo);
 					 
 					 exhibitsImgMapList.add(imageMap);
+					 
+					 
 					 
 				} catch (Exception e) {	}
 				
@@ -271,7 +251,7 @@ public class AdminController {
 			   n = service.addExhibition(newExhibitMap);
 			   
 			   for(int i=0; i<exhibitsImgMapList.size(); i++) {
-				   m = service.addExhibitimage(exhibitsImgMapList.get(i));
+				   m = service.addExhibitImage(exhibitsImgMapList.get(i));
 				   if(m==1) count++;
 			   }
 			   
@@ -289,7 +269,7 @@ public class AdminController {
 		
 		if(n==1) {
 			msg = "전시회 신청이 완료되었습니다.";
-			loc = "javascript:history.back()";
+			loc = "/artree";
 		} else {
 			msg = "전시회 신청에 실패하였습니다. 관리자에 문의하여주세요.";
 			loc = "javascript:history.go(0);";
@@ -298,7 +278,7 @@ public class AdminController {
 		req.setAttribute("msg", msg);
 		req.setAttribute("loc", loc);
 		
-		return "/artree";
+		return "msg";
 		
 	}
 	
@@ -309,9 +289,6 @@ public class AdminController {
 		
 		String galleryLocation = request.getParameter("galleryLocation");
 		String searchWord = request.getParameter("searchWord"); 
-		
-		System.out.println("============================= " + searchWord);
-		System.out.println("============================= " + galleryLocation);
 		
 		if(searchWord == null || searchWord.trim().isEmpty() ) {
 			searchWord = "";
@@ -334,10 +311,12 @@ public class AdminController {
 		if(wordList != null) {
 			for(GalleryVO vo : wordList) {
 				JSONObject jsonObj = new JSONObject();
+				jsonObj.put("galleryno", vo.getGalleryno());
 				jsonObj.put("location", vo.getLocation());
 				jsonObj.put("galleryname", vo.getGalleryname());
 				jsonObj.put("detailaddress", vo.getDetailaddress());
 				jsonObj.put("tel", vo.getTel());
+				
 				jsonArr.put(jsonObj);
 			}
 		}

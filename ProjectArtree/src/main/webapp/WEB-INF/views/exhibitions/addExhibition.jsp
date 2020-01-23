@@ -373,11 +373,21 @@
 </style>
 
 <script type="text/javascript">
-	$(document).ready(function(){ 
+	$(document).ready(function() { 
 
 		// datePicker
-		$("#startDate").datepicker();
-		$("#endDate").datepicker();
+	//	$("#startDate").datepicker();
+	//	$("#endDate").datepicker();
+		$("#startDate").datepicker({
+			dateFormat: "yy.mm.dd"
+		});
+		
+		$("#endDate").datepicker({
+			dateFormat: "yy.mm.dd"
+		});
+		
+		$("#authorInfo").text("");
+		$("#exhibitionInfo").text("");
 		
 	//	$(".ui-datepicker").css('background','#ffe680');
 		$(".ui-datepicker").css('border','none');
@@ -388,6 +398,14 @@
 			$("#searchWord").val("${ paraMap.searchWord }");
 		}
 		
+		$("#gallery").click(function(){
+			
+			$("#myModal").modal('show');
+			
+			$("searchWord").focus();
+			
+		});
+		
 		$("#searchWord").keydown(function(){
 			
 			if(event.keyCode==13) {
@@ -396,6 +414,16 @@
 			}
 			
 		});
+		
+		let gallerylocation = sessionStorage.getItem("gallerylocation");
+		let galleryname = sessionStorage.getItem("galleryname");
+		
+		// 문서가 로딩된 후 sessionStorage 에 남아있는 저장된 데이터 삭제
+		if( gallerylocation != null && galleryname != null && galleryno != null) {
+			sessionStorage.removeItem("gallerylocation");
+			sessionStorage.removeItem("galleryname");
+			sessionStorage.removeItem("galleryno");
+		}		
 		
 		// 가격 정보 입력 버튼 --------------------------------------------
 		$(".freeBtn").on("click", function(){
@@ -468,7 +496,7 @@
 				
 			} else {
 				
-				for(var i=0; i<parseInt(spinnerOqtyVal); i++) {
+				for(let i=0; i<parseInt(spinnerOqtyVal); i++) {
 					thumbnail += "<div class='thumbNail-wrap' style='margin: 0 10px;'>";
 					thumbnail += "<img class='thumbNail' src='' alt='' style='border:none;' /></div>";
 					
@@ -530,9 +558,9 @@
 		
 		// 각 태그 키워드 클릭
 		$("div#selectTag > div > span").click(function(){
-			var val = $("input#tag").val();
+			let val = $("input#tag").val();
 			
-			var str = (val=="")?"":",";
+			let str = (val=="")?"":",";
 			
 			$("input#tag").val(val+str+$(this).text());
 			$(this).css({'border':'solid 1px black', 'border-radius':'10px'})
@@ -541,7 +569,7 @@
 		/* --------- 유효성 검사 ---------------------------------------- */
 		$("img#openBtn").click(function(){
 			
-			if($("#applierName").val().trim()==""){
+			if($("#applier").val().trim()==""){
 				alert("신청자 이름을 입력하세요.");
 				$(this).focus();
 			} 
@@ -593,23 +621,7 @@
 				alert("대표 포스터를 입력하세요.");
 				$(this).focus();
 			}
-			else if($("#imageInput1").val()==""){
-				alert("첫번째 이미지를 입력하세요.");
-				$(this).focus();
-			}
-			else if($("#imageInput2").val()==""){
-				alert("두번째 이미지를 입력하세요.");
-				$(this).focus();
-			}
-			else if($("#imageInput3").val()==""){
-				alert("세번째 이미지를 입력하세요.");
-				$(this).focus();
-			}
-			else if($("#imageInput3").val()==""){
-				alert("세번째 이미지를 입력하세요.");
-				$(this).focus();
-			}
-			else if($("#category").val()==""){
+			else if($("#genre").val()==""){
 				alert("분야를 입력하세요.");
 				$(this).focus();
 			}
@@ -627,75 +639,116 @@
 			
 		});
 		/* --------- 유효성 검사 끝--------------------------------------- */
-		
-	}); // --------------------------------------------------------------
+				
+	}); // $(document).ready --------------------------------------------------------------
+	
 	
 	function searchGallery() {
 		
-		var wordLength = $("#searchWord").val().length;
+		let wordLength = $("#searchWord").val().length;
 		
-		if(wordLength == 0) {
+		$.ajax({
 			
-		} else {
+			url: "<%= ctxPath %>/wordSearchShow.at",
+			type: "GET",
+			data: { "galleryLocation":$("#galleryLocation").val()
+				   ,"searchWord":$("#searchWord").val() },
+			dataType: "JSON",
+			success: function(json){
+				
+			//	console.log(json);
 			
-			$.ajax({
+				$("#galleryListTable").empty();				
 				
-				url: "<%= ctxPath %>/wordSearchShow.at",
-				type: "GET",
-				data: { "galleryLocation":$("#galleryLocation").val()
-					   ,"searchWord":$("#searchWord").val() },
-				dataType: "JSON",
-				success: function(json){
-					
-				//	console.log(json);
+				let html ="";
 				
-					$("#galleryListTable").empty();				
-					
-					var html ="";
-					
-					html += "<thead>";
-					html += "<tr class='adminTableTR'>";
-					html += "<th>지역</th>";
-					html += "<th>갤러리명</th>";
-					html += "<th>주소</th>";
-					html += "<th>전화번호</th>";
+				html += "<thead>";
+				html += "<tr>";
+				html += "<th>지역</th>";
+				html += "<th>갤러리명</th>";
+				html += "<th>주소</th>";
+				html += "<th>전화번호</th>";
+				html += "</tr>";
+				html += "</thead>";
+				html += "<tbody>";
+				
+				if(json.length == 0) {
+					html += "<tr class='' style='cursor: pointer;'>";
+					html += "<td colspan='4'>";
+					html += "조회된 갤러리가 없습니다.";
+					html += "</td>";
 					html += "</tr>";
-					html += "</thead>";
-					html += "<tbody>";
-					
-					if(json.length == 0) {
-						html += "<tr class='' style='cursor: pointer;' onclick='goCustomerDetail();'>";
-						html += "<td colspan='4'>";
-						html += "조회된 갤러리가 없습니다.";
-						html += "</td>";
-						html += "</tr>";
-					}
-					
-					else {
-						
-						$.each(json, function(index, item) {						
-								
-								html += "<tr style='cursor: pointer;'>";
-								html += "<td style='width: 60px !important'>" +item.location+ "</td>";
-								html += "<td>" +item.galleryname+ "</td>";
-								html += "<td>" +item.detailaddress+ "</td>";
-								html += "<td style='width: 130px !important'>" +item.tel+ "</td>";
-								html += "</tr>";
-						
-						});					
-					}
-					
-					html += "</tbody>";
-					
-					$("#galleryListTable").html(html);
-				
-				},
-				error: function(request, status, error){
-					alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
 				}
 				
-			});
+				else {
+					
+					$.each(json, function(index, item) {
+						
+						if(item.location == "-") {
+							return;
+						}
+							
+						html += "<tr style='cursor: pointer;' onclick='selectedGallery()' class='selectedGallery'>";
+						html += "<td style='width: 60px !important; display: none;' class='galleryno'>" + item.galleryno + "</td>";
+						html += "<td style='width: 60px !important' class='gallerylocation'>" + item.location + "</td>";
+						html += "<td class='galleryname'>" + item.galleryname + "</td>";
+						html += "<td>" + item.detailaddress + "</td>";
+						html += "<td style='width: 130px !important'>" + item.tel + "</td>";
+						html += "</tr>";
+					
+					});					
+				}
+				
+				html += "</tbody>";
+				
+				$("#galleryListTable").html(html);
 			
+			},
+			error: function(request, status, error){
+				alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+			}
+			
+		});
+		
+	}
+	
+	function selectedGallery() {
+		
+		$(document).on("click", ".selectedGallery", function() {
+			
+			
+			let gallerylocation = $(this).find(".gallerylocation").text();
+			let galleryname = $(this).find(".galleryname").text();
+			let galleryno = $(this).find(".galleryno").text();
+			
+		//	console.log(gallerylocation + " / " + galleryname);
+			
+			// sessionStorage 에 gallerylocation 과 galleryname 데이터 저장
+			sessionStorage.setItem("gallerylocation", gallerylocation);
+			sessionStorage.setItem("galleryname", galleryname);
+			sessionStorage.setItem("galleryno", galleryno);
+			
+			$("#myModal").modal('hide');
+		//	$("#galleryListTable").empty();
+			writeGallery();
+			
+		});
+		
+	}
+	
+	function writeGallery() {
+		
+		let gallerylocation = sessionStorage.getItem("gallerylocation");
+		let galleryname = sessionStorage.getItem("galleryname");
+		let galleryno = sessionStorage.getItem("galleryno");
+		
+		if( (gallerylocation != null && galleryname != null ) && 
+			(gallerylocation != "" && galleryname != "") ) {
+			let gallery = gallerylocation+" ) "+ galleryname;
+		    $("#gallery").val(gallery);
+		    
+		    let gallerynoText = galleryno;
+		    $("#galleryno").val(gallerynoText);
 		}
 		
 	}
@@ -807,29 +860,29 @@
 				<tr>
 					<td style="vertical-align: top;">작가정보</td>
 					<td>
-						<textarea id="authorInfo" name="authorInfo" style="resize:none; border:solid 1px lightgray" rows="5" >
+						<textarea id="authorInfo" name="authorInfo" style="resize:none; border:solid 1px lightgray; padding:10px;" rows="5">
 						</textarea>
 					</td>
 				<tr>
 				<tr>
 					<td style="vertical-align: top;">전시정보</td>
 					<td>
-						<textarea id="exhibitionInfo" name="exhibitionInfo" style="resize:none; border:solid 1px lightgray" rows="5" >
+						<textarea id="exhibitionInfo" name="exhibitionInfo" style="resize:none; border:solid 1px lightgray; padding:10px;" rows="5">
 						</textarea>
 					</td>
 				<tr>
 				<tr>
 					<td>전시관</td>
 					<td>
-						<input type="text" name="gallery" id="gallery" data-toggle="modal" data-target="#myModal" />
-
+						<input type="text" name="gallery" id="gallery" />
+						<input type="hidden" name="galleryno" id="galleryno"/>
 					</td>
 				<tr>
 				<tr>
 					<td>일정</td>
-					<td><input style="width:130px;" class="pickDate" type="text" name="startDate" id="startDate" />
+					<td><input style="width:130px;" class="pickDate" type="text" name="startDate" id="startDate" autocomplete="off" />
 						- 
-						<input style="width:130px;" class="pickDate" type="text" name="endDate" id="endDate" />
+						<input style="width:130px;" class="pickDate" type="text" name="endDate" id="endDate" autocomplete="off" />
 					</td>
 				<tr>
 				<tr>
@@ -841,11 +894,11 @@
 				<tr>
 				<tr>
 					<td>이메일</td>
-					<td><input type="text" name="email" id="email" /></td>
+					<td><input type="text" name="email" id="email" autocomplete="off" /></td>
 				<tr>
 				<tr>
 					<td>연락처</td>
-					<td><input type="text" name="tel" id="tel" /></td>
+					<td><input type="text" name="tel" id="tel" autocomplete="off" /></td>
 				<tr>
 				<tr>
 					<td>입장료</td>
@@ -854,7 +907,7 @@
 						<img class="priceBtn" src="<%= ctxPath %>/resources/images/board/button_price.PNG" alt=""/>
 						
 						<div id="priceArea" style="display:none;">
-							<input style="width:100px; text-align:center;" type="text" name="price" id="price" value="" placeholder="가격" />
+							<input style="width:100px; text-align:center;" type="text" name="price" id="price" placeholder="가격" autocomplete="off" />
 						</div>
 					</td>
 				<tr>
@@ -941,7 +994,7 @@
 				<tr>
 					<td>분야</td>
 					<td>
-						<select id="category" name="category" style="width:100%;">
+						<select id="genre" name="genre" style="width:100%;">
 							<option value="">:: 선택하세요 ::</option>
 							<option value="media">미디어</option>
 							<option value="design">디자인</option>
@@ -956,73 +1009,75 @@
 				<tr>
 					<td>태그</td>
 					<td>
-						<span><input type="text" id="tag" name="tag" class="tag" style="width:100%" /></span>
+						<span><input type="text" id="tag" name="tag" class="tag" style="width:100%" autocomplete="off" /></span>
 					</td>
 				<tr>
 			</table>
 			
-									<div class="container" id="modalContainer">
-							<!-- Modal -->
-							<div class="modal fade" id="myModal" role="dialog">
-								<div class="modal-dialog">
-								    
-									<!-- Modal content-->
-									<div class="modal-content" id="galleryModal">
-										<div class="modal-header">
-											<button type="button" class="close" data-dismiss="modal">&times;</button>
-											<h4 class="modal-title">갤러리 검색</h4>
-										</div>
-										<div class="modal-body">
+			<div class="container" id="modalContainer">
+				<!-- Modal -->
+				<div class="modal fade" id="myModal" role="dialog">
+					<div class="modal-dialog">
+					    
+						<!-- Modal content-->
+						<div class="modal-content" id="galleryModal">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal">&times;</button>
+								<h4 class="modal-title">갤러리 검색</h4>
+							</div>
+							<div class="modal-body">
+							
+								<div id="searchArea" align="center" style="margin-top: 3vh">
+									<select id="galleryLocation" name="galleryLocation">
+										<option value="" >지역선택</option>
+										<c:forEach items="${ galleryLocationList }" var="locations">
+											<option>${ locations }</option>
+										</c:forEach>
+									</select>
+									<input type="text" name="searchWord" id="searchWord" style="width: 40%; margin-left: 10px;" autocomplete="off" placeholder="갤러리명으로 검색" />
+								</div>
+								
+								<div id="listArea" style="margin-top: 5vh">
+									<table id="galleryListTable" class="table">
+										<thead style="font-weight: bold">
+											<tr>
+												<td style="display: none">no</td>
+												<td>지역</td>
+												<td>갤러리명</td>
+												<td>주소</td>
+												<td>전화번호</td>
+											</tr>
+										</thead>
 										
-											<div id="searchArea" align="center" style="margin-top: 3vh">
-												<select id="galleryLocation" name="galleryLocation">
-													<option value="" >지역선택</option>
-													<c:forEach items="${ galleryLocationList }" var="locations" varStatus="status">
-														<option value="${ status.index }">${ locations }</option>
-													</c:forEach>
-												</select>
-												<input type="text" name="searchWord" id="searchWord" style="width: 40%; margin-left: 10px;" autocomplete="off" placeholder="갤러리명으로 검색" />
-											</div>
-											
-											<div id="listArea" style="margin-top: 5vh">
-												<table id="galleryListTable" class="table">
-													<thead style="font-weight: bold">
-														<tr>
-															<td>지역</td>
-															<td>갤러리명</td>
-															<td>주소</td>
-															<td>전화번호</td>
-														</tr>
-													</thead>
-													
-													<tbody>
-														<c:if test="${ not empty galleryList  }">
-														<c:forEach var="gallery" items="${ galleryList }" varStatus="status">
-															<tr>
-																<td style="width: 60px !important">${ gallery.location }</td> 
-																<td>${ gallery.galleryname }</td>
-																<td>${ gallery.detailaddress }</td>
-																<td style="width: 130px !important">${ gallery.tel }</td>
-															</tr>
-															
-														</c:forEach>
-														</c:if>
-														<c:if test="${ empty galleryList }">
-															<tr><td>없어</td>
-															</tr>
-														</c:if>
-													</tbody>
-												</table>
-											</div>
-										</div>
-										<div class="modal-footer">
-											<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-										</div>
-									</div>
-								      
+										<tbody>
+											<c:if test="${ not empty galleryList  }">
+											<c:forEach var="gallery" items="${ galleryList }" varStatus="status">
+												<tr onclick='selectedGallery()' class="selectedGallery">
+													<td style='width: 60px !important; display: none;' class='galleryno'>${ gallery.galleryno }</td>
+													<td style="width: 60px !important" class="gallerylocation">${ gallery.location }</td> 
+													<td class="galleryname">${ gallery.galleryname }</td>
+													<td>${ gallery.detailaddress }</td>
+													<td style="width: 130px !important">${ gallery.tel }</td>
+												</tr>
+												
+											</c:forEach>
+											</c:if>
+											<c:if test="${ empty galleryList }">
+												<tr><td>결과가 없습니다.</td>
+												</tr>
+											</c:if>
+										</tbody>
+									</table>
 								</div>
 							</div>
+							<div class="modal-footer">
+								<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+							</div>
 						</div>
+					      
+					</div>
+				</div>
+			</div>
 			
 			<div id="selectTag">
 				<div id="byExpression">

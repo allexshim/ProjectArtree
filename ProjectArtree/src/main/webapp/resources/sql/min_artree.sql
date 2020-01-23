@@ -19,18 +19,27 @@ desc gallery;
 
 select * from gallery ;
 
-select distinct location from gallery ;
+select galleryno, location, galleryname, detailaddress, nvl(tel, '-') from gallery where galleryname like '%갤러리안%';
+
+select galleryname from gallery where galleryname != '-' order by galleryname ;
 
 select * from gallery where galleryname like '지숨%한옥%';
 
-select galleryno, location, galleryname, detailaddress, tel from Gallery where galleryname != '-' ;
+select galleryno, location, galleryname, detailaddress, nvl(tel, '-') from Gallery where galleryname != '-' ;
+
+select galleryno, location, galleryname, detailaddress, nvl(tel, '-') from Gallery where tel  like '-' and galleryname != '-' ;
+
+
+select galleryno, location, galleryname, detailaddress, tel from Gallery where galleryname != '-'
+and location = '서울'
+and galleryname like '%청%';
 
 update gallery set location = '충남' where galleryname like '갤러리 담담';
 
 commit;
 -------------------------------------
 
-select count(*) from exhibition;
+select * from exhibition;
 
 desc exhibition;
 
@@ -73,20 +82,6 @@ nocache;
 
 insert into appliedexhibits ( seq_appliedExhibits.nextval, fk_galleryNo, exhibitionName, applier, author, startDate, endDate, email, tel, genre, tag, authorInfo, exhibitionInfo, price, foodorDrink, extraRestriction, photo, openCloseTime )
 values (  );
-
-
-create table spring_productimage
-(prodimageseq         number    not null       -- 제품이미지 일련번호(Primary Key)
-,fk_prodseq           number    not null       -- 제품번호(Foreign Key)
-,imagefilename        varchar2(255) not null   -- 이미지파일명. WAS에 저장될 파일명(2020011845435345464367524654634.png)
-,imageorgFilename     varchar2(255) not null   -- 진짜 이미지파일명(쉐보레우측.png) // 사용자가 파일을 업로드 하거나 파일을 다운로드 할때 사용되어지는 파일명 
-,imagefileSize        number                   -- 파일크기
-,thumbnailFileName    varchar2(255)            -- WAS에 저장될 썸네일 파일명(2020011813165790354388015717.png). 
-                                               -- 썸네일 파일명을 받는 컬럼임. 
-,constraint PK_spring_productimage primary key(prodimageseq)
-,constraint FK_spring_productimage foreign key(fk_prodseq)
-                                   references spring_product(prodseq) on delete cascade 
-);
 
 
 create table appliedDetail
