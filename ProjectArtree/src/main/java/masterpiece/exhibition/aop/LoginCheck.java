@@ -22,7 +22,7 @@ import masterpiece.exhibition.common.MyUtil;
 public class LoginCheck {
 	/* requireLogin_ 으로 시작하는 모든 메소드 */
 	// === PointCut을 생성한다 === * Controller에서 해당 advice가 필요한 메소드 이름을 require기능_~으로 명명한다.
-		@Pointcut("execution(public * masterpiece.exhibition..*Controller.requireLogin_*(..)) ")
+		@Pointcut("execution(public * masterpiece.exhibition..*Controller.requireLogin_*(..))")
 		public void requireLogin() {}
 		
 		// === Before Advice를 구현한다 === //

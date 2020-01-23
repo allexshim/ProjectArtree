@@ -11,10 +11,6 @@ public class BoardController {
 
 	
 	
-	// 공지 게시판
-	@RequestMapping(value="/notice.at")
-	public String notice() {
-		return "board/notice/notice.tiles";
-	}
+	
 
 }
