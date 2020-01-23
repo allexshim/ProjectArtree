@@ -19,7 +19,7 @@
     display: none; 
 }
    
-   .btn1 {
+   .btn {
    		text-align: center;
 		font-weight: bold;
 		background-color: #f2f2f2;
@@ -28,7 +28,7 @@
 		margin-top: 30px;
 	}
 	
-	.buyBtn {
+	.moreBtn {
 		margin-bottom: 10px;
 		font-size: 18pt;
 	}
@@ -235,13 +235,29 @@
 	}
 	
 	.new-exp {
+		text-decoration: none;
+		color: black;
+		position: relative;
 		display: block;
 		margin: 10px;
 	}
 	
+	.new-exp:hover {
+		text-decoration: none;
+		color: black;
+	}
+	
 	.end-exp {
+		text-decoration: none;
+		color: black;
+		position: relative;
 		display: block;
 		margin: 10px;
+	}
+	
+	.end-exp:hover {
+		text-decoration: none;
+		color: black;
 	}
 	
 	.event-morebtn {
@@ -268,6 +284,29 @@
 	#mysideinfo {
 		display: none;
 	}
+	
+	/* Flashing */
+	.flash img:hover {
+		opacity: 1;
+		-webkit-animation: flash 1.5s;
+		animation: flash 1.5s;
+	}
+	@-webkit-keyframes flash {
+		0% {
+			opacity: .4;
+		}
+		100% {
+			opacity: 1;
+		}
+	}
+	@keyframes flash {
+		0% {
+			opacity: .4;
+		}
+		100% {
+			opacity: 1;
+		}
+	}
    
 </style>
 	
@@ -277,11 +316,18 @@ $("#myheader").hide();
 $(".navigation").hide(); // 탑 버튼 숨김
 $(function () {
 	
-	$(".forIco").hover(function(){
-		$(this).children(".forMoving").stop().animate({left:'5px'}, 'fast');
-
-	}, function(){
-		$(this).children(".forMoving").stop().animate({left:'0px'}, 'fast');
+	$('.hover-left').hover(function() {
+	    $(this).find(".forMoving").stop().animate({left: '10px'}, 500);
+	},
+	function() {
+	    $(this).find(".forMoving").stop().animate({left: '0px'}, 500);                 
+	});
+	
+	$('.hover-top').hover(function() {
+	    $(this).find(".forMoving").stop().animate({top: '10px'}, 500);
+	},
+	function() {
+	    $(this).find(".forMoving").stop().animate({top: '0px'}, 500);                 
 	});
             
 	$(window).scroll(function () {
@@ -309,12 +355,7 @@ $(function () {
 		$(window).scrollTop($(thisTarget).offset().top);
 	});
 	
-	$(".hot-info1").hover(function(){
-		$(this).find(".hot-content").stop().animate({left:'5px'}, 'fast');
-
-	}, function(){
-		$(this).find(".hot-content").stop().animate({left:'0px'}, 'fast');
-	});
+	
 	
 });
 
@@ -347,27 +388,28 @@ function winScroll(){
 	<div id="slider" style="width: 100%; height: 800px; display: inline-block;">
        	<div style="background-size: cover; width:100%; height:100%; z-index:1000; margin-top:0; background-image: url('<%= ctxPath%>/resources/images/main/mainImg1.jpg')">
        		 <div class="main-logo" style="z-index: 5; width: 400px; height: 300px;">
-       			<img style="-webkit-transform:translate(270px,330px);" alt="로고이미지" src="<%= ctxPath%>/resources/images/main/logo_black_new.png" />
+       			<img style="width: 255px; height: 255px; -webkit-transform:translate(300px,350px);" alt="로고이미지" src="<%= ctxPath%>/resources/images/main/logo_black_new.png" />
        		 </div>
        	</div>
 	</div>
 	
 	
-	<div id="overflow" class="main-container" style="margin-bottom: 500px;">
+	<div id="overflow" class="main-container" style="margin-bottom: 400px;">
 		<div class="hot-exh">
 			<div id="div1" style="float:center; margin:0 auto; transform:translate(100px,20px);">
 				<h2>인기 전시회</h2>
 			</div>
+			<hr color="black;" style="width:85%; transform:translate(100px,20px);" />
 			<div class="hot-exh-L">
-				<a href="#"><img class="hot-img1" src="<%= ctxPath%>/resources/images/exhibition/poster1.JPG"></a>
+				<a class="flash" href="#"><img class="hot-img1" src="<%= ctxPath%>/resources/images/exhibition/poster1.JPG"></a>
 				<div class="hot-info1">
 					<span class="hot-title">전시회명</span>
 					<span class="hot-content">작가명</span>
 					<span class="hot-content">전시위치</span>
 					<span class="hot-content">2020-01-20~2020-01-22</span>
-					<button type="button" class="buyBtn btn1 forIco" onclick="">
+					<button type="button" class="moreBtn btn hover-left" onclick="">
 							자세히 보기
-							<img class="forMoving" src="<%= ctxPath%>/resources/images/exhibition/ico/right_arrow.png">
+							<img class="forMoving" style="position:relative;" src="<%= ctxPath%>/resources/images/exhibition/ico/right_arrow.png">
 					</button>
 				</div>
 			</div>
@@ -378,17 +420,25 @@ function winScroll(){
 					<span class="hot-content">작가명</span>
 					<span class="hot-content">전시위치</span>
 					<span class="hot-content">2020-01-20~2020-01-22</span>
+					<button type="button" class="moreBtn btn hover-left" onclick="">
+							자세히 보기
+							<img class="forMoving" style="position:relative;" src="<%= ctxPath%>/resources/images/exhibition/ico/right_arrow.png">
+					</button>
 				</div>
-				<a href="#"><img class="hot-img2" src="<%= ctxPath%>/resources/images/exhibition/poster2.JPG"></a>
+				<a class="flash" href="#"><img class="hot-img2" src="<%= ctxPath%>/resources/images/exhibition/poster2.JPG"></a>
 			</div>
 			
 			<div class="hot-exh-L">
-				<a href="#"><img class="hot-img1" src="<%= ctxPath%>/resources/images/exhibition/poster3.JPG"></a>
+				<a class="flash" href="#"><img class="hot-img1" src="<%= ctxPath%>/resources/images/exhibition/poster3.JPG"></a>
 				<div class="hot-info1">
 					<span class="hot-title">전시회명</span>
 					<span class="hot-content">작가명</span>
 					<span class="hot-content">전시위치</span>
 					<span class="hot-content">2020-01-20~2020-01-22</span>
+					<button type="button" class="moreBtn btn hover-left" onclick="">
+							자세히 보기
+							<img class="forMoving" style="position:relative;" src="<%= ctxPath%>/resources/images/exhibition/ico/right_arrow.png">
+					</button>
 				</div>
 			</div>
 		</div>
@@ -401,42 +451,58 @@ function winScroll(){
 			<div class="slideshow">
 			  <div class="mySlides">
 			    
-			    <a href="#"><img class="slide-img" src="<%= ctxPath%>/resources/images/exhibition/poster2.JPG"></a>
-			    	<div class="hot-info1" style="padding-top: 10%;">
-						<span class="hot-title">전시회명</span>
-						<span class="hot-content">작가명</span>
-						<span class="hot-content">전시위치</span>
-						<span class="hot-content">2020-01-20~2020-01-22</span>
-					</div>
-			  </div>
-			  
-			  <div class="mySlides">
-			    <a href="#"><img class="slide-img" src="<%= ctxPath%>/resources/images/exhibition/poster1.JPG"></a>
-			   		<div class="hot-info1" style="padding-top: 10%;">
-						<span class="hot-title">전시회명</span>
-						<span class="hot-content">작가명</span>
-						<span class="hot-content">전시위치</span>
-						<span class="hot-content">2020-01-20~2020-01-22</span>
-					</div>
-			  </div>
-			
-			  <div class="mySlides">
-			    <a href="#"><img class="slide-img" src="<%= ctxPath%>/resources/images/exhibition/poster2.JPG"></a>
-			    	<div class="hot-info1" style="padding-top: 10%;">
-						<span class="hot-title">전시회명</span>
-						<span class="hot-content">작가명</span>
-						<span class="hot-content">전시위치</span>
-						<span class="hot-content">2020-01-20~2020-01-22</span>
-					</div>
-			  </div>
-			  
-			  <div class="mySlides">
-			    <a href="#"><img class="slide-img" src="<%= ctxPath%>/resources/images/exhibition/poster3.JPG"></a>
+			    <a class="flash" href="#"><img class="slide-img" src="<%= ctxPath%>/resources/images/exhibition/poster2.JPG"></a>
 			    	<div class="hot-info1" style="padding-top: 5%;">
 						<span class="hot-title">전시회명</span>
 						<span class="hot-content">작가명</span>
 						<span class="hot-content">전시위치</span>
 						<span class="hot-content">2020-01-20~2020-01-22</span>
+						<button type="button" class="moreBtn btn hover-left" onclick="">
+							자세히 보기
+							<img class="forMoving" style="position:relative;" src="<%= ctxPath%>/resources/images/exhibition/ico/right_arrow.png">
+						</button>
+					</div>
+			  </div>
+			  
+			  <div class="mySlides">
+			    <a class="flash" href="#"><img class="slide-img" src="<%= ctxPath%>/resources/images/exhibition/poster1.JPG"></a>
+			   		<div class="hot-info1" style="padding-top: 5%;">
+						<span class="hot-title">전시회명</span>
+						<span class="hot-content">작가명</span>
+						<span class="hot-content">전시위치</span>
+						<span class="hot-content">2020-01-20~2020-01-22</span>
+						<button type="button" class="moreBtn btn hover-left" onclick="">
+							자세히 보기
+							<img class="forMoving" style="position:relative;" src="<%= ctxPath%>/resources/images/exhibition/ico/right_arrow.png">
+						</button>
+					</div>
+			  </div>
+			
+			  <div class="mySlides">
+			    <a class="flash" href="#"><img class="slide-img" src="<%= ctxPath%>/resources/images/exhibition/poster2.JPG"></a>
+			    	<div class="hot-info1" style="padding-top: 5%;">
+						<span class="hot-title">전시회명</span>
+						<span class="hot-content">작가명</span>
+						<span class="hot-content">전시위치</span>
+						<span class="hot-content">2020-01-20~2020-01-22</span>
+						<button type="button" class="moreBtn btn hover-left" onclick="">
+							자세히 보기
+							<img class="forMoving" style="position:relative;" src="<%= ctxPath%>/resources/images/exhibition/ico/right_arrow.png">
+						</button>
+					</div>
+			  </div>
+			  
+			  <div class="mySlides">
+			    <a class="flash" href="#"><img class="slide-img" src="<%= ctxPath%>/resources/images/exhibition/poster3.JPG"></a>
+			    	<div class="hot-info1" style="padding-top: 5%;">
+						<span class="hot-title">전시회명</span>
+						<span class="hot-content">작가명</span>
+						<span class="hot-content">전시위치</span>
+						<span class="hot-content">2020-01-20~2020-01-22</span>
+						<button type="button" class="moreBtn btn hover-left" onclick="">
+							자세히 보기
+							<img class="forMoving" style="position:relative;" src="<%= ctxPath%>/resources/images/exhibition/ico/right_arrow.png">
+						</button>
 					</div>
 			  </div>
 			
@@ -446,7 +512,7 @@ function winScroll(){
 				<h2>추천 전시회</h2>
 				<span>ARTREE 추천전시회를 보여줍니다.</span>
 			</div>
-			
+			<hr color="black;" style="width:100%; transform:translate(0,-590px);" />
 			<div style="text-align:center; display: none;">
 			  <span class="dot"></span>
 			  <span class="dot"></span>
@@ -465,25 +531,25 @@ function winScroll(){
 		</div>
 		<hr color="black;" style="width:90%; transform:translate(62px,245px);" />
 		<div class="new-exh">
-			<a href="#" class="new-one">
+			<a href="#" class="new-one flash hover-top">
 				<img class="new_poster" src="<%= ctxPath%>/resources/images/exhibition/artmap_20200102_9426350.jpg"/>
-				<span class="new-exp">전시회명</span>
-				<span class="new-exp">전시기간</span>
-				<span class="new-exp">전시작가</span>
+				<span class="new-exp forMoving">전시회명</span>
+				<span class="new-exp forMoving">전시기간</span>
+				<span class="new-exp forMoving">전시작가</span>
 			</a>
 			
-			<a href="#" class="new-one">
+			<a href="#" class="new-one flash hover-top">
 				<img class="new_poster" src="<%= ctxPath%>/resources/images/exhibition/artmap_20200102_9426350.jpg"/>
-				<span class="new-exp">전시회명</span>
-				<span class="new-exp">전시기간</span>
-				<span class="new-exp">전시작가</span>
+				<span class="new-exp forMoving">전시회명</span>
+				<span class="new-exp forMoving">전시기간</span>
+				<span class="new-exp forMoving">전시작가</span>
 			</a>
 			
-			<a href="#" class="new-one">
+			<a href="#" class="new-one flash hover-top">
 				<img class="new_poster" src="<%= ctxPath%>/resources/images/exhibition/artmap_20200102_9426350.jpg"/>
-				<span class="new-exp">전시회명</span>
-				<span class="new-exp">전시기간</span>
-				<span class="new-exp">전시작가</span>
+				<span class="new-exp forMoving">전시회명</span>
+				<span class="new-exp forMoving">전시기간</span>
+				<span class="new-exp forMoving">전시작가</span>
 			</a>
 		</div>
 		
@@ -492,25 +558,25 @@ function winScroll(){
 		</div>
 		<hr color="black;" style="width:90%; transform:translate(64px,420px);" />
 		<div class="end-exh" style="transform:translate(0, 90px);">
-			<a href="#" class="end-one">
+			<a href="#" class="end-one flash hover-top">
 				<img class="end_poster" src="<%= ctxPath%>/resources/images/exhibition/artmap_20200102_9426350.jpg"/>
-				<span class="end-exp">전시회명</span>
-				<span class="end-exp">전시기간</span>
-				<span class="end-exp">전시작가</span>
+				<span class="end-exp forMoving">전시회명</span>
+				<span class="end-exp forMoving">전시기간</span>
+				<span class="end-exp forMoving">전시작가</span>
 			</a>
 			
-			<a href="#" class="end-one">
+			<a href="#" class="end-one flash hover-top">
 				<img class="end_poster" src="<%= ctxPath%>/resources/images/exhibition/artmap_20200102_9426350.jpg"/>
-				<span class="end-exp">전시회명</span>
-				<span class="end-exp">전시기간</span>
-				<span class="end-exp">전시작가</span>
+				<span class="end-exp forMoving">전시회명</span>
+				<span class="end-exp forMoving">전시기간</span>
+				<span class="end-exp forMoving">전시작가</span>
 			</a>
 				
-			<a href="#" class="end-one">
+			<a href="#" class="end-one flash hover-top">
 				<img class="end_poster" src="<%= ctxPath%>/resources/images/exhibition/artmap_20200102_9426350.jpg"/>
-				<span class="end-exp">전시회명</span>
-				<span class="end-exp">전시기간</span>
-				<span class="end-exp">전시작가</span>
+				<span class="end-exp forMoving">전시회명</span>
+				<span class="end-exp forMoving">전시기간</span>
+				<span class="end-exp forMoving">전시작가</span>
 			</a>
 		</div>
 	</div>
@@ -526,27 +592,29 @@ function winScroll(){
 	</div>
 	<hr color="black;" style="width:94%; transform:translate(38px,445px);" />
        	<div class="event-div" style="transform:translate(0, 200px);">
-           	<a href="#" class="event_one" >
+           	<a href="#" class="event_one flash hover-top" >
 				<img class="event_poster" src="<%= ctxPath%>/resources/images/exhibition/artmap_20200102_9426350.jpg"/>
-				<span class="end-exp">이벤트이름</span>
-				<span class="end-exp">이벤트기간</span>
+				<span class="end-exp forMoving">이벤트이름</span>
+				<span class="end-exp forMoving">이벤트기간</span>
 			</a>
-			<a href="#" class="event_one" >
+			<a href="#" class="event_one flash hover-top" >
 				<img class="event_poster" src="<%= ctxPath%>/resources/images/exhibition/artmap_20200102_9426350.jpg"/>
-				<span class="end-exp">이벤트명</span>
-				<span class="end-exp">이벤트기간</span>
+				<span class="end-exp forMoving">이벤트명</span>
+				<span class="end-exp forMoving">이벤트기간</span>
 			</a>
-			<a href="#" class="event_one" >
+			<a href="#" class="event_one flash hover-top" >
 				<img class="event_poster" src="<%= ctxPath%>/resources/images/exhibition/artmap_20200102_9426350.jpg"/>
-				<span class="end-exp">이벤트명</span>
-				<span class="end-exp">이벤트기간</span>
+				<span class="end-exp forMoving">이벤트명</span>
+				<span class="end-exp forMoving">이벤트기간</span>
 			</a>
-			<a href="#" class="event_one" >
+			<a href="#" class="event_one flash hover-top" >
 				<img class="event_poster" src="<%= ctxPath%>/resources/images/exhibition/artmap_20200102_9426350.jpg"/>
-				<span class="end-exp">이벤트명</span>
-				<span class="end-exp">이벤트기간</span>
+				<span class="end-exp forMoving">이벤트명</span>
+				<span class="end-exp forMoving">이벤트기간</span>
 			</a>
        	</div>
+       	
+       	
 
 </div>
 
