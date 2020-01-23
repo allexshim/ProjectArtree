@@ -22,6 +22,14 @@ public interface InterExhibitsService {
 	List<HashMap<String, String>> getComExhListMap(String gno); // 특정 갤러리의 전시예정 전시회 목록 불러오기
 
 	List<HashMap<String, String>> getEndExhListMap(String gno); // 특정 갤러리의 전시종료 전시회 목록 불러오기
+
+	int getCheckExhLike(HashMap<String, String> paraMap); // 전시회 좋아요 체크 유무 확인
+
+	int getCheckGalLike(HashMap<String, String> paraMap); // 갤러리 좋아요 체크 유무 확인
+
+	int goCheckExhLikeDis(HashMap<String, String> paraMap); // 전시회 좋아요 지정 및 해제 체크
+
+	int goCheckGalLikeDis(HashMap<String, String> paraMap); // 갤러리 좋아요 지정 및 해제 체크
 	
 
 }

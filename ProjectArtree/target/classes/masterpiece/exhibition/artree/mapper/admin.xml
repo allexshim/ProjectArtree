@@ -5,19 +5,6 @@
 
 <mapper namespace="admin">
 
-	<insert id="addExhibition" parameterType="HashMap">
-		insert into appliedExhibits ( seq_appliedExhibits.nextval, fk_galleryNo, exhibitionName, applier, author, startDate, endDate
-			, email, tel, genre, tag, authorInfo, exhibitionInfo, price, foodorDrink, extraRestriction, photo, openCloseTime )
-		values ( applyingNoSeq.nextval, ${ fk_galleryNo }, ${ exhibitionName }, ${ applier }, ${ author }, ${ startDate }, ${ endDate }
-			, ${ email }, ${ tel }, ${ genre }, ${ tag }, ${ authorInfo }, ${ exhibitionInfo }, ${ price }, ${ foodorDrink }, ${ extraRestriction }
-			, ${ photo }, ${ openCloseTime } )
-	</insert>
-	
-	<insert id="addExhibitimage" parameterType="HashMap">
-		insert into appliedDetail(appliedimgseq, fk_applyingNo, imagefilename, imageorgFilename, imagefileSize, imageInfo, thumbnailFileName) 
-		values(seq_appliedDetail.nextval, #{fk_applyingNo}, #{imagefilename}, #{imageorgFilename}, #{imagefileSize}, #{ imageinfo }, #{thumbnailFileName})
-	</insert>
-	
 	<!-- tag 가져오기 - categories -->
 	<select id="getTypes" resultType="String">
 		select distinct type from tag
@@ -29,15 +16,9 @@
 	</select>
 	
 	<!-- gallery 가져오기 -->
-	<select id="getGalleries" resultType="masterpiece.exhibition.admin.model.GalleryVO" parameterType="HashMap">
-		select galleryno, location, galleryname, detailaddress, tel from Gallery 
+	<select id="getGalleries" resultType="masterpiece.exhibition.admin.model.GalleryVO">
+		select galleryno, location, galleryname, detailaddress, nvl(tel, '-') as tel from Gallery 
 		where galleryname != '-'
-		<if test='searchWord != ""'>
-		    and galleryname like '%' || #{ searchWord } || '%'
-		</if>
-		<if test='galleryLocation != ""'>
-			and location = #{ galleryLocation }
-		</if>
 		order by location, galleryname
 	</select>
 	
@@ -48,15 +29,37 @@
 	
 	<!-- gallery 검색 -->
 	<select id="wordSearchShow" resultType="masterpiece.exhibition.admin.model.GalleryVO" parameterType="HashMap">
-		select galleryno, location, galleryname, detailaddress, tel from Gallery 
+		select galleryno, location, galleryname, detailaddress, nvl(tel, '-') as tel from Gallery 
 		where galleryname != '-'
-		<if test='searchWord != ""'>
+		<if test='searchWord != "" , galleryLocation == ""'>	<!-- 지역을 선택하지 않고 검색어를 입력한 경우 -->
 		    and galleryname like '%' || #{ searchWord } || '%' or detailaddress like '%' || #{ searchWord } || '%'
 		</if>
-		<if test='galleryLocation != ""'>
-			and location = #{ galleryLocation }
+		<if test='galleryLocation != "" , searchWord != ""'>	<!-- 지역을 선택하고 또 검색어를 입력한 경우 -->
+			and location = #{ galleryLocation } 
+			and galleryname like '%' || #{ searchWord } || '%'
+		</if>
+		<if test='searchWord == "" , galleryLocation == ""'>
+		
 		</if>
 		order by location, galleryname
 	</select>
+	
+	<select id="getApplyingno" resultType="int">
+		select seq_appliedExhibits.nextval from dual
+	</select>
+	
+	<insert id="addExhibition" parameterType="HashMap">
+		insert into appliedExhibits ( applyingNo, fk_galleryNo, exhibitionName, applier, author, startDate, endDate,
+			email, tel, genre, tag, authorInfo, exhibitionInfo, price, foodorDrink, extraRestriction, photo, openCloseTime )
+		values ( #{ applyingno }, #{ fk_galleryno }, #{ exhibitionName }, #{ applier }, #{ author }, #{ startDate },
+			#{ endDate }, #{ email }, #{ tel }, #{ genre }, #{ tag }, #{ authorInfo }, #{ exhibitionInfo }, #{ price }, #{ foodorDrink },
+			#{ extraRestriction }, #{ photo }, #{ openCloseTime } )
+	</insert>
+	
+	<insert id="addExhibitImage" parameterType="HashMap">
+		insert into appliedDetail(appliedimgseq, fk_applyingNo, imagefilename, imageorgFilename, imagefileSize, imageInfo, thumbnailFileName) 
+		values( seq_appliedDetail.nextval, #{ fk_applyingno }, #{ imagefilename },
+			#{ imageorgfilename }, #{ imagefilesize }, #{ imageinfo }, #{ thumbnailfilename } )
+	</insert>
 
 </mapper>

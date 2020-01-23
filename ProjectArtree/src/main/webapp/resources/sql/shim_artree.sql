@@ -106,10 +106,241 @@ on V.exhibitionno = D.fk_exhibitionno;
 		on V.fk_galleryNo = G.galleryNo
 		order by startdate;
 
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
+select detailAddress
+        from (
+        select * from 
+        (select * from exhibition where status='전시중') E join exhibitionDetail D 
+        on E.exhibitionno = D.fk_exhibitionno
+        ) V
+		join (select * from gallery where status = 1) G
+		on V.fk_galleryNo = G.galleryNo
+		order by to_date(startdate);
+
+select detailAddress, exhibitionName, galleryName, startDate, endDate, mainPoster, exhibitionno
+        from (
+        select * from 
+        (select * from exhibition where status='전시중') E join exhibitionDetail D 
+        on E.exhibitionno = D.fk_exhibitionno
+        ) V
+		join (select * from gallery where status = 1 and galleryno = '417' ) G
+		on V.fk_galleryNo = G.galleryNo
+		order by to_date(startdate);
+
+select exhibitionno, fk_galleryno, exhibitionname, author, startdate, enddate, mainposter, galleryname, galleryno, location
+        from 
+        (
+        select *
+		from exhibition C join exhibitionDetail D
+		on C.exhibitionno = D.fk_exhibitionno
+        ) E join (select * from gallery where galleryno ='417') G
+        on E.fk_galleryno = G.galleryno
+        order by to_date(startdate);
+
+select * from exhibition where status='전시중';
+
+select exhibitionno, fk_galleryno, exhibitionname, author, startdate, enddate, mainposter, galleryname, galleryno, location
+        from 
+        (
+        select *
+		from exhibition C join exhibitionDetail D
+		on C.exhibitionno = D.fk_exhibitionno
+        ) E join gallery G
+        on E.fk_galleryno = G.galleryno
+        order by to_date(startdate);
+-----------------------------------------------------------
+-- 이벤트 관련 --
+create sequence seq_event
+start with 1 -- 대기번호의 출발번호를 1번부터 하겠다.
+increment by 1 -- 1번 이후로 1씩 증가시킨다.
+nomaxvalue -- maximun값을 정하지 않겠다. (ex/ maxvalue 100 : 100까지만 번호를 부여한다.), nomaxvalue의 경우 도달할 값이 없으므로 nominvalue, nocycle
+nominvalue -- minimun을 정하지 않겠다. (ex/ minvalue 10 , start with i에서 i보다 같거나 작아야한다.)
+nocycle -- cycle n : start number부터 증가하여 maximun에 도달한 후 minvalue(ex/10)에서 다시 시작해서 n만큼 반복한다. (start with i에서 i는 처음 한번만 사용된다.)
+nocache;
+
+drop sequence seq_event;
+
+commit;
+
+create table event
+(
+no	number	NOT NULL
+,fk_exhibitionNo	number	NOT NULL
+,eventName	VARCHAR2(50)	NOT NULL
+,content	VARCHAR2(100)	NOT NULL
+,startDate	VARCHAR2(20)	NOT NULL
+,endDate	VARCHAR2(20)	NOT NULL
+,mainPoster	VARCHAR2(100)	NOT NULL
+,eventView	number	NULL
+,constraint PK_event_no primary key(no)
+,constraint FK_event_fk_exhibitionNo foreign key(fk_exhibitionNo) 
+                                                        references exhibition(exhibitionno)
+);
+select * from exhibition;
+select * from exhibitionDetail;
+
+commit;
+select * from event;
+insert into event(no, fk_exhibitionNo, eventName, content, startDate, endDate, mainPoster, eventView)
+values (seq_event.nextval, 4924, '이벤트 샘플1(나중에 삭제부탁합니다)', '메인 테스트용 이벤트 내용1',  '2020.01.12', '2020.01.30', 'http://app.art-map.co.kr/upload/exhibition/artmap_20200102_11934700.png', '3');
+
+insert into event(no, fk_exhibitionNo, eventName, content, startDate, endDate, mainPoster, eventView)
+values (seq_event.nextval, 4935, '이벤트 샘플2(나중에 삭제부탁합니다)', '메인 테스트용 이벤트 내용2',  '2020.01.12', '2020.02.30', 'http://app.art-map.co.kr/upload/exhibition/artmap_20200102_11934700.png', '10');
+
+insert into event(no, fk_exhibitionNo, eventName, content, startDate, endDate, mainPoster, eventView)
+values (seq_event.nextval, 4930, '이벤트 샘플3(나중에 삭제부탁합니다)', '메인 테스트용 이벤트 내용2',  '2020.01.01', '2020.02.15', 'http://app.art-map.co.kr/upload/exhibition/artmap_20200102_11934700.png', '8');
+
+insert into event(no, fk_exhibitionNo, eventName, content, startDate, endDate, mainPoster, eventView)
+values (seq_event.nextval, 4920, '이벤트 샘플4(나중에 삭제부탁합니다)', '메인 테스트용 이벤트 내용2',  '2020.01.01', '2020.02.15', 'http://app.art-map.co.kr/upload/exhibition/artmap_20200102_11934700.png', '8');
+
+select rno, no, fk_exhibitionNo, eventName, content, startDate, endDate, mainPoster
+from (
+select rownum as rno, no, fk_exhibitionNo, eventName, content, startDate, endDate, mainPoster
+from (
+select no, fk_exhibitionNo, eventName, content, startDate, endDate, mainPoster
+from event
+order by no desc ) V order by rno asc ) Z where rno <= 4;
+
+
+select * from member 
+where idx= to_number( '2' );
+
+desc member;
+-------------------------------------------------------------
+        select readCount, rno, exhibitionno, fk_galleryno, exhibitionname, author, startdate, enddate, mainposter, galleryname, galleryno, location
+        from (
+        select readCount, rownum as rno, exhibitionno, fk_galleryno, exhibitionname, author, startdate, enddate, mainposter, galleryname, galleryno, location
+        from ( select * from  ( select *
+		from exhibition V join exhibitionDetail D
+		on V.exhibitionno = D.fk_exhibitionno
+        ) E join gallery G
+        on E.fk_galleryno = G.galleryno
+        order by E.readCount desc
+        ) F ) Z where rno <=3;
+       
+        select rno, exhibitionno, fk_galleryno, exhibitionname, author, startdate, enddate, mainposter, galleryname, galleryno, location
+        from (
+        select readCount, rownum as rno, exhibitionno, fk_galleryno, exhibitionname, author, startdate, enddate, mainposter, galleryname, galleryno, location
+        from ( select * from  ( select *
+		from (select * from exhibition where to_date(endDate) >= sysdate ) V join exhibitionDetail D
+		on V.exhibitionno = D.fk_exhibitionno
+        ) E join gallery G
+        on E.fk_galleryno = G.galleryno
+        order by to_date(E.endDate) asc
+        ) F ) Z where rno <=3;
+        
+        select * from exhibition order by exhibitionno desc;
+        
+        select favortag
+        from (select * from member where idx = '5') M join wishlist W
+        on M.idx = W.fk_idx;
+        
+        
+        select * from wishlist; -- favortag
+        
+        
+        select favortag
+        from   wishlist;
+
+        select * from
+        (select tag, exhibitionname, readcount, rownum as rno from
+        (select * from exhibition
+        where tag like '%' || '초록' || '%'
+        order by readcount desc ) V ) Z
+        where rownum <= 3;
+        
+        select rno, exhibitionno, fk_galleryno, exhibitionname, author, startdate, enddate, mainposter, galleryname, galleryno, location
+        from
+        (select rownum as rno, readcount, exhibitionno, fk_galleryno, exhibitionname, author, startdate, enddate, mainposter, galleryname, galleryno, location 
+        from
+        (select readCount, exhibitionno, fk_galleryno, exhibitionname, author, startdate, enddate, mainposter, galleryname, galleryno, location
+        from
+        (select * from 
+        (select * from exhibition
+        where tag like '%' || '초록' || '%') V 
+        join exhibitionDetail D
+        on V.exhibitionno = D.fk_exhibitionno) 
+        E join gallery G
+        on E.fk_galleryno = G.galleryno
+        order by readcount desc
+        ) X ) Z where rno <= 3;
+        
+        select rno, exhibitionno, fk_galleryno, exhibitionname, author, startdate, enddate, mainposter, galleryname, galleryno, location
+        from (
+        select readCount, rownum as rno, exhibitionno, fk_galleryno, exhibitionname, author, startdate, enddate, mainposter, galleryname, galleryno, location
+        from ( select * from  ( select *
+		from exhibition V join exhibitionDetail D
+		on V.exhibitionno = D.fk_exhibitionno
+        ) E join gallery G
+        on E.fk_galleryno = G.galleryno
+        order by E.exhibitionno desc
+        ) F ) Z where rno <![CDATA[<=]]> 3
+        
+        
 /*
 전시회 이름
 갤러리 이름/지역
 전시 시작 기간 - 전시 종료 기간
 메인 포스터
 */
+
+    select * from
+    (select TXT, CNT, rownum as RNO
+    from
+    (select TXT, CNT
+    from (select TXT, count(*) as CNT
+    from ( WITH TT AS
+        ( SELECT '핑크,수직적,배색,꼴라쥬,꼴라쥬,초록,초록,초록, 빨강, 빨강, 빨강' TXT FROM DUAL )
+        SELECT TRIM(REGEXP_SUBSTR(TXT, '[^,]+', 1, LEVEL)) AS TXT
+        FROM TT CONNECT BY INSTR(TXT, ',', 1, LEVEL - 1) > 0
+    ) V
+    group by TXT) X
+    order by CNT desc ) Y
+    ) Z where RNO = 1;
+
+-----------
+
+create table community
+(boardNo number	NOT NULL
+,no	number	NOT NULL
+,fk_exhibitionNo	number	NOT NULL
+,title	VARCHAR2(30)	NOT NULL
+,content	VARCHAR2(300)	NOT NULL
+,writeDay	VARCHAR2(30)	NOT NULL
+,commentCount	number	NOT NULL
+,fk_idx	number	NOT NULL
+,readcount	number	NULL
+,constraint PK_community_no primary key(no)
+,constraint FK_community_fk_exhibitionNo foreign key(fk_exhibitionNo) 
+                                                        references exhibition(exhibitionno)
+,constraint FK_community_fk_idx foreign key(fk_idx) 
+                                                        references member(idx)                                                      
+);
+
+commit; 
+
+desc comment;
+
+create sequence seq_community
+start with 1 -- 대기번호의 출발번호를 1번부터 하겠다.
+increment by 1 -- 1번 이후로 1씩 증가시킨다.
+nomaxvalue -- maximun값을 정하지 않겠다. (ex/ maxvalue 100 : 100까지만 번호를 부여한다.), nomaxvalue의 경우 도달할 값이 없으므로 nominvalue, nocycle
+nominvalue -- minimun을 정하지 않겠다. (ex/ minvalue 10 , start with i에서 i보다 같거나 작아야한다.)
+nocycle -- cycle n : start number부터 증가하여 maximun에 도달한 후 minvalue(ex/10)에서 다시 시작해서 n만큼 반복한다. (start with i에서 i는 처음 한번만 사용된다.)
+nocache;
+
+-- 내가 2번!!!!!!!!!!!!
+create table board_comment
+(commentNo	number	NOT NULL
+,boardNo	number	NOT NULL
+,fk_idx	number	NOT NULL
+,comContent	VARCHAR2(200)	NOT NULL
+,comwriteDay	DATE	NOT NULL
+,constraint PK_cmt_commentNo primary key(commentNo)
+,constraint CK_cmt_boardNo check(boardNo in ('1', '2'))
+,constraint FK_cmt_fk_idx foreign key(fk_idx) 
+                                                        references member(idx)                         
+);
+
+drop table  comment purge;

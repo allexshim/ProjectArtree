@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 public class BoardController {
 
+<<<<<<< HEAD
 	@RequestMapping(value="/reviewList.at")
 	public String reviewList(HttpServletRequest request) {
 		
@@ -126,6 +127,8 @@ public class BoardController {
 	} // end of addCommunity --------------------------------------------
 	
 	
+=======
+>>>>>>> branch 'master' of https://github.com/allexshim/ProjectArtree
 	@RequestMapping(value="/eventList.at")
 	public String eventList() {
 		return "board/events/eventList.tiles";
@@ -137,11 +140,7 @@ public class BoardController {
 		return "board/events/addEvent.tiles";
 	}
 	
-	// 공지 게시판
-	@RequestMapping(value="/notice.at")
-	public String notice() {
-		return "board/notice/notice.tiles";
-	}
-
 	
+	
+
 }

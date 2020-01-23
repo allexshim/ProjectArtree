@@ -61,97 +61,84 @@ html,body{
 
 /* The container <div> - needed to position the dropdown content */
 .dropdown {
+  cursor: pointer;
   position: relative;
   display: inline-block;
 }
 
 /* Dropdown Content (Service) */
-.dropdown-content {
+.M1 {
+  -webkit-transform:translate(10px,10px);
   font-weight: bold;
   text-align: left;
-  font-size: 20px;
-  margin: 15px 0 0 20px;
+  font-size: 20pt;
+  margin: 15px 0 20px 20px;
   display: none;
   position: absolute;
   background-color: white;
   min-width: 120px;
+  border-radius: 0px;
   
 }
 
-/* Links inside the dropdown */
-.dropdown-content a {
-  color: black;
-  padding: 12px 16px;
-  text-decoration: none;
-  display: block;
+.dropdown-a1 {
+	font-size: 20px;
+	color: black;
+    padding: 12px 30px;
+    text-decoration: none;
+    display: block;
 }
 
-
-/* Show the dropdown menu on hover */
-.dropdown:hover .dropdown-content {
-	display: block;
-	z-index: 100; 
-	
-}
 
 /* Dropdown Content (Hidden by Default) */
 .dropdown-content-R1 {
   font-weight: bold;
   text-align: center;
   font-size: 12px;
-  margin: 50px 0 0 0;
-  -webkit-transform:translate(12px,0);
+  -webkit-transform:translate(-25px,-10px);
   display: none;
   position: absolute;
   background-color: white;
-  min-width: 120px;
+  width: 50px;
   
 }
 
 /* Links inside the dropdown */
 .dropdown-content-R1 a {
+  text-align: center;
   color: black;
   padding: 12px 16px;
   text-decoration: none;
   display: block;
 }
 
-
-/* Show the dropdown menu on hover */
-.dropdown:hover .dropdown-content-R1 {
-	display: block;
-	z-index: 100;
-	
-}
 
 /* Dropdown Content (Hidden by Default) */
 .dropdown-content-R2 {
   font-weight: bold;
   text-align: center;
   font-size: 12px;
-  margin: 50px 0 0 0;
   display: none;
   position: absolute;
   background-color: white;
   min-width: 120px;
-  -webkit-transform:translate(-5px,0);
+  -webkit-transform:translate(-45px,-10px);
+  border: solid 1px #f2f2f2;
+  margin-left: 30px;
   
+}
+
+.menu .dropdown-menu {
+	min-width: 70px;
 }
 
 /* Links inside the dropdown */
 .dropdown-content-R2 a {
+  text-align: center;
   color: black;
   padding: 12px 16px;
   text-decoration: none;
   display: block;
-}
-
-
-/* Show the dropdown menu on hover */
-.dropdown:hover .dropdown-content-R2 {
-	display: block;
-	z-index: 100;
-	
 }
 
 .loginNadmin {
@@ -232,6 +219,22 @@ input#login_btn {
 <script type="text/javascript" src="<%= ctxPath%>/resources/js/jquery-3.3.1.min.js"></script>
 <script type="text/javascript">
 
+$(document).ready(function(){
+	$(".dropdown").hover(            
+	        function() {
+	            $('.dropdown-menu', this).not('.in .dropdown-menu').stop( true, true ).slideDown("300");
+	            $(this).toggleClass('open');        
+	        },
+	        function() {
+	            $('.dropdown-menu', this).not('.in .dropdown-menu').stop( true, true ).slideUp("200");
+	            $(this).toggleClass('open');       
+	        }
+	    );
+	
+    
+});
+
+
 //============================ 로그인 스크립트 ============================
 // 클릭하면 로그인 창 띄우기
 function layer_open(el) {
@@ -274,45 +277,48 @@ function goLogin() {
 
 		<div class="row">
 		<div class="col-sm-2"></div>
-			<div class="col-sm-8" style="float: center;">
-				<a class="active header-nav" href="<%=ctxPath%>/galList.at">GALLARY</a>
-				<a class="header-nav" href="<%=ctxPath%>/exhList.at">EXHIBITION</a>
+			<div class="col-sm-8" style="float: center;" id="bs-slide-dropdown">
+				<a class="active header-nav" href="<%=ctxPath%>/galHome.at">GALLARY</a>
+				<a class="header-nav" href="<%=ctxPath%>/exhHome.at">EXHIBITION</a>
 				<a class="header-nav" href="<%=ctxPath%>/mainartree.at"><img style="height: 60px;" src="<%=ctxPath %>/resources/images/main/logo_black1.jpg" /></a>
 				<a class="header-nav" href="<%=ctxPath%>/aboutbin.at">ABOUT ARTREE</a>
 					<div class="dropdown">
-					  <a class="dropbtn header-nav">SERVICE</a>
-					  <div class="dropdown-content">
-					    <a href="<%=ctxPath%>/notice.at">Notice</a>
-					    <a href="<%=ctxPath%>/reviewList.at">Review</a>
-					    <a href="<%=ctxPath%>/previewList.at">Preview</a>
-					    <a href="<%=ctxPath%>/eventList.at">Event</a>
-					    <a href="<%=ctxPath%>/communityList.at">Cummunity</a>
+					  <a class="dropbtn header-nav dropdown-toggle" data-toggle="dropdown">SERVICE</a>
+					  <div class="dropdown-menu M1" role="menu">
+					    <a class="dropdown-a1" href="<%=ctxPath%>/notice.at">Notice</a>
+					    <a class="dropdown-a1" href="<%=ctxPath%>/reviewList.at">Review</a>
+					    <a class="dropdown-a1" href="<%=ctxPath%>/previewList.at">Preview</a>
+					    <a class="dropdown-a1" href="<%=ctxPath%>/eventList.at">Event</a>
+					    <a class="dropdown-a1" href="<%=ctxPath%>/communityList.at">Community</a>
 					  </div>
 					</div>
 			</div>
 		 	<!-- 오른쪽메뉴 -->
 		 <div class="loginNadmin col-sm-2" style="position: relative;">
 			
-			<div class="dropdown" >
-				  <a class="dropbtn login" style="padding-top: 0px; -webkit-transform:translate(20px,0);"><img src="<%= ctxPath %>/resources/images/main/mainheader-account-login.png" /></a>
-				  <div class="dropdown-content-R1">
+			<div class="dropdown ddl" >
+				  <a class="dropbtn login dropdown-toggle" data-toggle="dropdown" style=" padding-top: 0px; -webkit-transform:translate(0,0);">
+				  	<img src="<%= ctxPath %>/resources/images/main/mainheader-account-login.png" />
+				  </a>
+				  <div class="dropdown-content-R1 dropdown-menu" role="menu">
 				  	<c:if test="${sessionScope.loginuser == null}">
 					    <a href="javascript:layer_open('layer')">로그인</a>
 					    <a href="<%=ctxPath%>/join.at">회원가입</a>
 					</c:if>
 				    <c:if test="${sessionScope.loginuser != null}">
-				    	<a href="/artree/logout.at">로그아웃</a>
+				    	<a href="<%=ctxPath%>/logout.at">로그아웃</a>
 				    </c:if>
 				  </div>
 				  
 				  
 			</div>
-			<div class="dropdown" >
-				 	<a class="dropbtn menu" style="padding-top: 0px; -webkit-transform:translate(20px,0);"><img src="<%= ctxPath %>/resources/images/main/mainheader-menu.png" /></a>
-				    <div class="dropdown-content-R2">
+			<div class="dropdown ddm" >
+				 	<a class="dropbtn menu" data-toggle="dropdown" style="padding-top: 0px; -webkit-transform:translate(0,0);"><img src="<%= ctxPath %>/resources/images/main/mainheader-menu.png" /></a>
+				    <div class="dropdown-content-R2 dropdown-menu" role="menu">
 					    <a href="<%=ctxPath%>/mypage.at">마이페이지</a>
+					    <a href="#">장바구니</a>
 					    <c:if test="${sessionScope.loginuser.status == 2}">
-					    <a href="<%=ctxPath%>/admin.at">관리자페이지</a>
+					    	<a href="<%=ctxPath%>/admin.at">관리자페이지</a>
 				    	</c:if>
 				  </div>
 			</div>	  

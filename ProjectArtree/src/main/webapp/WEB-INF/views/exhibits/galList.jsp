@@ -21,7 +21,7 @@
 		text-align: center;
 		font-weight: bold;
 		font-size: 25pt;
-		margin: 30px 0 60px 0;
+		margin: 0px 0 60px 0;
 	}
 	
 	#container_gal_list .main_top {
@@ -160,7 +160,7 @@
 		width: 100%;
 		display: inline-block; 
 		text-align: center;
-		margin: 100px 0 100px 0;
+		margin: 200px 0 200px 0;
 	}
 	
 	#container_gal_list .Title_Area .lt {
@@ -263,8 +263,8 @@
 			goSearch();
 		});
 		
-		$("#count").show();
-		$("#tc").show();
+		$("#count").hide();
+		$("#tc").hide();
 		
 		var type="";
 		var loca="";
