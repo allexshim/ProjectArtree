@@ -17,13 +17,23 @@ public interface InterOrderDAO {
 
 	List<HashMap<String, String>> cartDetailList(String string); // 장바구니 상세 조회
 
-	void delCartDetail(String cartNo); // 장바구니 상세 삭제
-	void delCart(String cartNo); // 장바구니 삭제	
+	int delCartDetail(String cartNo); // 장바구니 상세 삭제
+	int delCart(String cartNo); // 장바구니 삭제	
 
 	int insertReser(HashMap<String, String> map); // 예매 입력
 
 	String selectReserNo(HashMap<String, String> map); // 예매번호 조회
 
 	int insertReserDetail(HashMap<String, String> map2); // 예매 상세 입력 
+
+	String selectReserDetailNo(HashMap<String, String> map); // 예매상세번호 조회
+
+	int insertEx(HashMap<String, String> map); // 예매 전시회 입력 	
+
+	List<HashMap<String, String>> selectReser(HashMap<String, String> map); // 예매 조회
+
+	List<HashMap<String, String>> selectReserDetail(HashMap<String, String> map); // 예매상세 조회
+
+	List<HashMap<String, String>> selectReserEx(HashMap<String, String> map); // 예매전시 조회
 
 }

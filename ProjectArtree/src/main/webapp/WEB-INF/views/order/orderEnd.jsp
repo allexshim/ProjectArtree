@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <% String ctxPath = request.getContextPath(); %>    
 <!DOCTYPE html>
 <html>
@@ -21,19 +22,106 @@
 	}
 	
 	th {
-		width: 25%;				
+		width: 30%;				
 	}
+	
+	#ui-id-1, #ui-id-3, #ui-id-1:focus, #ui-id-3:focus, #ui-id-1:hover, #ui-id-3:hover { 
+		outline: none; 
+		border: none;
+	}
+
+/* 슬라이드 시작 */
+.mySlides {display: none}
+
+/* Slideshow container */
+.slideshow-container {
+  max-width: 1000px;
+  position: relative;
+  margin: auto;
+}
+
+/* Next & previous buttons */
+.prev, .next {
+  cursor: pointer;
+  position: absolute;
+  top: 50%;
+  width: auto;
+  padding: 16px;
+  margin-top: -22px;
+  color: black;
+  font-weight: bold;
+  font-size: 18px;
+  transition: 0.6s ease;
+  border-radius: 0 3px 3px 0;
+  user-select: none;
+}
+
+/* Position the "next button" to the right */
+.next {
+  right: 0;
+  border-radius: 3px 0 0 3px;
+}
+
+/* On hover, add a black background color with a little bit see-through */
+.prev:hover, .next:hover {
+  background-color: rgba(0,0,0,0.8);
+}
+
+/* Caption text */
+.text {
+  color: #f2f2f2;
+  font-size: 15px;
+  padding: 8px 12px;
+  position: absolute;
+  bottom: 8px;
+  width: 100%;
+  text-align: center;
+}
+
+/* Number text (1/3 etc) */
+.numbertext {
+  color: black;
+  font-size: 11px;
+  display: inline-block;
+  margin-left: 1%;
+}
+
+.active, .dot:hover {
+  background-color: #717171;
+}
+/* 
+.fade {
+  -webkit-animation-name: fade;
+  -webkit-animation-duration: 1.5s;
+  animation-name: fade;
+  animation-duration: 1.5s;
+}
+
+@-webkit-keyframes fade {
+  from {opacity: .4} 
+  to {opacity: 1}
+}
+
+@keyframes fade {
+  from {opacity: .4} 
+  to {opacity: 1}
+} */
+
+/* On smaller screens, decrease text size */
+@media only screen and (max-width: 300px) {
+  .prev, .next,.text {font-size: 11px}
+}
+/* 슬라이드 끝 */
 </style>
 
 <script>
-	$(function(){
-		session.removeAttribute("order");
+	$(function(){		
 		$("#accordion").accordion();
 	})
 		
 	function goRefund() {
 		var frm = document.refundBin;	
-		frm.method="GET";
+		frm.method="POST";
 		frm.action="<%=ctxPath %>/refundBin.at";		
 		frm.submit();
 	}
@@ -42,51 +130,30 @@
 <body>
 	<form name="refundBin">
 	<div style="width: 60%; margin: 0 auto;">
-		<div>
-			<div style="margin-bottom: 1%; font-size: 22px; padding-top: 5%;">주문 상품 정보</div>
-			<table class="table table-hover">			
-				<tr>
-					<th>이미지</th>
-					<td><img style="width: 100%;" src="<%=ctxPath%>/resources/images/order/base.jpg"></td>									
-				</tr>				
-				<tr>
-					<th>상품정보</th>
-					<td>KAWS: COMPANIONSHIP IN THE AGE OF LONELINESS</td>
-				</tr>				
-				<tr>
-					<th>날짜</th>
-					<td>Sunday 19 Jan 2020</td>
-				</tr>				
-				<tr>
-					<th>수량</th>
-					<td>1</td>
-				</tr>										
-				<tr>
-					<th>예매취소</th>
-					<td><div onclick="cancelPay()" style="text-align:center; color:black; background:white; cursor:pointer; border: solid 1px black; border-radius: 4px; width: 5%;">취소</div></td>
-				</tr>				
-			</table>						
-		</div>	
-			
+		
 		<div>
 			<div style="margin-bottom: 1%; font-weight: bold; font-size: 22px;">주문정보</div>
 			<table class="table table-hover">
 				<tr>
-					<th>주문번호</th>
-					<td>20200114001</td>
+					<th>예매번호</th>
+					<td>${RESERNO }</td>
 				</tr>
 				<tr>
-					<th>주문일자</th>
-					<td>2020-01-14 18:53</td>
+					<th>예매일자</th>
+					<td>${RESERDATE }</td>
 				</tr>
 				<tr>
 					<th>주문자</th>
 					<td>정핫빈</td>
 				</tr>
 				<tr>
-					<th>예약상태</th>
-					<td>사용대기</td>
+					<th>예매상태</th>
+					<td>${RESERSTAT }</td>
 				</tr>
+				<tr>
+					<th>예매취소</th>
+					<td><div onclick="cancelPay()" style="text-align:center; color:black; background:white; cursor:pointer; border: solid 1px black; border-radius: 4px; width: 5%;">취소</div></td>
+				</tr>	
 			</table>
 		</div>
 			
@@ -95,22 +162,25 @@
 			<table class="table table-hover">
 				<tr>
 					<th>총 주문금액</th>
-					<td>10000원</td>
+					<td>&#8361;<fmt:formatNumber value="${RESERSUBTOTAL }" pattern="#,###"/></td>
 				</tr>
 				<tr>
 					<th>총 할인금액</th>
-					<td>2000원</td>
+					<td>&#8361;<fmt:formatNumber value="${RESERDISCOUNT }" pattern="#,###"/></td>
 				</tr>
 				<tr>
+				
 					<th>총 결제금액</th>
-					<td>8000원</td>
+					<td>&#8361;<fmt:formatNumber value="${RESERTOTAL }" pattern="#,###"/></td>
 				</tr>
 				<tr>
 					<th>결제수단</th>
-					<td>신용카드</td>
+					<td>${PAYMENTOP }</td>
 				</tr>
 			</table>
 		</div>
+		
+		${html }				
 		
 		<div id="accordion">		
 			<h3 style="padding:2%; text-align: left; font-size: 22px; font-weight: bold;">예매 취소 시 유의사항</h3>
@@ -148,6 +218,37 @@
 			<div style="text-align:center; color:black; background:white; cursor:pointer; float: right; border: solid 1px black; border-radius: 4px; width: 8%; margin-top: 1%; padding: 0.3%;">주문목록</div>					
 		</div>				
 	</div>
-	</form>			
+	</form>		
+	
+<script>
+/* 슬라이드 */ 
+var slideIndex = 1;
+showSlides(slideIndex);
+
+function plusSlides(n) {
+  showSlides(slideIndex += n);
+}
+
+function currentSlide(n) {
+  showSlides(slideIndex = n);
+}
+
+function showSlides(n) {
+  var i;
+  var slides = document.getElementsByClassName("mySlides");
+  var dots = document.getElementsByClassName("dot");
+  if (n > slides.length) {slideIndex = 1}    
+  if (n < 1) {slideIndex = slides.length}
+  for (i = 0; i < slides.length; i++) {
+      slides[i].style.display = "none";  
+  }
+  for (i = 0; i < dots.length; i++) {
+      dots[i].className = dots[i].className.replace(" active", "");
+  }
+  slides[slideIndex-1].style.display = "block";  
+  dots[slideIndex-1].className += " active";
+}
+</script>
+		
 </body>
 </html>

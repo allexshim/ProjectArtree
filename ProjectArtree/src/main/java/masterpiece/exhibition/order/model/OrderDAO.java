@@ -57,14 +57,16 @@ public class OrderDAO implements InterOrderDAO {
 
 	//장바구니 상세 삭제
 	@Override
-	public void delCartDetail(String cartNo) {
-		sqlsession.delete("order.delCartDetail",cartNo);		
+	public int delCartDetail(String cartNo) {
+		int n =sqlsession.delete("order.delCartDetail",cartNo);
+		return n;
 	}	
 	
 	//장바구니 삭제
 	@Override
-	public void delCart(String cartNo) {		
-		sqlsession.delete("order.delCart",cartNo);		
+	public int delCart(String cartNo) {		
+		int n = sqlsession.delete("order.delCart",cartNo);
+		return n;
 	}
 
 	@Override
@@ -84,6 +86,36 @@ public class OrderDAO implements InterOrderDAO {
 	public int insertReserDetail(HashMap<String, String> map2) {
 		int n = sqlsession.insert("order.insertReserDetail",map2);	
 		return n;
+	}
+
+	@Override
+	public String selectReserDetailNo(HashMap<String, String> map) {
+		String selectReserDetailNo = sqlsession.selectOne("order.selectReserDetailNo",map);
+		return selectReserDetailNo;
+	}
+
+	@Override
+	public int insertEx(HashMap<String, String> map) {
+		int n = sqlsession.insert("order.insertEx",map);	
+		return n;
+	}
+
+	@Override
+	public List<HashMap<String, String>> selectReser(HashMap<String, String> map) {
+		List<HashMap<String, String>> selectReser = sqlsession.selectList("order.selectReser",map);
+		return selectReser;
+	}
+
+	@Override
+	public List<HashMap<String, String>> selectReserDetail(HashMap<String, String> map) {
+		List<HashMap<String, String>> selectReserDetail = sqlsession.selectList("order.selectReserDetail",map);
+		return selectReserDetail;
+	}
+
+	@Override
+	public List<HashMap<String, String>> selectReserEx(HashMap<String, String> map) {
+		List<HashMap<String, String>> selectReserEx = sqlsession.selectList("order.selectReserEx",map);
+		return selectReserEx;
 	}
 	
 }
