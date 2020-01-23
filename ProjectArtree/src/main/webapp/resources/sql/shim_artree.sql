@@ -106,10 +106,163 @@ on V.exhibitionno = D.fk_exhibitionno;
 		on V.fk_galleryNo = G.galleryNo
 		order by startdate;
 
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
+select detailAddress
+        from (
+        select * from 
+        (select * from exhibition where status='전시중') E join exhibitionDetail D 
+        on E.exhibitionno = D.fk_exhibitionno
+        ) V
+		join (select * from gallery where status = 1) G
+		on V.fk_galleryNo = G.galleryNo
+		order by to_date(startdate);
+
+select detailAddress, exhibitionName, galleryName, startDate, endDate, mainPoster, exhibitionno
+        from (
+        select * from 
+        (select * from exhibition where status='전시중') E join exhibitionDetail D 
+        on E.exhibitionno = D.fk_exhibitionno
+        ) V
+		join (select * from gallery where status = 1 and galleryno = '417' ) G
+		on V.fk_galleryNo = G.galleryNo
+		order by to_date(startdate);
+
+select exhibitionno, fk_galleryno, exhibitionname, author, startdate, enddate, mainposter, galleryname, galleryno, location
+        from 
+        (
+        select *
+		from exhibition C join exhibitionDetail D
+		on C.exhibitionno = D.fk_exhibitionno
+        ) E join (select * from gallery where galleryno ='417') G
+        on E.fk_galleryno = G.galleryno
+        order by to_date(startdate);
+
+select * from exhibition where status='전시중';
+
+select exhibitionno, fk_galleryno, exhibitionname, author, startdate, enddate, mainposter, galleryname, galleryno, location
+        from 
+        (
+        select *
+		from exhibition C join exhibitionDetail D
+		on C.exhibitionno = D.fk_exhibitionno
+        ) E join gallery G
+        on E.fk_galleryno = G.galleryno
+        order by to_date(startdate);
+-----------------------------------------------------------
+-- 이벤트 관련 --
+
+select * from exhibition;
+
+commit;
+
+create table event
+(
+no	number	NOT NULL
+,fk_exhibitionNo	number	NOT NULL
+,eventName	VARCHAR2(50)	NOT NULL
+,content	VARCHAR2(100)	NOT NULL
+,startDate	VARCHAR2(20)	NOT NULL
+,endDate	VARCHAR2(20)	NOT NULL
+,mainPoster	VARCHAR2(100)	NOT NULL
+,eventView	number	NULL
+,constraint PK_event_no primary key(no)
+,constraint FK_event_fk_exhibitionNo foreign key(fk_exhibitionNo) 
+                                                        references exhibition(exhibitionno)
+);
+
+
+-------------------------------------------------------------
+        select readCount, rno, exhibitionno, fk_galleryno, exhibitionname, author, startdate, enddate, mainposter, galleryname, galleryno, location
+        from (
+        select readCount, rownum as rno, exhibitionno, fk_galleryno, exhibitionname, author, startdate, enddate, mainposter, galleryname, galleryno, location
+        from ( select * from  ( select *
+		from exhibition V join exhibitionDetail D
+		on V.exhibitionno = D.fk_exhibitionno
+        ) E join gallery G
+        on E.fk_galleryno = G.galleryno
+        order by E.readCount desc
+        ) F ) Z where rno <=3;
+       
+        select rno, exhibitionno, fk_galleryno, exhibitionname, author, startdate, enddate, mainposter, galleryname, galleryno, location
+        from (
+        select readCount, rownum as rno, exhibitionno, fk_galleryno, exhibitionname, author, startdate, enddate, mainposter, galleryname, galleryno, location
+        from ( select * from  ( select *
+		from (select * from exhibition where to_date(endDate) >= sysdate ) V join exhibitionDetail D
+		on V.exhibitionno = D.fk_exhibitionno
+        ) E join gallery G
+        on E.fk_galleryno = G.galleryno
+        order by to_date(E.endDate) asc
+        ) F ) Z where rno <=3;
+        
+        select * from exhibition order by exhibitionno desc;
+        
+        select favortag
+        from (select * from member where idx = '5') M join wishlist W
+        on M.idx = W.fk_idx;
+        
+        
+        select * from wishlist; -- favortag
+        
+        
+        select favortag
+        from   wishlist;
+
+        select * from
+        (select tag, exhibitionname, readcount, rownum as rno from
+        (select * from exhibition
+        where tag like '%' || '초록' || '%'
+        order by readcount desc ) V ) Z
+        where rownum <= 3;
+        
+        select rno, exhibitionno, fk_galleryno, exhibitionname, author, startdate, enddate, mainposter, galleryname, galleryno, location
+        from
+        (select rownum as rno, readcount, exhibitionno, fk_galleryno, exhibitionname, author, startdate, enddate, mainposter, galleryname, galleryno, location 
+        from
+        (select readCount, exhibitionno, fk_galleryno, exhibitionname, author, startdate, enddate, mainposter, galleryname, galleryno, location
+        from
+        (select * from 
+        (select * from exhibition
+        where tag like '%' || '초록' || '%') V 
+        join exhibitionDetail D
+        on V.exhibitionno = D.fk_exhibitionno) 
+        E join gallery G
+        on E.fk_galleryno = G.galleryno
+        order by readcount desc
+        ) X ) Z where rno <= 3;
+        
+        select rno, exhibitionno, fk_galleryno, exhibitionname, author, startdate, enddate, mainposter, galleryname, galleryno, location
+        from (
+        select readCount, rownum as rno, exhibitionno, fk_galleryno, exhibitionname, author, startdate, enddate, mainposter, galleryname, galleryno, location
+        from ( select * from  ( select *
+		from exhibition V join exhibitionDetail D
+		on V.exhibitionno = D.fk_exhibitionno
+        ) E join gallery G
+        on E.fk_galleryno = G.galleryno
+        order by E.exhibitionno desc
+        ) F ) Z where rno <![CDATA[<=]]> 3
+        
+        
 /*
 전시회 이름
 갤러리 이름/지역
 전시 시작 기간 - 전시 종료 기간
 메인 포스터
 */
+
+    select * from
+    (select TXT, CNT, rownum as RNO
+    from
+    (select TXT, CNT
+    from (select TXT, count(*) as CNT
+    from ( WITH TT AS
+        ( SELECT '핑크,수직적,배색,꼴라쥬,꼴라쥬,초록,초록,초록, 빨강, 빨강, 빨강' TXT FROM DUAL )
+        SELECT TRIM(REGEXP_SUBSTR(TXT, '[^,]+', 1, LEVEL)) AS TXT
+        FROM TT CONNECT BY INSTR(TXT, ',', 1, LEVEL - 1) > 0
+    ) V
+    group by TXT) X
+    order by CNT desc ) Y
+    ) Z where RNO = 1;
+
+
+

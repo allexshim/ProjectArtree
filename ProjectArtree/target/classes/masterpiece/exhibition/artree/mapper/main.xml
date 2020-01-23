@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- ====  mapper 기본설정 ==== -->
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="main">
+
+	<!-- 해당 하는 전시회 정보를 받아온다. 
+	exhibitionno, fk_galleryno, exhibitionname, author, startdate, enddate, 
+	mainposter, galleryname, galleryno, location
+
+	-->
+	<resultMap type="HashMap" id="selectMap">
+		<result property="exhibitionno"   column="exhibitionno" 	javaType="String"/> 
+	 	<result property="fk_galleryno"   column="fk_galleryno" 	javaType="String"/>
+	 	<result property="exhibitionname" column="exhibitionname" 	javaType="String"/>
+	 	<result property="author"  		  column="author" 			javaType="String"/>
+	 	<result property="startdate"  	  column="startdate" 		javaType="String"/>
+	 	<result property="enddate"   	  column="enddate" 			javaType="String"/>
+	 	<result property="mainposter"     column="mainposter" 		javaType="String"/>
+	 	<result property="galleryname"    column="galleryname" 		javaType="String"/>
+	 	<result property="galleryno"      column="galleryno" 		javaType="String"/>
+	 	<result property="location"       column="location" 		javaType="String"/>
+	</resultMap>
+
+	<!-- 가장 조회수가 높은 전시회 3개를 가져온다. -->
+	<select id="getMostPolular" resultMap="selectMap" >
+	 	select readCount, rno, exhibitionno, fk_galleryno, exhibitionname, author, startdate, enddate, mainposter, galleryname, galleryno, location
+        from (
+        select readCount, rownum as rno, exhibitionno, fk_galleryno, exhibitionname, author, startdate, enddate, mainposter, galleryname, galleryno, location
+        from ( select * from  ( select *
+		from exhibition V join exhibitionDetail D
+		on V.exhibitionno = D.fk_exhibitionno
+        ) E join gallery G
+        on E.fk_galleryno = G.galleryno
+        order by E.readCount desc
+        ) F ) Z where rno <![CDATA[<=]]> 3
+	</select>
+
+	<!-- 가장 최신에 등록된 전시회 3개를 가져온다. -->
+	<select id="getNewest" resultMap="selectMap" >
+	 	select rno, exhibitionno, fk_galleryno, exhibitionname, author, startdate, enddate, mainposter, galleryname, galleryno, location
+        from (
+        select readCount, rownum as rno, exhibitionno, fk_galleryno, exhibitionname, author, startdate, enddate, mainposter, galleryname, galleryno, location
+        from ( select * from  ( select *
+		from exhibition V join exhibitionDetail D
+		on V.exhibitionno = D.fk_exhibitionno
+        ) E join gallery G
+        on E.fk_galleryno = G.galleryno
+        order by E.exhibitionno desc
+        ) F ) Z where rno <![CDATA[<=]]> 3
+	</select>
+	
+	<!-- 종료 임박 전시회, 종료일이 빠른 순으로 3개 가져온다 -->
+	<select id="getEndSoon" resultMap="selectMap" >
+		select rno, exhibitionno, fk_galleryno, exhibitionname, author, startdate, enddate, mainposter, galleryname, galleryno, location
+        from (
+        select readCount, rownum as rno, exhibitionno, fk_galleryno, exhibitionname, author, startdate, enddate, mainposter, galleryname, galleryno, location
+        from ( select * from  ( select *
+		from (select * from exhibition where to_date(endDate) <![CDATA[>=]]> sysdate ) V join exhibitionDetail D
+		on V.exhibitionno = D.fk_exhibitionno
+        ) E join gallery G
+        on E.fk_galleryno = G.galleryno
+        order by to_date(E.endDate) asc
+        ) F ) Z where rno <![CDATA[<=]]> 3
+	</select>
+	
+	 <!-- 해당 회원이 선호하는 태그를 가져온다  -->
+	<select id="getPreferTag" parameterType="String" resultType="String" >
+		select favortag
+        from (
+        	select * 
+        	from member 
+        	<if test='!idx.equals("") and idx != null '>
+        	where idx= #{idx}
+        	</if>
+        ) M join wishlist W
+        on M.idx = W.fk_idx
+	</select>
+	
+	<!-- // 가져온 선호 태그를 split으로 자른 후, 가장 선호하는 태그 1개를 가져온다.
+	list<String> 인경우의 resultType은 string 
+	-->
+	<select id="getFavorTag" parameterType="String" resultType="String">
+		select TXT from
+	    (select TXT, CNT, rownum as RNO
+	    from
+	    (select TXT, CNT
+	    from (select TXT, count(*) as CNT
+	    from ( WITH TT AS
+	        ( SELECT #{preferTag} TXT FROM DUAL )
+	        SELECT TRIM(REGEXP_SUBSTR(TXT, '[^,]+', 1, LEVEL)) AS TXT
+	        FROM TT CONNECT BY INSTR(TXT, ',', 1, LEVEL - 1) <![CDATA[>]]> 0
+	    ) V
+	    group by TXT) X
+	    order by CNT desc ) Y
+	    ) Z where RNO = 1
+	</select>
+	
+	<!-- 개인 회원/ 전체 회원이 선호하는 태그에 해당하는 전시회중, 조회수 높은 순으로 3개 select -->
+	<select id="getFavorExhibition" parameterType="String" resultMap="selectMap" >
+		select rno, exhibitionno, fk_galleryno, exhibitionname, author, startdate, enddate, mainposter, galleryname, galleryno, location
+        from
+        (select rownum as rno, readcount, exhibitionno, fk_galleryno, exhibitionname, author, startdate, enddate, mainposter, galleryname, galleryno, location 
+        from
+        (select readCount, exhibitionno, fk_galleryno, exhibitionname, author, startdate, enddate, mainposter, galleryname, galleryno, location
+        from
+        (select * from 
+        (select * from exhibition
+        where tag like '%' || #{favorTag} || '%') V 
+        join exhibitionDetail D
+        on V.exhibitionno = D.fk_exhibitionno) 
+        E join gallery G
+        on E.fk_galleryno = G.galleryno
+        order by readcount desc
+        ) X ) Z where rno <![CDATA[<=]]> 3
+	</select>
+	
+</mapper>

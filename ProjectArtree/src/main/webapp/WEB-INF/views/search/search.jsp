@@ -323,7 +323,7 @@
 		 $("#exhibitionList").empty();
 		 // exhibitionno, fk_galleryno, exhibitionname, author, startdate, enddate, mainposter, galleryname, galleryno, location
 		 $.each(json, function(index, item) { 
-				 html += "<a href='/artree/exhDetail.at?exhibitionno="+item.exhibitionno+"'><div class='singleExhibition'>";
+				 html += "<a href='/artree/exhDetail.at?eno="+item.exhibitionno+"'><div class='singleExhibition'>";
 				 html += "<img src='"+item.mainposter+"' />";
 				 html += "<span class='infoContainer'>";
 				 html += "<span class='title' style='font-size:13pt;'>"+item.exhibitionname+"</span><br/><br/>";
