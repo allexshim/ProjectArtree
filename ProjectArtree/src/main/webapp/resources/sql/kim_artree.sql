@@ -164,4 +164,43 @@ on A.exhibitionno = B.fk_exhibitionno
 where fk_galleryno = 174
 
 
+select*
+from member A left join wishlist B
+on A.idx = B.fk_idx
+where name = '김현지'
 
+select fk_galleryno, status
+from exhibition
+order by fk_galleryno
+
+select count(*)
+from galwishlist
+where fk_idx = 10 and fk_galleryno = 1066
+
+desc galwishlist
+
+select * from galwishlist
+
+insert into wishlist(wishno, fk_idx, fk_exhibitionno, fk_galleryno, favortag, favorgenre)
+values(SEQ_WISHLIST_WISHNO.nextval, idx, 갤러리넘, 전시회넘, genre, tag)
+
+
+
+create table galwishlist
+(WISHNO          NUMBER NOT NULL      
+,FK_IDX          NUMBER NOT NULL   
+,FK_GALLERYNO    VARCHAR2(100) NOT NULL  
+,constraint PK_galwishlist primary key(FK_IDX, FK_GALLERYNO)
+,constraint FK_galwishlist_FK_IDX foreign key(FK_IDX) references member(idx)
+,constraint FK_galwishlist_FK_GALLERYNO foreign key(FK_GALLERYNO) references gallery(galleryno)
+);
+
+create sequence seq_galwishlist
+start with 1
+increment by 1
+nomaxvalue
+nominvalue
+nocycle
+nocache;
+
+COMMIT
