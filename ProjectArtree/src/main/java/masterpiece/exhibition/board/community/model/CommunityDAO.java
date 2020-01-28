@@ -15,9 +15,16 @@ public class CommunityDAO implements InterCommunityDAO {
 	
 	// 모든 전시회 정보를 가져와서 넘긴다 (전시회 검색용)
 	@Override
-	public List<HashMap<String, String>> getAllExhibit() {
-		List<HashMap<String, String>> exhibitionList = sqlsession.selectList("community.getAllExhibit");
+	public List<HashMap<String, String>> getExhibit(String searchWord) {
+		List<HashMap<String, String>> exhibitionList = sqlsession.selectList("community.getExhibit", searchWord);
 		return exhibitionList;
+	}
+	
+	// 새 글 추가하기
+	@Override
+	public int addCommunity(HashMap<String, String> addCommunity) {
+		int n = sqlsession.insert("community.addCommunity",addCommunity);
+		return n;
 	}
 
 }

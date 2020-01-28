@@ -12,17 +12,29 @@
 		<result property="galleryname"  	column="galleryname" 		javaType="String"/> 
 	</resultMap>
 
-
-	<select id="getAllExhibit" resultMap="Exhibit" >
+	<!-- 전시회 이름 검색하기 -->
+	<select id="getExhibit" parameterType="String" resultMap="Exhibit" >
 		select exhibitionno, exhibitionname, author, galleryname
         from 
         (
         select *
-		from exhibition V join exhibitionDetail D
+		from 
+        (select * from exhibition
+	        <if test=' value != "" '>
+	        where exhibitionname like '%' || #{ value } || '%'
+	        </if>
+        ) V 
+        join exhibitionDetail D
 		on V.exhibitionno = D.fk_exhibitionno
         ) E join gallery G
         on E.fk_galleryno = G.galleryno
-        order by to_date(startdate)
+        order by to_date(startdate) desc
 	</select>
+	
+	<!-- 새 글 추가하기 -->
+	<insert id="addCommunity" parameterType="HashMap" >
+		insert into community(no, fk_exhibitionNo, title, content, writeDay, commentCount, fk_idx, readcount)
+		values(seq_community.nextval, #{fk_exhibitionno}, #{title}, #{content}, sysdate, 0, #{fk_idx}, 0)
+	</insert>
 	
 </mapper>

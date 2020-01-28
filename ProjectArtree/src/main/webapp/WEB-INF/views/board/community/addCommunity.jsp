@@ -162,6 +162,18 @@
 			
 		}) // 다음글 클릭시 이벤트 --------------
 		
+		$("#searchWord").keydown(function(){
+			if(event.keyCode==13) {
+				event.preventDefault();
+				searchExhibition($("#searchWord").val());
+			}	
+		});
+		
+		$(".searchBtn").click(function(){
+			searchExhibition($("#searchWord").val());
+		});
+
+		
 		// 글목록으로 돌아가기
 		$("#toListBtn").click(function(){
 			window.location.href="/artree/communityList.at";
@@ -196,6 +208,88 @@
 		
 	}); // end of $(document).ready -------------------------------------
 
+	function searchExhibition(searchWord) {
+		$.ajax({
+			url: "<%= ctxPath %>/searchExhibitInModal.at",
+			type: "GET",
+			data: { "searchWord":searchWord },
+			dataType: "JSON",
+			success: function(json){
+				$("#galleryListTable").empty();				
+				
+				let html ="";
+				html += "<thead>";
+				html += "<tr>";
+				html += "<th>번호</th>";
+				html += "<th>전시회 이름</th>";
+				html += "<th>작가</th>";
+				html += "<th>장소</th>";
+				html += "</tr>";
+				html += "</thead>";
+				html += "<tbody>";
+				
+				if(json.length == 0) {
+					html += "<tr class='' style='cursor: pointer;'>";
+					html += "<td colspan='4'>";
+					html += "조회된 갤러리가 없습니다.";
+					html += "</td>";
+					html += "</tr>";
+				}
+				
+				else {	
+					$.each(json, function(index, item) {
+						html += "<tr style='cursor: pointer;' onclick='selectedExhibition()' class='selectedExhibition'>";
+						html += "<td style='width: 5px !important;' class='exhibitno'>" + item.exhibitionno + "</td>";
+						html += "<td style='width: 300px !important' class='exhibitionname'>" + item.exhibitionname + "</td>";
+						html += "<td style='width: 50px !important'>" + item.author + "</td>";
+						html += "<td style='width: 80px !important'>" + item.galleryname + "</td>";
+						html += "</tr>";
+					});					
+				}
+				
+				html += "</tbody>";
+				
+				$("#exhibitionListTable").html(html);
+			},
+			error: function(request, status, error){
+				alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+			}
+		});
+	} // end of searchExhibition ----------------------------------------
+	
+	
+	function selectedExhibition(){
+		$(document).on("click", ".selectedExhibition", function() {
+			
+			/*exhibitionno, exhibitionname, author, galleryname*/
+			let exhibitionname = $(this).find(".exhibitionname").text();
+			let exhibitionno = $(this).find(".exhibitno").text();
+			// sessionStorage에 데이터 저장
+			sessionStorage.setItem("exhibitionname", exhibitionname);
+			sessionStorage.setItem("exhibitionno", exhibitionno);
+			$("#myModal").modal('hide');
+			
+			writeExhibition();		
+		});
+	} // end of selectedExhibition -----------------------------------------
+	
+	
+	function writeExhibition() {
+		
+		let exhibitionname = sessionStorage.getItem("exhibitionname");
+		let exhibitionno = sessionStorage.getItem("exhibitionno");
+		
+		if( (exhibitionname != null) && (exhibitionname != "" )) {
+		    $("#name").val(exhibitionname);
+		    $("#no").val(exhibitionno);
+		    
+		    // modal에 남아있는 검색 데이터를 초기화한다.
+		    sessionStorage.removeItem("exhibitionname");
+		    $("#searchWord").val("");
+		    searchExhibition("");
+		}	
+	} // end of writeExhibition ----------------------------------------
+	
 </script>
 
 </head>
@@ -215,7 +309,10 @@
 			<table id="detailTable">
 				<tr>
 					<td>전시회명</td>
-					<td><input id="name" name="name" type="text" placeholder="전시회 이름을 입력해주세요." autocomplete="off" /></td>
+					<td>
+						<input id="name" name="name" type="text" placeholder="전시회 이름을 입력해주세요." autocomplete="off" />
+						<input id="no" name="no" type="hidden"/>
+					</td>
 				<tr>
 			
 				<tr>
@@ -232,7 +329,7 @@
 				<tr>
 				<tr>
 					<td colspan="2">
-						<textarea id="contents" name="contents" style="resize:none; border:solid 1px lightgray" rows="10" cols="120">
+						<textarea id="contents" name="contents" style="resize:none; border:solid 1px lightgray; font-weight:normal !important;" rows="10" cols="120">
 						</textarea>
 					</td>
 				<tr>
@@ -263,10 +360,10 @@
 	</div>
 	
 	<!-- ==================== 전시회 검색 모달 =================================== -->
-	<div class="container" id="modalContainer" style="width : 80%;">
+	<div class="container" id="modalContainer">
 		<!-- Modal -->
 		<div class="modal fade" id="myModal" role="dialog">
-			<div class="modal-dialog">
+			<div class="modal-dialog modal-lg">
 			    
 				<!-- Modal content-->
 				<div class="modal-content" id="exhibitionModal">
@@ -277,14 +374,14 @@
 					<div class="modal-body">
 					
 						<div id="searchArea" align="center" style="margin-top: 3vh">
-							<input type="text" name="searchWord" id="searchWord" style="width: 40%; margin-left: 10px;" autocomplete="off" placeholder="갤러리명으로 검색" />
+							<input type="text" name="searchWord" id="searchWord" style="width: 60%; margin: 0 auto;" autocomplete="off" placeholder="전시회 이름으로 검색" /><i class="fas fa-search searchBtn" style="font-size:15pt; padding-left:10px; cursor:pointer;"></i>
 						</div>
 						
 						<div id="listArea" style="margin-top: 5vh">
-							<table id="exhibitionListTable" class="table" style="text-align: center;">
+							<table id="exhibitionListTable" class="table" style="cursor:pointer;">
 								<thead style="font-weight: bold">
 									<tr>
-										<td style="display:none;">번호</td>
+										<td>번호</td>
 										<td>전시회 이름</td>
 										<td>작가</td>
 										<td>장소</td>
@@ -295,10 +392,10 @@
 									<c:if test="${ not empty exhibitionList  }">
 									<c:forEach var="exhibit" items="${ exhibitionList }" varStatus="status">
 										<tr onclick='selectedExhibition()' class="selectedExhibition">
-											<td style='width: 5px !important; display:none;' class='exhibitno'>${ exhibit.exhibitionno }</td>
-											<td style="width: 300px !important" class="exhibitionName">${ exhibit.exhibitionname }</td> 
+											<td style='width: 5px !important;' class='exhibitno'>${ exhibit.exhibitionno }</td>
+											<td style="width: 300px !important" class="exhibitionname">${ exhibit.exhibitionname }</td> 
 											<td style="width: 50px !important">${ exhibit.author }</td>
-											<td style="width: 50px !important">${ exhibit.galleryname }</td>
+											<td style="width: 80px !important">${ exhibit.galleryname }</td>
 										</tr>
 									</c:forEach>
 									</c:if>

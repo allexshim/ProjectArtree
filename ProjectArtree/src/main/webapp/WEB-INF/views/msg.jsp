@@ -7,6 +7,6 @@
     }
     
     if(${loc != null}) {
-		"${loc}";
+    	location.href="${loc}";
     } 
 </script> 
