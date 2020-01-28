@@ -215,7 +215,14 @@
 		
 		// 글쓰기 페이지로 가기
 		$("div#goWrite").click(function(){
-			window.location.href="/artree/addCommunity.at";	
+			if(${sessionScope.loginuser == null}){
+				alert("먼저 로그인 하세요!");
+				location.href="javascript:layer_open('layer')";
+				return;
+			}
+			else {
+				window.location.href="/artree/addCommunity.at";	
+			}
 		});
 		
 	});

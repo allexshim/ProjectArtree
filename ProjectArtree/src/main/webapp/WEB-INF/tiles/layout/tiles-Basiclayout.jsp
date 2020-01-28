@@ -23,7 +23,10 @@
  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
-
+ <link rel="stylesheet" href="https://unpkg.com/swiper/css/swiper.css">
+ <link rel="stylesheet" href="https://unpkg.com/swiper/css/swiper.min.css">
+ <script src="https://unpkg.com/swiper/js/swiper.js"></script>
+ <script src="https://unpkg.com/swiper/js/swiper.min.js"></script>
  <link rel="stylesheet" type="text/css" href="<%= ctxPath%>/resources/style/basicstyle.css" />
   
    <%-- 이 파일의 css는 해당 파일에서 담당한다. --%>
@@ -46,5 +49,6 @@
 			<tiles:insertAttribute name="footer" />
 		</div>
 	</div>
+	
 </body>
 </html>

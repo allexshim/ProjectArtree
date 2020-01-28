@@ -322,6 +322,8 @@ commit;
 
 desc comment;
 
+select * from community;
+
 create sequence seq_community
 start with 1 -- 대기번호의 출발번호를 1번부터 하겠다.
 increment by 1 -- 1번 이후로 1씩 증가시킨다.
@@ -344,3 +346,14 @@ create table board_comment
 );
 
 drop table  comment purge;
+
+
+select exhibitionno, fk_galleryno, exhibitionname, author, startdate, enddate, mainposter, galleryname, galleryno, location
+        from 
+        (
+        select *
+		from exhibition V join exhibitionDetail D
+		on V.exhibitionno = D.fk_exhibitionno
+        ) E join gallery G
+        on E.fk_galleryno = G.galleryno
+        order by to_date(startdate);

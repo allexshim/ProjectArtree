@@ -22,7 +22,7 @@
 <style type="text/css">
    
  body::-webkit-scrollbar { 
-    display: none; 
+ /*    display: none;  */
 }
    
    .btn {
@@ -205,7 +205,7 @@
 	}
 	
 	.new-one {
-		
+		cursor: pointer;
 		text-align: center;
 		display: block;
 		flex: 1;
@@ -213,13 +213,23 @@
 		height: 100%;
 	}
 	
+	.new-one:hover {
+		text-decoration: none;
+		color: black;
+	}
+	
 	.end-one {
-		
+		cursor: pointer;
 		text-align: center;
 		display: block;
 		flex: 1;
 		width: 33%;
 		height: 100%;
+	}
+	
+	.end-one:hover {
+		text-decoration: none;
+		color: black;
 	}
 	
 	.new_poster {
@@ -283,8 +293,13 @@
 		display: none;
 	}
 	
+	.flash:hover {
+		cursor: pointer;
+	}
+	
 	/* Flashing */
 	.flash img:hover {
+		cursor: pointer;
 		opacity: 1;
 		-webkit-animation: flash 1.5s;
 		animation: flash 1.5s;
@@ -316,7 +331,6 @@
     .swiper-slide {
       top: 0;
       text-align: center;
-      font-size: 18px;
       background: #fff;
 
       /* Center slide text vertically */
@@ -335,15 +349,20 @@
     }
     
     .recom-title {
-    	font-size: 20pt;
+    	display: inline-block;
+    	width: 90%;
+    	margin-top: 10px;
+    	font-size: 14pt;
     	text-decoration: none;
     	color: black;
     }
     
     .recom-content {
-    	margin: 10px;
     	text-decoration: none;
-    	color: black;
+		color: black;
+		position: relative;
+		display: block;
+		margin: 10px;
     }
     
     .recom-title:hover {
@@ -355,28 +374,205 @@
     	text-decoration: none;
     	color: black;
     }
+    
+    .end-exp-title {
+    	font-size: 14pt;
+    }
+    
+    .new-exp-title {
+    	font-size: 14pt;
+    }
+    
+    
    
 </style>
 	
 <script type="text/javascript">
 
+
+
 $("#myheader").hide();
 $(".navigation").hide(); // 탑 버튼 숨김
 $(function () {
 	
-	$('.hover-left').hover(function() {
-	    $(this).find(".forMoving").stop().animate({left: '10px'}, 500);
-	},
-	function() {
-	    $(this).find(".forMoving").stop().animate({left: '0px'}, 500);                 
+	$(document).on("mouseover", ".hover-left", function(){
+		$(this).find(".forMoving").stop().animate({left:'10px'}, 180);
 	});
 	
-	$('.hover-top').hover(function() {
-	    $(this).find(".forMoving").stop().animate({top: '10px'}, 500);
-	},
-	function() {
-	    $(this).find(".forMoving").stop().animate({top: '0px'}, 500);                 
+	$(document).on("mouseout", ".hover-left", function(){
+		$(this).find(".forMoving").stop().animate({left:'0px'}, 180);
 	});
+	
+	$(document).on("mouseover", ".hover-top", function(){
+		$(this).find(".forMoving").stop().animate({top:'10px'}, 180);
+	});
+	
+	$(document).on("mouseout", ".hover-top", function(){
+		$(this).find(".forMoving").stop().animate({top:'0px'}, 180);
+	});
+	
+	$.ajax({
+		url: "<%=ctxPath%>/getMostPolular.at",
+		data: {},
+		dataType: "JSON",
+		success:function(json){
+			
+			var html = "";
+			
+			$.each(json, function(index, item){
+				
+				if(index == 1) {
+					html += "<div class='hot-exh-R'>"
+						 +		"<div class='hot-info2'>"
+						 +			"<span class='hot-title'>"+item.exhibitionname+"</span>"
+						 +			"<span class='hot-content'>"+item.author+"</span>"
+						 +			"<span class='hot-content'>"+item.location+"/"+item.galleryname+"</span>"
+						 +			"<span class='hot-content'>"+item.startdate+"~"+item.enddate+"</span>"
+						 +			"<button type='button' class='moreBtn btn hover-left' onclick='exhDetail("+item.exhibitionno+")'>"
+						 +					"자세히 보기"
+						 +					"<img class='forMoving' style='position:relative;' src='<%=ctxPath%>/resources/images/exhibition/ico/right_arrow.png'>"
+						 +			"</button>"
+						 +		"</div>"
+						 +		"<a class='flash' onclick='exhDetail("+item.exhibitionno+")'><img class='hot-img2' src='"+item.mainposter+"'></a>"
+						 +	"</div>"
+				}
+				else {
+					html += "<div class='hot-exh-L'>"
+						 +		"<a class='flash' onclick='exhDetail("+item.exhibitionno+")'><img class='hot-img1' src='"+item.mainposter+"'></a>"
+						 +		"<div class='hot-info1'>"
+						 +			"<span class='hot-title'>"+item.exhibitionname+"</span>"
+						 +			"<span class='hot-content'>"+item.author+"</span>"
+						 +			"<span class='hot-content'>"+item.location+" / "+item.galleryname+"</span>"
+						 +			"<span class='hot-content'>"+item.startdate+"~"+item.enddate+"</span>"
+						 +			"<button type='button' class='moreBtn btn hover-left' onclick='exhDetail("+item.exhibitionno+")'>"
+						 +					"자세히 보기"
+						 +					"<img class='forMoving' style='position:relative;' src='<%=ctxPath%>/resources/images/exhibition/ico/right_arrow.png'>"
+						 +			"</button>"
+						 +		"</div>"
+						 +	"</div>"
+					
+				}
+					
+					 
+			});
+			
+			$(".hot-exh").append(html);
+		},
+		error: function(request, status, error){
+			alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+		}
+	});
+	
+	$.ajax({
+		url: "<%=ctxPath%>/getPreference.at",
+		data: {},
+		dataType: "JSON",
+		success:function(json){
+			
+			var html = "";
+			
+			$.each(json, function(index, item){
+				
+				html += "<div class='swiper-slide'>" 
+					 + "<a class='recom-a flash hover-top' onclick='exhDetail("+item.exhibitionno+")'>"	
+					 + "<img class='slide-img' src='"+item.mainposter+"'>"
+					 + "<br/>"
+					 + "<span class='recom-title'>"+item.exhibitionname+"</span>"
+					 + "<span class='recom-content'>"+item.author+"</span>"
+					 + "<span class='recom-content'>"+item.location+" / "+item.galleryname+"</span>"
+					 + "<span class='recom-content'>"+item.startdate+"~"+item.enddate+"</span>"
+					 + "</a>"
+					 + "</div>"
+			});
+			
+			$(".swiper-wrapper").append(html);
+			
+		},
+		error: function(request, status, error){
+			alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+		}
+	});
+	
+	
+	$.ajax({
+		url: "<%=ctxPath%>/getNewest.at",
+		data: {},
+		dataType: "JSON",
+		success:function(json){
+			
+			var html = "";
+			
+			$.each(json, function(index, item){
+				
+				html += "<a onclick='exhDetail("+item.exhibitionno+")' class='new-one flash hover-top'>"
+					 +	"<img class='new_poster' src='"+item.mainposter+"' >"
+					 +		"<span class='new-exp new-exp-title'>"+item.exhibitionname+"</span>"
+					 +		"<span class='new-exp'>"+item.author+"</span>"
+					 + 		"<span class='new-exp'>"+item.location+" / "+item.galleryname+"</span>"
+					 +		"<span class='new-exp forMoving'>"+item.startdate+"~"+item.enddate+"</span>"
+					 +	"</a>"
+			});
+			
+			$(".new-exh").append(html);
+		},
+		error: function(request, status, error){
+			alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+		}
+	});
+	
+	
+	$.ajax({
+		url: "<%=ctxPath%>/getEndSoon.at",
+		data: {},
+		dataType: "JSON",
+		success:function(json){
+			
+			var html = "";
+			
+			$.each(json, function(index, item){
+				
+				html += "<a onclick='exhDetail("+item.exhibitionno+")' class='end-one flash hover-top'>"
+					 +	"<img class='end_poster' src='"+item.mainposter+"' >"
+					 +		"<span class='end-exp end-exp-title'>"+item.exhibitionname+"</span>"
+					 +		"<span class='end-exp'>"+item.author+"</span>"
+					 + 		"<span class='end-exp'>"+item.location+" / "+item.galleryname+"</span>"
+					 +		"<span class='end-exp forMoving'>"+item.startdate+"~"+item.enddate+"</span>"
+					 +	"</a>"
+			});
+			
+			$(".end-exh").append(html);
+		},
+		error: function(request, status, error){
+			alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+		}
+	});
+	
+	$.ajax({
+		url: "<%=ctxPath%>/getNewEvent.at",
+		data: {},
+		dataType: "JSON",
+		success:function(json){
+			
+			var html = "";
+			
+			$.each(json, function(index, item){
+				
+				html += "<a href='#' class='event_one flash hover-top'>"
+					 +	"<img class='event_poster' src='"+item.mainPoster+"' >"
+					 +		"<span class='end-exp'>"+item.eventName+"</span>"
+					 +		"<span class='end-exp forMoving'>"+item.startDate+"~"+item.endDate+"</span>"
+					 +	"</a>"
+			});
+			
+			$(".event-div").append(html);
+		},
+		error: function(request, status, error){
+			alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+		}
+	});
+		
+	
+	
             
 	$(window).scroll(function () {
 		if ($(this).scrollTop() > 100) { // 스크롤 내릴 표시
@@ -424,14 +620,20 @@ function winScroll(){
     var op = 1 - (window.pageYOffset / slider.offsetHeight);
     slider.style.opacity = op; 
 }
-	
+
+function exhDetail(eno){
+	location.href="<%= ctxPath%>/exhDetail.at?eno="+eno;
+}
+
+
 
 </script>
-   
+
+
     
 
 	<div id="slider" style="width: 100%; height: 800px; display: inline-block;">
-       	<div style="background-size: cover; width:100vw; height:100vh; z-index:1000; margin-top:0; background-image: url('<%= ctxPath%>/resources/images/main/mainImg1.jpg')">
+       	<div style="background-size: cover; width:100%; height:100%; z-index:1000; margin-top:0; background-image: url('<%= ctxPath%>/resources/images/main/mainImg1.jpg')">
        		 <div class="main-logo" style="z-index: 5; width: 400px; height: 300px;">
        			<img style="width: 255px; height: 255px; -webkit-transform:translate(300px,350px);" alt="로고이미지" src="<%= ctxPath%>/resources/images/main/logo_black_new.png" />
        		 </div>
@@ -445,75 +647,18 @@ function winScroll(){
 				<h2>인기 전시회</h2>
 			</div>
 			<hr color="black;" style="width:85%; transform:translate(100px,20px);" />
-			<div class="hot-exh-L">
-				<a class="flash" href="#"><img class="hot-img1" src="<%= ctxPath%>/resources/images/exhibition/poster1.JPG"></a>
-				<div class="hot-info1">
-					<span class="hot-title">전시회명</span>
-					<span class="hot-content">작가명</span>
-					<span class="hot-content">전시위치</span>
-					<span class="hot-content">2020-01-20~2020-01-22</span>
-					<button type="button" class="moreBtn btn hover-left" onclick="">
-							자세히 보기
-							<img class="forMoving" style="position:relative;" src="<%= ctxPath%>/resources/images/exhibition/ico/right_arrow.png">
-					</button>
-				</div>
-			</div>
 			
-			<div class="hot-exh-R">
-				<div class="hot-info2">
-					<span class="hot-title">전시회명</span>
-					<span class="hot-content">작가명</span>
-					<span class="hot-content">전시위치</span>
-					<span class="hot-content">2020-01-20~2020-01-22</span>
-					<button type="button" class="moreBtn btn hover-left" onclick="">
-							자세히 보기
-							<img class="forMoving" style="position:relative;" src="<%= ctxPath%>/resources/images/exhibition/ico/right_arrow.png">
-					</button>
-				</div>
-				<a class="flash" href="#"><img class="hot-img2" src="<%= ctxPath%>/resources/images/exhibition/poster2.JPG"></a>
-			</div>
 			
-			<div class="hot-exh-L">
-				<a class="flash" href="#"><img class="hot-img1" src="<%= ctxPath%>/resources/images/exhibition/poster3.JPG"></a>
-				<div class="hot-info1">
-					<span class="hot-title">전시회명</span>
-					<span class="hot-content">작가명</span>
-					<span class="hot-content">전시위치</span>
-					<span class="hot-content">2020-01-20~2020-01-22</span>
-					<button type="button" class="moreBtn btn hover-left" onclick="">
-							자세히 보기
-							<img class="forMoving" style="position:relative;" src="<%= ctxPath%>/resources/images/exhibition/ico/right_arrow.png">
-					</button>
-				</div>
-			</div>
+			
 		</div>
 		
 	<hr color="#f2f2f2;" style="transform:translate(0,700px);" />
 	
+	
 	<div class="recom-exh">	
 		<div class="swiper-container">
 		    <div class="swiper-wrapper">
-		      <div class="swiper-slide">
-			  	<a class="recom-a flash hover-top" href="#">
-			  		<img class="slide-img" src="<%= ctxPath%>/resources/images/exhibition/poster3.JPG">
-		  			<br/>
-		  			<br/>
-					<span class="recom-title forMoving">전시회명</span><br/>
-					<span class="recom-content forMoving">작가명</span><br/>
-					<span class="recom-content forMoving">전시위치</span><br/>
-					<span class="recom-content forMoving">2020-01-20~2020-01-22</span>
-					
-			  	</a>
-			    	
-			  </div>
-		      <div class="swiper-slide">Slide 2</div>
-		      <div class="swiper-slide">Slide 3</div>
-		      <div class="swiper-slide">Slide 4</div>
-		      <div class="swiper-slide">Slide 5</div>
-		      <div class="swiper-slide">Slide 6</div>
-		      <div class="swiper-slide">Slide 7</div>
-		      <div class="swiper-slide">Slide 8</div>
-		      <div class="swiper-slide">Slide 9</div>
+		      
 		    </div>
 		    <!-- Add Pagination -->
 		    <div class="swiper-pagination"></div>
@@ -545,136 +690,79 @@ function winScroll(){
 		</div>
 		<hr color="black;" style="width:90%; transform:translate(62px,245px);" />
 		<div class="new-exh">
-			<a href="#" class="new-one flash hover-top">
-				<img class="new_poster" src="<%= ctxPath%>/resources/images/exhibition/artmap_20200102_9426350.jpg"/>
-				<span class="new-exp forMoving">전시회명</span>
-				<span class="new-exp forMoving">전시기간</span>
-				<span class="new-exp forMoving">전시작가</span>
-			</a>
 			
-			<a href="#" class="new-one flash hover-top">
-				<img class="new_poster" src="<%= ctxPath%>/resources/images/exhibition/artmap_20200102_9426350.jpg"/>
-				<span class="new-exp forMoving">전시회명</span>
-				<span class="new-exp forMoving">전시기간</span>
-				<span class="new-exp forMoving">전시작가</span>
-			</a>
-			
-			<a href="#" class="new-one flash hover-top">
-				<img class="new_poster" src="<%= ctxPath%>/resources/images/exhibition/artmap_20200102_9426350.jpg"/>
-				<span class="new-exp forMoving">전시회명</span>
-				<span class="new-exp forMoving">전시기간</span>
-				<span class="new-exp forMoving">전시작가</span>
-			</a>
 		</div>
 		
-		<div id="div4" class="new-title" style="float: right; -webkit-transform:translate(-58px, 370px);">
+		<div id="div4" class="new-title" style="float: right; -webkit-transform:translate(-58px, 450px);">
 			<h2>종료임박 전시회</h2>
 		</div>
-		<hr color="black;" style="width:90%; transform:translate(64px,420px);" />
-		<div class="end-exh" style="transform:translate(0, 90px);">
-			<a href="#" class="end-one flash hover-top">
-				<img class="end_poster" src="<%= ctxPath%>/resources/images/exhibition/artmap_20200102_9426350.jpg"/>
-				<span class="end-exp forMoving">전시회명</span>
-				<span class="end-exp forMoving">전시기간</span>
-				<span class="end-exp forMoving">전시작가</span>
-			</a>
+		<hr color="black;" style="width:90%; transform:translate(64px,500px);" />
+		<div class="end-exh" style="transform:translate(0, 170px);">
 			
-			<a href="#" class="end-one flash hover-top">
-				<img class="end_poster" src="<%= ctxPath%>/resources/images/exhibition/artmap_20200102_9426350.jpg"/>
-				<span class="end-exp forMoving">전시회명</span>
-				<span class="end-exp forMoving">전시기간</span>
-				<span class="end-exp forMoving">전시작가</span>
-			</a>
-				
-			<a href="#" class="end-one flash hover-top">
-				<img class="end_poster" src="<%= ctxPath%>/resources/images/exhibition/artmap_20200102_9426350.jpg"/>
-				<span class="end-exp forMoving">전시회명</span>
-				<span class="end-exp forMoving">전시기간</span>
-				<span class="end-exp forMoving">전시작가</span>
-			</a>
 		</div>
 	</div>
 	
-	<hr color="#f2f2f2;" style="transform:translate(0, 250px);" />
+	<hr color="#f2f2f2;" style="transform:translate(0, 330px);" />
 	
 	
-	<div id="div5" class="event-title" style=" float: left; transform:translate(35px, 180px);">
+	<div id="div5" class="event-title" style=" float: left; transform:translate(35px, 260px);">
 		<h2>EVENT</h2>
 	</div>
-	<div class="event-more" style="float: right; transform:translate(-35px, 420px);">
-		<a class="event-morebtn" href="<%= ctxPath%>/eventList.at">더보기+</a>
+	<div class="event-more" style="float: right; transform:translate(-35px, 500px);">
+		<a class="event-morebtn " href="<%= ctxPath%>/eventList.at">이벤트 모두보기 +</a>
 	</div>
-	<hr color="black;" style="width:94%; transform:translate(38px,445px);" />
-       	<div class="event-div" style="transform:translate(0, 200px);">
-           	<a href="#" class="event_one flash hover-top" >
-				<img class="event_poster" src="<%= ctxPath%>/resources/images/exhibition/artmap_20200102_9426350.jpg"/>
-				<span class="end-exp forMoving">이벤트이름</span>
-				<span class="end-exp forMoving">이벤트기간</span>
-			</a>
-			<a href="#" class="event_one flash hover-top" >
-				<img class="event_poster" src="<%= ctxPath%>/resources/images/exhibition/artmap_20200102_9426350.jpg"/>
-				<span class="end-exp forMoving">이벤트명</span>
-				<span class="end-exp forMoving">이벤트기간</span>
-			</a>
-			<a href="#" class="event_one flash hover-top" >
-				<img class="event_poster" src="<%= ctxPath%>/resources/images/exhibition/artmap_20200102_9426350.jpg"/>
-				<span class="end-exp forMoving">이벤트명</span>
-				<span class="end-exp forMoving">이벤트기간</span>
-			</a>
-			<a href="#" class="event_one flash hover-top" >
-				<img class="event_poster" src="<%= ctxPath%>/resources/images/exhibition/artmap_20200102_9426350.jpg"/>
-				<span class="end-exp forMoving">이벤트명</span>
-				<span class="end-exp forMoving">이벤트기간</span>
-			</a>
+	<hr color="black;" style="width:94%; transform:translate(38px,525px);" />
+       	<div class="event-div" style="transform:translate(0, 280px);">
+           	
        	</div>
        	
-       	
-
 </div>
 
 <div class="navigation" style="display: block; right:50px; bottom: 20%; position:fixed; z-index:9999;">
 	<a class="return-top" href="#">[TOP]</a>
 </div>
+
+
 <script type="text/javascript">
 
-	var slideIndex = 0;
-	showSlides();
-	
-	function showSlides() {
-	  var i;
-	  var slides = document.getElementsByClassName("mySlides");
-	  var dots = document.getElementsByClassName("dot");
-	  for (i = 0; i < slides.length; i++) {
-	    slides[i].style.display = "none";  
-	  }
-	  slideIndex++;
-	  if (slideIndex > slides.length) {slideIndex = 1}    
-	  for (i = 0; i < dots.length; i++) {
-	    dots[i].className = dots[i].className.replace(" active", "");
-	  }
-	  slides[slideIndex-1].style.display = "block";  
-	  dots[slideIndex-1].className += " active";
-	  setTimeout(showSlides, 3000); // Change image every 2 seconds
-	}
+var slideIndex = 0;
+showSlides();
+
+function showSlides() {
+  var i;
+  var slides = document.getElementsByClassName("mySlides");
+  var dots = document.getElementsByClassName("dot");
+  for (i = 0; i < slides.length; i++) {
+    slides[i].style.display = "none";  
+  }
+  slideIndex++;
+  if (slideIndex > slides.length) {slideIndex = 1}    
+  for (i = 0; i < dots.length; i++) {
+    dots[i].className = dots[i].className.replace(" active", "");
+  }
+  slides[slideIndex-1].style.display = "block";  
+  dots[slideIndex-1].className += " active";
+  setTimeout(showSlides, 3000); // Change image every 2 seconds
+}
 
 
 </script>
 
+<script>
 <!-- Initialize Swiper -->
-  <script>
-    var swiper = new Swiper('.swiper-container', {
-      slidesPerView: 3,
-      spaceBetween: 30,
-      slidesPerGroup: 3,
-      loop: true,
-      loopFillGroupWithBlank: true,
-      pagination: {
-        el: '.swiper-pagination',
-        clickable: true,
-      },
-      navigation: {
-        nextEl: '.swiper-button-next',
-        prevEl: '.swiper-button-prev',
-      },
-    });
-  </script>
+var swiper = new Swiper('.swiper-container', {
+    slidesPerView: 3,
+    spaceBetween: 30,
+    slidesPerGroup: 3,
+    loop: true,
+    loopFillGroupWithBlank: true,
+    pagination: {
+      el: '.swiper-pagination',
+      clickable: true,
+    },
+    navigation: {
+      nextEl: '.swiper-button-next',
+      prevEl: '.swiper-button-prev',
+    },
+  });
+</script>

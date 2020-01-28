@@ -100,13 +100,16 @@ create table reser (
         , constraint FK_reser_idx foreign key(fk_idx) references member(idx)        
         , constraint CK_reser_STATUS check ( status in ('0','1'))
         ); 
-select * from reser;
-select * from reserDetail where fk_reserno = 12;
-select * from reserEx ;
-select * from cart;
-select TO_CHAR(TO_DATE('20180823', 'YYYYMMDD'), 'YYYY-MM-DD') from cart;
+select * from reser order by reserno desc
+select * from reserDetail order by reserdetailno desc;
+select * from reserEx where fk_reserdetailno = 22;
+select * from cart order by cartno desc;
+select TO_CHAR(TO_DATE(dday, 'YYYY-MM-DD'), 'YYYY/MM/DD') as dday from cart;
 select * from cartDetail;
 select max(reserno) from reser;
+select * from member order by idx;
+select RESERDETAILNO, FK_RESERNO, FK_EXHIBITIONNO, TO_CHAR(TO_DATE(dday, 'YY/MM/DD'), 'YYYY-MM-DD') as dday, STATUS, EXNAME, RESERSTAT, MAINIMG from reserDetail;
+select * from member;
 -- 예매상세        
 create table reserDetail ( 
           reserDetailNo number                    -- 예매상세 번호
@@ -156,3 +159,12 @@ select * from member;
 select * from APPLIEDEXHIBITS;
 
 commit;
+
+
+---
+
+select *
+from cart a left join exhibitionDetail b	
+on a.fk_exhibitionno = b.fk_exhibitionno		
+where fk_idx = 1
+order by cartno desc
