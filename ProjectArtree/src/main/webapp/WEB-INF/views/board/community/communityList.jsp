@@ -102,12 +102,12 @@
 	}
 	
 	div#contentContainer table thead td:nth-child(2), div#contentContainer table tbody td:nth-child(2) {
-		width : 35%;
+		width : 25%;
 		text-align: center;
 	}
 	
-	div#contentContainer table thead td:nth-child(3), div#contentContainer table tbody td:nth-child(3) {
-		width : 25%;
+	div#contentContainer table thead td:nth-child(4), div#contentContainer table tbody td:nth-child(3) {
+		width : 30%;
 		text-align: center;
 	}
 	
@@ -115,14 +115,19 @@
 		cursor: pointer;
 	}
 
-	div#contentContainer table thead td:nth-child(4), div#contentContainer table tbody td:nth-child(4) {
+	div#contentContainer table thead td:nth-child(5), div#contentContainer table tbody td:nth-child(4) {
 		width : 10%;
 		text-align: center;
 	}
 	
-	div#contentContainer table thead td:nth-child(5), div#contentContainer table tbody td:nth-child(5) {
+	div#contentContainer table thead td:nth-child(6), div#contentContainer table tbody td:nth-child(5) {
 		width : 5%;
 		text-align: center;
+	}
+	
+	div#contentContainer table thead td:nth-child(7), div#contentContainer table tbody td:nth-child(5) {
+		width : 5%;
+		text-align: center !important;
 	}
 
 	div#contentContainer table thead td {
@@ -201,15 +206,16 @@
 		// 리스트의 전시회 이름을 클릭하면 전시회 상세페이지로 이동한다.
 		$("div#contentContainer table tbody td:nth-child(2)").click(function(){
 			
-			var exhibitionCode = "${exhibitionCode}";
+			var exhibitionno = $(this).next().text();
+			console.log(exhibitionno);
 			// 페이지로 들어올 때 전시회 코드도 같이 받아와서, 클릭한 전시회 코드를 넘겨줍니다.
-			window.location.href="/artree/*.at?exhibitionCode="+exhibitionCode;	
+			//window.location.href="/artree/exhDetail.at?eno="+exhibitionno;	
 		});
 		
 		// 리스트의 리뷰 제목을 클릭하면 리뷰 상세페이지로 이동한다.
-		$("div#contentContainer table tbody td:nth-child(3)").click(function(){
+		$("div#contentContainer table tbody td:nth-child(4)").click(function(){
 			// 글번호를 넘긴다.
-			var no = $(this).prev().prev().text();
+			var no = $(this).prev().prev().prev().text();
 			window.location.href="/artree/communityDetail.at?no="+no;	
 		});
 		
@@ -254,95 +260,46 @@
 		
 		<div id="contentContainer">
 			<table id="communityContents">
-				<thead>
-					<tr>
-						<td>No.</td>
-						<td>Exhibition</td>
-						<td>Title</td>
-						<td>WriteDay</td>
-						<td>Read</td>
-					</tr>	
-				</thead>
-				
-				<tbody>
-					<tr>
-						<td>1</td>
-						<td>국립현대미술관 50주년 기념전 《광장: 미술과 사회 1900-2019》개최</td>
-						<td>리뷰제목리뷰제목리뷰제목리목</td>
-						<td>2020-01-10 22:10</td>
-						<td>5</td>
-					</tr>
-					<tr>
-						<td>2</td>
-						<td>국립현대미술관 50주년 기념전</td>
-						<td>리뷰제목리뷰제목리뷰제목</td>
-						<td>2020-01-10 22:10</td>
-						<td>5</td>
-					</tr>
-					<tr>
-						<td>3</td>
-						<td>가나아트 컬렉션 상설전 시대유감 時代遺憾 </td>
-						<td>리뷰제목리뷰제목리뷰제목제목리뷰제</td>
-						<td>2020-01-10 22:10</td>
-						<td>5</td>
-					</tr>
-					<tr>
-						<td>4</td>
-						<td>국립현대미술관 50주년 기념전</td>
-						<td>리뷰제목리뷰제목리뷰제목</td>
-						<td>2020-01-10 22:10</td>
-						<td>5</td>
-					</tr>
-					<tr>
-						<td>5</td>
-						<td>국립현대미술관 50주년 기념전</td>
-						<td>리뷰제목리뷰제목리뷰제목</td>
-						<td>2020-01-10 22:10</td>
-						<td>5</td>
-					</tr>
-					<tr>
-						<td>6</td>
-						<td>국립현대미술관 50주년 기념전</td>
-						<td>리뷰제목리뷰제목리뷰제목</td>
-						<td>2020-01-10 22:10</td>
-						<td>5</td>
-					</tr>
-					<tr>
-						<td>7</td>
-						<td>국립현대미술관 50주년 기념전</td>
-						<td>리뷰제목리뷰제목리뷰제목</td>
-						<td>2020-01-10 22:10</td>
-						<td>5</td>
-					</tr>
-					<tr>
-						<td>8</td>
-						<td>국립현대미술관 50주년 기념전</td>
-						<td>리뷰제목리뷰제목리뷰제목</td>
-						<td>2020-01-10 22:10</td>
-						<td>5</td>
-					</tr>
-					<tr>
-						<td>9</td>
-						<td>국립현대미술관 50주년 기념전</td>
-						<td>리뷰제목리뷰제목리뷰제목</td>
-						<td>2020-01-10 22:10</td>
-						<td>5</td>
-					</tr>
-					<tr>
-						<td>10</td>
-						<td>국립현대미술관 50주년 기념전</td>
-						<td>리뷰제목리뷰제목리뷰제목</td>
-						<td>2020-01-10 22:10</td>
-						<td>5</td>
-					</tr>
-				</tbody>
+				<c:if test="${communityList != null}">
+					<thead>
+						<tr style="text-align: center !important;">
+							<td>No.</td>
+							<td>Exhibition</td>
+							<td style="display:none;"></td>
+							<td>Title</td>
+							<td>Writer</td>
+							<td>WriteDay</td>
+							<td>Read</td>
+						</tr>	
+					</thead>
+					
+					<tbody><!-- exhibitionname, C.title, C.name, C.writeday, C.readcount -->
+						<c:forEach var="item" items="${communityList}">
+							<tr>
+								<td>${item.no}</td>
+								<td>${item.exhibitionname}</td>
+								<td style="display:none;">${item.exhibitionno}</td>
+								<td style="cursor:pointer;">${item.title}</td>
+								<td>${item.name}</td>
+								<td>${item.writeday}</td>
+								<td style="text-align: center !important;">${item.readcount}</td>		
+							</tr>
+						</c:forEach>
+					</tbody>
+				</c:if>
+				<c:if test="${communityList == null}">
+					<thead>
+						<tr>
+							<td colspan="4">아직 등록된 글이 없습니다.</td>
+						</tr>	
+					</thead>
+				</c:if>
 			</table>
 		</div>
 
-		<!-- 페이징바 들어올 자리 -->
-		<!-- 페이지 바 여유되면 넣겠습니다........ㅠㅠㅠㅠㅠㅠㅠㅠㅠ-->
+		<!-- 페이징바  -->
 		<div class="pagination" align="center">
-		<%-- 	${pageBar} --%>
+			${pageBar}
 		</div>
 		
 		<div id="goWrite">

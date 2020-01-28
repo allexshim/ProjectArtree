@@ -5,8 +5,38 @@
 
 <mapper namespace="community">
 	
+	<resultMap type="HashMap" id="communityMap">
+		<result property="no"  				column="no" 			javaType="String"/> 
+		<result property="exhibitionname"  	column="exhibitionname" javaType="String"/> 
+		<result property="exhibitionno"  	column="exhibitionno" 	javaType="String"/> 
+		<result property="title"  			column="title" 			javaType="String"/> 
+		<result property="name"  			column="name" 			javaType="String"/> 
+		<result property="writeday"  		column="writeday" 		javaType="String"/> 
+		<result property="readcount"  		column="readcount" 		javaType="String"/> 
+	</resultMap>
+	
+	<!-- 글 조회하기 -->
+	<select id="getCommunity" parameterType="HashMap" resultMap="communityMap" >
+		select *
+        from (
+        select rownum as rno, no, exhibitionname, exhibitionno, title, name, writeday, readcount
+        from (
+        select C.no, E.exhibitionname, E.exhibitionno, C.title, C.name, C.writeday, C.readcount
+		from (
+		select V.*, M.name
+		from community V join member M 
+		on V.fk_idx = M.idx
+		) C  join exhibition E 
+		on C.fk_exhibitionno = E.exhibitionno
+		order by C.no desc
+        ) T ) Z 
+        <if test=" startRno != null ">
+        where rno between #{startRno} and #{endRno}
+        </if>
+	</select>
+	
 	<resultMap type="HashMap" id="Exhibit">
-		<result property="exhibitionno"  	 column="exhibitionno" 		javaType="String"/> 
+		<result property="exhibitionno"  	column="exhibitionno" 		javaType="String"/> 
 		<result property="exhibitionname"   column="exhibitionname" 	javaType="String"/> 
 		<result property="author"   		column="author" 			javaType="String"/> 
 		<result property="galleryname"  	column="galleryname" 		javaType="String"/> 

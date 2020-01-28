@@ -6,7 +6,13 @@
 		alert("${msg}");
     }
     
+<<<<<<< HEAD
     if(${loc != null}) {
 		location.href="${loc}";
     }
+=======
+    if(${loc != null}) {
+		location.href="${loc}";
+    } 
+>>>>>>> branch 'master' of https://github.com/allexshim/ProjectArtree.git
 </script> 
