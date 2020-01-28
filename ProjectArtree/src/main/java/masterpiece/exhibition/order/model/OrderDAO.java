@@ -117,5 +117,17 @@ public class OrderDAO implements InterOrderDAO {
 		List<HashMap<String, String>> selectReserEx = sqlsession.selectList("order.selectReserEx",map);
 		return selectReserEx;
 	}
+
+	@Override
+	public List<HashMap<String, String>> monthlySalesList(HashMap<String, String> map) {
+		List<HashMap<String, String>> monthlySalesList = sqlsession.selectList("order.monthlySalesList",map);
+		return monthlySalesList;
+	}
+
+	@Override
+	public List<HashMap<String, String>> dailySalesList(HashMap<String, String> map) {
+		List<HashMap<String, String>> dailySalesList = sqlsession.selectList("order.dailySalesList",map);
+		return dailySalesList;
+	}
 	
 }

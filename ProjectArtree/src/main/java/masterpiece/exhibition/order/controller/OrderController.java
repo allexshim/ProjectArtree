@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.json.JSONArray;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import masterpiece.exhibition.common.MyUtil;
 import masterpiece.exhibition.member.model.MemberVO;
 import masterpiece.exhibition.order.service.InterOrderService;
 
@@ -27,8 +29,12 @@ public class OrderController {
 	private InterOrderService service;
 
 	@RequestMapping(value = "/ticketsbin.at")
-	public String ticketsbin(HttpServletRequest request) {
+	public String ticketsbin(HttpServletRequest request, HttpServletResponse response) {
 
+		HttpSession session = request.getSession();
+		String goBackURL = MyUtil.getCurrentURL(request);
+		session.setAttribute("goBackURL",goBackURL);
+		
 		//String no = request.getParameter("eno");
 		HashMap<String, String> map = new HashMap<String, String>();
 
@@ -63,8 +69,7 @@ public class OrderController {
 		request.setAttribute("price30", price30);
 		request.setAttribute("price50", price50);
 		request.setAttribute("img", img);
-
-		HttpSession session = request.getSession();
+		
 		session.setAttribute("no", no);
 		String[] qt = null;
 		String bin = "";
@@ -90,8 +95,8 @@ public class OrderController {
 
 	@RequestMapping(value = "/insertCart.at")
 	public ModelAndView insertCart(HttpServletRequest request, ModelAndView mav) {
-
-		HttpSession session = request.getSession();
+		
+		HttpSession session = request.getSession();		
 		HashMap<String, String> map = new HashMap<String, String>();
 		String dateBin = request.getParameter("dateBin");
 		String exname = request.getParameter("exhibitionname");
@@ -153,7 +158,9 @@ public class OrderController {
 
 	@RequestMapping(value = "/paymentGatebin.at")
 	public String paymentGatebin(HttpServletRequest request, HashMap<String,String> map) {
-		String idx = "1";
+		HttpSession session = request.getSession();		
+		MemberVO mvo = (MemberVO)session.getAttribute("loginuser");		
+		String idx = mvo.getIdx();	
 		map.put("idx", idx);
 		List<HashMap<String,String>> mapList = service.selectCartNoList(map);
 		
@@ -184,7 +191,9 @@ public class OrderController {
 		map.put("Discount", Discount);
 		map.put("orderpri", orderpri);	
 		
-		String idx = "1";
+		HttpSession session = request.getSession();		
+		MemberVO mvo = (MemberVO)session.getAttribute("loginuser");		
+		String idx = mvo.getIdx();
 		map.put("idx", idx);
 		service.order(map); // 예매 입력, 카트 삭제
 		
@@ -332,5 +341,60 @@ public class OrderController {
 
 		return jsonStr;
 	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/monthlySales.at", produces = "text/plain;charset=UTF-8")
+	public String monthlySales(HttpServletRequest request) {
+		HashMap<String,String> map = new HashMap<String,String>();
+		List<HashMap<String, String>> monthlySalesList = service.monthlySalesList(map);
+		String jsonStr = "";
+		JSONArray jsonArr = new JSONArray();		
+		
+		for (int a = 0; a < monthlySalesList.size(); a++) {
+		
+			JSONObject jsonObj = new JSONObject();
+			
+			Set key = monthlySalesList.get(a).keySet();
+			Iterator iterator = key.iterator();		
+			for (iterator = key.iterator(); iterator.hasNext();) {
+			   String keyName = (String) iterator.next();		
+			   jsonObj.put(keyName, monthlySalesList.get(a).get(keyName));			   
+			}	
+			
+			jsonArr.put(jsonObj);
+		}
 
+		jsonStr = jsonArr.toString();
+
+		return jsonStr;
+	}
+
+	@ResponseBody
+	@RequestMapping(value = "/dailySales.at", produces = "text/plain;charset=UTF-8")
+	public String dailySales(HttpServletRequest request) {		
+
+		HashMap<String,String> map = new HashMap<String,String>();
+		String reserdate =request.getParameter("reserdate");		
+		map.put("reserdate", reserdate);
+		List<HashMap<String, String>> dailySalesList = service.dailySalesList(map);
+		String jsonStr = "";
+		JSONArray jsonArr = new JSONArray();		
+		
+		for (int a = 0; a < dailySalesList.size(); a++) {
+		
+			JSONObject jsonObj = new JSONObject();
+			
+			Set key = dailySalesList.get(a).keySet();
+			Iterator iterator = key.iterator();		
+			for (iterator = key.iterator(); iterator.hasNext();) {
+			   String keyName = (String) iterator.next();		
+			   jsonObj.put(keyName, dailySalesList.get(a).get(keyName));			   
+			}				
+			jsonArr.put(jsonObj);
+		}
+
+		jsonStr = jsonArr.toString();		
+		return jsonStr;
+	}
+	
 }

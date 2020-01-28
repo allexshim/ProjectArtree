@@ -139,4 +139,30 @@
 		select * from reserEx where fk_reserdetailno = #{RESERDETAILNO}
 	</select>
 	
+	<resultMap type="HashMap" id="monthlySalesMap">
+		<result property="reserdate" column="reserdate" javaType="String"></result>
+		<result property="monthlySales" column="monthlySales" javaType="String"></result>					
+	</resultMap>
+	
+	<select id="monthlySalesList" resultMap="monthlySalesMap">				
+select to_char(reserdate, 'mm') as reserdate, substr(sum(resertotal),1,length(sum(resertotal))-4) as monthlySales from reser
+where status = 1 and 
+reserdate like '20/%'
+group by to_char(reserdate, 'mm')
+order by reserdate
+	</select>
+	
+	<resultMap type="HashMap" id="dailySalesMap">
+		<result property="reserdate" column="reserdate" javaType="String"></result>
+		<result property="dailySales" column="dailySales" javaType="String"></result>					
+	</resultMap>
+	
+	<select id="dailySalesList" resultMap="dailySalesMap">		
+select to_char(reserdate,'dd') as reserdate, substr(sum(resertotal),1,length(sum(resertotal))-4) as dailySales from reser
+where status = 1 and
+reserdate like '20/' || #{reserdate} || '/%'
+group by to_char(reserdate,'dd')
+order by reserdate
+	</select>
+	
 </mapper>

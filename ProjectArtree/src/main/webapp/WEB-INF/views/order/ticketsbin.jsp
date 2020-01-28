@@ -50,10 +50,17 @@
 			monthNames: ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'],
 			altField: '#calendar-date',
 			dateFormat: 'yy-mm-dd'
-		});	
-		
+		});					
+				
 		$("#nextBin").click(function(){
-			if($("input[name=totalBin]").val()!=""){
+			
+			var loginuser = "${sessionScope.loginuser}";
+			
+			if(loginuser == "") {
+				location.href="javascript:layer_open('layer')";
+			}
+			
+			else if($("input[name=totalBin]").val()!=""){
 				goCtrl()	
 			}			
 			else {
@@ -183,7 +190,7 @@
 			${startdate } - ${enddate }
 		</div>
 		
-		<div style="width: 80%; height: 400px;"><img style="width: 100%; height: 100%;" src="${mainposter}"></div>
+		<div style="width: 80%; height: 400px;"><img style="width: 60%; height: 100%;" src="${mainposter}"></div>
 		
 		<div style="margin:2% 0; font-size: 22px; font-weight: bold; text-align: left;">
 			${exhibitionname}<input hidden="hidden" name="exhibitionname" value="${exhibitionname}">

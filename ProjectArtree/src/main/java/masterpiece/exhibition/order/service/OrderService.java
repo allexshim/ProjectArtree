@@ -155,4 +155,16 @@ public class OrderService implements InterOrderService {
 		List<HashMap<String, String>> selectReserEx = dao.selectReserEx(map);
 		return selectReserEx;		
 	}
+
+	@Override
+	public List<HashMap<String, String>> monthlySalesList(HashMap<String, String> map) {
+		List<HashMap<String, String>> monthlySalesList = dao.monthlySalesList(map);
+		return monthlySalesList;
+	}
+
+	@Override
+	public List<HashMap<String, String>> dailySalesList(HashMap<String, String> map) {
+		List<HashMap<String, String>> dailySalesList = dao.dailySalesList(map);
+		return dailySalesList;
+	}
 }

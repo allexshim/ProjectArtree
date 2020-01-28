@@ -36,4 +36,8 @@ public interface InterOrderDAO {
 
 	List<HashMap<String, String>> selectReserEx(HashMap<String, String> map); // 예매전시 조회
 
+	List<HashMap<String, String>> monthlySalesList(HashMap<String, String> map); // 월별매출 조회
+
+	List<HashMap<String, String>> dailySalesList(HashMap<String, String> map); // 일별매출 조회
+
 }
