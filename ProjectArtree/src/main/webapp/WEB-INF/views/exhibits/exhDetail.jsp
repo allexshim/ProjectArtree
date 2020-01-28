@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <%
 	String ctxPath = request.getContextPath();
@@ -572,8 +573,6 @@
 			$(this).children(".forMoving").stop().animate({left:'0px'}, 'fast');
 		});
 		
-		$('[data-toggle="tooltip"]').tooltip();
-		
 		$(".moving").click(function(){
 			var start = $(".price_area").offset();
 			$('html, body').animate({scrollTop:start.top}, 1000);
@@ -788,6 +787,7 @@
 					html += "<img data-toggle='tooltip' title='전시회 관심 지정 !' data-placement='bottom' src='<%= ctxPath%>/resources/images/exhibition/ico/empty_heart.png'>";
 				}
 				
+				$('[data-toggle="tooltip"]').tooltip();
 				$(".A_heart").html(html);
 			},
 			error: function(request, status, error){
@@ -816,6 +816,7 @@
 				}
 				
 				$(".A_select").html(html);
+				$('[data-toggle="tooltip"]').tooltip();
 			},
 			error: function(request, status, error){
 				alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
@@ -826,25 +827,29 @@
 	////////////////////////// 전시회 좋아요 지정 및 해제 ////////////////////////
 	function exhLike(eno, gno, tag, gen){
 		
-		$.ajax({
-			
-			url: "<%=ctxPath%>/ExhLike.at",
-			type: 'POST',
-			data: {"eno":eno, "gno":gno, "tag":tag, "gen":gen},
-			dataType: "JSON",
-			success: function(json){
-				if(json.CkEcnt == 1){
-					
+		if(${sessionScope.loginuser == null}){
+			alert("먼저 로그인을 진행해주세요 !");
+			location.href="javascript:layer_open('layer')";
+			return;
+		}
+		else {
+			$.ajax({
+				
+				url: "<%=ctxPath%>/ExhLike.at",
+				type: 'POST',
+				async:false,
+				data: {"eno":eno, "gno":gno, "tag":tag, "gen":gen},
+				dataType: "JSON",
+				success: function(json){
+					if(json.CkEcnt == 1){
+						goCheckLikeExh(eno);
+					}
+				},
+				error: function(request, status, error){
+					alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
 				}
-				else {
-					
-				}
-			},
-			error: function(request, status, error){
-				alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
-			}
-		});
-		
+			});
+		}
 	}
 	
 	////////////////////////// 갤러리 좋아요 지정 및 해제 ////////////////////////
@@ -853,14 +858,12 @@
 			
 			url: "<%=ctxPath%>/GalLike.at",
 			type: 'POST',
+			
 			data: {"gno":gno},
 			dataType: "JSON",
 			success: function(json){
 				if(json.CkGcnt == 1){
-					
-				}
-				else {
-					
+					goCheckLikeGal(gno);
 				}
 			},
 			error: function(request, status, error){
@@ -899,6 +902,12 @@
 		}
 	} // end of share --------------------
 
+	function goCtrl(){
+		<%-- 전시회넘버 / eno / ticketsbin.at post get 상관없음
+			로긴유저만 ~ 
+		--%>
+		<%-- add to cart 없애기 --%>
+	}
 </script>
 <%-- EXHIBITION LIST SCRIPT END --%>
 
@@ -918,7 +927,7 @@
 				
 				<c:if test="${exhDetailMap.PRICE ne 0}">
 					<div class="top_btn_area" align="center" style="top: 720px; left: 58%; position: absolute;">
-						<button type="button" class="buyBtn btn1 forIco" onclick="">
+						<button type="button" class="buyBtn btn1 forIco" onclick="goCtrl()">
 							BUY TICKETS
 							<img class="forMoving" src="<%= ctxPath%>/resources/images/exhibition/ico/right_arrow.png">
 						</button>
@@ -1194,21 +1203,39 @@
 					  	</tr>
 					  	<tr>
 					  		<td>성인 | 만 19세 이상</td>
-					  		<td>${exhDetailMap.PRICE}</td>
-					  		<td>${exhDetailMap.PRICE*0.9}</td>
-					  		<td>${exhDetailMap.PRICE*0.7}</td>
+					  		<td>
+					  			<fmt:formatNumber value="${exhDetailMap.PRICE}" type="number"/>원
+					  		</td>
+					  		<td>
+					  			<fmt:formatNumber value="${exhDetailMap.PRICE*0.9}" type="number"/>원
+					  		</td>
+					  		<td>
+					  			<fmt:formatNumber value="${exhDetailMap.PRICE*0.7}" type="number"/>원
+					  		</td>
 					  	</tr>
 					  	<tr>
 					  		<td>청소년 | 만 13 ~ 18세</td>
-					  		<td>${exhDetailMap.PRICE*0.8}</td>
-					  		<td>${(exhDetailMap.PRICE*0.8)*0.9}</td>
-					  		<td>${(exhDetailMap.PRICE*0.8)*0.7}</td>
+					  		<td>
+					  			<fmt:formatNumber value="${exhDetailMap.PRICE*0.8}" type="number"/>원
+					  		</td>
+					  		<td>
+					  			<fmt:formatNumber value="${(exhDetailMap.PRICE*0.8)*0.9}" type="number"/>원
+					  		</td>
+					  		<td>
+					  			<fmt:formatNumber value="${(exhDetailMap.PRICE*0.8)*0.7}" type="number"/>원
+					  		</td>
 					  	</tr>
 					  	<tr>
 					  		<td>어린이 | 만 4 ~ 12세</td>
-					  		<td>${exhDetailMap.PRICE*0.5}</td>
-					  		<td>${(exhDetailMap.PRICE*0.5)*0.9}</td>
-					  		<td>${(exhDetailMap.PRICE*0.5)*0.7}</td>
+					  		<td>
+					  			<fmt:formatNumber value="${exhDetailMap.PRICE*0.5}" type="number"/>원
+					  		</td>
+					  		<td>
+					  			<fmt:formatNumber value="${(exhDetailMap.PRICE*0.5)*0.9}" type="number"/>원
+					  		</td>
+					  		<td>
+					  			<fmt:formatNumber value="${(exhDetailMap.PRICE*0.5)*0.7}" type="number"/>원
+					  		</td>
 					  	</tr>
 					  	<tr>
 					  		<td>만 4세 미만</td>

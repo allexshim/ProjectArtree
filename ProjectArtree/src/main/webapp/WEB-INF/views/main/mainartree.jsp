@@ -431,7 +431,7 @@ function winScroll(){
     
 
 	<div id="slider" style="width: 100%; height: 800px; display: inline-block;">
-       	<div style="background-size: cover; width:100%; height:100%; z-index:1000; margin-top:0; background-image: url('<%= ctxPath%>/resources/images/main/mainImg1.jpg')">
+       	<div style="background-size: cover; width:100vw; height:100vh; z-index:1000; margin-top:0; background-image: url('<%= ctxPath%>/resources/images/main/mainImg1.jpg')">
        		 <div class="main-logo" style="z-index: 5; width: 400px; height: 300px;">
        			<img style="width: 255px; height: 255px; -webkit-transform:translate(300px,350px);" alt="로고이미지" src="<%= ctxPath%>/resources/images/main/logo_black_new.png" />
        		 </div>

@@ -25,6 +25,13 @@ public interface InterMemberDAO {
 
 	int updatePwd(HashMap<String, String> updateMap); // 임시 비밀번호로 현재 비밀번호 변경
 
+	List<HashMap<String, String>> selectWannaGo(String idx); // 하트 눌렀을 때 가고싶어요 select
+
+	List<HashMap<String, String>> selectGo(String idx); // 책갈피 눌렀을 때 다녀왔어요 select
+
+	int updateFavor1(HashMap<String, String> paraMap); // 마이페이지 - 작품 재설정1
+	int updateFavor2(HashMap<String, String> paraMap); // 마이페이지 - 작품 재설정2
+
 	
 
 }

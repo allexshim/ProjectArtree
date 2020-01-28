@@ -1,6 +1,10 @@
 package masterpiece.exhibition.board.community.controller;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -80,7 +84,14 @@ public class CommunityController {
 	} // end of communityDetail -------------------------------------------
 	
 	@RequestMapping(value="/addCommunity.at")
-	public String addCommunity(HttpServletRequest request) {
+	public String requireLogin_addCommunity(HttpServletRequest request, HttpServletResponse response) {
+		
+		// 현재시간을 얻어와서 넘긴다 (작성일자)
+		SimpleDateFormat format = new SimpleDateFormat ( "yyyy-MM-dd HH:mm:ss");
+		Date time = new Date();
+		String writeDay = format.format(time);
+		
+		request.setAttribute("writeDay", writeDay);
 		
 		return "board/community/addCommunity.tiles";
 	} // end of addCommunity --------------------------------------------

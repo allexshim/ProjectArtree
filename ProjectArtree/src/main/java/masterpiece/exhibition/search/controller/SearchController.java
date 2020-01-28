@@ -35,6 +35,14 @@ public class SearchController {
 		return "search/search.tiles";
 	} // end of reviewList --------------------------------------------
 	
+	/*/// wordCloud 수정용 백업
+	// 검색 페이지로 이동하는 url
+	@RequestMapping(value="/search2.at")
+	public String goSearchPage2(HttpServletRequest request) {
+		
+		return "search/search2.tiles";
+	} // end of reviewList --------------------------------------------
+*/	
 	// 전시회 정보 가져오기
 	@ResponseBody
 	@RequestMapping(value="/locationSearch.at", produces="text/plain;charset=UTF-8")

@@ -57,6 +57,10 @@
 		border-bottom: 2px solid #666 !important;
 	}
 	
+	.onNav {
+		border-bottom: 3px solid #666 !important;
+	}
+	
 	/* 기본 틀 */
 	div.conts {
 		display: inline-block;
@@ -203,16 +207,20 @@
 			$(this).removeClass("on");
 			$("#myArtmap").addClass("on");
 		});
-	
+		
+		$("#wantCnt").html(${wantList}.length);
+		$("#goCnt").html(${goList}.length);
+		
 	});
 	
 	// 가고싶어요 다녀왔어요 변경
 	function tab_nav(n){
-		$(".tab_nav").removeClass("on");
+		$(".tab_nav").removeClass("onNav");
 		$(".tbl_div").css("display", "none");
-		$("#tab_nav"+n).addClass("on");
+		$("#tab_nav"+n).addClass("onNav");
 		$("#tab_wrap"+n).css("display", "");
 	}
+	
 </script>
 
 <body>
@@ -336,9 +344,9 @@
 		<div class="conts" style="padding: 0px;">
 			<div class="clip">
 				<h2>전시클립</h2>
-				<div class="tab_nav on" onClick="tab_nav('1')" id="tab_nav1">가고싶어요 (1)</div>
+				<div class="tab_nav onNav" onClick="tab_nav('1')" id="tab_nav1">가고싶어요 (<span id="wantCnt"></span>)</div>
 				<!-- select count -->
-				<div class="tab_nav" onClick="tab_nav('2')" id="tab_nav2">다녀왔어요 (1)</div>
+				<div class="tab_nav" onClick="tab_nav('2')" id="tab_nav2">다녀왔어요 (<span id="goCnt"></span>)</div>
 				<div class="tbl_div" id="tab_wrap1">
 					<table class="tab_tbl">
 						<colgroup>
@@ -346,19 +354,21 @@
 							<col style="width: 65%"/>
 							<col style="width: 25%"/>
 						</colgroup>
+						<c:forEach items="${wantList}" var="want">
 						<tr>
 							<td>
-								<img src="http://app.art-map.co.kr/upload/exhibition/artmap_20200106_104227138.jpg"/>
+								<img src="${want.mainposter}"/>
 							</td>
 							<td>
-								<span>MIMESIS AP3: Picturesque City</span>
-								<span>미메시스아트뮤지엄/경기</span>
-								<span>2019.11.28 - 2020.01.27</span>
+								<span>${want.exhibitionname}</span>
+								<span>${want.galleryname} }</span>
+								<span>${want.startdate} - ${want.enddate}</span>
 							</td>
 							<td>
-								<span>전시중</span>
+								<span>${want.status}</span>
 							</td>
 						</tr>
+						</c:forEach>
 					</table>
 				</div>
 				
@@ -369,19 +379,21 @@
 							<col style="width: 65%"/>
 							<col style="width: 25%"/>
 						</colgroup>
+						<c:forEach items="${goList}" var="go">
 						<tr>
 							<td>
-								<img src="http://app.art-map.co.kr/upload/exhibition/artmap_20191017_95348991.jpg"/>
+								<img src="${go.mainposter}"/>
 							</td>
 							<td>
-								<span>알폰스 무하 Alphonse Mucha</span>
-								<span>마이아트뮤지엄/서울</span>
-								<span>2019-10-24 - 2020-03-01</span>
+								<span>${go.exhibitionname}</span>
+								<span>${go.galleryname}</span>
+								<span>${go.startdate} - ${go.enddate}</span>
 							</td>
 							<td>
-								<span>전시중</span>
+								<span>${go.status}</span>
 							</td>
 						</tr>
+						</c:forEach>
 					</table>
 				</div>
 			</div>
