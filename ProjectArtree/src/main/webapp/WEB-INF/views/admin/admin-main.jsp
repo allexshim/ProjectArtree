@@ -117,7 +117,7 @@ body, html {
 		
 		$("#exhibitions").click(function(){
 				
-			window.location.href="/artree/registerformList.at";
+			window.location.href="/artree/exhibitionList.at";
 			
 		});
 			

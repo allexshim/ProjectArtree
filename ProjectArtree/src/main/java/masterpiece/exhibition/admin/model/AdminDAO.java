@@ -7,6 +7,8 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import masterpiece.exhibition.exhibits.model.ExhibitsVO;
+
 @Repository
 public class AdminDAO implements InterAdminDAO {
 
@@ -72,6 +74,20 @@ public class AdminDAO implements InterAdminDAO {
 	public int getApplyingno() {
 		int applyingno = sqlsession.selectOne("admin.getApplyingno");
 		return applyingno;
+	}
+
+	// 전시회목록 가져오기
+	@Override
+	public List<ExhibitsVO> getExhibitionList() {
+		List<ExhibitsVO> exhibitionList = sqlsession.selectList("admin.getExhibitionList");
+		return exhibitionList;
+	}
+
+	// 전시회정보 가져오기
+	@Override
+	public ExhibitsVO getExhibitionDetail(String no) {
+		ExhibitsVO exhibitionInfo = sqlsession.selectOne("admin.getExhibitionDetail", no);
+		return exhibitionInfo;
 	}
 
 
