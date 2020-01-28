@@ -113,6 +113,15 @@ public class MemberService implements InterMemberService {
 		return n;
 	}
 
+
+	// *********************** 마이페이지 *********************** //
+	// ========= word cloud 개인 선호 태그 select =========
+	@Override
+	public List<String> myfavorTag(String idx) {
+		List<String> myfavorTag = dao.myfavorTag(idx);
+		return myfavorTag;
+	}
+	
 	// ========= 하트 눌렀을 때 가고싶어요 select =========
 	@Override
 	public List<HashMap<String, String>> selectWannaGo(String idx) {
@@ -120,12 +129,25 @@ public class MemberService implements InterMemberService {
 		return wantList;
 	}
 
-	// *********************** 마이페이지 *********************** //
 	// ========= 책갈피 눌렀을 때 다녀왔어요 select =========
 	@Override
 	public List<HashMap<String, String>> selectGo(String idx) {
 		List<HashMap<String, String>> goList = dao.selectGo(idx);
 		return goList;
+	}
+
+	// ========= 하트 눌렀을 때 전시회의 작가 select =========
+	@Override
+	public List<HashMap<String, String>> selectFavorAuthor(String idx) {
+		List<HashMap<String, String>> favorAuthor = dao.selectFavorAuthor(idx);
+		return favorAuthor;
+	}
+
+	// ========= 선호 전시관 =========
+	@Override
+	public List<HashMap<String, String>> selectfavorGal(String idx) {
+		List<HashMap<String, String>> favorGal = dao.selectfavorGal(idx);
+		return favorGal;
 	}
 
 	// ========= 마이페이지 - 작품 재설정 =========
@@ -136,6 +158,36 @@ public class MemberService implements InterMemberService {
 		int m = dao.updateFavor2(paraMap);
 		return n+m;
 	}
+
+	// ========= 닉네임 변경 =========
+	@Override
+	public int changeName(HashMap<String, String> paraMap) {
+		int n = dao.changeName(paraMap);
+		return n;
+	}
+
+	// ========= 비밀번호 변경 =========
+	@Override
+	public int changePwd(HashMap<String, String> paraMap) {
+		int n = dao.changePwd(paraMap);
+		return n;
+	}
+
+	// ========= 회원탈퇴 =========
+	@Override
+	public int withdrawal(HashMap<String, String> paraMap) {
+
+		// 탈퇴 사유 member insert
+		int n = dao.updateWithdrawal(paraMap);
+		
+		// status 0 으로 변경
+		int m = dao.updateStatus(paraMap.get("idx"));
+		
+		return n+m;
+	}
+
+
+
 
 
 

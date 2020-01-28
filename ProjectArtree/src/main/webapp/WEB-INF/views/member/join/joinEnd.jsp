@@ -355,8 +355,6 @@ function confirm() {
 			  html += "</div>";
 		  }
 		  
-		  console.log(text);
-		  
 		  getGenreTag(text);
 		  
 		  $("#point").html(html);

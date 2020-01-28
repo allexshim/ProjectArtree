@@ -433,6 +433,13 @@ public class MemberController {
 		
 		String idx = loginuser.getIdx();
 
+		// word cloud 개인 선호 태그 select
+		List<String> myfavorTag = service.myfavorTag(idx);
+		
+		String text = String.valueOf(myfavorTag).substring(1, String.valueOf(myfavorTag).length()-1);
+		
+		request.setAttribute("text", text);
+		
 		// 하트 눌렀을 때 가고싶어요 select
 		List<HashMap<String, String>> wantList = service.selectWannaGo(idx);
 		request.setAttribute("wantList", wantList);
@@ -441,9 +448,20 @@ public class MemberController {
 		List<HashMap<String, String>> goList = service.selectGo(idx);
 		request.setAttribute("goList", goList);
 		
-		// 하트랑 책갈피 눌렀을 때 누른 전시회의 작가 select
-		// List<HashMap<String, String>> favorAuthor = service.selectFavorAuthor(idx);
-
+		int wantCnt = wantList.size();
+		int goCnt = goList.size();
+		
+		request.setAttribute("wantCnt", wantCnt);
+		request.setAttribute("goCnt", goCnt);
+		
+		// 하트 눌렀을 때 전시회의 작가 select
+		List<HashMap<String, String>> favorAuthor = service.selectFavorAuthor(idx);
+		request.setAttribute("favorAuthor", favorAuthor);
+		
+		// 선호 전시관
+		List<HashMap<String, String>> favorGal = service.selectfavorGal(idx);
+		request.setAttribute("favorGal", favorGal);
+		
 		return "member/mypage/mypage.tiles";
 	} // end of mypage --------------------------------------------
 	
@@ -460,6 +478,11 @@ public class MemberController {
 		
 		String goBackURL = MyUtil.getCurrentURL(request);
 		session.setAttribute("goBackURL", goBackURL);
+		
+		MemberVO loginuser = (MemberVO)session.getAttribute("loginuser");
+		
+		request.setAttribute("loginuser", loginuser);
+		
 		
 		return "member/mypage/mypage_set.tiles";
 	} // end of mypage_set --------------------------------------------
@@ -492,5 +515,87 @@ public class MemberController {
 		return n;
 		
 	} // end of updateFavor --------------------------------------------
-
+	
+	// 닉네임 변경
+	@ResponseBody
+	@RequestMapping(value="/changeName.at") 
+	public int changeName(HttpServletRequest request) {
+		
+		int n = 0;
+		
+		HttpSession session = request.getSession();
+		MemberVO loginuser = (MemberVO)session.getAttribute("loginuser");
+		
+		String idx = loginuser.getIdx();
+		String name = request.getParameter("name");
+		
+		HashMap<String, String> paraMap = new HashMap<String, String>();
+		paraMap.put("idx", idx);
+		paraMap.put("name", name);
+		
+		n = service.changeName(paraMap);
+		
+		loginuser.setName(name);
+		
+		
+		return n;
+	}
+	
+	// 비밀번호 변경
+	@ResponseBody
+	@RequestMapping(value="/changePwd.at") 
+	public int changePwd(HttpServletRequest request) {
+		
+		int n = 0;
+		
+		HttpSession session = request.getSession();
+		MemberVO loginuser = (MemberVO)session.getAttribute("loginuser");
+		
+		String chgPwd = SHA256.encrypt(request.getParameter("chgPwd"));
+		String curPwd = SHA256.encrypt(request.getParameter("curPwd"));
+		String idx = loginuser.getIdx();
+		
+		HashMap<String, String> paraMap = new HashMap<String, String>();
+		paraMap.put("password", chgPwd);
+		paraMap.put("idx", idx);
+		
+		if(curPwd.equals(loginuser.getPassword())) {
+			// 입력한 현재 비밀번호와 저장된 현재 비밀번호가 같으면 update 진행
+			n = service.changePwd(paraMap);
+		}
+		else {
+			n = -1;
+		}
+		return n;
+	}
+	
+	// 회원탈퇴
+	@RequestMapping(value="/withdrawal.at") 
+	public ModelAndView withdrawal(HttpServletRequest request, ModelAndView mav) {
+	
+		HttpSession session = request.getSession();
+		MemberVO loginuser = (MemberVO)session.getAttribute("loginuser");
+		
+		String withdrawal = request.getParameter("withdrawal"); // 탈퇴사유
+		String idx = loginuser.getIdx();
+		
+		HashMap<String, String> paraMap = new HashMap<String, String>();
+		paraMap.put("withdrawal", withdrawal);
+		paraMap.put("idx", idx);
+		
+		int n = service.withdrawal(paraMap);
+		
+		if(n==2) {
+			String msg = "탈퇴되었습니다. 이용해 주셔서 감사합니다.";
+			String loc = "/artree";
+			
+			mav.addObject("msg", msg);
+			mav.addObject("loc", loc);
+			
+			mav.setViewName("msg");
+		}
+				
+		return mav;
+	}
+	
 }

@@ -17,6 +17,7 @@
 	div.myPage_wrap {
 		width: 1250px;
 		margin: 0 auto;
+		margin-top: 100px;
 	}
 	
 	ul {
@@ -124,7 +125,7 @@
 <body>
 	<div class="myPage_wrap">
 	<div class="myPage_header">
-		<h1 class="header_name">사용자 이름</h1>
+		<h1 class="header_name">${loginuser.name}</h1>
 		<nav class="myPage_tabs">
 			<a href="/artree/mypage.at" class="tab">My Artmap</a>
 			<a href="/artree/mypage_order.at" class="tab on" id="myOrder">주문내역</a>
