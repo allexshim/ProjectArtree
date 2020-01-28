@@ -213,6 +213,11 @@
 		height: 100%;
 	}
 	
+	.new-one:hover {
+		text-decoration: none;
+		color: black;
+	}
+	
 	.end-one {
 		cursor: pointer;
 		text-align: center;
@@ -220,6 +225,11 @@
 		flex: 1;
 		width: 33%;
 		height: 100%;
+	}
+	
+	.end-one:hover {
+		text-decoration: none;
+		color: black;
 	}
 	
 	.new_poster {
@@ -283,6 +293,10 @@
 		display: none;
 	}
 	
+	.flash:hover {
+		cursor: pointer;
+	}
+	
 	/* Flashing */
 	.flash img:hover {
 		cursor: pointer;
@@ -317,7 +331,6 @@
     .swiper-slide {
       top: 0;
       text-align: center;
-      font-size: 18px;
       background: #fff;
 
       /* Center slide text vertically */
@@ -336,16 +349,20 @@
     }
     
     .recom-title {
+    	display: inline-block;
+    	width: 90%;
     	margin-top: 10px;
-    	font-size: 16pt;
+    	font-size: 14pt;
     	text-decoration: none;
     	color: black;
     }
     
     .recom-content {
-    	margin: 10px;
     	text-decoration: none;
-    	color: black;
+		color: black;
+		position: relative;
+		display: block;
+		margin: 10px;
     }
     
     .recom-title:hover {
@@ -357,6 +374,16 @@
     	text-decoration: none;
     	color: black;
     }
+    
+    .end-exp-title {
+    	font-size: 14pt;
+    }
+    
+    .new-exp-title {
+    	font-size: 14pt;
+    }
+    
+    
    
 </style>
 	
@@ -367,6 +394,22 @@
 $("#myheader").hide();
 $(".navigation").hide(); // 탑 버튼 숨김
 $(function () {
+	
+	$(document).on("mouseover", ".hover-left", function(){
+		$(this).find(".forMoving").stop().animate({left:'10px'}, 180);
+	});
+	
+	$(document).on("mouseout", ".hover-left", function(){
+		$(this).find(".forMoving").stop().animate({left:'0px'}, 180);
+	});
+	
+	$(document).on("mouseover", ".hover-top", function(){
+		$(this).find(".forMoving").stop().animate({top:'10px'}, 180);
+	});
+	
+	$(document).on("mouseout", ".hover-top", function(){
+		$(this).find(".forMoving").stop().animate({top:'0px'}, 180);
+	});
 	
 	$.ajax({
 		url: "<%=ctxPath%>/getMostPolular.at",
@@ -434,16 +477,15 @@ $(function () {
 					 + "<a class='recom-a flash hover-top' onclick='exhDetail("+item.exhibitionno+")'>"	
 					 + "<img class='slide-img' src='"+item.mainposter+"'>"
 					 + "<br/>"
-					 + "<span class='recom-title forMoving'>"+item.exhibitionname+"</span><br/>"
-					 + "<span class='recom-content forMoving'>"+item.author+"</span><br/>"
-					 + "<span class='recom-content forMoving'>"+item.location+" / "+item.galleryname+"</span><br/>"
-					 + "<span class='recom-content forMoving'>"+item.startdate+"~"+item.enddate+"</span>"
+					 + "<span class='recom-title'>"+item.exhibitionname+"</span>"
+					 + "<span class='recom-content'>"+item.author+"</span>"
+					 + "<span class='recom-content'>"+item.location+" / "+item.galleryname+"</span>"
+					 + "<span class='recom-content'>"+item.startdate+"~"+item.enddate+"</span>"
 					 + "</a>"
 					 + "</div>"
 			});
 			
 			$(".swiper-wrapper").append(html);
-			
 			
 		},
 		error: function(request, status, error){
@@ -464,9 +506,9 @@ $(function () {
 				
 				html += "<a onclick='exhDetail("+item.exhibitionno+")' class='new-one flash hover-top'>"
 					 +	"<img class='new_poster' src='"+item.mainposter+"' >"
-					 +		"<span class='new-exp forMoving'>"+item.exhibitionname+"</span>"
-					 +		"<span class='new-exp forMoving'>"+item.author+"</span>"
-					 + "<span class='recom-content forMoving'>"+item.location+" / "+item.galleryname+"</span><br/>"
+					 +		"<span class='new-exp new-exp-title'>"+item.exhibitionname+"</span>"
+					 +		"<span class='new-exp'>"+item.author+"</span>"
+					 + 		"<span class='new-exp'>"+item.location+" / "+item.galleryname+"</span>"
 					 +		"<span class='new-exp forMoving'>"+item.startdate+"~"+item.enddate+"</span>"
 					 +	"</a>"
 			});
@@ -491,9 +533,9 @@ $(function () {
 				
 				html += "<a onclick='exhDetail("+item.exhibitionno+")' class='end-one flash hover-top'>"
 					 +	"<img class='end_poster' src='"+item.mainposter+"' >"
-					 +		"<span class='end-exp forMoving'>"+item.exhibitionname+"</span>"
-					 +		"<span class='end-exp forMoving'>"+item.author+"</span>"
-					 + "<span class='recom-content forMoving'>"+item.location+" / "+item.galleryname+"</span><br/>"
+					 +		"<span class='end-exp end-exp-title'>"+item.exhibitionname+"</span>"
+					 +		"<span class='end-exp'>"+item.author+"</span>"
+					 + 		"<span class='end-exp'>"+item.location+" / "+item.galleryname+"</span>"
 					 +		"<span class='end-exp forMoving'>"+item.startdate+"~"+item.enddate+"</span>"
 					 +	"</a>"
 			});
@@ -517,7 +559,7 @@ $(function () {
 				
 				html += "<a href='#' class='event_one flash hover-top'>"
 					 +	"<img class='event_poster' src='"+item.mainPoster+"' >"
-					 +		"<span class='end-exp forMoving'>"+item.eventName+"</span>"
+					 +		"<span class='end-exp'>"+item.eventName+"</span>"
 					 +		"<span class='end-exp forMoving'>"+item.startDate+"~"+item.endDate+"</span>"
 					 +	"</a>"
 			});
@@ -530,19 +572,7 @@ $(function () {
 	});
 		
 	
-	$('.hover-left').hover(function() {
-	    $(this).find(".forMoving").stop().animate({left: '10px'}, 500);
-	},
-	function() {
-	    $(this).find(".forMoving").stop().animate({left: '0px'}, 500);                 
-	});
 	
-	$('.hover-top').hover(function() {
-	    $(this).find(".forMoving").stop().animate({top: '10px'}, 500);
-	},
-	function() {
-	    $(this).find(".forMoving").stop().animate({top: '0px'}, 500);                 
-	});
             
 	$(window).scroll(function () {
 		if ($(this).scrollTop() > 100) { // 스크롤 내릴 표시
@@ -595,6 +625,43 @@ function exhDetail(eno){
 	location.href="<%= ctxPath%>/exhDetail.at?eno="+eno;
 }
 
+
+var slideIndex = 0;
+showSlides();
+
+function showSlides() {
+  var i;
+  var slides = document.getElementsByClassName("mySlides");
+  var dots = document.getElementsByClassName("dot");
+  for (i = 0; i < slides.length; i++) {
+    slides[i].style.display = "none";  
+  }
+  slideIndex++;
+  if (slideIndex > slides.length) {slideIndex = 1}    
+  for (i = 0; i < dots.length; i++) {
+    dots[i].className = dots[i].className.replace(" active", "");
+  }
+  slides[slideIndex-1].style.display = "block";  
+  dots[slideIndex-1].className += " active";
+  setTimeout(showSlides, 3000); // Change image every 2 seconds
+}
+
+var swiper = new Swiper('.swiper-container', {
+    slidesPerView: 3,
+    spaceBetween: 30,
+    slidesPerGroup: 3,
+    loop: true,
+    loopFillGroupWithBlank: true,
+    pagination: {
+      el: '.swiper-pagination',
+      clickable: true,
+    },
+    navigation: {
+      nextEl: '.swiper-button-next',
+      prevEl: '.swiper-button-prev',
+    },
+  });
+
 </script>
    
     
@@ -620,6 +687,7 @@ function exhDetail(eno){
 		</div>
 		
 	<hr color="#f2f2f2;" style="transform:translate(0,700px);" />
+	
 	
 	<div class="recom-exh">	
 		<div class="swiper-container">
@@ -675,60 +743,17 @@ function exhDetail(eno){
 		<h2>EVENT</h2>
 	</div>
 	<div class="event-more" style="float: right; transform:translate(-35px, 500px);">
-		<a class="event-morebtn" href="<%= ctxPath%>/eventList.at">더보기+</a>
+		<a class="event-morebtn " href="<%= ctxPath%>/eventList.at">이벤트 모두보기 +</a>
 	</div>
 	<hr color="black;" style="width:94%; transform:translate(38px,525px);" />
        	<div class="event-div" style="transform:translate(0, 280px);">
            	
        	</div>
        	
-       	
-
 </div>
 
 <div class="navigation" style="display: block; right:50px; bottom: 20%; position:fixed; z-index:9999;">
 	<a class="return-top" href="#">[TOP]</a>
 </div>
-<script type="text/javascript">
-
-	var slideIndex = 0;
-	
-	
-	function showSlides() {
-	  var i;
-	  var slides = document.getElementsByClassName("mySlides");
-	  var dots = document.getElementsByClassName("dot");
-	  for (i = 0; i < slides.length; i++) {
-	    slides[i].style.display = "none";  
-	  }
-	  slideIndex++;
-	  if (slideIndex > slides.length) {slideIndex = 1}    
-	  for (i = 0; i < dots.length; i++) {
-	    dots[i].className = dots[i].className.replace(" active", "");
-	  }
-	  slides[slideIndex-1].style.display = "block";  
-	  dots[slideIndex-1].className += " active";
-	  setTimeout(showSlides, 3000); // Change image every 2 seconds
-	}
-	showSlides();
-
-</script>
 
 <!-- Initialize Swiper -->
-  <script type="text/javascript">
-    var swiper = new Swiper('.swiper-container', {
-      slidesPerView: 3,
-      spaceBetween: 30,
-      slidesPerGroup: 3,
-      loop: true,
-      loopFillGroupWithBlank: true,
-      pagination: {
-        el: '.swiper-pagination',
-        clickable: true,
-      },
-      navigation: {
-        nextEl: '.swiper-button-next',
-        prevEl: '.swiper-button-prev',
-      },
-    });
-  </script>
