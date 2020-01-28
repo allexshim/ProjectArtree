@@ -61,5 +61,20 @@
 		values( seq_appliedDetail.nextval, #{ fk_applyingno }, #{ imagefilename },
 			#{ imageorgfilename }, #{ imagefilesize }, #{ imageinfo }, #{ thumbnailfilename } )
 	</insert>
+	
+	<!-- 전시회목록 가져오기 -->
+	<select id="getExhibitionList" resultType="masterpiece.exhibition.exhibits.model.ExhibitsVO">
+		select exhibitionno, exhibitionname, author, status from exhibition where status = '전시중'
+	</select>
+	
+	<!-- 전시회정보 가져오기 -->
+	<select id="getExhibitionDetail" resultType="masterpiece.exhibition.exhibits.model.ExhibitsVO" parameterType="String">
+		select E.exhibitionno, E.exhibitionname, E.author, E.status, G.galleryname
+			, E.applier, E.tel, E.email, E.startdate || ' - ' || E.enddate, E.genre, E.tag
+			, E.exhibitioninfo, E.price, E.foodofdrink, E.extrarestriction, E.photo, E.openclosetime
+		from exhibition E JOIN gallery G
+		on E.fk_galleryno = G.galleryno
+		where E.fk_galleryno = #{ no }
+	</select>
 
 </mapper>

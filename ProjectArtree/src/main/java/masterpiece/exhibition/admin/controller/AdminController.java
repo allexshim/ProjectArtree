@@ -24,6 +24,7 @@ import masterpiece.exhibition.admin.model.GalleryVO;
 import masterpiece.exhibition.admin.service.InterAdminService;
 import masterpiece.exhibition.common.FileManager;
 import masterpiece.exhibition.common.ThumbnailManager;
+import masterpiece.exhibition.exhibits.model.ExhibitsVO;
 import masterpiece.exhibition.member.model.MemberVO;
 
 @Component
@@ -42,45 +43,15 @@ public class AdminController {
 	private ThumbnailManager thumbnailManager;
 	
 	@RequestMapping(value="/admin.at")
-	public String requireLogin_admin(HttpServletRequest request, HttpServletResponse response) {
+	public String isAdmin__admin(HttpServletRequest request, HttpServletResponse response) {
 		
-		// 관리자의 접근만 허용
-		HttpSession session = request.getSession();
-		
-		MemberVO loginuser = (MemberVO) session.getAttribute("loginuser");
-		
-		if(!"artree0213@gmail.com".equals(loginuser.getEmail())) {
-			
-			String msg = "접근권한이 없습니다.";
-			String loc = "javascript:history.back()";
-			
-			request.setAttribute("msg", msg);
-			request.setAttribute("loc", loc);
-
-			return "msg";
-		}
 		
 		return "admin/admin-main.tiles";
 	}
 	
 	@RequestMapping(value="/memberList.at")
-	public String requireLogin_memberList(HttpServletRequest request, HttpServletResponse response) {
+	public String isAdmin__memberList(HttpServletRequest request, HttpServletResponse response) {
 		
-		// 관리자의 접근만 허용
-		HttpSession session = request.getSession();
-		
-		MemberVO loginuser = (MemberVO) session.getAttribute("loginuser");
-		
-		if(!"artree0213@gmail.com".equals(loginuser.getEmail())) {
-			
-			String msg = "접근권한이 없습니다.";
-			String loc = "javascript:history.back()";
-			
-			request.setAttribute("msg", msg);
-			request.setAttribute("loc", loc);
-
-			return "msg";
-		}
 		
 		
 		
@@ -88,27 +59,10 @@ public class AdminController {
 	}
 	
 	@RequestMapping(value="/memberInfo.at")
-	public String requireLogin_memberInfo(HttpServletRequest request, HttpServletResponse response) {
+	public String isAdmin__memberInfo(HttpServletRequest request, HttpServletResponse response) {
 		
-		// 관리자의 접근만 허용
-		HttpSession session = request.getSession();
-		
-		MemberVO loginuser = (MemberVO) session.getAttribute("loginuser");
-		
-		if(!"artree0213@gmail.com".equals(loginuser.getEmail())) {
-			
-			String msg = "접근권한이 없습니다.";
-			String loc = "javascript:history.back()";
-			
-			request.setAttribute("msg", msg);
-			request.setAttribute("loc", loc);
-
-			return "msg";
-		}
 		
 		String no = request.getParameter("no");
-		
-		
 		
 		return "admin/members/memberInfo.tiles";
 	}
@@ -116,95 +70,34 @@ public class AdminController {
 	// ------------------ 각종 통계페이지 -------------------- //
 	
 	@RequestMapping(value="/bySales.at")
-	public String requireLogin_bySales(HttpServletRequest request, HttpServletResponse response) {
+	public String isAdmin__bySales(HttpServletRequest request, HttpServletResponse response) {
 		
-		// 관리자의 접근만 허용
-		HttpSession session = request.getSession();
-		
-		MemberVO loginuser = (MemberVO) session.getAttribute("loginuser");
-		
-		if(!"artree0213@gmail.com".equals(loginuser.getEmail())) {
-			
-			String msg = "접근권한이 없습니다.";
-			String loc = "javascript:history.back()";
-			
-			request.setAttribute("msg", msg);
-			request.setAttribute("loc", loc);
-
-			return "msg";
-		}
 		
 		return "admin/statistics/bySales.tiles";
 	}
 	
 	@RequestMapping(value="/byGender.at")
-	public String requireLogin_byGender(HttpServletRequest request, HttpServletResponse response) {
+	public String isAdmin__byGender(HttpServletRequest request, HttpServletResponse response) {
 		
-		// 관리자의 접근만 허용
-		HttpSession session = request.getSession();
-		
-		MemberVO loginuser = (MemberVO) session.getAttribute("loginuser");
-		
-		if(!"artree0213@gmail.com".equals(loginuser.getEmail())) {
-			
-			String msg = "접근권한이 없습니다.";
-			String loc = "javascript:history.back()";
-			
-			request.setAttribute("msg", msg);
-			request.setAttribute("loc", loc);
-
-			return "msg";
-		}
 		
 		return "admin/statistics/byGender.tiles";
 	}
 	
 	@RequestMapping(value="/byGenre.at")
-	public String requireLogin_byGenre(HttpServletRequest request, HttpServletResponse response) {
-		
-		// 관리자의 접근만 허용
-		HttpSession session = request.getSession();
-		
-		MemberVO loginuser = (MemberVO) session.getAttribute("loginuser");
-		
-		if(!"artree0213@gmail.com".equals(loginuser.getEmail())) {
-			
-			String msg = "접근권한이 없습니다.";
-			String loc = "javascript:history.back()";
-			
-			request.setAttribute("msg", msg);
-			request.setAttribute("loc", loc);
-
-			return "msg";
-		}
+	public String isAdmin_byGenre(HttpServletRequest request, HttpServletResponse response) {
 		
 		return "admin/statistics/byGenre.tiles";
 	}
 	
 	@RequestMapping(value="/byTags.at")
-	public String requireLogin_byTags(HttpServletRequest request, HttpServletResponse response) {
+	public String isAdmin_byTags(HttpServletRequest request, HttpServletResponse response) {
 		
-		// 관리자의 접근만 허용
-		HttpSession session = request.getSession();
-		
-		MemberVO loginuser = (MemberVO) session.getAttribute("loginuser");
-		
-		if(!"artree0213@gmail.com".equals(loginuser.getEmail())) {
-			
-			String msg = "접근권한이 없습니다.";
-			String loc = "javascript:history.back()";
-			
-			request.setAttribute("msg", msg);
-			request.setAttribute("loc", loc);
-
-			return "msg";
-		}
 		
 		return "admin/statistics/byTags.tiles";
 	}
 	
 	@RequestMapping(value="/byTicketingRate.at")
-	public String requireLogin_byTicketingRate(HttpServletRequest request, HttpServletResponse response) {
+	public String isAdmin_byTicketingRate(HttpServletRequest request, HttpServletResponse response) {
 		
 		// 관리자의 접근만 허용
 		HttpSession session = request.getSession();
@@ -225,52 +118,28 @@ public class AdminController {
 		return "admin/statistics/byTicketingRate.tiles";
 	}
 	
-	// ----------------------------------------------------- //
+	// ------------------------- 전시회 관리 ---------------------------- //
 	
-	@RequestMapping(value="/registerformList.at")
-	public String requireLogin_resisterformList(HttpServletRequest request, HttpServletResponse response) {
+	@RequestMapping(value="/exhibitionList.at")
+	public String isAdmin_resisterformList(HttpServletRequest request, HttpServletResponse response) {
 
-		// 관리자의 접근만 허용
-		HttpSession session = request.getSession();
+		List<ExhibitsVO> exhibitionList = service.getExhibitionList();
 		
-		MemberVO loginuser = (MemberVO) session.getAttribute("loginuser");
+		request.setAttribute("exhibitionList", exhibitionList);
 		
-		if(!"artree0213@gmail.com".equals(loginuser.getEmail())) {
-			
-			String msg = "접근권한이 없습니다.";
-			String loc = "javascript:history.back()";
-			
-			request.setAttribute("msg", msg);
-			request.setAttribute("loc", loc);
-
-			return "msg";
-		}
-				
-		return "exhibitions/adminRegisterFormList.tiles";
+		return "exhibitions/adminExhibitionList.tiles";
 	}
 	
-	@RequestMapping(value="/registerformDetail.at")
-	public String requireLogin_registerformDetail(HttpServletRequest request, HttpServletResponse response) {
-		
-		// 관리자의 접근만 허용
-		HttpSession session = request.getSession();
-		
-		MemberVO loginuser = (MemberVO) session.getAttribute("loginuser");
-		
-		if(!"artree0213@gmail.com".equals(loginuser.getEmail())) {
-			
-			String msg = "접근권한이 없습니다.";
-			String loc = "javascript:history.back()";
-			
-			request.setAttribute("msg", msg);
-			request.setAttribute("loc", loc);
-
-			return "msg";
-		}
+	@RequestMapping(value="/exhibitionDetail.at")
+	public String isAdmin_registerformDetail(HttpServletRequest request, HttpServletResponse response) {
 		
 		String no = request.getParameter("no"); // 목록에서 넘겨준 글번호를 받아옵니다.
 		
-		return "exhibitions/adminregisterformDetail.tiles";
+		ExhibitsVO exhibitionInfo = service.getExhibitionDetail(no);
+		
+		request.setAttribute("exhibitionInfo", exhibitionInfo);
+		
+		return "exhibitions/adminExhibitionDetail.tiles";
 	}
 	
 	// ------------------------------------------------------------ //
