@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import masterpiece.exhibition.common.AES256;
+import masterpiece.exhibition.common.MyUtil;
 import masterpiece.exhibition.common.SHA256;
 import masterpiece.exhibition.mail.GoogleMail;
 import masterpiece.exhibition.member.model.MemberVO;
@@ -212,9 +213,6 @@ public class MemberController {
 		String email = request.getParameter("email_login");
 		String password = request.getParameter("password_login");
 		
-		System.out.println("email: "+email);
-		System.out.println("email: "+password);
-		
 		HashMap<String, String> paraMap = new HashMap<String, String>();
 		
 		paraMap.put("email", email);
@@ -222,7 +220,6 @@ public class MemberController {
 		
 		// 로그인 확인
 		MemberVO loginuser = service.getLoginMember(paraMap);
-		System.out.println(loginuser);
 		
 		HttpSession session = request.getSession();
 		
@@ -273,15 +270,15 @@ public class MemberController {
 					// 아무런 이상없이 로그인 하는 경우
 					session.setAttribute("loginuser", loginuser);
 					
-					if(session.getAttribute("gobackURL") != null) {
+					String goBackURL = (String) session.getAttribute("goBackURL");
+					if(session.getAttribute("goBackURL") != null) {
 						// 세션에 저장된 돌아갈 페이지의 주소(gobackURL)이 있다라면
 						
-						String gobackURL = (String) session.getAttribute("gobackURL");
-						mav.addObject("gobackURL", gobackURL); // request 영역에 저장시키는 것이다.
+						mav.addObject("gobackURL", goBackURL); // request 영역에 저장시키는 것이다.
 						
-						session.removeAttribute("gobackURL");
+						session.removeAttribute("goBackURL");
 					}
-					
+				
 					mav.setViewName("member/login/loginEnd");
 					
 				}
@@ -431,6 +428,22 @@ public class MemberController {
 	@RequestMapping(value="/mypage.at")
 	public String mypage(HttpServletRequest request) {
 		
+		HttpSession session = request.getSession();
+		MemberVO loginuser = (MemberVO)session.getAttribute("loginuser");
+		
+		String idx = loginuser.getIdx();
+
+		// 하트 눌렀을 때 가고싶어요 select
+		List<HashMap<String, String>> wantList = service.selectWannaGo(idx);
+		request.setAttribute("wantList", wantList);
+		
+		// 책갈피 눌렀을 때 다녀왔어요 select
+		List<HashMap<String, String>> goList = service.selectGo(idx);
+		request.setAttribute("goList", goList);
+		
+		// 하트랑 책갈피 눌렀을 때 누른 전시회의 작가 select
+		// List<HashMap<String, String>> favorAuthor = service.selectFavorAuthor(idx);
+
 		return "member/mypage/mypage.tiles";
 	} // end of mypage --------------------------------------------
 	
@@ -443,7 +456,41 @@ public class MemberController {
 	@RequestMapping(value="/mypage_set.at")
 	public String mypage_set(HttpServletRequest request) {
 		
+		HttpSession session = request.getSession();
+		
+		String goBackURL = MyUtil.getCurrentURL(request);
+		session.setAttribute("goBackURL", goBackURL);
+		
 		return "member/mypage/mypage_set.tiles";
 	} // end of mypage_set --------------------------------------------
+
+	@ResponseBody
+	@RequestMapping(value="/updateFavor.at") 
+	public int updateFavor(HttpServletRequest request) {
+		
+		// 마이페이지 - 작품 재설정
+		int n=0;
+		
+		HttpSession session = request.getSession();
+		MemberVO loginuser = (MemberVO)session.getAttribute("loginuser");
+		
+		String idx = loginuser.getIdx();
+		String exhibitionno1 = request.getParameter("exhibitionno1");
+		String galleryno1 = request.getParameter("galleryno1");
+		String exhibitionno2 = request.getParameter("exhibitionno2");
+		String galleryno2 = request.getParameter("galleryno2");
+		
+		HashMap<String, String> paraMap = new HashMap<String, String>();
+		paraMap.put("idx", idx);
+		paraMap.put("exhibitionno1", exhibitionno1);
+		paraMap.put("galleryno1", galleryno1);
+		paraMap.put("exhibitionno2", exhibitionno2);
+		paraMap.put("galleryno2", galleryno2);
+		
+		n = service.updateFavor(paraMap);
+		
+		return n;
+		
+	} // end of updateFavor --------------------------------------------
 
 }

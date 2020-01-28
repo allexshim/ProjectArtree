@@ -74,6 +74,8 @@ create table wishList
 );
 -- Table WISHLIST이(가) 생성되었습니다.
 
+
+
 create sequence seq_wishList_wishNo
 start with 1
 increment by 1
@@ -217,7 +219,15 @@ END;
 
 drop function get_wishno;
 
+select *
+from member M left join wishlist W
+on M.idx = W.fk_idx
+order by idx;
 
+insert into wishlist(wishno, fk_idx, fk_galleryno, fk_exhibitionno, favortag, favorgenre)
+values(seq_wishList_wishNo.nextval, 4, '722', '1218', '키덜트', '설치미술');
+insert into wishlist(wishno, fk_idx, fk_galleryno, fk_exhibitionno, favortag, favorgenre)
+values(seq_wishList_wishNo.nextval, 4, '2007', '1094', '초록,어두운', '미디어');
       
 SELECT A.uniqueness,
        b.*
@@ -232,6 +242,104 @@ select *
 from member;
 
 
+-- galwishlist, seq_galwishlist 갤러리 관심 지정
 
 select *
-from seq;
+from exhibition;
+
+select *
+from exhibitiondetail;
+
+select *
+from gallery;
+
+-- exhibition - exhibitionname, startdate, enddate, status
+-- exhibitiondetail - mainposter
+-- gallery - galleryname
+
+select 
+    V.exhibitionname, V.startdate, V.enddate, V.status,
+    D.mainposter, 
+    G.galleryname  
+from 
+    (
+    select E.exhibitionno, E.fk_galleryno, E.exhibitionname, E.startdate, E.enddate, E.status
+    from wishlist W join exhibition E
+    on W.fk_exhibitionno = E.exhibitionno
+    where fk_idx=1 and E.status='전시중'
+    ) V inner join 
+    exhibitiondetail D on V.exhibitionno = D.fk_exhibitionno left outer join 
+    gallery G on V.fk_galleryno = G.galleryno
+order by 
+    1 asc;
+
+commit;
+
+select *
+from reser;
+
+select *
+from reserdetail;
+
+
+
+select 
+    V.exhibitionname, V.startdate, V.enddate, V.status,
+    D.mainposter, 
+    G.galleryname  
+from 
+    (
+    select E.exhibitionno, E.fk_galleryno, E.exhibitionname, E.startdate, E.enddate, E.status
+    from 
+        (select distinct R.fk_idx, D.fk_exhibitionno
+         from reser R join reserdetail D
+         on R.reserno = D.fk_reserno
+         where fk_idx = 1) W join exhibition E on W.fk_exhibitionno = E.exhibitionno
+    ) V inner join 
+    exhibitiondetail D on V.exhibitionno = D.fk_exhibitionno left outer join 
+    gallery G on V.fk_galleryno = G.galleryno
+order by 1 asc;
+
+
+-- wishlist 에서의 선호작가, image
+select distinct E.author, E.image1
+from wishlist W join exhibition E
+on W.fk_exhibitionno = E.exhibitionno
+where W.fk_idx = 1;
+
+-- 작가의 exhibition image
+select author, image1
+from exhibition E join exhibitiondetail D
+on E.exhibitionno = D.fk_exhibitionno
+where author = '박수연' and rownum = 1;
+
+
+select distinct author, image1 
+from wishlist W inner join 
+exhibition E on W.fk_exhibitionno = E.exhibitionno left outer join 
+exhibitiondetail D on E.exhibitionno = D.fk_exhibitionno
+order by 1 asc;
+
+-- fk_galleryno, fk_exhibitionno, favortag, favorgenre
+
+
+select wishno, fk_galleryno, fk_exhibitionno, favortag, favorgenre
+from
+(select rownum AS rno, wishno, fk_galleryno, fk_exhibitionno, favortag, favorgenre
+from wishlist
+where fk_idx=1
+) V 
+where rno = 1;
+
+update wishlist set fk_galleryno='722', fk_exhibitionno='1218', 
+       favortag=(select tag from exhibition where exhibitionno='1218'), 
+       favorgenre=(select genre from exhibition where exhibitionno='1218')
+where wishno=(select wishno
+                from
+                (select rownum AS rno, wishno
+                from wishlist
+                where fk_idx=2
+                ) V 
+                where rno = 1);
+                
+                

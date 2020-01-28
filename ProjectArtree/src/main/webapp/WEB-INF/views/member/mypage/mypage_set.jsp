@@ -130,6 +130,10 @@
 		margin-right: 22px;
 	}
 	
+	div.display {
+		display: none;
+	}
+	
 	
 
 	/* 비밀번호 */
@@ -164,40 +168,42 @@
 	
 	});
 	
-	function fav(n,s){
-
-		if(s == "1"){
-
-			var tag1 = n;
-			$("#tag1").css("display", "none");
-			$("#tag2").css("display", "");
-			$("#tagA").attr("src","<%= ctxPath%>/resources/images/member/"+tag1+"A.png");
-			$("#tagB").attr("src","<%= ctxPath%>/resources/images/member/"+tag1+"B.png");
-			$("#tagC").attr("src","<%= ctxPath%>/resources/images/member/"+tag1+"C.png");
-			$("#tagD").attr("src","<%= ctxPath%>/resources/images/member/"+tag1+"D.png");
-			$("#tagA").attr("onclick","fav('"+tag1+"A','2')");
-			$("#tagB").attr("onclick","fav('"+tag1+"B','2')");
-			$("#tagC").attr("onclick","fav('"+tag1+"C','2')");
-			$("#tagD").attr("onclick","fav('"+tag1+"D','2')");
-
-		} else {
-			// var param = JSON.stringify({"tag1":n.substring(0,1), "idx":idx, "tag2":n})
-
-/* 
-			var param = JSON.stringify({"tag1":n.substring(0,1),"_id":userid,"tag2":n});
-			$.post("/data/info.php",param,function(data){
-				var res = JSON.parse(data);
-
-				console.log(res.result);
-
-				if(res.result){
-					alert("변경되었습니다.");
-					location.reload();
-				} 
-			});*/
-		}
-
+	// 작품 선택1, 작품 선택2
+	// favor_step1 (tagImg 뒤에 올 숫자, exhibitionno, galleryno)
+	function favor_step1(n, e, g) {
+		$("#exhibitionno1").val(e);
+		$("#galleryno1").val(g);
+		$("#tagImg").fadeOut( 300 );
+		setTimeout(function(){ $("#tagImg"+n).fadeIn( 300 ); }, 300);
 	}
+
+	// favor_step2 (exhibitionno, galleryno)
+	function favor_step2(e, g){
+		$("#exhibitionno2").val(e);
+		$("#galleryno2").val(g);
+		
+		updateSubmit();
+	}
+	
+	// 두 번째 작품까지 선택하면 update 위한 ajax
+	function updateSubmit() {
+		var data = $("form[name=tagForm]").serialize();	
+		
+		$.ajax({
+			url:"<%= request.getContextPath()%>/updateFavor.at",
+			data:data,
+			type:"GET",
+			success:function(json){
+				alert("변경되었습니다.");
+				location.reload();
+			},
+			  
+		    error: function(request, status, error){
+		 		alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+		    }
+		});
+	}
+	
 </script>
 
 <body>
@@ -224,29 +230,51 @@
 						<span>마음에 드는 작품을 골라 주세요</span>
 					</th>
 					<td>
-						<div class="img_wrap" id="tag1">
-							<img class="img_margin" src="<%= ctxPath%>/resources/images/member/1.png" onClick="(fav('1', '1'))"/>
-							<img src="<%= ctxPath%>/resources/images/member/2.png" onClick="(fav('2', '1'))"/>
-							<br/>
-							<img class="img_margin" src="<%= ctxPath%>/resources/images/member/3.png" onClick="(fav('3', '1'))"/>
-							<img src="<%= ctxPath%>/resources/images/member/4.png" onClick="(fav('4', '1'))"/>
+						<div class="img_wrap" id="tagImg">
+							<img class="img_margin" src="<%= ctxPath%>/resources/images/member/1.png" onClick="favor_step1(1, '1066', '983')"/>
+			                <img src="<%= ctxPath%>/resources/images/member/2.png" onClick="favor_step1(2, '1094', '2007')"/>
+			                <br/>
+			                <img class="img_margin" src="<%= ctxPath%>/resources/images/member/3.png" onClick="favor_step1(3, '1240', '9')"/>
+			                <img src="<%= ctxPath%>/resources/images/member/4.png" onClick="favor_step1(4, '1367', '2583')"/>
 						</div>
 
-						<div class="img_wrap" id="tag2" style="display: none;">
-							<img class="img_margin" id="tagA"/>
-							<img id="tagB"/>
-							<br/>
-							<img class="img_margin" id="tagC"/>
-							<img id="tagD"/>
+						<div class="img_wrap display" id="tagImg1">
+							<img class="img_margin" src="<%= ctxPath%>/resources/images/member/1A.png" onClick="favor_step2('1096', '2023')"/>
+                  			<img src="<%= ctxPath%>/resources/images/member/1B.png" onClick="favor_step2('1229', '339')"/>
+                  			<br/>
+                  			<img class="img_margin" src="<%= ctxPath%>/resources/images/member/1C.png" onClick="favor_step2('1332', '725')"/>
+                  			<img src="<%= ctxPath%>/resources/images/member/1D.png" onClick="favor_step2('1353', '1126')"/>
 						</div>
+						<div class="img_wrap display" id="tagImg2">
+		                    <img class="img_margin" src="<%= ctxPath%>/resources/images/member/2A.png" onClick="favor_step2('1218', '722')"/>
+		                    <img src="<%= ctxPath%>/resources/images/member/2B.png" onClick="favor_step2('1296', '298')"/>
+		                    <br/>
+		                    <img class="img_margin" src="<%= ctxPath%>/resources/images/member/2C.png" onClick="favor_step2('1374', '270')"/>
+		                    <img src="<%= ctxPath%>/resources/images/member/2D.png" onClick="favor_step2('1418', '272')"/>
+		                 </div>
+		               
+		                 <div class="img_wrap display" id="tagImg3">
+		                    <img class="img_margin" src="<%= ctxPath%>/resources/images/member/3A.png" onClick="favor_step2('1077', '459')"/>
+		                    <img src="<%= ctxPath%>/resources/images/member/3B.png" onClick="favor_step2('1241', '45')"/>
+		                    <br/>
+		                    <img class="img_margin" src="<%= ctxPath%>/resources/images/member/3C.png" onClick="favor_step2('1380', '725')"/>
+		                    <img src="<%= ctxPath%>/resources/images/member/3D.png" onClick="favor_step2('1509', '9')"/>
+		                 </div>
+               
+		                 <div class="img_wrap display" class="tagImg" id="tagImg4">
+		                    <img class="img_margin" src="<%= ctxPath%>/resources/images/member/4A.png" onClick="favor_step2('1088', '312')"/>
+		                    <img src="<%= ctxPath%>/resources/images/member/4B.png" onClick="favor_step2('1216', '267')"/>
+		                    <br/>
+		                    <img class="img_margin" src="<%= ctxPath%>/resources/images/member/4C.png" onClick="favor_step2('1328', '267')"/>
+		                    <img src="<%= ctxPath%>/resources/images/member/4D.png" onClick="favor_step2('1506', '864')"/>
+		                 </div>
+						
 						
 						<form name="tagForm">
-							<input type="text" id="tag1_input" name="tag1_input"/>
-							<input type="text" id="tag2_input" name="tag2_input"/>
-							<input type="text" id="galleryno1" name="galleryno1"/>
-							<input type="text" id="exhibitionno1" name="exhibitionno1"/>
-							<input type="text" id="galleryno2" name="galleryno2"/>
-							<input type="text" id="exhibitionno2" name="exhibitionno2"/>
+							<input type="hidden" id="galleryno1" name="galleryno1"/>
+							<input type="hidden" id="exhibitionno1" name="exhibitionno1"/>
+							<input type="hidden" id="galleryno2" name="galleryno2"/>
+							<input type="hidden" id="exhibitionno2" name="exhibitionno2"/>
 						</form>
 					</td>
 				</tr>

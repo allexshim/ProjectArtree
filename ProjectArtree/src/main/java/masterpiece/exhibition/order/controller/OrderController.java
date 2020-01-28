@@ -29,6 +29,7 @@ public class OrderController {
 	@RequestMapping(value = "/ticketsbin.at")
 	public String ticketsbin(HttpServletRequest request) {
 
+		//String no = request.getParameter("eno");
 		HashMap<String, String> map = new HashMap<String, String>();
 
 		String no = "4901"; // 구매하기 눌렀을때 전시회 번호 받아와야함 지금은 임시
@@ -98,11 +99,10 @@ public class OrderController {
 		map.put("date", dateBin);
 		map.put("exname", exname);
 		
-		// 장바구니 입력
-		MemberVO mvo = (MemberVO)session.getAttribute("loginuser");
+		// 장바구니 입력		
+		MemberVO mvo = (MemberVO)session.getAttribute("loginuser");		
 		String idx = mvo.getIdx();	
-		map.put("idx", idx);
-		System.out.println(idx);
+		map.put("idx", idx);		
 		
 		String no = (String) session.getAttribute("no");
 		map.put("no", no);
@@ -132,14 +132,22 @@ public class OrderController {
 					}
 				}
 			}
-		}
-
+		}				
 		String msg = null;
 		String loc = request.getContextPath() + "/paymentbin.at";
-
+		
 		mav.addObject("msg", msg);
 		mav.addObject("loc", loc);
 		mav.setViewName("msg");
+		
+		/*else { 
+			String msg = "로그인을 해주세요.";
+			String loc = request.getContextPath() + "/mainartree.at";
+			
+			mav.addObject("msg", msg);
+			mav.addObject("loc", loc);
+			mav.setViewName("msg");
+		}			*/
 		return mav;
 	}
 
@@ -270,7 +278,9 @@ public class OrderController {
 		String jsonStr = "";
 		JSONArray jsonArr = new JSONArray();
 		HashMap<String, String> map = new HashMap<String, String>();
-		String idx = "1";
+		HttpSession session = request.getSession();
+		MemberVO mvo = (MemberVO)session.getAttribute("loginuser");		
+		String idx = mvo.getIdx();			
 		map.put("idx", idx);
 		String cartNo = "";
 
