@@ -63,6 +63,7 @@
 		padding-bottom: 20px;
 		border-bottom : solid 2px lightgray;
 		overflow: hidden; /* div밖으로 이미지가 넘칠 때 해결 방법! 기억해둘것! */
+		padding-top : 50px;
 	}
 	
 	div#detailContents h3 {
@@ -135,9 +136,19 @@
 </style>
 
 <script src="<%= ctxPath%>/resources/js/jquery-3.3.1.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
 <script type="text/javascript">
 	$(document).ready(function(){ 
 		
+		$("#name").focus(function(){
+
+			$("#myModal").modal('show');
+			$("searchWord").focus();
+			
+		});
 		
 		// 이전글 클릭시 이벤트
 		$(".prev").click(function(){
@@ -177,7 +188,7 @@
 			else {
 				var frm = document.addcommunity;
 				frm.method = "GET";
-				frm.action = "*.at";
+				frm.action = "addCommunityEnd.at";
 				frm.submit();
 			}
 		});
@@ -195,16 +206,16 @@
 			<span class="lt">Community</span>
 		</div>
 		
-		<div id="myPoster" align="center">
+	<%-- 	<div id="myPoster" align="center">
 			<img src="<%= ctxPath %>/resources/images/exhibition/poster1.JPG" />
 		</div>
-		
+		 --%>
 		<div id="detailContents">
 		<form name="addcommunity">
 			<table id="detailTable">
 				<tr>
 					<td>전시회명</td>
-					<td><input id="name" name="name" type="text" placeholder="전시회 이름을 입력해주세요."/></td>
+					<td><input id="name" name="name" type="text" placeholder="전시회 이름을 입력해주세요." autocomplete="off" /></td>
 				<tr>
 			
 				<tr>
@@ -213,7 +224,7 @@
 				<tr>
 				<tr>
 					<td>작성자</td>
-					<td>${loginuser.getName}</td>
+					<td>${loginuser.name}</td>
 				<tr>
 				<tr>
 					<td>작성일자</td>
@@ -250,5 +261,64 @@
 			<img id="toListBtn" src="<%= ctxPath %>/resources/images/board/toListBtn.JPG" />
 		</div>
 	</div>
+	
+	<!-- ==================== 전시회 검색 모달 =================================== -->
+	<div class="container" id="modalContainer" style="width : 80%;">
+		<!-- Modal -->
+		<div class="modal fade" id="myModal" role="dialog">
+			<div class="modal-dialog">
+			    
+				<!-- Modal content-->
+				<div class="modal-content" id="exhibitionModal">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal">&times;</button>
+						<h4 class="modal-title">전시회 검색</h4>
+					</div>
+					<div class="modal-body">
+					
+						<div id="searchArea" align="center" style="margin-top: 3vh">
+							<input type="text" name="searchWord" id="searchWord" style="width: 40%; margin-left: 10px;" autocomplete="off" placeholder="갤러리명으로 검색" />
+						</div>
+						
+						<div id="listArea" style="margin-top: 5vh">
+							<table id="exhibitionListTable" class="table" style="text-align: center;">
+								<thead style="font-weight: bold">
+									<tr>
+										<td style="display:none;">번호</td>
+										<td>전시회 이름</td>
+										<td>작가</td>
+										<td>장소</td>
+									</tr>
+								</thead>
+								
+								<tbody>
+									<c:if test="${ not empty exhibitionList  }">
+									<c:forEach var="exhibit" items="${ exhibitionList }" varStatus="status">
+										<tr onclick='selectedExhibition()' class="selectedExhibition">
+											<td style='width: 5px !important; display:none;' class='exhibitno'>${ exhibit.exhibitionno }</td>
+											<td style="width: 300px !important" class="exhibitionName">${ exhibit.exhibitionname }</td> 
+											<td style="width: 50px !important">${ exhibit.author }</td>
+											<td style="width: 50px !important">${ exhibit.galleryname }</td>
+										</tr>
+									</c:forEach>
+									</c:if>
+									<c:if test="${ empty exhibitionList }">
+										<tr><td>결과가 없습니다.</td>
+										</tr>
+									</c:if>
+								</tbody>
+							</table>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+					</div>
+				</div>
+			      
+			</div>
+		</div>
+	</div>
+		
+		
 </body>
 </html>

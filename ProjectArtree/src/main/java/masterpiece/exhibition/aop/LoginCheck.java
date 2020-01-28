@@ -36,14 +36,7 @@ public class LoginCheck {
 			
 			if(session.getAttribute("loginuser") == null) {
 				try {
-					/*
-					String loc = "layer_open('layer')";
-					request.setAttribute("loc", loc);
-					
-					RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/msgForLogin.jsp");
-					
-					dispatcher.forward(request, response);*/
-					
+				
 					String msg = "먼저 로그인하세요!"; 
 					String loc = "/artree";
 					

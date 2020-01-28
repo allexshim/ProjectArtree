@@ -2,18 +2,33 @@ package masterpiece.exhibition.board.community.controller;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import masterpiece.exhibition.board.community.service.InterCommunityService;
+import masterpiece.exhibition.common.MyUtil;
+
 
 @Controller
 public class CommunityController {
 
+	@Autowired
+	InterCommunityService service;
+	
 	@RequestMapping(value="/communityList.at")
 	public String communityList(HttpServletRequest request) {
+		
+		HttpSession session = request.getSession();
+		String goBackURL = MyUtil.getCurrentURL(request);	
+		session.setAttribute("goBackURL", goBackURL);
 		// 아래는 페이지 바 샘플인데 여유 되면 진행합니다...
 				/*
 				String sizePerPage = "10";	// 한 페이지에 보여줄 상품(게시글 등) 갯수
@@ -84,7 +99,7 @@ public class CommunityController {
 	} // end of communityDetail -------------------------------------------
 	
 	@RequestMapping(value="/addCommunity.at")
-	public String requireLogin_addCommunity(HttpServletRequest request, HttpServletResponse response) {
+	public String addCommunity(HttpServletRequest request, HttpServletResponse response) {
 		
 		// 현재시간을 얻어와서 넘긴다 (작성일자)
 		SimpleDateFormat format = new SimpleDateFormat ( "yyyy-MM-dd HH:mm:ss");
@@ -93,9 +108,26 @@ public class CommunityController {
 		
 		request.setAttribute("writeDay", writeDay);
 		
+		
+		// 모든 전시회 정보를 가져와서 넘긴다 (전시회 검색용)
+		List<HashMap<String,String>> exhibitionList = service.getAllExhibit();
+		request.setAttribute("exhibitionList", exhibitionList);
+		
 		return "board/community/addCommunity.tiles";
 	} // end of addCommunity --------------------------------------------
 	
+	// 새 글 입력하기
+	@RequestMapping(value="/addCommunityEnd.at")
+	public String addCommunityEnd(HttpServletRequest request, HttpServletResponse response) {
+
+		String name = request.getParameter("name");
+		String title = request.getParameter("title");
+		String contents = request.getParameter("contents");
+		
+		
+		
+		return "board/community/addCommunity.tiles";
+	} // end of addCommunityEnd --------------------------------------------
 	
 	
 }

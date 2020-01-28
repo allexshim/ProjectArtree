@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- ====  mapper 기본설정 ==== -->
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="community">
+	
+	<resultMap type="HashMap" id="Exhibit">
+		<result property="exhibitionno"  	 column="exhibitionno" 		javaType="String"/> 
+		<result property="exhibitionname"   column="exhibitionname" 	javaType="String"/> 
+		<result property="author"   		column="author" 			javaType="String"/> 
+		<result property="galleryname"  	column="galleryname" 		javaType="String"/> 
+	</resultMap>
+
+
+	<select id="getAllExhibit" resultMap="Exhibit" >
+		select exhibitionno, exhibitionname, author, galleryname
+        from 
+        (
+        select *
+		from exhibition V join exhibitionDetail D
+		on V.exhibitionno = D.fk_exhibitionno
+        ) E join gallery G
+        on E.fk_galleryno = G.galleryno
+        order by to_date(startdate)
+	</select>
+	
+</mapper>
