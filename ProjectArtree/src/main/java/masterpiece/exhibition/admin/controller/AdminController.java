@@ -121,7 +121,7 @@ public class AdminController {
 	// ------------------------- 전시회 관리 ---------------------------- //
 	
 	@RequestMapping(value="/exhibitionList.at")
-	public String isAdmin_resisterformList(HttpServletRequest request, HttpServletResponse response) {
+	public String isAdmin_exhibitionList(HttpServletRequest request, HttpServletResponse response) {
 
 		List<ExhibitsVO> exhibitionList = service.getExhibitionList();
 		
@@ -131,11 +131,13 @@ public class AdminController {
 	}
 	
 	@RequestMapping(value="/exhibitionDetail.at")
-	public String isAdmin_registerformDetail(HttpServletRequest request, HttpServletResponse response) {
+	public String isAdmin_exhibitionDetail(HttpServletRequest request, HttpServletResponse response) {
 		
 		String no = request.getParameter("no"); // 목록에서 넘겨준 글번호를 받아옵니다.
 		
-		ExhibitsVO exhibitionInfo = service.getExhibitionDetail(no);
+	//	System.out.println("====================== " + no);
+		
+		HashMap<String, String> exhibitionInfo = service.getExhibitionDetail(no);
 		
 		request.setAttribute("exhibitionInfo", exhibitionInfo);
 		

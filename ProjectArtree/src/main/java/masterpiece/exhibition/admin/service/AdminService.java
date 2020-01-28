@@ -84,8 +84,8 @@ public class AdminService implements InterAdminService {
 
 	// 전시회정보 가져오기
 	@Override
-	public ExhibitsVO getExhibitionDetail(String no) {
-		ExhibitsVO exhibitionInfo = dao.getExhibitionDetail(no);
+	public HashMap<String, String> getExhibitionDetail(String no) {
+		HashMap<String, String> exhibitionInfo = dao.getExhibitionDetail(no);
 		return exhibitionInfo;
 	}
 

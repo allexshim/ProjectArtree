@@ -184,9 +184,9 @@
 			
 		//	console.log(no);
 
-			window.location.href="/artree/registerformDetail.at?no="+no;
+			window.location.href="/artree/exhibitionDetail.at?no=" + no;
 			
-		}); // end of $("div#contentContainer table tbody td:nth-child(2)").click
+		}); // end of $("#contentContainer table tbody tr").click
 		
 	});
 	
@@ -228,7 +228,9 @@
 					<c:if test="${ not empty exhibitionList  }">
 					<c:forEach var="exhibit" items="${ exhibitionList }">
 					<tr>
-						<td class="exhibitionno">${ exhibit.exhibitionno }</td>
+						<td class="exhibitionno">${ exhibit.exhibitionno }
+							<input type="hidden" name="no" value="${ exhibit.exhibitionno }" />
+						</td>
 						<td>${ exhibit.exhibitionname }</td>
 						<td>${ exhibit.author }</td>
 						<td><img src="<%= ctxPath %>/resources/images/exhibition/watingBtn.JPG" /></td>

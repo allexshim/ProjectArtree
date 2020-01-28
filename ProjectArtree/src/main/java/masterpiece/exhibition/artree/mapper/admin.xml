@@ -68,13 +68,44 @@
 	</select>
 	
 	<!-- 전시회정보 가져오기 -->
-	<select id="getExhibitionDetail" resultType="masterpiece.exhibition.exhibits.model.ExhibitsVO" parameterType="String">
+	<resultMap type="HashMap" id="getExhibitionDetailMap">
+		<result property="exhibitionno" 	column="exhibitionno" 		javaType="String" />
+		<result property="exhibitionname" 	column="exhibitionname" 	javaType="String" />
+		<result property="author" 			column="author" 			javaType="String" />
+		<result property="status" 			column="status" 			javaType="String" />
+		<result property="galleryname" 		column="galleryname" 		javaType="String" />
+		<result property="applier" 			column="applier" 			javaType="String" />
+		<result property="tel" 				column="tel" 				javaType="String" />
+		<result property="email" 			column="email" 				javaType="String" />
+		<result property="startdate" 		column="startdate" 			javaType="String" />
+		<result property="enddate" 			column="enddate" 			javaType="String" />
+		<result property="genre" 			column="genre" 				javaType="String" />
+		<result property="tag" 				column="tag" 				javaType="String" />
+		<result property="exhibitioninfo" 	column="exhibitioninfo" 	javaType="String" />
+		<result property="price" 			column="price" 				javaType="String" />
+		<result property="foodordrink" 		column="foodordrink" 		javaType="String" />
+		<result property="extrarestriction" column="extrarestriction" 	javaType="String" />
+		<result property="photo" 			column="photo" 				javaType="String" />
+		<result property="openclosetime" 	column="openclosetime" 		javaType="String" />
+		<result property="image1" 			column="image1" 			javaType="String" />
+		<result property="image2" 			column="image2" 			javaType="String" />
+		<result property="image3" 			column="image3" 			javaType="String" />
+		<result property="mainposter" 		column="mainposter" 		javaType="String" />
+		<result property="image1info" 		column="image1info" 		javaType="String" />
+		<result property="image2info" 		column="image2info" 		javaType="String" />
+		<result property="image3info" 		column="image3info" 		javaType="String" />
+	</resultMap>
+	<select id="getExhibitionDetail" resultMap="getExhibitionDetailMap" parameterType="String">
 		select E.exhibitionno, E.exhibitionname, E.author, E.status, G.galleryname
-			, E.applier, E.tel, E.email, E.startdate || ' - ' || E.enddate, E.genre, E.tag
-			, E.exhibitioninfo, E.price, E.foodofdrink, E.extrarestriction, E.photo, E.openclosetime
-		from exhibition E JOIN gallery G
-		on E.fk_galleryno = G.galleryno
-		where E.fk_galleryno = #{ no }
+			, E.applier, E.tel, E.email, E.startdate, E.enddate, E.genre, E.tag
+			, E.exhibitioninfo, E.price, E.foodordrink, E.extrarestriction, E.photo, E.openclosetime
+			, nvl(ED.mainposter, '없음') AS mainposter
+			, nvl(ED.image1, '없음') AS image1, nvl(ED.image2, '없음') AS image2, nvl(ED.image3, '없음') AS image3
+            , nvl(ED.image1info, '없음') AS image1info, nvl(ED.image2info, '없음') AS image2info, nvl(ED.image3info, '없음') AS image3info
+		from exhibition E 
+        JOIN gallery G on E.fk_galleryno = G.galleryno
+        JOIN exhibitiondetail ED on E.exhibitionno = ED.fk_exhibitionno
+        where E.exhibitionno = #{ no }
 	</select>
 
 </mapper>

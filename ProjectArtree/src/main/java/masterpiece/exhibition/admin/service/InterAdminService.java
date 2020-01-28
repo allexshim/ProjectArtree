@@ -37,7 +37,7 @@ public interface InterAdminService {
 	List<ExhibitsVO> getExhibitionList();
 
 	// 전시회정보 가져오기
-	ExhibitsVO getExhibitionDetail(String no);
+	HashMap<String, String> getExhibitionDetail(String no);
 
 
 
