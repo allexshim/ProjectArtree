@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import masterpiece.exhibition.common.AES256;
+import masterpiece.exhibition.exhibits.model.ExhibitsVO;
 import masterpiece.exhibition.admin.model.AppliedExhibitionVO;
 import masterpiece.exhibition.admin.model.GalleryVO;
 import masterpiece.exhibition.admin.model.InterAdminDAO;
@@ -72,6 +73,20 @@ public class AdminService implements InterAdminService {
 		int applyingno = dao.getApplyingno();
 		
 		return applyingno;
+	}
+
+	// 전시회목록 가져오기
+	@Override
+	public List<ExhibitsVO> getExhibitionList() {
+		List<ExhibitsVO> exhibitionList = dao.getExhibitionList();
+		return exhibitionList;
+	}
+
+	// 전시회정보 가져오기
+	@Override
+	public HashMap<String, String> getExhibitionDetail(String no) {
+		HashMap<String, String> exhibitionInfo = dao.getExhibitionDetail(no);
+		return exhibitionInfo;
 	}
 
 

@@ -302,23 +302,17 @@ order by 1 asc;
 
 
 -- wishlist 에서의 선호작가, image
-select distinct E.author, E.image1
-from wishlist W join exhibition E
-on W.fk_exhibitionno = E.exhibitionno
-where W.fk_idx = 1;
 
--- 작가의 exhibition image
 select author, image1
-from exhibition E join exhibitiondetail D
-on E.exhibitionno = D.fk_exhibitionno
-where author = '박수연' and rownum = 1;
+from
+(
+select ROW_NUMBER() OVER(ORDER BY wishno) as num, wishno, exhibitionno, author
+from wishList W join exhibition E 
+on W.fk_exhibitionno = E.exhibitionno
+where W.fk_idx = 4 order by 1 desc) T join exhibitiondetail D
+on T.exhibitionno = D.fk_exhibitionno
+where num > 2;
 
-
-select distinct author, image1 
-from wishlist W inner join 
-exhibition E on W.fk_exhibitionno = E.exhibitionno left outer join 
-exhibitiondetail D on E.exhibitionno = D.fk_exhibitionno
-order by 1 asc;
 
 -- fk_galleryno, fk_exhibitionno, favortag, favorgenre
 
@@ -342,4 +336,15 @@ where wishno=(select wishno
                 ) V 
                 where rno = 1);
                 
-                
+-- member 테이블에 탈퇴사유 컬럼 생성
+alter table member
+add withdrawal Nvarchar2(500);
+
+select *
+from member;
+
+select *
+from wishList
+where fk_idx=4;
+
+

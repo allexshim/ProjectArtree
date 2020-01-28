@@ -16,8 +16,9 @@
 	
 	div.myPage_wrap {
 		width: 1250px;
-		height: 1361px;
 		margin: 0 auto;
+		margin-top: 100px;
+		margin-bottom: 50px;
 	}
 	
 	ul {
@@ -157,6 +158,9 @@
 <script type="text/javascript">
 
 	$(function() {
+		
+		$("#name_change").val('${loginuser.name}');
+		
 		$(".tab").mouseover(function(){
 			$(this).addClass("on");
 		});
@@ -165,8 +169,64 @@
 			$(this).removeClass("on");
 			$("#mySetting").addClass("on");
 		});
-	
-	});
+
+		// 닉네임 변경
+		$("#name_change_btn").click(function() {
+			
+			if($("#name_change").val().trim() != "") {
+				changeName();
+			}
+			else {
+				alert("성함을 입력해 주세요.");
+			}
+		});
+		
+		// 비밀번호 변경
+		$("#password_change_btn").click(function() {
+			
+			var curPwd = $("#current_password").val().trim();
+			var chgPwd = $("#password_change").val().trim();
+			
+			if(curPwd == "") {
+				alert("현재 비밀번호를 입력해 주세요.");
+				return;
+			}
+			
+			if(chgPwd == "") {
+				alert("변경 비밀번호를 입력해 주세요.");
+				return;
+			}
+			
+			if(curPwd == chgPwd) {
+				alert("현재 비밀번호와 변경 비밀번호가 같습니다.");
+				return;
+			}
+			
+			changePwd();
+		});
+		
+		// 회원탈퇴
+		$("#member_withdrawal_btn").click(function(){
+			
+			if($("#withdrawal").val().trim() == "") {
+				alert("탈퇴 사유를 입력해 주세요.");
+				return;
+			}
+			else {
+				
+				var bool = confirm('탈퇴시 회원님의 사용정보(전시 클립, 작품컬렉션, 작가 목록 등)는 모두 삭제되며, 재가입은 탈퇴 시점으로부터 3개월 이후에 가능합니다.\n\n탈퇴하시겠습니까?');
+				
+				if (bool) {
+					var frm = document.withdrawalForm;
+					frm.method = "POST";
+					frm.action = "<%= request.getContextPath()%>/withdrawal.at";
+					frm.submit();
+				}
+			}
+			
+		});
+		
+	}); // end of function() -------
 	
 	// 작품 선택1, 작품 선택2
 	// favor_step1 (tagImg 뒤에 올 숫자, exhibitionno, galleryno)
@@ -204,12 +264,63 @@
 		});
 	}
 	
+	// 닉네임 변경
+	function changeName() {
+		
+		var data = $("#name_change").val();
+		
+		$.ajax({
+			url:"<%= request.getContextPath()%>/changeName.at",
+			data:{name:data},
+			type:"POST",		
+			success:function(json){
+				alert("닉네임["+data+"]로 변경되었습니다.");
+				location.reload();
+			},
+			  
+		    error: function(request, status, error){
+		 		alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+		    }
+		});
+	}
+	
+	// 비밀번호 변경
+	function changePwd() {
+		
+		var chgPwd = $("#password_change").val();
+		var curPwd = $("#current_password").val();
+		
+		$.ajax({
+			url:"<%= request.getContextPath()%>/changePwd.at",
+			data:{chgPwd:chgPwd,
+				  curPwd:curPwd},
+			type:"POST",		
+			success:function(json){
+				console.log(json);
+				
+				if(json==1) {
+					alert("변경되었습니다.");
+					location.reload();
+					$("#password_change").val("");
+					$("#current_password").val("");
+				}
+				else if(json==-1) {
+					alert("현재 비밀번호가 맞지 않습니다.");			
+				}
+			},
+			  
+		    error: function(request, status, error){
+		 		alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+		    }
+		});
+	}
+	
 </script>
 
 <body>
 	<div class="myPage_wrap">
 	<div class="myPage_header">
-		<h1 class="header_name">사용자 이름</h1>
+		<h1 class="header_name">${loginuser.name}</h1>
 		<nav class="myPage_tabs">
 			<a href="/artree/mypage.at" class="tab">My Artmap</a>
 			<a href="/artree/mypage_order.at" class="tab">주문내역</a>
@@ -281,26 +392,29 @@
 				<tr class="name_set">
 					<th><h2>닉네임</h2></th>
 					<td>
-						<input type="text"/>
-						<button type="button" id="name_change">변경</button>
+						<input type="text" id="name_change"/>
+						<button type="button" id="name_change_btn">변경</button>
 					</td>
 				</tr>
 				<tr class="password_set">
 					<th><h2>비밀번호 설정</h2></th>
 					<td>
 						<label>현재 비밀번호</label>
-						<input type="text" style="margin-bottom: 10px;"/>
+						<input type="password" id="current_password" style="margin-bottom: 10px;"/>
 						<label>변경 비밀번호</label>
-						<input type="text"/>
-						<button type="button" id="password_change">비밀번호변경</button>
+						<input type="password" id="password_change"/>
+						<button type="button" id="password_change_btn">비밀번호변경</button>
 					</td>
 				</tr>
 				<tr class="status_set">
 					<th><h2>회원탈퇴</h2></th>
 					<td>
 						<label>탈퇴사유</label>
-						<input type="text"/>
-						<button type="button" id="password_change">회원탈퇴</button>
+						<form name="withdrawalForm">
+						<input type="text" id="withdrawal" name="withdrawal"/>
+						<input type="text" style="display:none;">
+						<button type="button" id="member_withdrawal_btn">회원탈퇴</button>
+						</form>
 					</td>
 				</tr>
 		</table>

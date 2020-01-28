@@ -43,6 +43,10 @@ select * from exhibition;
 
 desc exhibition;
 
+desc appliedexhibits;
+
+select * from appliedExhibits;
+
 create table appliedExhibits
 (
 applyingNo	number	NOT NULL
@@ -67,10 +71,13 @@ applyingNo	number	NOT NULL
 , constraint FK_appliedExhibits_gno foreign key( fk_galleryNo ) references gallery( galleryNo )
 );
 
+select seq_appliedExhibits.nextval from dual;
 
 desc appliedexhibits;
 
 drop table appliedExhibits purge;
+
+drop sequence seq_appliedExhibits;
 
 create sequence seq_appliedExhibits
 start with 1
@@ -83,6 +90,8 @@ nocache;
 insert into appliedexhibits ( seq_appliedExhibits.nextval, fk_galleryNo, exhibitionName, applier, author, startDate, endDate, email, tel, genre, tag, authorInfo, exhibitionInfo, price, foodorDrink, extraRestriction, photo, openCloseTime )
 values (  );
 
+
+select * from appliedexhibits;
 
 create table appliedDetail
 ( appliedimgseq		number				not null
@@ -111,10 +120,39 @@ nocache;
 
 drop table appliedDetail purge;
 
+------------------------------------------------------
+
+
+select * from member;
+
+select * from exhibition;
+
+desc exhibition;
+
+
+select exhibitionno, exhibitionname, author, status from exhibition where status = '전시중';
 
 
 
+select * from cart ;
 
+
+select E.exhibitionno, E.exhibitionname, E.author, E.status, G.galleryname, E.applier, E.tel, E.email, E.startdate, E.enddate, E.genre, E.tag, E.exhibitioninfo, E.price, E.foodordrink, E.extrarestriction, E.photo, E.openclosetime
+from exhibition E JOIN gallery G
+on e.fk_galleryno = g.galleryno
+where E.fk_galleryno = 250;
+
+select E.exhibitionno, E.exhibitionname, E.author, E.status, G.galleryname
+			, E.applier, E.tel, E.email, E.startdate, E.enddate, E.genre, E.tag
+			, E.exhibitioninfo, E.price, E.foodordrink, E.extrarestriction, E.photo, E.openclosetime
+            , nvl(ED.image1, '없음') AS image1, nvl(ED.image2, '없음') AS image2, nvl(ED.image3, '없음') AS image3, nvl(ED.mainposter, '없음') AS mainposter
+            , nvl(ED.image1info, '없음') AS image1info, nvl(ED.image2info, '없음') AS image2info, nvl(ED.image3info, '없음') AS image3info
+		from exhibition E 
+        JOIN gallery G on E.fk_galleryno = G.galleryno
+        JOIN exhibitiondetail ED on E.exhibitionno = ED.fk_exhibitionno
+        where E.exhibitionno = 4922;
+
+select * from EXHIBITIONDETAIL;
 
 
 

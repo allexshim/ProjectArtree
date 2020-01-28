@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import masterpiece.exhibition.admin.model.GalleryVO;
+import masterpiece.exhibition.exhibits.model.ExhibitsVO;
 
 public interface InterAdminService {
 
@@ -31,6 +32,12 @@ public interface InterAdminService {
 
 	// 새로 등록할 전시회번호 채번해오기 
 	int getApplyingno();
+
+	// 전시회목록 가져오기
+	List<ExhibitsVO> getExhibitionList();
+
+	// 전시회정보 가져오기
+	HashMap<String, String> getExhibitionDetail(String no);
 
 
 
