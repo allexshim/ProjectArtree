@@ -58,7 +58,7 @@
 		font-size : 12pt;
 	} 
 	
-	div#searchContainer #searchCondition {
+	div#searchContainer #searchType {
 		font-size : 12pt;
 		height : 30px;
 		margin-right : 10px;
@@ -182,34 +182,23 @@
 		
 		// 검색하기 버튼 클릭
 		$("#searchicon").click(function(){
-			
-			// 유효성 검사
-			var searchCondition = $("#searchCondition").val().trim();
-			var searchWord = $("#searchWord").val().trim();
-			
-			if( searchCondition == "" ){
-				alert("검색 조건을 선택하세요.");
-				return;
-			}
-			
-			else if( searchWord == "" ){
-				alert("검색어를 입력하세요.");
-				$("#searchWord").focus();
-				return;
-			}
-			
-			window.location.href="**.at?searchCondition="+searchCondition+"&searchWord="+searchWord;
-
+			goSearch();
 		}); // end of $("#searchicon").click()
 		
+		// 엔터 치기
+		$("#searchWord").keydown(function(event){
+			if(event.keyCode == 13){
+				goSearch();
+			}
+		});
 		
 		// 리스트의 전시회 이름을 클릭하면 전시회 상세페이지로 이동한다.
 		$("div#contentContainer table tbody td:nth-child(2)").click(function(){
 			
 			var exhibitionno = $(this).next().text();
-			console.log(exhibitionno);
+			
 			// 페이지로 들어올 때 전시회 코드도 같이 받아와서, 클릭한 전시회 코드를 넘겨줍니다.
-			//window.location.href="/artree/exhDetail.at?eno="+exhibitionno;	
+			window.location.href="/artree/exhDetail.at?eno="+exhibitionno;	
 		});
 		
 		// 리스트의 리뷰 제목을 클릭하면 리뷰 상세페이지로 이동한다.
@@ -231,8 +220,25 @@
 			}
 		});
 		
-	});
+	}); // end of document.ready ------------------------------------------------
 
+	function goSearch(){
+		// 유효성 검사
+		var searchType = $("#searchType").val().trim();
+		var searchWord = $("#searchWord").val().trim();
+		
+		if( searchType == "" ){
+			alert("검색 조건을 선택하세요.");
+			return;
+		}
+		else if( searchWord == "" ){
+			alert("검색어를 입력하세요.");
+			$("#searchWord").focus();
+			return;
+		}
+		window.location.href="/artree/communityList.at?searchType="+searchType+"&searchWord="+searchWord;
+	} // end of goSearch() ------------------------
+	
 </script>
 </head>
 <body>
@@ -247,7 +253,7 @@
 		</div>
 		
 		<div id="searchContainer">	
-			<select id="searchCondition">
+			<select id="searchType">
 				<option value="">검색조건</option>
 				<option value="name">전시회 이름</option>
 				<option value="titleContents">제목+글내용</option>
@@ -260,7 +266,7 @@
 		
 		<div id="contentContainer">
 			<table id="communityContents">
-				<c:if test="${communityList != null}">
+				<c:if test='${communityList != null or communityList != "" }'>
 					<thead>
 						<tr style="text-align: center !important;">
 							<td>No.</td>
@@ -287,7 +293,7 @@
 						</c:forEach>
 					</tbody>
 				</c:if>
-				<c:if test="${communityList == null}">
+				<c:if test='${communityList == null or communityList == "" }'>
 					<thead>
 						<tr>
 							<td colspan="4">아직 등록된 글이 없습니다.</td>

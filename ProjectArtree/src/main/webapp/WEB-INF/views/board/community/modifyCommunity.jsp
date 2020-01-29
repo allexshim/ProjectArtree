@@ -94,22 +94,7 @@
 		padding : 10px;
 		cursor : pointer;
 	}
-	
-	/* div#preNext {
-		width: 80%;
-		margin: 0 auto;
-	}
-	
-	div#preNext table tr td:nth-child(2) {
-		font-weight: bold;
-		width : 80px;
-		text-align: center;
-	}
-	
-	div#preNext table tr td {
-		cursor : pointer;
-	} */
-	
+
 	div#toListBtn {
 		padding-top : 20px;
 		padding-bottom : 20px;
@@ -131,24 +116,24 @@
 <script type="text/javascript">
 	$(document).ready(function(){ 
 		
+		// 수정에서 등록 버튼 누르면 등록 말고 수정되게 바꾸세요------------------------
+		// 전시회name, 전시회no, title, content
+		if(${modifycommu != null}){
+			
+			$("#name").val("${modifycommu.exhibitionname}");
+			$("#exhibitionno").val("${modifycommu.exhibitionno}");
+			$("#title").val("${modifycommu.title}");
+			$("#contents").val("${modifycommu.content}");
+			$("#no").val("${modifycommu.no}");
+		} // 수정할 글 정보 입력하기 -----------------------------
+		
+		
 		$("#name").focus(function(){
 
 			$("#myModal").modal('show');
 			$("searchWord").focus();
 			
 		});
-		
-		// 이전글 클릭시 이벤트
-		$(".prev").click(function(){
-			
-		}) // 이전글 클릭시 이벤트 -------------
-		
-		
-		// 다음글 클릭시 이벤트
-		$(".next").click(function(){
-			
-			
-		}) // 다음글 클릭시 이벤트 --------------
 		
 		$("#searchWord").keydown(function(){
 			if(event.keyCode==13) {
@@ -187,8 +172,8 @@
 			} 
 			else {
 				var frm = document.addcommunity;
-				frm.method = "GET";
-				frm.action = "addCommunityEnd.at";
+				frm.method = "POST";
+				frm.action = "modifyCommunityEnd.at";
 				frm.submit();
 			}
 		});
@@ -269,7 +254,7 @@
 		
 		if( (exhibitionname != null) && (exhibitionname != "" )) {
 		    $("#name").val(exhibitionname);
-		    $("#no").val(exhibitionno);
+		    $("#exhibitionno").val(exhibitionno);
 		    
 		    // modal에 남아있는 검색 데이터를 초기화한다.
 		    sessionStorage.removeItem("exhibitionname");
@@ -299,21 +284,24 @@
 					<td>전시회명</td>
 					<td>
 						<input id="name" name="name" type="text" placeholder="전시회 이름을 입력해주세요." autocomplete="off" />
-						<input id="no" name="no" type="hidden"/>
+						<input id="exhibitionno" name="exhibitionno" type="hidden"/>
 					</td>
 				<tr>
 			
 				<tr>
 					<td>제목</td>
-					<td><input id="title" name="title" type="text" placeholder="제목을 입력해주세요."/></td>
+					<td>
+						<input id="title" name="title" type="text" placeholder="제목을 입력해주세요."/>
+						<input id="no" name="no" type="hidden"/>
+					</td>
 				<tr>
 				<tr>
 					<td>작성자</td>
-					<td>${loginuser.name}</td>
+					<td>${modifycommu.name}</td>
 				<tr>
 				<tr>
 					<td>작성일자</td>
-					<td>${writeDay}</td>
+					<td>${modifycommu.writeday}</td>
 				<tr>
 				<tr>
 					<td colspan="2">
@@ -328,20 +316,6 @@
 			</div>
 		</div>
 		
-		<!-- <div id="preNext">
-			<table>
-				<tr>
-					<td class="prev"><i class='fa fa-angle-up' style='font-size:32px'></i></td>
-					<td class="prev">이전글</td>
-					<td class="prev">이전글제목이전글제목이전글제목이전글제목이전글제목이전글제목</td>
-				</tr>
-				<tr>
-					<td class="next"><i class='fa fa-angle-down' style='font-size:32px'></i></td>
-					<td class="next">다음글</td>
-					<td class="next">다음글제목다음글제목다음글제목다음글제목다음글제목다음글제목</td>
-				</tr>
-			</table>
-		</div> -->
 		<div id="toListBtn" align="center">
 			<img id="toListBtn" src="<%= ctxPath %>/resources/images/board/toListBtn.JPG" />
 		</div>

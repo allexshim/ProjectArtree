@@ -17,7 +17,9 @@ public class CommunityService implements InterCommunityService {
 	// 목록 불러오기
 	@Override
 	public List<HashMap<String, String>> getCommunity(HashMap<String, String> searchMap) {
-		List<HashMap<String, String>> communityList = dao.getCommunity(searchMap);
+
+		List<HashMap<String, String>> communityList = null;
+		communityList = dao.getCommunity(searchMap);
 		return communityList;
 	}
 	
@@ -35,8 +37,25 @@ public class CommunityService implements InterCommunityService {
 		return n;
 	}
 
+	// 해당 글번호의 글 정보 가져오기
+	@Override
+	public HashMap<String, String> getCommunityDetail(String no) {
+		HashMap<String, String> communityDetail = dao.getCommunityDetail(no);
+		return communityDetail;
+	}
 
- 
-	
-	
+	// 글 수정하기 
+	@Override
+	public int modifyCommunity(HashMap<String, String> modifycommu) {
+		int n = dao.modifyCommunity(modifycommu);
+		return n;
+	}
+
+	// 새 댓글 등록하기
+	@Override
+	public int addComment(HashMap<String, String> comment) {
+		int n = dao.addComment(comment);
+		return n;
+	}
+
 }

@@ -13,7 +13,16 @@ public interface InterCommunityService {
 
 	// 새 글 추가하기
 	int addCommunity(HashMap<String, String> addCommunity);
-
 	
+	// 해당 글번호의 글 정보 가져오기
+	HashMap<String, String> getCommunityDetail(String no);
+
+	// 글 수정하기 
+	int modifyCommunity(HashMap<String, String> modifycommu);
+
+	// 새 댓글 등록하기
+	int addComment(HashMap<String, String> comment);
+
+
 
 }
