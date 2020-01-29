@@ -11,9 +11,10 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.support.SessionAttributeStore;
+import org.springframework.web.context.annotation.SessionScope;
 
 import masterpiece.exhibition.exhibits.service.InterExhibitsService;
 import masterpiece.exhibition.member.model.MemberVO;
@@ -40,40 +41,35 @@ public class ExhibitsController {
 		String type = request.getParameter("type");
 		String loca = request.getParameter("loca");
 		
+		System.out.println(len+"//"+page);
+		
+		if(type == null || "0".equals(type)) {
+			type = "";
+		}
+		if(loca == null || "0".equals(loca)) {
+			loca = "";
+		}
+		
 		HashMap<String, String> paraMap = new HashMap<String, String>();
 		paraMap.put("check", "exh");
+		paraMap.put("type", type);
+		paraMap.put("loca", loca);
 		
 		int totCount = service.getTotalCount(paraMap);
 		
 		if(len == null || !len.equals("16")) {
 			len = "16";
 		}
-		
-		int pg = 0;
-		
-		if(page == null) {
-			page = "1";
-			pg = 1;
-		}
-		else {
-			try {
-				pg = Integer.parseInt(page);
-				if( pg < 1 || pg > totCount/16) {
-					pg = 1;
-				}
-			} catch (NumberFormatException e) {
-				pg = 1;
-			}
 			
-		}
-			
-		String start = String.valueOf(((pg-1)*Integer.parseInt(len))+1);
+		String start = String.valueOf(((Integer.parseInt(page)-1)*Integer.parseInt(len))+1);
 		String end = String.valueOf(Integer.parseInt(start) + Integer.parseInt(len) - 1);
+		
+		System.out.println(len+"////"+page);
 		
 		paraMap.put("start", start); 
 		paraMap.put("end", end);
-		paraMap.put("type", type);
-		paraMap.put("loca", loca);
+		
+		System.out.println(start+"//////"+end);
 		
 		List<HashMap<String, Object>> ExhListMap = service.getExhList(paraMap);
 		
@@ -105,9 +101,59 @@ public class ExhibitsController {
 		String eno = request.getParameter("eno");
 		
 		HashMap<String, String> exhDetailMap = service.getExhDetail(eno); // 해당전시회정보
-
+		
 		request.setAttribute("exhDetailMap", exhDetailMap);
 		return "exhibits/exhDetail.tiles";
+	}
+	
+	///////////////////////// 전시회 상세페이지 - 성별 차트 //////////////////////////
+	@ResponseBody
+	@RequestMapping(value="/genderChart.at", produces="text/plain;charset=UTF-8")
+	public String genderChart(HttpServletRequest request) {
+		
+		String eno = request.getParameter("eno");
+		
+		List<HashMap<String, Object>> genderChart = service.getGenderChart(eno); // 성별 차트
+		
+		JSONArray jsonArr = new JSONArray();
+		
+		for(HashMap<String,Object> chart : genderChart) {
+			
+			JSONObject jobj = new JSONObject();
+			
+			jobj.put("GENDER", chart.get("GENDER"));
+			jobj.put("CNT", chart.get("CNT"));
+			
+			jsonArr.put(jobj);
+			
+		}
+		
+		return jsonArr.toString();
+	}
+	
+	///////////////////////// 전시회 상세페이지 - 연령대별 차트 //////////////////////////
+	@ResponseBody
+	@RequestMapping(value="/ageChart.at", produces="text/plain;charset=UTF-8")
+	public String ageChart(HttpServletRequest request) {
+	
+		String eno = request.getParameter("eno");
+	
+		List<HashMap<String, String>> ageChart = service.getAgeChart(eno); // 연령대 차트
+		
+		JSONArray jsonArr = new JSONArray();
+	
+		for(HashMap<String, String> chart : ageChart) {
+		
+			JSONObject jobj = new JSONObject();
+			
+			jobj.put("AGEGROUP", chart.get("AGEGROUP"));
+			jobj.put("CNT", chart.get("CNT"));
+			
+			jsonArr.put(jobj);
+		
+		}
+	
+		return jsonArr.toString();
 	}
 
 	/////////////////// 갤러리 목록 홈 /////////////////////

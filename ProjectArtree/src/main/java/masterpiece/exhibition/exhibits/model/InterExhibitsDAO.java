@@ -35,4 +35,8 @@ public interface InterExhibitsDAO {
 
 	int goCheckLikeGal(HashMap<String, String> paraMap); // 갤러리 좋아요 지정 
 
+	List<HashMap<String, Object>> getGenderChart(String eno); // 성별 차트
+
+	List<HashMap<String, String>> getAgeChart(String eno); // 연령대별 차트
+
 }

@@ -23,13 +23,36 @@
 		select row_number() over(order by exhibitionno desc) AS RNO
 			 , exhibitionno, fk_galleryno, B.galleryname, B.location, exhibitionname
 			 , startdate ||' - '|| enddate AS schedule
-			 , price, D.mainposter
+			 , price, D.mainposter, A.status
 		from exhibition A left join gallery B
 		on A.fk_galleryno = B.galleryno
 		left join exhibitiondetail D
 		on A.exhibitionno = d.fk_exhibitionno
+		<if test='loca != ""'>
+			where location
+			<choose>
+				<when test="loca == 1">= '서울'</when>
+				<when test="loca == 2">in ('경기', '인천')</when>
+				<when test="loca == 3">in ('부산', '울산', '경남')</when>
+				<when test="loca == 4">in ('대구', '경북')</when>
+				<when test="loca == 5">in ('광주', '전라')</when>
+				<when test="loca == 6">in ('대전', '충청', '세종')</when>
+				<when test="loca == 7">in ('제주', '강원')</when>
+			</choose>			
+		</if>
+		<if test='type != ""'>
+			<if test='loca != ""'> and </if> 
+			<if test='loca == ""'> where </if> 
+			A.status = 
+			<choose>
+				<when test="type == 'ing'">'전시중'</when>
+				<when test="type == 'com'">'전시예정'</when>
+				<when test="type == 'end'">'전시종료'</when>
+			</choose>
+		</if>
 		) V
 		where RNO between #{start} and #{end}
+
 	</select>
 	
 	<!-- ////////////////// 페이징처리를 위한 게시물 갯수 ////////////////// -->
@@ -37,7 +60,30 @@
 		select count(*) from
 		<choose>
 			<when test='check.equals("exh")'>
-				exhibition
+				exhibition A left join gallery B
+				 on A.fk_galleryno = B.galleryno
+				<if test='loca != ""'>
+					where location
+					<choose>
+						<when test="loca == 1">= '서울'</when>
+						<when test="loca == 2">in ('경기', '인천')</when>
+						<when test="loca == 3">in ('부산', '울산', '경남')</when>
+						<when test="loca == 4">in ('대구', '경북')</when>
+						<when test="loca == 5">in ('광주', '전라')</when>
+						<when test="loca == 6">in ('대전', '충청', '세종')</when>
+						<when test="loca == 7">in ('제주', '강원')</when>
+					</choose>			
+				</if>
+				<if test='type != ""'>
+					<if test='loca != ""'> and </if> 
+					<if test='loca == ""'> where </if> 
+					A.status = 
+					<choose>
+						<when test="type == 'ing'">'전시중'</when>
+						<when test="type == 'com'">'전시예정'</when>
+						<when test="type == 'end'">'전시종료'</when>
+					</choose>
+				</if>
 			</when>
 			<when test='check.equals("gal")'>
 				gallery
@@ -237,4 +283,32 @@
 	<delete id="goCheckDislikeGal" parameterType="HashMap">
 		delete from galwishlist where fk_idx = #{idx} and fk_galleryno = #{gno}
 	</delete>
+	
+	<!-- ////////////////////////////// 성별, 연령대별 차트 ///////////////////////////////// -->
+	<resultMap type="HashMap" id="genderMap">
+		<result property="GENDER" column="gender" javaType="String"/>
+		<result property="CNT" column="cnt" javaType="int"/>
+	</resultMap>
+	
+	<select id="getGenderChart" parameterType="String" resultMap="genderMap">
+		select func_gender(gender) AS gender, count(*) AS cnt
+		from wishList A left join member B
+		on A.fk_idx = B.idx 
+		where fk_exhibitionno = #{eno}
+		group by gender
+	</select>
+	
+	<resultMap type="HashMap" id="ageMap">
+		<result property="AGEGROUP" column="agegroup" javaType="int"/>
+		<result property="CNT" column="cnt" javaType="int"/>
+	</resultMap>
+	
+	<select id="getAgeChart" parameterType="String" resultMap="ageMap">
+		select agegroup, count(*) AS cnt
+		from wishList A left join member B
+		on A.fk_idx = B.idx 
+		where fk_exhibitionno = #{eno}
+		group by agegroup
+		order by agegroup asc
+	</select>
 </mapper>
