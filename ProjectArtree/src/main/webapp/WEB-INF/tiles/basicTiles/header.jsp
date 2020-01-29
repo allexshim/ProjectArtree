@@ -315,7 +315,7 @@ function goCart() {
 					    <a class="dropdown-a1" href="<%=ctxPath%>/notice.at">Notice</a>
 					    <a class="dropdown-a1" href="<%=ctxPath%>/reviewList.at">Review</a>
 					    <a class="dropdown-a1" href="<%=ctxPath%>/previewList.at">Preview</a>
-					    <a class="dropdown-a1" href="<%=ctxPath%>/eventList.at">Event</a>
+					    <a class="dropdown-a1" href="<%=ctxPath%>/event.at">Event</a>
 					    <a class="dropdown-a1" href="<%=ctxPath%>/communityList.at">Community</a>
 					  </div>
 					</div>
