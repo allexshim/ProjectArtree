@@ -18,6 +18,10 @@
 		font-family: 'Noto Sans Kr', sans-serif;
 	}
 	
+	.noticeContainer {
+		width: 80%;
+	}
+	
 	#reviewContainer {
 		padding-bottom : 100px;
 	}

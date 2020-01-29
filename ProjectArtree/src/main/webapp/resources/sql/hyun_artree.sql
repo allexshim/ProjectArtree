@@ -26,8 +26,12 @@ create table notice
  from member;
  
  select gender
-		     , count(*) AS CNT
-		     , round( count(*)/(select count(*) from member)*100, 2 ) AS PERCENTAGE 
-		from member
-		group by gender
-		order by gender
+     , count(*) AS CNT
+     , round( count(*)/(select count(*) from member)*100, 2 ) AS PERCENTAGE 
+from member
+group by gender
+order by gender;
+
+ select *
+ from event;
+        
