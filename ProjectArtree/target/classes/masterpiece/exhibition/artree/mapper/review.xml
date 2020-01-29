@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- ====  mapper 기본설정 ==== -->
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="review">
+	
+	<!-- 전시회 이름 검색하기 -->
+	<resultMap type="HashMap" id="Exhibit">
+		<result property="exhibitionno"  	column="exhibitionno" 		javaType="String"/> 
+		<result property="exhibitionname"   column="exhibitionname" 	javaType="String"/> 
+		<result property="author"   		column="author" 			javaType="String"/> 
+		<result property="galleryname"  	column="galleryname" 		javaType="String"/> 
+	</resultMap>
+
+	<select id="getExhibit" parameterType="String" resultMap="Exhibit" >
+		select exhibitionno, exhibitionname, author, galleryname
+        from 
+        (
+        select *
+		from 
+        (select * from exhibition
+	        <if test=' value != "" '>
+	        where exhibitionname like '%' || #{ value } || '%'
+	        </if>
+        ) V 
+        join exhibitionDetail D
+		on V.exhibitionno = D.fk_exhibitionno
+        ) E join gallery G
+        on E.fk_galleryno = G.galleryno
+        order by to_date(startdate) desc
+	</select>
+	
+	<!-- 새 글 입력 -->
+	<insert id="addReview" parameterType="HashMap">
+		insert into review(boardno, revno, fk_idx, fk_name, exhibitionname, fk_exhibitionno, revTitle, revContent, readCount, revWriteday, status, commentCount)
+		values(default, reviewSeq.nextval, #{idx}, #{name}, #{exhibitionname}, #{exhibitionno}, #{revTitle}, #{revContent}, default, default, default, default)
+	</insert>
+	
+	<!-- 리뷰 테이블에 있는 모든 글 목록 가져오기 -->
+	<resultMap type="HashMap" id="revMap">
+   		<result property="revno" 			column="revno" 				javaType="String"/>
+	 	<result property="exhibitionname" 	column="exhibitionname" 	javaType="String"/>
+	 	<result property="revtitle" 		column="revtitle" 			javaType="String"/>
+	 	<result property="revwriteday" 		column="revwriteday" 		javaType="String"/>
+	 	<result property="readcount" 		column="readcount" 			javaType="String"/>
+    </resultMap>
+	<select id="selectRevList" resultMap="revMap">
+		select revno, exhibitionname, revTitle, to_char(revwriteday, 'yyyy-mm-dd') AS revwriteday, readcount from review
+	</select>
+	
+	<!-- ============ 페이지 바 ============ -->
+	<!-- 검색조건이 없을 경우의 총 게시물 건수(totalCount) -->
+    <select id="getTotalCountWithNoSearch" resultType="int">
+    	select count(*)
+    	from review
+    	where status = 1
+    </select>
+     <!-- 검색조건이 있을 경우의 총 게시물 건수(totalCount) -->
+    <select id="getTotalCountWithSearch" parameterType="HashMap" resultType="int">
+    	select count(*)
+    	from review
+    	where status = 1
+    	and ${searchType} like '%'|| #{searchWord} ||'%'
+    </select>
+    
+    <!-- 페이징 처리한 글목록 가져오기 -->
+    <select id="reviewListWithPaging" parameterType="HashMap" resultType="masterpiece.exhibition.board.review.model.ReviewVO"> 
+    	select rno, revno, fk_idx, fk_name, exhibitionname, fk_exhibitionno, revTitle, readcount, revWriteday, commentCount
+    	from
+    	(
+	    	select rownum AS rno
+	    		 , revno, fk_idx, fk_name, exhibitionname, fk_exhibitionno, revTitle, readcount, revWriteday, commentCount
+	    	from
+	    	(
+	    	select revno, fk_idx, fk_name, exhibitionname, fk_exhibitionno, revTitle,  
+	               readcount, to_char(revWriteday, 'yyyy-mm-dd') as revWriteday,
+	               commentCount
+	        from review
+	        where status = 1
+	        <if test='searchWord != ""'>
+	       	and ${searchType} like '%'|| #{searchWord} ||'%'
+	        </if>
+	        order by revno desc 
+	        ) V
+        ) T
+        where rno between #{startRno} and #{endRno}
+    </select>
+    
+    <!-- 보고 온 전시회의 메인 포스터 가져오기 -->
+    <select id="getPoster" parameterType="String" resultType="String">
+    	select mainposter
+		from exhibitiondetail
+		where fk_exhibitionno = (select fk_exhibitionno
+								 from review
+								 where revno = #{revno})
+    </select>
+    
+    <!-- 글 1개 조회 -->
+    <select id="getView" parameterType="String" resultType="masterpiece.exhibition.board.review.model.ReviewVO">
+    	select previousno, previoustitle,
+    		   revno, fk_idx, fk_name, fk_exhibitionno, exhibitionname, revTitle, revContent, readCount, revWriteday,
+	           nextno, nexttitle, commentCount
+	    from 
+	    (
+	    select lag(revno, 1) over(order by revno desc) as previousno
+	    	 , lag(revTitle, 1) over(order by revno desc) as previoustitle
+	    	 , revno, fk_idx, fk_name, fk_exhibitionno, exhibitionname, revTitle, revContent
+	    	 , readCount, to_char(revWriteday, 'yyyy-mm-dd hh24:mi:ss') as revWriteday
+	    	 , lead(revno, 1) over(order by revno desc) as nextno
+	    	 , lead(revTitle, 1) over(order by revno desc) as nexttitle
+	    	 , commentCount
+	    from review
+	    where status = 1
+	    ) V
+	    where V.revno = #{revno}
+    </select>
+    <!-- 조회수 증가 -->
+    <update id="setAddReadCount" parameterType="String">
+      update review set readCount = readCount + 1
+      where status = 1 and revno = #{revno}
+    </update>
+    
+    <!-- 작성자만 글 수정 가능 -->
+    <update id="modifyEndReview" parameterType="HashMap">
+      update review set fk_exhibitionno = #{fk_exhibitionno} 
+      				, revTitle = #{revTitle}
+                    , revContent = #{revContent}
+                    , revWriteday = sysdate
+      where revno = #{revno}
+    </update>
+    
+    <!-- ================== 댓글 ================== -->
+    <!-- 해당 글 번호에 해당하는 댓글 가져오기 -->
+    <resultMap type="HashMap" id="commMap">
+   		<result property="commentno" 	column="commentno" 		javaType="String"/>
+   		<result property="fk_idx" 		column="fk_idx" 		javaType="String"/>
+   		<result property="name" 		column="name" 			javaType="String"/>
+   		<result property="comcontent" 	column="comcontent" 	javaType="String"/>
+   		<result property="comwriteday" 	column="comwriteday" 	javaType="String"/>
+    </resultMap>
+    <select id="getCommentList" parameterType="String" resultMap="commMap">
+    	select commentno, fk_idx, name, comcontent, comwriteday
+		from board_comment B join member M
+		on B.fk_idx = M.idx
+		where fk_no=#{revno} and boardno=1
+    </select>
+    
+    <!-- 댓글쓰기 -->
+    <insert id="addComment" parameterType="HashMap">
+       insert into board_comment(commentno, boardno, fk_idx, comcontent, comwriteday, fk_no)
+       values(seq_board_comment.nextval, 1, #{idx}, #{comcontent}, sysdate, #{fk_revno})
+    </insert>
+    
+    <!-- review 테이블에 commentCount 컬럼의 값을 1증가 (update) -->  
+    <update id="updateCommentCount" parameterType="String">
+       update review set commentCount = commentCount + 1 
+       where revno = #{fk_revno}
+    </update>
+</mapper>

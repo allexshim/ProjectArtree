@@ -3,9 +3,12 @@ package masterpiece.exhibition.member.controller;
 import java.io.UnsupportedEncodingException;
 import java.security.GeneralSecurityException;
 import java.security.NoSuchAlgorithmException;
+import java.text.DecimalFormat;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -26,6 +29,7 @@ import masterpiece.exhibition.common.SHA256;
 import masterpiece.exhibition.mail.GoogleMail;
 import masterpiece.exhibition.member.model.MemberVO;
 import masterpiece.exhibition.member.service.InterMemberService;
+import masterpiece.exhibition.order.service.InterOrderService;
 
 @Component
 @Controller
@@ -34,6 +38,9 @@ public class MemberController {
 	// 의존객체 주입
 	@Autowired   
 	private InterMemberService service;
+	
+	@Autowired
+	private InterOrderService orderService;
 
 	@Autowired   
 	private AES256 aes;
@@ -467,6 +474,34 @@ public class MemberController {
 	
 	@RequestMapping(value="/mypage_order.at")
 	public String mypage_order(HttpServletRequest request) {
+		DecimalFormat dec = new DecimalFormat("#,###");
+		HttpSession session = request.getSession();
+		MemberVO loginuser = (MemberVO)session.getAttribute("loginuser");
+		
+		if(loginuser != null) {
+			String idx = loginuser.getIdx();
+			HashMap<String,String> map = new HashMap<String,String>();
+			map.put("idx", idx);
+			List<HashMap<String,String>> reserList = orderService.reserList(map);				
+			String html = "";
+			for (int i=0; i<reserList.size(); i++) {		
+				int resertotal = Integer.parseInt(reserList.get(i).get("resertotal"));
+				html += "<tr class=\"orderDetail\" style=\"border-bottom:solid 1px black;\">";
+				html += "<td>"+reserList.get(i).get("reserdate")+"</td>";
+				html += "<td class=\"order_info\">";
+				html += "<img src=\""+reserList.get(i).get("mainimg")+"\">";
+				html += "<span style=\"margin-left:20%;\">"+reserList.get(i).get("exname")+"</span>";			
+				html += "</td>";					
+				html += "<td>"+reserList.get(i).get("reserno")+"</td>";
+				html += "<td>&#8361;"+dec.format(resertotal)+"</td>";
+				html += "<td>"+reserList.get(i).get("reserstat")+"</td>";
+				html += "<td style=\"padding: 0px !important; width: 0% !important;\"><input type=\"text\" hidden=\"hidden\" value=\""+reserList.get(i).get("reserno")+"\" name=\"orderDetail\"></td>";
+				html += "</tr>";
+				html += "";
+			}
+			
+			request.setAttribute("html", html);
+		}
 		
 		return "member/mypage/mypage_order.tiles";
 	} // end of mypage_order --------------------------------------------

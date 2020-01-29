@@ -19,9 +19,12 @@
 	
 	#detailContainer {
 		padding-bottom : 100px;
-		margin: 200px 0 100px 0; 
 	}
-
+	
+	#detailContainer {	
+		margin: 100px 0 100px 0;
+	}	
+		
 	#detailContainer .Title_Area {	
 		margin: 0 auto;
 		width: 100%;
@@ -42,24 +45,13 @@
 		font-weight: bold;
 	}	
 	
-	div#myPoster {
-		padding-top : 10px;
-	}
-	
-	div#myPoster:after {
-		content: "";
-	  	display: block;
-		width : 80%;		
-		padding-top : 30px;
-		border-bottom : solid 2px lightgray;
-	}
-	
 	div#detailContents {
-		width: 80%;
+		width: 70%;
 		margin: 0 auto;
 		padding-bottom: 20px;
 		border-bottom : solid 2px lightgray;
 		overflow: hidden; /* div밖으로 이미지가 넘칠 때 해결 방법! 기억해둘것! */
+		padding-top : 50px;
 	}
 	
 	div#detailContents h3 {
@@ -83,7 +75,7 @@
 	}
 	
 	table#detailTable tr td:nth-child(2) input {
-		width : 100%;
+		width : 97%;
 		border : 1px solid lightgray;
 	}
 	
@@ -95,29 +87,14 @@
 
 	div#myBtns {
 		float : right;
-		padding-right : 22px;
+		padding-right : 50px;
 	}
 	
 	div#myBtns img {
 		padding : 10px;
 		cursor : pointer;
 	}
-	
-	div#preNext {
-		width: 80%;
-		margin: 0 auto;
-	}
-	
-	div#preNext table tr td:nth-child(2) {
-		font-weight: bold;
-		width : 80px;
-		text-align: center;
-	}
-	
-	div#preNext table tr td {
-		cursor : pointer;
-	}
-	
+
 	div#toListBtn {
 		padding-top : 20px;
 		padding-bottom : 20px;
@@ -127,7 +104,6 @@
 	
 	div#detailContainer input, div#detailContainer textarea {
 		border-radius: 5px;
-		font-weight: normal;
 	}
 	
 </style>
@@ -140,24 +116,24 @@
 <script type="text/javascript">
 	$(document).ready(function(){ 
 		
+		// 수정에서 등록 버튼 누르면 등록 말고 수정되게 바꾸세요------------------------
+		// 전시회name, 전시회no, title, content
+		if(${modifycommu != null}){
+			
+			$("#name").val("${modifycommu.exhibitionname}");
+			$("#exhibitionno").val("${modifycommu.exhibitionno}");
+			$("#title").val("${modifycommu.title}");
+			$("#contents").val("${modifycommu.content}");
+			$("#no").val("${modifycommu.no}");
+		} // 수정할 글 정보 입력하기 -----------------------------
+		
+		
 		$("#name").focus(function(){
 
 			$("#myModal").modal('show');
 			$("searchWord").focus();
 			
 		});
-		
-		// 이전글 클릭시 이벤트
-		$(".prev").click(function(){
-			
-		}) // 이전글 클릭시 이벤트 -------------
-		
-		
-		// 다음글 클릭시 이벤트
-		$(".next").click(function(){
-			
-			
-		}) // 다음글 클릭시 이벤트 --------------
 		
 		$("#searchWord").keydown(function(){
 			if(event.keyCode==13) {
@@ -169,10 +145,11 @@
 		$(".searchBtn").click(function(){
 			searchExhibition($("#searchWord").val());
 		});
+
 		
 		// 글목록으로 돌아가기
 		$("#toListBtn").click(function(){
-			window.location.href="/artree/reviewList.at";
+			window.location.href="/artree/communityList.at";
 		});
 		
 		$("#registerBtn").click(function(){
@@ -194,18 +171,19 @@
 				$("#contents").focus();
 			} 
 			else {
-				var frm = document.addReview;
-				frm.method = "GET";
-				frm.action = "addReviewEnd.at";
+				var frm = document.addcommunity;
+				frm.method = "POST";
+				frm.action = "modifyCommunityEnd.at";
 				frm.submit();
 			}
 		});
 		
+		
 	}); // end of $(document).ready -------------------------------------
-	
+
 	function searchExhibition(searchWord) {
 		$.ajax({
-			url: "<%= ctxPath %>/exhibitInModal.at",
+			url: "<%= ctxPath %>/searchExhibitInModal.at",
 			type: "GET",
 			data: { "searchWord":searchWord },
 			dataType: "JSON",
@@ -284,7 +262,7 @@
 		    searchExhibition("");
 		}	
 	} // end of writeExhibition ----------------------------------------
-
+	
 </script>
 
 </head>
@@ -292,34 +270,42 @@
 	<div id="detailContainer">
 		<div class="Title_Area">
 			<span class="st">Membership</span>
-			<span class="lt">Review</span>
+			<span class="lt">Community</span>
 		</div>
-
+		
+	<%-- 	<div id="myPoster" align="center">
+			<img src="<%= ctxPath %>/resources/images/exhibition/poster1.JPG" />
+		</div>
+		 --%>
 		<div id="detailContents">
-		<form name="addReview">
+		<form name="addcommunity">
 			<table id="detailTable">
 				<tr>
 					<td>전시회명</td>
-					<td><input id="name" name="name" type="text" placeholder="전시회 이름을 입력해주세요."/>
-					<input id="exhibitionno" name="exhibitionno" type="hidden"/>
+					<td>
+						<input id="name" name="name" type="text" placeholder="전시회 이름을 입력해주세요." autocomplete="off" />
+						<input id="exhibitionno" name="exhibitionno" type="hidden"/>
 					</td>
 				<tr>
 			
 				<tr>
 					<td>제목</td>
-					<td><input id="title" name="title" type="text" placeholder="제목을 입력해주세요."/></td>
+					<td>
+						<input id="title" name="title" type="text" placeholder="제목을 입력해주세요."/>
+						<input id="no" name="no" type="hidden"/>
+					</td>
 				<tr>
 				<tr>
 					<td>작성자</td>
-					<td>${loginuser.name}</td>
+					<td>${modifycommu.name}</td>
 				<tr>
 				<tr>
 					<td>작성일자</td>
-					<td>${writeDay}</td>
+					<td>${modifycommu.writeday}</td>
 				<tr>
 				<tr>
 					<td colspan="2">
-						<textarea id="contents" name="contents" style="resize:none; border:solid 1px lightgray" rows="10" cols="120">
+						<textarea id="contents" name="contents" style="resize:none; border:solid 1px lightgray; font-weight:normal !important;" rows="10" cols="120">
 						</textarea>
 					</td>
 				<tr>
@@ -330,20 +316,6 @@
 			</div>
 		</div>
 		
-		<div id="preNext">
-			<table>
-				<tr>
-					<td class="prev"><i class='fa fa-angle-up' style='font-size:32px'></i></td>
-					<td class="prev">이전글</td>
-					<td class="prev">이전글제목이전글제목이전글제목이전글제목이전글제목이전글제목</td>
-				</tr>
-				<tr>
-					<td class="next"><i class='fa fa-angle-down' style='font-size:32px'></i></td>
-					<td class="next">다음글</td>
-					<td class="next">다음글제목다음글제목다음글제목다음글제목다음글제목다음글제목</td>
-				</tr>
-			</table>
-		</div>
 		<div id="toListBtn" align="center">
 			<img id="toListBtn" src="<%= ctxPath %>/resources/images/board/toListBtn.JPG" />
 		</div>
@@ -405,5 +377,7 @@
 			</div>
 		</div>
 	</div>
+		
+		
 </body>
 </html>

@@ -118,4 +118,18 @@ public class ExhibitsDAO implements InterExhibitsDAO {
 		return CheckLikeGal;
 	}
 
+	///////////////////////////// 성별 차트 /////////////////////////////
+	@Override
+	public List<HashMap<String, Object>> getGenderChart(String eno) {
+		List<HashMap<String, Object>> GenderChart = sql.selectList("exhibits.getGenderChart", eno);
+		return GenderChart;
+	}
+
+	////////////////////////////// 연령대별 차트 ////////////////////////////
+	@Override
+	public List<HashMap<String, String>> getAgeChart(String eno) {
+		List<HashMap<String, String>> AgeChart = sql.selectList("exhibits.getAgeChart", eno);
+		return AgeChart;
+	}
+
 }

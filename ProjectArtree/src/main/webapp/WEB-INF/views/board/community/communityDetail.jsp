@@ -50,6 +50,8 @@
 	}
 	
 	div#myPoster img {
+		width : 300px;
+		height : 400px;
 		border-radius: 15px;
 		box-shadow: 5px 5px 5px grey;
 	}
@@ -69,14 +71,9 @@
 		border-bottom : solid 2px lightgray;
 		overflow: hidden; /* div밖으로 이미지가 넘칠 때 해결 방법! 기억해둘것! */
 	}
-	
-	div#detailContents h3 {
-		padding-left : 2.5%;
-	}
-	
+
 	table#detailTable {
-		width: 95%;
-		margin: 0 auto;
+		width: 60%;
 	}
 	
 	
@@ -85,7 +82,7 @@
 	}
 	
 	table#detailTable tr td:first-child {
-		width : 20px;
+		width : 35px;
 		font-weight: bold;
 	}
 	
@@ -110,9 +107,16 @@
 		margin: 0 auto;
 	}
 	
+	div#preNext table tr td:first-child {
+		font-weight: bold;
+		width : 50px;
+		text-align: center;
+	}
+	}
+	
 	div#preNext table tr td:nth-child(2) {
 		font-weight: bold;
-		width : 80px;
+		width : 50px;
 		text-align: center;
 	}
 	
@@ -183,28 +187,36 @@
 		cursor : pointer;
 	}
 	
+	a.detailLink {text-decoration: none; color:black; font-weight: normal;}
+	a.detailLink:hover {text-decoration: none;}
+	
+	a.prenext {text-decoration: none; color:black; font-weight: normal;}
+	a.prenext:hover {text-decoration: none;}
+	
 </style>
 
 <script src="<%= ctxPath%>/resources/js/jquery-3.3.1.min.js"></script>
 <script type="text/javascript">
 	$(document).ready(function(){ 
-		
-		// 이전글 클릭시 이벤트
-		$(".prev").click(function(){
-			
-		}) // 이전글 클릭시 이벤트 -------------
-		
-		
-		// 다음글 클릭시 이벤트
-		$(".next").click(function(){
-			
-			
-		}) // 다음글 클릭시 이벤트 --------------
-		
+
 		// 글목록으로 돌아가기
 		$("#toListBtn").click(function(){
 			window.location.href="/artree/communityList.at";
 		});
+		
+		
+		// 글 삭제, 수정 ------------------------------------------
+		$("#modifyBtn").click(function(){
+			window.location.href="modifyCommunity.at?no="+${communityDetail.no};
+		}); // 글 수정 --------------------------------------------
+		
+		$("#deleteBtn").click(function(){
+			
+			
+			
+		}); // 글 삭제 --------------------------------------------
+		
+		// ---------------------------------------------------
 		
 		// 댓글 ------------------------------------------------
 		
@@ -228,8 +240,8 @@
 			}
 			else {
 				var frm = document.newComment;
-				frm.method = "POST";
-				frm.action = "*.at";
+				frm.method = "GET";
+				frm.action = "/artree/addComment.at";
 				frm.submit();
 			}
 			
@@ -248,57 +260,47 @@
 			<span class="lt">Community</span>
 		</div>
 		
-		<div id="myPoster" align="center">
-			<img src="<%= ctxPath %>/resources/images/exhibition/poster1.JPG" />
+		<div id="myPoster" align="center"><!-- 클릭하면 상세페이지로 이동 exhibitionno -->
+			<a class="detailLink" href='/artree/exhDetail.at?eno=${communityDetail.exhibitionno}' ><img src="${communityDetail.mainposter}" /></a>
 		</div>
 		
 		<div id="detailContents">		
-			<h3>예술섬의 사색 Ⅰ : 이배경 작가전</h3>
+			<h3><a class="detailLink" href='/artree/exhDetail.at?eno=${communityDetail.exhibitionno}' >${communityDetail.exhibitionname}</a></h3>
 			<table id="detailTable">
-				<tr>
+				<tr><!-- mainposter, exhibitionname, title, name, fk_idx, writeday, content -->
 					<td>제목</td>
-					<td>예술섬의 사색을 보고온 리뷰글</td>
+					<td>${communityDetail.title}</td>
 				<tr>
 				<tr>
 					<td>작성자</td>
-					<td>심예은</td>
+					<td>${communityDetail.name}</td>
 				<tr>
 				<tr>
 					<td>작성일자</td>
-					<td>2020-01-07 21:21</td>
+					<td>${communityDetail.writeday}</td>
 				<tr>
 				<tr>
-					<td colspan="2">글내용글내용글내용글내용글내용글내용글내용글내용글내용
-									글내용글내용글내용글내용글내용글내용글내용글내용글내용
-									글내용글내용글내용글내용
-									글내용글내용글내용
-									글내용글내용
-									글내용글내용글내용글내용글내용글내용글내용글내용글내용
-									글내용글내용글내용글내용글내용글내용글내용글내용글내용
-									글내용글내용글내용글내용
-									글내용글내용글내용
-									글내용글내용글내용글내용글내용글내용글내용글내용글내용글내용글내용
-									글내용글내용글내용글내용글내용글내용글내용글내용글내용
-									글내용글내용글내용글내용
-									글내용글내용글내용
-									글내용글내용
-									글내용글내용글내용글내용글내용글내용글내용글내용글내용
-									글내용글내용글내용글내용글내용글내용글내용글내용글내용
-									글내용글내용글내용글내용
-									글내용글내용글내용
-									글내용글내용
-					</td>
+					<td colspan="2">${communityDetail.content}</td>
 				<tr>
 			</table>
-	
-			<div id="myBtns">
-				<img id="modifyBtn" src="<%= ctxPath %>/resources/images/board/modifyBtn.JPG" />
-				<img id="deleteBtn" src="<%= ctxPath %>/resources/images/board/deleteBtn.JPG" />
-			</div>
+			
+			<!-- 자기가 쓴 글만 수정,삭제 버튼이 보인다. / 관리자는 삭제 버튼을 볼 수 있다. -->
+			<c:if test="${(communityDetail.fk_idx == loginuser.idx)}">
+				<div id="myBtns">
+					<img id="modifyBtn" src="<%= ctxPath %>/resources/images/board/modifyBtn.JPG" />
+					<img id="deleteBtn" src="<%= ctxPath %>/resources/images/board/deleteBtn.JPG" />
+				</div>
+			</c:if>
+			<c:if test="${ loginuser.status == 2 }">
+				<div id="myBtns">
+					<img id="deleteBtn" src="<%= ctxPath %>/resources/images/board/deleteBtn.JPG" />
+				</div>
+			</c:if>
 		</div>
 		
 		<div id="myComments">
 			<table>
+				<c:if test="${commentList != null}">
 			<!--  이 부분이 c:foreach로 묶이게 됩니다. -->
 				<tr>
 					<td class="commentWriter">댓글작성자이름</td>
@@ -318,46 +320,49 @@
 					</td>
 				</tr>
 			<!--  이 부분이 c:foreach로 묶이게 됩니다. -->	
-				<tr>
-					<td class="commentWriter">댓글작성자이름</td>
-					<td class="commentWriteDate">댓글작성일자</td>
-				</tr>
-				<tr>
-					<td class="commentContents" colspan="2">
-						댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용
-						댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용
-					</td>
-				</tr>
-				<tr>
-					<td class="commentWriter">댓글작성자이름</td>
-					<td class="commentWriteDate">댓글작성일자</td>
-				</tr>
-				<tr>
-					<td class="commentContents" colspan="2">
-						댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용
-						댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용댓글내용
-					</td>
-				</tr>
-			</table>
+				</c:if>
+				<c:if test="${commentList == null}">
+					<tr>
+						<td colspan="2">작성된 댓글이 없습니다.</td>
+					</tr>
+				</c:if>
+			</table> 
 			
-			<form id="newComment" name="newComment">
-				<input id="commentWriter" name="commentWriter" type="text" value="심예은" readonly="readonly"/><br/>
-				<textarea id="commentContents" name="commentContents" placeholder="댓글 내용을 입력하세요."></textarea>
-				<img id="addComment" src="<%= ctxPath %>/resources/images/board/registerBtn.JPG" />
-			</form>
+			<c:if test="${loginuser != null}">
+				<form id="newComment" name="newComment" style="padding-top:20px;">
+					<input id="commentWriter" name="commentWriter" type="text" value="${loginuser.name}" readonly="readonly"/><br/>
+					<textarea id="commentContents" name="commentContents" placeholder="댓글 내용을 입력하세요."></textarea>
+					<img id="addComment" src="<%= ctxPath %>/resources/images/board/registerBtn.JPG" />
+					<input id="fk_no" name="fk_no" type="hidden" value="${communityDetail.no}" />
+				</form>
+			</c:if>
 		</div>
 		
-		<div id="preNext">
+		<div id="preNext" style="padding-top:20px;" >
 			<table>
 				<tr>
 					<td class="prev"><i class='fa fa-angle-up' style='font-size:32px'></i></td>
 					<td class="prev">이전글</td>
-					<td class="prev">이전글제목이전글제목이전글제목이전글제목이전글제목이전글제목</td>
+					<td class="prev">
+						<c:if test="${communityDetail.previousno != null}">
+							<a class="prenext" style="padding-left:5px;" href='/artree/communityDetail.at?no=${communityDetail.previousno}'>${communityDetail.previoustitle}</a>
+						</c:if>
+						<c:if test="${communityDetail.previousno == null}">
+							<span style="padding-left:5px; color:black;">이전 글이 없습니다.</span>
+						</c:if>
+					</td>
 				</tr>
 				<tr>
 					<td class="next"><i class='fa fa-angle-down' style='font-size:32px'></i></td>
 					<td class="next">다음글</td>
-					<td class="next">다음글제목다음글제목다음글제목다음글제목다음글제목다음글제목</td>
+					<td class="next">
+						<c:if test="${communityDetail.nextno != null}">
+							<a class="prenext" style="padding-left:5px;" href='/artree/communityDetail.at?no=${communityDetail.nextno}'>${communityDetail.nexttitle}</a>
+						</c:if>
+						<c:if test="${communityDetail.nextno == null}">
+							<span style="padding-left:5px; color:black;">다음 글이 없습니다.</span>
+						</c:if>
+					</td>
 				</tr>
 			</table>
 		</div>

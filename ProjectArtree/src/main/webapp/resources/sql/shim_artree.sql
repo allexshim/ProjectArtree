@@ -314,18 +314,24 @@ values(seq_community.nextval, ?, ?, ?, ?, 0, ?, 0);
 <td>WriteDay</td>
 <td>Read</td>
 */
+/* 전시회 이름, 제목/글내용, 글작성자 */
 
-select *
+        select *
         from (
-        select rownum as rno, no, exhibitionname, exhibitionno, title, name, writeday, readcount
+        select rownum as rno, no, exhibitionname, exhibitionno, title, name, writeday, readcount, content
         from (
-        select C.no, E.exhibitionname, E.exhibitionno, C.title, C.name, C.writeday, C.readcount
+        select C.content, C.no, E.exhibitionname, E.exhibitionno, C.title, C.name, C.writeday, C.readcount
 		from (
 		select V.*, M.name
 		from community V join member M 
 		on V.fk_idx = M.idx
 		) C  join exhibition E 
 		on C.fk_exhibitionno = E.exhibitionno
+        where 1= 1 
+        and exhibitionname like '%' || '오늘' || '%'
+        and (title like '%' || '무료' || '%'
+        or content like '%' || '얍' || '%')
+        and name like '%' || '심' || '%'
 		order by C.no desc
         ) T ) Z 
         where rno between 1 and 10;
@@ -351,14 +357,39 @@ create table community
 ALTER INDEX ARTREE.PK_EXHIBITION_EXHIBITIONNO REBUILD;
 
 
+/*포스터
+전시회이름
+제목
+작성자이름, fk_idx
+작성일자
+글내용*/
 
+-- where no = ?
+
+select mainposter, exhibitionname,exhibitionno, title, name, C.fk_idx, writeday, content
+from
+(select D.*, M.name 
+from community D join member M 
+on D.fk_idx = M.idx where no = 2) C join 
+(select A.exhibitionno, A.exhibitionname, B.mainposter from 
+(exhibition A join exhibitionDetail B 
+on A.exhibitionno = B.fk_exhibitionno)
+) E on C.fk_exhibitionno = E.exhibitionno;
+
+select status from member;
+
+
+--전시회 이름, 글제목, 작성자이름, 작성일자, 글내용
+
+
+--=========================================================================================================
 commit; 
 
 desc comment;
 
 select * from tab;
 
-create sequence seq_community
+create sequence seq_board_comment
 start with 1 -- 대기번호의 출발번호를 1번부터 하겠다.
 increment by 1 -- 1번 이후로 1씩 증가시킨다.
 nomaxvalue -- maximun값을 정하지 않겠다. (ex/ maxvalue 100 : 100까지만 번호를 부여한다.), nomaxvalue의 경우 도달할 값이 없으므로 nominvalue, nocycle
@@ -371,14 +402,47 @@ create table board_comment
 (commentNo	number	NOT NULL
 ,boardNo	number	NOT NULL
 ,fk_idx	number	NOT NULL
+,fk_no number not null -- 해당하는 글번호
 ,comContent	VARCHAR2(200)	NOT NULL
 ,comwriteDay	DATE	NOT NULL
 ,constraint PK_cmt_commentNo primary key(commentNo)
 ,constraint CK_cmt_boardNo check(boardNo in ('1', '2'))
 ,constraint FK_cmt_fk_idx foreign key(fk_idx) 
-                                                        references member(idx)                         
+                                                        references member(idx)                                               
 );
+commit;
+rollback;
+select * from board_comment;
+drop table board_comment purge;
 
-drop table community purge;
-
+       select 
+        previousno, previoustitle, no, mainposter, exhibitionname, exhibitionno, title, name, C.fk_idx, writeday, content, nextno, nexttitle
+		from
+		(select D.*
+                , M.name  
+		from ( select no, title, fk_idx, writeday, content, fk_exhibitionno
+                , lag(no, 1) over(order by no desc) as nextno
+                , lag(title, 1) over(order by no desc) as nexttitle
+                , lead(no, 1) over(order by no desc) as previousno
+		        , lead(title, 1) over(order by no desc) as previoustitle
+		from community) D join member M 
+		on D.fk_idx = M.idx where no = 2 ) C join 
+		(select A.exhibitionno, A.exhibitionname, B.mainposter from 
+		(exhibition A join exhibitionDetail B 
+		on A.exhibitionno = B.fk_exhibitionno)
+		) E on C.fk_exhibitionno = E.exhibitionno;
+        
+        select no
+                , lag(no, 1) over(order by no desc) as previousno
+                , lag(title, 1) over(order by no desc) as previoustitle
+                , lead(no, 1) over(order by no desc) as nextno
+		        , lead(title, 1) over(order by no desc) as nexttitle
+        from community;
+        
+        select no, title, fk_idx, writeday, content
+                , lag(no, 1) over(order by no desc) as previousno
+                , lag(title, 1) over(order by no desc) as previoustitle
+                , lead(no, 1) over(order by no desc) as nextno
+		        , lead(title, 1) over(order by no desc) as nexttitle
+		from community;
 

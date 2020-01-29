@@ -16,6 +16,7 @@ public class CommunityDAO implements InterCommunityDAO {
 	// 목록 불러오기
 	@Override
 	public List<HashMap<String, String>> getCommunity(HashMap<String, String> searchMap) {
+
 		List<HashMap<String, String>> communityList = sqlsession.selectList("community.getCommunity",searchMap);
 		return communityList;
 	}
@@ -31,6 +32,27 @@ public class CommunityDAO implements InterCommunityDAO {
 	@Override
 	public int addCommunity(HashMap<String, String> addCommunity) {
 		int n = sqlsession.insert("community.addCommunity",addCommunity);
+		return n;
+	}
+
+	// 해당 글번호의 글 정보 가져오기
+	@Override
+	public HashMap<String, String> getCommunityDetail(String no) {
+		HashMap<String, String> communityDetail = sqlsession.selectOne("community.getCommunityDetail", no);
+		return communityDetail;
+	}
+
+	// 글 수정하기 
+	@Override
+	public int modifyCommunity(HashMap<String, String> modifycommu) {
+		int n = sqlsession.update("community.modifyCommunity",modifycommu);
+		return n;
+	}
+
+	// 새 댓글 등록하기
+	@Override
+	public int addComment(HashMap<String, String> comment) {
+		int n = sqlsession.insert("community.addComment",comment);
 		return n;
 	}
 

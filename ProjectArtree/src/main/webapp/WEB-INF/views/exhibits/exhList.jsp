@@ -127,20 +127,21 @@
 		$("#count").show();
 		$("#tc").show();
 		
-		var type="";
-		var loca="";
-		
 		/////////////// 스크롤 페이징
 		var page = 1;
-		getExhList(page);
+		getExhList(page, sessionStorage.getItem("type"), sessionStorage.getItem("loca"));
 	    ///////////////
 	    
 	    // 스크롤이 최하단 으로 내려가면 리스트를 조회하고 page를 증가시킨다.
-		$(window).scroll(function(){   
-		    if($(window).scrollTop() == $(document).height() - $(window).height()){
-		    	 page++; 
-		    	 getExhList(page);
-		    } 
+		$(window).scroll(function(){
+			
+			if( $("#count").text() != $("#tc").text() ){
+			    if($(window).scrollTop() == $(document).height() - $(window).height()){
+			    	 page++; 
+			    	 getExhList(page, sessionStorage.getItem("type"), sessionStorage.getItem("loca"));
+			    }
+			}
+			
 		});
 
 		$(document).on("mouseover", ".exh_one", function(){
@@ -156,13 +157,19 @@
 	var len = 16;
 	
 	////////////////// 전시회 목록 불러오기 /////////////////////
-	function getExhList(page){
-
+	function getExhList(page, type, loca){
+		
+		if(type != null){ sessionStorage.setItem("type", type); }
+		if(loca != null){ sessionStorage.setItem("loca", loca); }
+		
 		$.ajax({
 			url: "<%=ctxPath%>/exhList.at",
-			data: {"page":page, "len":len},
-			dataType: "JSON",
+			data: {"page":page, "len":len, "type":type, "loca":loca},
+			type: "POST",
+			dataType: "JSON",			
 			success:function(json){
+				
+				if( (type != null || loca != null) && page == 1 ){ $(".ExhList_Area").html(""); }
 				
 				var html = "";
 				
@@ -215,20 +222,26 @@
 						$("#tc").text(item.totCount);
 						
 					});
-					
+/* 					
+					if(json.length < 16){
+						$(".ExhList_Area").html(html);
+					}
+					else {
+						$(".ExhList_Area").append(html);
+					}	 */
 					
 					$(".ExhList_Area").append(html);
-					
-					/* // >>> (중요@@@@@@) 더보기... 버튼의 value 속성에 값을 지정하기 <<< //
-					$("#btnMoreHIT").val(parseInt(start)+lenHIT);
-					///////////////////// Integer.parseInt - javaScript에서는 Integer 객체가 없고 var로 타입이 결정되기 때문에 parseInt만 써주면 됨.
-					///////////////////// java에서는 var가 없고 Integer 객체가 있기 때문에 Integer.parseInt를 해주는 것임 */
-					
+
+					alert("json"+json.length);
 					//countHIT 에 지금까지 출력된 상품의 갯수를 누적해서 기록한다.
 					$("#count").text( parseInt($("#count").text())+json.length ); // 초기치 0
 					
+					alert($("#count").text()+"//"+$("#tc").text());
+					
 					if( $("#count").text() == $("#tc").text() ){
+						alert("끝");
 						$("#count").text("0");
+						return false;
 					}
 				}
 				
@@ -258,21 +271,21 @@
 	
 	<div class="ExhCategory_Area">
 		<div class="cate_exh categoryList">
-			<a href="?" class="exh_cate_option on">전체</a>
-			<a href="javaScript:void(0)" onclick="getExhList(1, 'ing', 're');" class="exh_cate_option">진행중인 전시회</a>
-			<a href="javaScript:void(0)" onclick="getExhList(1, 'exp', 're');" class="exh_cate_option">예정전시</a>
-			<a href="javaScript:void(0)" onclick="getExhList(1, 'end', 're');" class="exh_cate_option">지난전시</a>
+			<a href="javaScript:void(0)" onclick="getExhList(1, 0, sessionStorage.getItem('loca'));" class="exh_cate_option on">전체</a>
+			<a href="javaScript:void(0)" onclick="getExhList(1, 'ing', sessionStorage.getItem('loca'));" class="exh_cate_option">진행중인 전시회</a>
+			<a href="javaScript:void(0)" onclick="getExhList(1, 'com', sessionStorage.getItem('loca'));" class="exh_cate_option">예정전시</a>
+			<a href="javaScript:void(0)" onclick="getExhList(1, 'end', sessionStorage.getItem('loca'));" class="exh_cate_option">지난전시</a>
 		</div>
 		
 		<div class="cate_map categoryList">
-			<a href="?" class="exh_cate_option on">지역 전체</a>
-			<a href="javaScript:void(0)" onclick="getExhList(1, 're', '1');" class="exh_cate_option">서울</a>
-			<a href="javaScript:void(0)" onclick="getExhList(1, 're', '2');" class="exh_cate_option">경기 인천</a>
-			<a href="javaScript:void(0)" onclick="getExhList(1, 're', '3');" class="exh_cate_option">부산 울산 경남</a>
-			<a href="javaScript:void(0)" onclick="getExhList(1, 're', '4');" class="exh_cate_option">대구 경북</a>
-			<a href="javaScript:void(0)" onclick="getExhList(1, 're', '5');" class="exh_cate_option">광주 전라</a>
-			<a href="javaScript:void(0)" onclick="getExhList(1, 're', '6');" class="exh_cate_option">대전 충청 세종</a>
-			<a href="javaScript:void(0)" onclick="getExhList(1, 're', '7');" class="exh_cate_option">제주 강원</a>
+			<a href="javaScript:void(0)" onclick="getExhList(1, sessionStorage.getItem('type'), 0);" class="exh_cate_option on">지역 전체</a>
+			<a href="javaScript:void(0)" onclick="getExhList(1, sessionStorage.getItem('type'), 1);" class="exh_cate_option">서울</a>
+			<a href="javaScript:void(0)" onclick="getExhList(1, sessionStorage.getItem('type'), 2);" class="exh_cate_option">경기 인천</a>
+			<a href="javaScript:void(0)" onclick="getExhList(1, sessionStorage.getItem('type'), 3);" class="exh_cate_option">부산 울산 경남</a>
+			<a href="javaScript:void(0)" onclick="getExhList(1, sessionStorage.getItem('type'), 4);" class="exh_cate_option">대구 경북</a>
+			<a href="javaScript:void(0)" onclick="getExhList(1, sessionStorage.getItem('type'), 5);" class="exh_cate_option">광주 전라</a>
+			<a href="javaScript:void(0)" onclick="getExhList(1, sessionStorage.getItem('type'), 6);" class="exh_cate_option">대전 충청 세종</a>
+			<a href="javaScript:void(0)" onclick="getExhList(1, sessionStorage.getItem('type'), 7);" class="exh_cate_option">제주 강원</a>
 		</div>
 	</div>
 	
