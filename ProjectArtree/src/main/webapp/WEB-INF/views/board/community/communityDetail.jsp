@@ -318,7 +318,7 @@
 				html += "<td class='commentWriter' style='width:50px;'>"+item.name+"</td>";
 				html += "<td class='commentWriteDate'>"+item.comwriteDay;
 				
-				if(item.fk_idx == ${loginuser.idx}){
+				if(item.fk_idx == "${loginuser.idx}"){
 					html += "<span class='commentModifyBtn' style='padding-left:10px; padding-bottom:1px; font-weight: bold;'>수정</span>&nbsp;|"	;
 					html += "<span class='commentDeleteBtn' style='padding-bottom:1px; font-weight: bold;'>삭제</span>";					
 					html += "<span class='commentNo' style='display:none'>"+item.commentNo+"</span>";		

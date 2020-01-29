@@ -116,17 +116,7 @@
 		padding-bottom : 10px; 
 	}
 	
-	/* == 통계 영역 == */
-	#statistics-area {
-		height: 60vh;
-		border: 2px solid red;
-	}
-	
-	#table-area {
-		border: 2px solid navy;
-		height: 50vh;
-	}
-	
+	/* == 통계 영역 == */		
 	.table th {
 		text-align: center;
 	}

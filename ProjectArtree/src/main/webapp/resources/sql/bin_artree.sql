@@ -209,3 +209,7 @@ select * from reserDetail
 		where status = 1 and 
 		fk_reserno = #{reserno}
 		order by reserdetailno desc	
+        
+sELECT * FROM tabs        
+
+desc event;

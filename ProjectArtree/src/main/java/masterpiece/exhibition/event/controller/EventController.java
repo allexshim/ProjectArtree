@@ -14,7 +14,7 @@ public class EventController {
 		return "event/aboutbin.tiles";
 	}
 	
-	@RequestMapping(value="/eventbin.at")
+	@RequestMapping(value="/event.at")
 	public String eventbin(HttpServletRequest request) {		
 		
 		String content = "";
