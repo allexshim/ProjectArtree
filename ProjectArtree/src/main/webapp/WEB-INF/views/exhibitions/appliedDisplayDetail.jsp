@@ -181,11 +181,14 @@
 		    $("#myCarousel").carousel("next");
 		  });
 		 
-		 
 		// open 버튼을 클릭한다면 해당 전시회를 '전시중' 상태로 변경한다.
 		$("#openBtn").click(function(){
-			var exhibitionCode = "${exhibitionCode}"; // 상세 페이지로 넘어올때 해당 전시회의 전시회 코드를 함께 넘긴다.
-			window.location.href="/artree/*.at?exhibitionCode="+exhibitionCode;	
+			
+			if(confirm("정말로 전시중 상태로 바꾸시겠습니까?")) {
+				var exhibitionno = "${ exhibitionInfo.exhibitionno }"; // 상세 페이지로 넘어올때 해당 전시회의 전시회 코드를 함께 넘긴다.
+				window.location.href="/artree/changeExhibitStatus.at?exhibitionno=" + exhibitionno;	
+			}
+			
 		}); // end of $("#openBtn").click -----------------------------
 		
 		
@@ -207,7 +210,7 @@
 				<tbody>
 				<c:if test="${ not empty exhibitionInfo }">
 					<tr>
-						<td>no.</td><td>${ exhibitionInfo.exhibitionno }</td>
+						<td>no.</td><td>${ exhibitionInfo.exhibitionno }<input type="hidden" name="exhibitionno" value="${ exhibitionInfo.exhibitionno }" /></td>
 					</tr>
 					<tr>
 						<td>지원자명</td><td>${ exhibitionInfo.applier }</td>
@@ -243,50 +246,41 @@
 		
 		<div id="myPoster" align="center">
 			<h2>포스터</h2>
-			<c:if test="${ not empty exhibitionInfo }">
-			<img src="${ exhibitionInfo.mainposter }" />
+			<c:if test="${ not empty getImageList }" var="img">
+			<img src="${ img.mainposter }" />
 			</c:if>
 		</div>
 		
 		<div id="myImages" align="center">
 			<h2>작품전경</h2> <!--  썸네일 아직 안배워서 일단 이렇게 처리 -->
 			<div>
-				<c:if test="${ not empty exhibitionInfo }">
-				<c:if test="${ exhibitionInfo.image1 != '없음' }">
-				<img class="thumbNail" width="200px" height="200px" src="${ exhibitionInfo.image1 }" />
-				</c:if>
-				<c:if test="${ exhibitionInfo.image2 != '없음' }">
-				<img class="thumbNail" width="200px" height="200px" src="${ exhibitionInfo.image2 }" />
-				</c:if>
-				<c:if test="${ exhibitionInfo.image3 != '없음' }">
-				<img class="thumbNail" width="200px" height="200px" src="${ exhibitionInfo.image3 }" />
-				</c:if>
-				</c:if>
+				<c:forEach items="${ getImageList.thumbnailfilename != '없음' }" var="img">
+				<img class="thumbNail" width="200px" height="200px" src="${ img.thumbnailfilename }" />
+				</c:forEach>
 			</div>
 			
-			<c:if test="${ not empty exhibitionInfo && 
-						( exhibitionInfo.image1 != '없음' || exhibitionInfo.image2 != '없음' || exhibitionInfo.image3 != '없음' ) }">
+			<c:if test="${ getImageList.imagefilename != '없음' }">
 			<div id="myCarousel" class="carousel slide"  style="display:inline-block; overflow:hidden;">
 				<div id="bigImage" align="center" style="display:inline-block; vertical-align: middle;">
 				<a class="left" style="display:inline-block;">
 					<i class='fa fa-angle-left arrow'></i>
 				</a>
 				<div class="carousel-inner" role="listbox" style="display:inline-block; width: 500px; overflow:hidden; vertical-align: middle;">
-					<c:if test="${ exhibitionInfo.image1 != '없음' }">
+					<c:forEach items="${ getImageList }" var="img" varStatus="i">
+					
+					<c:if test="${ i.index == 1 }">
 				    <div class="item active">
-				      <img src="${ exhibitionInfo.image1 }" alt="" width="400px" height="400px">
+				      <img src="${ img.imagefilename }" alt="" width="400px" height="400px">
 				    </div>
 				    </c:if>
-				    <c:if test="${ exhibitionInfo.image2 != '없음' }">
+				    
+				    <c:if test="${ i.index != 1 }">
 				    <div class="item">
-				      <img src="${ exhibitionInfo.image2 }" alt="" width="400px" height="400px">
+				      <img src="${ img.imagefilename }" alt="" width="400px" height="400px">
 				    </div>
 				    </c:if>
-				    <c:if test="${ exhibitionInfo.image3 != '없음' }">
-				    <div class="item">
-				      <img src="${ exhibitionInfo.image3 }" alt="" width="400px" height="400px">
-				    </div>
-				    </c:if>
+				    
+				    </c:forEach>
 				</div>
 					
 					<a class="right" style="display:inline-block;">
@@ -298,22 +292,24 @@
 		
 			<div id="extraInfo">
 				<table id="extraInfoTable">
+					<c:if test="${ getImageList.image1info != '없음' }" var="img">
+					<tr>
+						<td>이미지 1 설명</td><td>${ getImageList.image1info }</td>
+					</tr>
+					</c:if>
+					
+					<c:if test="${ getImageList.image2info != '없음' }" var="img">
+					<tr>
+						<td>이미지 2 설명</td><td>${ getImageList.image2info }</td>
+					</tr>
+					</c:if>
+					<c:if test="${ getImageList.image3info != '없음' }" var="img">
+					<tr>
+						<td>이미지 3 설명</td><td>${ getImageList.image3info }</td>
+					</tr>
+					</c:if>
+
 					<c:if test="${ not empty exhibitionInfo }">
-					<c:if test="${ exhibitionInfo.image1info != '없음' }">
-					<tr>
-						<td>이미지 1 설명</td><td>${ exhibitionInfo.image1info }</td>
-					</tr>
-					</c:if>
-					<c:if test="${ exhibitionInfo.image2info != '없음' }">
-					<tr>
-						<td>이미지 2 설명</td><td>${ exhibitionInfo.image2info }</td>
-					</tr>
-					</c:if>
-					<c:if test="${ exhibitionInfo.image3info != '없음' }">
-					<tr>
-						<td>이미지 3 설명</td><td>${ exhibitionInfo.image3info }</td>
-					</tr>
-					</c:if>
 					<tr>
 						<td>식음료 반입 가능 여부</td><td>${ exhibitionInfo.foodordrink }</td>
 					</tr>
@@ -331,7 +327,7 @@
 					</tr>
 					</c:if>
 				</table>
-	<%-- 			<div align="center">
+<%-- 				<div align="center">
 					<img id="openBtn" src="<%= ctxPath %>/resources/images/board/openDisplyBtn.JPG" />
 				</div> --%>
 			</div>

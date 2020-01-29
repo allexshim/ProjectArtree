@@ -93,13 +93,15 @@ values (  );
 
 select * from appliedexhibits;
 
+select * from appliedDetail;
+
 create table appliedDetail
 ( appliedimgseq		number				not null
 , fk_applyingNo			number				NOT NULL
 , imagefilename			VARCHAR2(255)	not NULL
 , imageorgFilename	VARCHAR2(255)	not NULL
 , imagefileSize			VARCHAR2(100)	not NULL
-, imageinfo				VARCHAR2(500)	NULL
+, image1info				VARCHAR2(500)	NULL
 , thumbnailFileName	varchar2(255)
 , constraint PK_appliedDetail_appliedimg primary key( appliedimgseq )
 , constraint FK_appliedDetail_appliedimg foreign key( fk_applyingNo )
@@ -127,13 +129,20 @@ select * from member;
 
 select * from exhibition;
 
+select distinct status from exhibition;
+
+select * from exhibition where status = '전시예정';
+
 desc exhibition;
 
 
 select exhibitionno, exhibitionname, author, status from exhibition where status = '전시중';
 
+select * from exhibition where status = '전시예정' order by startdate;
 
+update exhibition set status = '전시예정' where exhibitionno = 5135;
 
+commit;
 select * from cart ;
 
 
@@ -154,6 +163,75 @@ select E.exhibitionno, E.exhibitionname, E.author, E.status, G.galleryname
 
 select * from EXHIBITIONDETAIL;
 
+desc exhibition;
+
+select E.exhibitionno, E.exhibitionname, E.author, E.status, G.galleryname
+			, E.applier, E.tel, E.email, E.startdate, E.enddate, E.genre, E.tag
+			, E.exhibitioninfo, E.price, E.foodordrink, E.extrarestriction, E.photo, E.openclosetime
+			, nvl(ED.mainposter, '없음') AS mainposter
+			, nvl(ED.image1, '없음') AS image1, nvl(ED.image2, '없음') AS image2, nvl(ED.image3, '없음') AS image3
+            , nvl(ED.image1info, '없음') AS image1info, nvl(ED.image2info, '없음') AS image2info, nvl(ED.image3info, '없음') AS image3info
+		from exhibition E 
+        JOIN gallery G on E.fk_galleryno = G.galleryno
+        JOIN exhibitiondetail ED on E.exhibitionno = ED.fk_exhibitionno
+        where E.exhibitionno = 4922;
+
+Alter table exhibition modify (exhibitioninfo clob);
+
+
+alter table appliedDetail rename column imageinfo to image1info;
+
+alter table appliedDetail add image2info VARCHAR2(500) default '없음' null ;
+
+alter table appliedDetail add image3info VARCHAR2(500) default '없음' null ;
+
+alter table appliedDetail add mainposter VARCHAR2(500) default '없음' not null ;
+
+commit;
+
+
+select * from appliedDetail;
+
+select * from appliedExhibits;
+
+desc appliedExhibits;
+desc applieddetail;
+desc exhibition;
+
+alter table appliedDetail
+drop column image2info;
+
+alter table appliedDetail
+drop column image3info;
+
+alter table appliedDetail
+rename column image1info to imageinfo;
+
+select * from appliedDetail;
+
+
+
+
+select fk_applyingno, imagefilename, imageorgfilename, imagefilesize, thumbnailfilename, mainposter
+			, nvl(image1info, '없음') AS image1info, nvl(image2info, '없음') AS image2info, nvl(image3info, '없음') AS image3info
+		from appliedDetail
+		where fk_applyingno = 3
+		order by fk_applyingno desc;
+
+
+desc appliedexhibits;
+
+
+Alter table appliedexhibits modify (exhibitioninfo clob);
+
+commit;
+
+
+
+
+alter index ARTREE.PK_APPLIEDEXHIBITS_ANO rebuild;
+
+commit;
 
 
 
