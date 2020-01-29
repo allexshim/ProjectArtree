@@ -300,12 +300,42 @@ desc member;
     ) Z where RNO = 1;
 
 -----------
+select * from community;
+drop table community purge;
+drop sequence seq_community;
+insert into community(no, fk_exhibitionNo, title, content, writeDay, commentCount, fk_idx, readcount)
+values(seq_community.nextval, ?, ?, ?, ?, 0, ?, 0);
+
+/*
+<td>No.</td>
+<td>Exhibition</td>
+<td>Title</td>
+<td>Writer</td>
+<td>WriteDay</td>
+<td>Read</td>
+*/
+
+select *
+        from (
+        select rownum as rno, no, exhibitionname, exhibitionno, title, name, writeday, readcount
+        from (
+        select C.no, E.exhibitionname, E.exhibitionno, C.title, C.name, C.writeday, C.readcount
+		from (
+		select V.*, M.name
+		from community V join member M 
+		on V.fk_idx = M.idx
+		) C  join exhibition E 
+		on C.fk_exhibitionno = E.exhibitionno
+		order by C.no desc
+        ) T ) Z 
+        where rno between 1 and 10;
+
 
 create table community
-(boardNo number	NOT NULL
+(boardNo number default 2
 ,no	number	NOT NULL
 ,fk_exhibitionNo	number	NOT NULL
-,title	VARCHAR2(30)	NOT NULL
+,title	VARCHAR2(100)	NOT NULL
 ,content	VARCHAR2(300)	NOT NULL
 ,writeDay	VARCHAR2(30)	NOT NULL
 ,commentCount	number	NOT NULL
@@ -318,11 +348,15 @@ create table community
                                                         references member(idx)                                                      
 );
 
+ALTER INDEX ARTREE.PK_EXHIBITION_EXHIBITIONNO REBUILD;
+
+
+
 commit; 
 
 desc comment;
 
-select * from community;
+select * from tab;
 
 create sequence seq_community
 start with 1 -- 대기번호의 출발번호를 1번부터 하겠다.
@@ -345,15 +379,6 @@ create table board_comment
                                                         references member(idx)                         
 );
 
-drop table  comment purge;
+drop table community purge;
 
 
-select exhibitionno, fk_galleryno, exhibitionname, author, startdate, enddate, mainposter, galleryname, galleryno, location
-        from 
-        (
-        select *
-		from exhibition V join exhibitionDetail D
-		on V.exhibitionno = D.fk_exhibitionno
-        ) E join gallery G
-        on E.fk_galleryno = G.galleryno
-        order by to_date(startdate);
