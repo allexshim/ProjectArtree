@@ -347,4 +347,56 @@ select *
 from wishList
 where fk_idx=4;
 
+-- galwishlist 에 있는 fk_galleryno로
+-- gallery 테이블의 gallery name, detailaddress, mainpicture
+
+
+select galleryno, galleryname, detailaddress, mainpicture
+from
+(select fk_galleryno
+from galwishList
+where fk_idx=4) W join gallery G
+on W.fk_galleryno = G.galleryno;
+
+-- 개인 선호 태그
+select favortag
+from wishlist
+where fk_idx=4;
+
+-- 리뷰 게시판
+create table review
+(boardno        number default 1      not null   -- 게시판 코드
+,revno          number                not null   -- 글번호
+,fk_idx         number                not null   -- 사용자 idx
+,fk_name        varchar2(30)        not null -- 사용자 name
+,exhibitionname        VARCHAR2(300)         not null   -- 전시회명
+,fk_exhibitionno number         not null -- 전시회
+,revTitle        Nvarchar2(200)        not null   -- 글제목
+,revContent        Nvarchar2(2000)       not null   -- 글내용    -- clob
+,readCount      number default 0      not null   -- 글조회수
+,revWriteday        date default sysdate  not null   -- 글쓴시간
+,status         number(1) default 1   not null   -- 글삭제여부  1:사용가능한글,  0:삭제된글 
+,commentCount   number default 0      not null   -- 댓글의 갯수
+,constraint  PK_review_seq primary key(revno)
+,constraint  FK_review_idx foreign key(fk_idx) references member(idx)
+,constraint  FK_review_exhibitionno foreign key(fk_exhibitionno) references exhibition(exhibitionno)
+,constraint  CK_review_status check( status in(0,1) )
+);
+-- Table REVIEW이(가) 생성되었습니다.
+
+drop table review purge;
+
+create sequence reviewSeq
+start with 1
+increment by 1
+nomaxvalue 
+nominvalue
+nocycle
+nocache;
+-- Sequence REVIEWSEQ이(가) 생성되었습니다.
+
+select *
+from review;
+
+select revno, exhibitionname, revTitle, to_char(revwriteday, 'yyyy-mm-dd'), readcount from review;
 

@@ -384,6 +384,8 @@
     }
     
     .end-exp-title {
+    	width: 70%;
+    	-webkit-transform:translate(55px,0);
     	font-size: 14pt;
     }
     
