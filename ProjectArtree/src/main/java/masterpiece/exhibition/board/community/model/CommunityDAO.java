@@ -36,6 +36,13 @@ public class CommunityDAO implements InterCommunityDAO {
 		return n;
 	}
 
+	// 조회수 증가시키기
+	@Override
+	public int updateReadCount(HashMap<String, String> map) {
+		int n = sqlsession.update("community.updateReadCount", map);
+		return n;
+	}
+	
 	// 해당 글번호의 글 정보 가져오기
 	@Override
 	public HashMap<String, String> getCommunityDetail(String no) {
@@ -76,6 +83,27 @@ public class CommunityDAO implements InterCommunityDAO {
 	@Override
 	public int deleteComment(String commentNo) {
 		int n = sqlsession.update("community.deleteComment",commentNo);
+		return n;
+	}
+
+	// 각각 게시글에 달린 댓글 개수 알아오기
+	@Override
+	public int getNumberOfComment(String no) {
+		int CmtCount  = sqlsession.selectOne("community.getNumberOfComment",no);
+		return CmtCount;
+	}
+
+	// 해당 글의 댓글 삭제
+	@Override
+	public int deleteCommunityComment(String no) {
+		int n = sqlsession.delete("community.deleteCommunityComment", no);
+		return n;
+	}
+
+	// 해당 글 삭제
+	@Override
+	public int deleteCommunity(String no) {
+		int n = sqlsession.delete("community.deleteCommunity", no);
 		return n;
 	}
 

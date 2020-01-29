@@ -18,6 +18,7 @@ import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import masterpiece.exhibition.board.community.service.InterCommunityService;
@@ -154,10 +155,18 @@ public class CommunityController {
 		
 		HashMap<String,String> communityDetail = new HashMap<String,String>();
 		
+		// 조회수 올릴때 자기가 쓴 글은 안올라가게 하기...
 		HttpSession session = request.getSession();
+		MemberVO loginuser = (MemberVO)session.getAttribute("loginuser");
+		
+		String idx = "";
+		if(loginuser!= null) {
+			idx = loginuser.getIdx();
+		}
+
 		if("yes".equals(session.getAttribute("readCountPermission"))) {
 			// 해당 글번호의 글 정보 가져오기
-			communityDetail = service.getCommunityDetail(no);
+			communityDetail = service.getCommunityDetail(no, idx);
 			//mainposter, exhibitionname, title, name, fk_idx, writeday, content
 	         
 	        session.removeAttribute("readCountPermission");
@@ -166,8 +175,7 @@ public class CommunityController {
 	    else {
 	    	// 새로고침
 	    	communityDetail = service.getCommunityDetailNoCount(no);
-	    }
-	      
+	    }    
 		
 		communityDetail.put("no", no);
 
@@ -182,7 +190,6 @@ public class CommunityController {
 
 		return "board/community/communityDetail.tiles";
 	} // end of communityDetail -------------------------------------------
-	
 	
 	@RequestMapping(value="/addCommunity.at")
 	public String addCommunity(HttpServletRequest request) {
@@ -233,6 +240,10 @@ public class CommunityController {
 		String content = request.getParameter("contents");
 		String fk_exhibitionno = request.getParameter("no");
 		
+		// 크로스 사이트 공격 방지
+		title = MyUtil.replaceParameter(title);
+		content = MyUtil.replaceParameter(content);
+	
 		System.out.println(fk_exhibitionno);
 		//#{fk_exhibitionno}, #{title}, #{content},#{fk_idx}, 0)
 		HashMap<String,String> addCommunity = new HashMap<String,String>();
@@ -280,10 +291,10 @@ public class CommunityController {
 		HashMap<String,String> modifycommu = new HashMap<String,String>();
 		
 		// 수정할 글 정보 가져오기
-		modifycommu = service.getCommunityDetail(no);
+		modifycommu = service.getCommunityDetailNoCount(no);
 		modifycommu.put("no", no);
 		request.setAttribute("modifycommu", modifycommu);
-		
+
 		// 모든 전시회 정보를 가져와서 넘긴다 (전시회 검색용)
 		String searchWord = "";
 		List<HashMap<String,String>> exhibitionList = service.getExhibit(searchWord);
@@ -299,13 +310,17 @@ public class CommunityController {
 		/*no, title, contents*/
 		String exhibitionno = request.getParameter("exhibitionno");
 		String title = request.getParameter("title");
-		String contents = request.getParameter("contents");
+		String content = request.getParameter("contents");
 		String no = request.getParameter("no");
+		
+		// 크로스 사이트 공격 방지
+		title = MyUtil.replaceParameter(title);
+		content = MyUtil.replaceParameter(content);
 		
 		HashMap<String,String> modifycommu = new HashMap<String,String>();
 		modifycommu.put("exhibitionno", exhibitionno);
 		modifycommu.put("title", title);
-		modifycommu.put("content", contents);
+		modifycommu.put("content", content);
 		modifycommu.put("no", no);
 		
 		// 글 수정하기 
@@ -330,10 +345,36 @@ public class CommunityController {
 		} 
 	} // end of modifyCommunityEnd --------------------------------------
 	
+	// 글 삭제하기 deleteCommunity.at
+	@RequestMapping(value="deleteCommunity.at")
+	public void deleteCommunity(HttpServletRequest request, HttpServletResponse response) {
+	
+		// 삭제할 글 번호
+		String no = request.getParameter("no");
+		// 글 삭제하기 >> 1.해당 글의 댓글 삭제 2.해당 글 삭제
+		int n = service.deleteCommunity(no);
+		
+		try {
+			String msg = "글이 삭제되었습니다."; 
+			String loc = "/artree/communityList.at";
+			
+			request.setAttribute("msg", msg); 
+			request.setAttribute("loc", loc);
+			
+			RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/msg.jsp");
+			dispatcher.forward(request, response);
+				
+		} catch (ServletException | IOException e) {
+			e.printStackTrace();
+		} 
+		
+	} // end of deleteCommunity ------------------------------------------
+	
 	
 	// 댓글 입력하기
-	@RequestMapping(value="addComment.at")
-	public void requireLogin_addComment(HttpServletRequest request, HttpServletResponse response) {
+	@ResponseBody
+	@RequestMapping(value="addComment.at", method= {RequestMethod.POST}, produces="text/plain;charset=UTF-8")
+	public String requireLogin_addComment(HttpServletRequest request, HttpServletResponse response) {
 		
 		HttpSession session = request.getSession();
 		MemberVO loginuser = (MemberVO)session.getAttribute("loginuser");
@@ -345,30 +386,31 @@ public class CommunityController {
 		String comContent = request.getParameter("commentContents");
 		String fk_no = request.getParameter("fk_no");
 		
+		// 크로스 사이트 공격 방지
+		comContent = MyUtil.replaceParameter(comContent);		
+		
 		HashMap<String,String> comment = new HashMap<String,String>();
 		comment.put("fk_idx", idx);
 		comment.put("comContent", comContent);
 		comment.put("fk_no", fk_no); // 댓글을 등록하려는 원글 번호
 		
 		// 새 댓글 등록하기
-		int n = service.addComment(comment);
-		try {
-			String msg = "";
+		List<HashMap<String,String>> commentList = service.addComment(comment);
+		
+		JSONArray jsarr = new JSONArray();
+		for(HashMap<String,String> map : commentList) {
+			JSONObject jsobj = new JSONObject();
+			// commentNo, fk_idx, comContent, comwriteDay, M.name
+			jsobj.put("commentNo", map.get("commentNo"));
+			jsobj.put("fk_idx", map.get("fk_idx"));
+			jsobj.put("comContent", map.get("comContent"));
+			jsobj.put("comwriteDay", map.get("comwriteDay"));
+			jsobj.put("name", map.get("name"));
 			
-			if(n==1) { msg = "댓글 등록 완료"; }
-			else { msg = "에러가 발생했습니다."; }
-			
-			String loc = "/artree/communityDetail.at?no="+fk_no;
-			
-			request.setAttribute("msg", msg); 
-			request.setAttribute("loc", loc);
-			
-			RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/msg.jsp");
-			dispatcher.forward(request, response);
-				
-		} catch (ServletException | IOException e) {
-			e.printStackTrace();
-		} 
+			jsarr.put(jsobj);
+		}
+		
+		return jsarr.toString();
 
 	} // end of requireLogin_addComment -----------------------
 	
@@ -384,6 +426,9 @@ public class CommunityController {
 		String commentNo = request.getParameter("commentNo");
 		String comContent = request.getParameter("content");
 		String fk_no = request.getParameter("no");
+		
+		// 크로스 사이트 공격 방지
+		comContent = MyUtil.replaceParameter(comContent);				
 		
 		HashMap<String,String> comment = new HashMap<String,String>();
 		comment.put("commentNo", commentNo);

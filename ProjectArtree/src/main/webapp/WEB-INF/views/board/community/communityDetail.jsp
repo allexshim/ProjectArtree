@@ -242,9 +242,7 @@
 		}); // 글 수정 --------------------------------------------
 		
 		$("#deleteBtn").click(function(){
-			
-			
-			
+			window.location.href="deleteCommunity.at?no="+${communityDetail.no};	
 		}); // 글 삭제 --------------------------------------------
 		
 		// ---------------------------------------------------
@@ -293,10 +291,22 @@
 				$("#commentContents").focus();
 			}
 			else {
-				var frm = document.newComment;
-				frm.method = "GET";
-				frm.action = "/artree/addComment.at";
-				frm.submit();
+				let form_data = $("form[name=newComment]").serialize();
+				$.ajax({
+					  url:"<%=request.getContextPath()%>/addComment.at",
+			          type:"POST",
+			          data : form_data,
+			          dataType:"JSON",
+			          success: function(json) { 
+			        	  // 새로 입력한 댓글을 insert하고, 다시 해당 글의 댓글을 불러와서 뿌린다.
+			        	  makeCommentList(json);	
+			        	  $("#newComment #commentContents").val("");  
+			          },
+			          error: function(request, status, error){
+			                alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+			          }
+				});
+				
 			}
 			
 		});
