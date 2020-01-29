@@ -29,4 +29,7 @@ public interface InterCommunityDAO {
 	// 수정한 댓글 update하기
 	int modifyComment(HashMap<String, String> comment);
 
+	// 댓글 삭제하기
+	int deleteComment(String commentNo);
+
 }

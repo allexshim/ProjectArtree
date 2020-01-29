@@ -72,6 +72,13 @@ public class CommunityDAO implements InterCommunityDAO {
 		return n;
 	}
 
+	// 댓글 삭제하기
+	@Override
+	public int deleteComment(String commentNo) {
+		int n = sqlsession.update("community.deleteComment",commentNo);
+		return n;
+	}
+
 
 	
 	

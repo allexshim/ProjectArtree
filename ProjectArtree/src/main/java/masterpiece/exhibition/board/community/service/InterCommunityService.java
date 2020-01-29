@@ -17,6 +17,9 @@ public interface InterCommunityService {
 	// 해당 글번호의 글 정보 가져오기
 	HashMap<String, String> getCommunityDetail(String no);
 
+	// 조회수 증가 없이 해당 글번호의 글 정보 가져오기
+	HashMap<String, String> getCommunityDetailNoCount(String no);
+	
 	// 글 수정하기 
 	int modifyCommunity(HashMap<String, String> modifycommu);
 
@@ -28,6 +31,11 @@ public interface InterCommunityService {
 
 	// 수정한 댓글을 update하고 해당 글의 댓글 목록을 가져온다.
 	List<HashMap<String, String>> modifyComment(HashMap<String, String> comment);
+
+	// 댓글을 삭제하고 해당 글의 댓글 목록을 다시 가져온다.
+	List<HashMap<String, String>> deleteComment(HashMap<String, String> comment);
+
+	
 
 
 

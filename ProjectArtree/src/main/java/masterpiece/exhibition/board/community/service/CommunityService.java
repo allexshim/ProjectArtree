@@ -44,6 +44,13 @@ public class CommunityService implements InterCommunityService {
 		HashMap<String, String> communityDetail = dao.getCommunityDetail(no);
 		return communityDetail;
 	}
+	
+	// 조회수 증가 없이 해당 글번호의 글 정보 가져오기
+	@Override
+	public HashMap<String, String> getCommunityDetailNoCount(String no) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 	// 글 수정하기 
 	@Override
@@ -82,5 +89,22 @@ public class CommunityService implements InterCommunityService {
 		
 		return commentList;
 	}
+
+	// 댓글을 삭제하고 해당 글의 댓글 목록을 다시 가져온다.
+	@Override
+	public List<HashMap<String, String>> deleteComment(HashMap<String, String> comment) {
+		// 1. delete하기 ~ commentNo
+		int n = dao.deleteComment(comment.get("commentNo"));
+		
+		List<HashMap<String,String>> commentList = null;
+		if(n==1) {
+			// 2. 댓글 목록 가져오기
+			commentList = dao.getCommunityComment(comment.get("fk_no"));
+		} // 실패한다면 commentList == null;
+				
+		return commentList;
+	}
+	
+	
 
 }

@@ -153,5 +153,10 @@
 		update board_comment set comContent = #{comContent} 
 		where commentNo = #{commentNo}
 	</insert>
+	
+	<!-- 댓글 삭제하기 -->
+	<delete id="deleteComment" parameterType="String" >
+		delete from board_comment where commentno = #{commentNo}
+	</delete>
 
 </mapper>

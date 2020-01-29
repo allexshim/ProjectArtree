@@ -266,9 +266,23 @@
 		    
 		});
 		
+		
 		$(".commentDeleteBtn").click(function(){
 			var commentNo = $(this).next().text();
-			window.location.href="*.at?commentNo="+commentNo;
+			$.ajax({
+			  url:"<%=request.getContextPath()%>/goDeleteComm.at",
+	          type:"GET",
+	          data : {"commentNo":commentNo,"no":${communityDetail.no}
+			  },
+	          dataType:"JSON",
+	          success: function(json) { 
+	        	  // 수정한 댓글을 update하고, 다시 해당 글의 댓글을 불러와서 뿌린다.
+	        	  makeCommentList(json);	  
+	          },
+	          error: function(request, status, error){
+	                alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+	          }
+			}); // end of ajax ------------------------------------------
 		});
 
 		// 새 댓글 등록하기
@@ -319,14 +333,14 @@
 				html += "<td class='commentWriteDate'>"+item.comwriteDay;
 				
 				if(item.fk_idx == "${loginuser.idx}"){
-					html += "<span class='commentModifyBtn' style='padding-left:10px; padding-bottom:1px; font-weight: bold;'>수정</span>&nbsp;|"	;
+					html += "<span class='commentModifyBtn' style='padding-left:10px; padding-bottom:1px; font-weight: bold;'>수정</span>&nbsp;|&nbsp;"	;
 					html += "<span class='commentDeleteBtn' style='padding-bottom:1px; font-weight: bold;'>삭제</span>";					
 					html += "<span class='commentNo' style='display:none'>"+item.commentNo+"</span>";		
 				}
 				
 				if(${ loginuser.status == 2 }){
 					html += "<c:if test='${ loginuser.status == 2 }'>";
-					html += "<span class='commentDeleteBtn' style='padding-left:10px; padding-bottom:1px; font-weight: bold;'>수정</span>";	
+					html += "<span class='commentDeleteBtn' style='padding-left:10px; padding-bottom:1px; font-weight: bold;'>삭제</span>";	
 					html += "<span class='commentNo' style='display:none'>"+item.commentNo+"</span>";	
 					html += "</c:if>";
 				}
@@ -406,7 +420,7 @@
 									<span class="commentNo" style="display:none">${item.commentNo}</span>
 								</c:if>
 								<c:if test="${ loginuser.status == 2 }">
-									<span class="commentDeleteBtn" style="padding-left:10px; padding-bottom:1px; font-weight: bold;">수정</span>
+									<span class="commentDeleteBtn" style="padding-left:10px; padding-bottom:1px; font-weight: bold;">삭제</span>
 									<span class="commentNo" style="display:none">${item.commentNo}</span>
 								</c:if>
 							</td>

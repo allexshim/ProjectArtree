@@ -428,6 +428,10 @@ values(seq_board_comment.nextval, 2, '', '', '', sysdate);
 
 commit;
 rollback;
+delete from board_comment where commentno = '4';
+
+desc board_comment;
+
 select * from board_comment;
 drop table board_comment purge;
 
@@ -462,3 +466,20 @@ drop table board_comment purge;
 		        , lead(title, 1) over(order by no desc) as nexttitle
 		from community;
 
+/*
+comment.put("commentNo", commentNo);
+comment.put("comContent", comContent);
+*/
+
+select commentNo, fk_idx, comContent, comwriteDay, M.name
+		from 
+		(select commentNo, fk_idx, comContent, comwriteDay
+		from board_comment 
+		where fk_no = 5 ) C join member M
+		on C.fk_idx = M.idx
+		order by commentNo desc;
+
+
+select * from board_comment;
+rollback;
+update board_comment set comContent = 'ddd' where commentNo = '3';
