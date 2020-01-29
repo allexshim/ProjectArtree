@@ -25,12 +25,31 @@ public interface InterMemberDAO {
 
 	int updatePwd(HashMap<String, String> updateMap); // 임시 비밀번호로 현재 비밀번호 변경
 
+	List<String> myfavorTag(String idx); // word cloud 개인 선호 태그 select
+	
 	List<HashMap<String, String>> selectWannaGo(String idx); // 하트 눌렀을 때 가고싶어요 select
 
 	List<HashMap<String, String>> selectGo(String idx); // 책갈피 눌렀을 때 다녀왔어요 select
 
+	List<HashMap<String, String>> selectFavorAuthor(String idx); // 하트 눌렀을 때 전시회의 작가 select
+	
+	List<HashMap<String, String>> selectfavorGal(String idx); // 선호 전시관
+	
 	int updateFavor1(HashMap<String, String> paraMap); // 마이페이지 - 작품 재설정1
 	int updateFavor2(HashMap<String, String> paraMap); // 마이페이지 - 작품 재설정2
+
+	int changeName(HashMap<String, String> paraMap); // 닉네임 변경 
+
+	int changePwd(HashMap<String, String> paraMap); // 비밀번호 변경
+
+	int updateWithdrawal(HashMap<String, String> paraMap); // 탈퇴 사유 입력
+	int updateStatus(String idx); // status 0 으로 변경
+
+
+
+
+
+
 
 	
 

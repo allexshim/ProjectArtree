@@ -107,11 +107,14 @@
 		
 </script>
 <body>
+
+	<input id="cancle" type="text" hidden="hidden" value="${reserNo}" name="cancle">
+	
 	<form name="refundBin">
 	<div style="width: 60%; margin: 0 auto;">
 		
 		<div>
-			<div style="margin-bottom: 1%; font-weight: bold; font-size: 22px;">주문정보</div>
+			<div style="padding-top:20%; margin-bottom: 1%; font-weight: bold; font-size: 22px;">주문정보</div>
 			<table class="table table-hover">
 				<tr>
 					<th>예매번호</th>
@@ -194,39 +197,59 @@
 			</div>			
 		</div>		
 		<div style="overflow: hidden; margin-bottom: 5%;">
-			<div style="text-align:center; color:black; background:white; cursor:pointer; float: right; border: solid 1px black; border-radius: 4px; width: 8%; margin-top: 1%; padding: 0.3%;">주문목록</div>					
+			<div onclick="goList()" style="text-align:center; color:black; background:white; cursor:pointer; float: right; border: solid 1px black; border-radius: 4px; width: 8%; margin-top: 1%; padding: 0.3%;">주문목록</div>					
 		</div>				
 	</div>
 	</form>		
 	
 <script>
-/* 슬라이드 */ 
-var slideIndex = 1;
-showSlides(slideIndex);
-
-function plusSlides(n) {
-  showSlides(slideIndex += n);
-}
-
-function currentSlide(n) {
-  showSlides(slideIndex = n);
-}
-
-function showSlides(n) {
-  var i;
-  var slides = document.getElementsByClassName("mySlides");
-  var dots = document.getElementsByClassName("dot");
-  if (n > slides.length) {slideIndex = 1}    
-  if (n < 1) {slideIndex = slides.length}
-  for (i = 0; i < slides.length; i++) {
-      slides[i].style.display = "none";  
-  }
-  for (i = 0; i < dots.length; i++) {
-      dots[i].className = dots[i].className.replace(" active", "");
-  }
-  slides[slideIndex-1].style.display = "block";  
-  dots[slideIndex-1].className += " active";
-}
+	
+	function goList() {
+		location.href="<%=ctxPath%>/mypage_order.at";
+	}
+	
+	function cancelPay() {
+		// 해당 주문내역 삭제하고 주문내역으로 보내기  
+		$.ajax({
+			url:"<%=request.getContextPath()%>/delReser.at",				
+			type:"POST",					
+			data:{"reserNo":$("#cancle").val()},
+			async:false,
+			error:function(request,status,error) {
+				alert("code = "+ request.status + " message = " + request.responseText + " error = " + error);
+			}	
+		});				
+		location.href="<%=ctxPath%>/mypage_order.at";
+	}
+	
+	/* 슬라이드 */ 
+	var slideIndex = 1;
+	showSlides(slideIndex);
+	
+	function plusSlides(n) {
+	  showSlides(slideIndex += n);
+	}
+	
+	function currentSlide(n) {
+	  showSlides(slideIndex = n);
+	}
+	
+	function showSlides(n) {
+	  var i;
+	  var slides = document.getElementsByClassName("mySlides");
+	  var dots = document.getElementsByClassName("dot");
+	  if (n > slides.length) {slideIndex = 1}    
+	  if (n < 1) {slideIndex = slides.length}
+	  for (i = 0; i < slides.length; i++) {
+	      slides[i].style.display = "none";  
+	  }
+	  for (i = 0; i < dots.length; i++) {
+	      dots[i].className = dots[i].className.replace(" active", "");
+	  }
+	  slides[slideIndex-1].style.display = "block";  
+	  dots[slideIndex-1].className += " active";
+	}
+	/* 슬라이드 끝 */
 </script>
 		
 </body>

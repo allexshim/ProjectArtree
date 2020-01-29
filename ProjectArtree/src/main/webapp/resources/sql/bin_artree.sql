@@ -100,7 +100,29 @@ create table reser (
         , constraint FK_reser_idx foreign key(fk_idx) references member(idx)        
         , constraint CK_reser_STATUS check ( status in ('0','1'))
         ); 
-select * from reser order by reserno desc
+select distinct(a.reserno), reserdate, resertotal, fk_idx
+,exname ,reserstat ,mainimg
+from reser a inner join reserdetail b
+on a.reserno = b.fk_reserno
+where a.status = 1 and 
+fk_idx = #{idx}
+order by reserno desc
+
+select * from reserdetail
+-- 일일 매출
+select to_char(reserdate,'dd') as reserdate, substr(sum(resertotal),1,length(sum(resertotal))-4) as dailySales from reser
+where status = 1 and
+reserdate like '20/01/%'
+group by to_char(reserdate,'dd')
+order by reserdate
+--
+-- 월별 매출    1,2,3,4,5
+select to_char(reserdate, 'mm') as reserdate, substr(sum(resertotal),1,length(sum(resertotal))-4) as monthlySales from reser
+where status = 1 and 
+reserdate like '20/%'
+group by to_char(reserdate, 'mm')
+order by reserdate
+--
 select * from reserDetail order by reserdetailno desc;
 select * from reserEx where fk_reserdetailno = 22;
 select * from cart order by cartno desc;
@@ -168,3 +190,26 @@ from cart a left join exhibitionDetail b
 on a.fk_exhibitionno = b.fk_exhibitionno		
 where fk_idx = 1
 order by cartno desc
+
+commit;
+
+select * from reserDetail
+where status = 1 and 
+fk_reserno = 26
+order by reserdetailno desc
+
+select * from reserDetail order by reserdetailno desc
+select * from reser 
+select * from reserEx 
+where status = 1 and
+fk_reserdetailno = 37
+order by reserexno desc
+
+select * from reserDetail
+		where status = 1 and 
+		fk_reserno = #{reserno}
+		order by reserdetailno desc	
+        
+sELECT * FROM tabs        
+
+desc event;

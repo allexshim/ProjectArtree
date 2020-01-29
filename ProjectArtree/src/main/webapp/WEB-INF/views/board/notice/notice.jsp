@@ -174,7 +174,7 @@
 			else {
 				var frm = document.newNotice;
 				frm.method = "POST";
-				frm.action = "*.at";
+				frm.action = "/addNotice.at";
 				frm.submit();
 			}
 		}); // 공지 추가 하기 끝 --------------------------------
@@ -219,9 +219,15 @@
 			$(this).find("i").toggleClass("fa-chevron-down");
 			$(this).find("i").toggleClass("fa-chevron-up");
 		});
+		
+		
 		 
 	}); // end of document.ready ---------------------------------------
 
+	function excelbtn(){
+		location.href="<%= ctxPath%>/excelDown.at";
+	}
+	
 </script>
 </head>
 <body>
@@ -234,15 +240,15 @@
 			<span style="text-align:center">Membership</span>
 			<h1 style="margin:0;">Notice</h1>
 			<h4 class="current">공지사항</h4>
-			<h4>자주 묻는 질문</h4>
+			<h4 >자주 묻는 질문</h4>
 		</div>
-		
-		<div id="btns" align="right">
-			<img id="addNotice" src="<%= ctxPath %>/resources/images/board/addNoticeBtn.JPG" />
-			<img id="removeNotice" src="<%= ctxPath %>/resources/images/board/deleteNoticeBtn.JPG" />
-			<img id="backNotice" src="<%= ctxPath %>/resources/images/board/backNoticeBtn.JPG" />
-		</div>
-		
+		<c:if test="${sessionScope.loginuser.status == 2}">
+			<div id="btns" align="right">
+				<img id="addNotice" src="<%= ctxPath %>/resources/images/board/addNoticeBtn.JPG" />
+				<img id="removeNotice" src="<%= ctxPath %>/resources/images/board/deleteNoticeBtn.JPG" />
+				<img id="backNotice" src="<%= ctxPath %>/resources/images/board/backNoticeBtn.JPG" />
+			</div>
+		</c:if>
 		<!--  add 버튼을 누르면 나타나는 공지 추가하기  -->
 		<div id="addNoticeContainer">
 			<form id="newNotice" name="newNotice">
@@ -252,8 +258,10 @@
 					<textarea name="addContent" id="addContent" placeholder="내용을 입력하세요."></textarea>
 				</span>
 				<div align="center">
-					<img id="addBtn" src="<%= ctxPath %>/resources/images/board/addBtn.JPG" />
+					<img onclick="" id="addBtn" src="<%= ctxPath %>/resources/images/board/addBtn.JPG" />
 				</div>
+				
+				
 			</form>
 		</div>
 		

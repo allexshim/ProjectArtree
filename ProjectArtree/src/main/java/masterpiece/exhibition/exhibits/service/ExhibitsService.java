@@ -125,4 +125,18 @@ public class ExhibitsService implements InterExhibitsService {
 		return result;
 	}
 
+	/////////////////////////// 성별 차트 ///////////////////////////
+	@Override
+	public List<HashMap<String, Object>> getGenderChart(String eno) {
+		List<HashMap<String, Object>> GenderChart = dao.getGenderChart(eno);
+		return GenderChart;
+	}
+
+	////////////////////////// 연령대별 차트 ///////////////////////
+	@Override
+	public List<HashMap<String, String>> getAgeChart(String eno) {
+		List<HashMap<String, String>> AgeChart = dao.getAgeChart(eno);
+		return AgeChart;
+	}
+
 }

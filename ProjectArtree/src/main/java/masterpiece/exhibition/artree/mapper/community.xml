@@ -5,8 +5,53 @@
 
 <mapper namespace="community">
 	
+	<resultMap type="HashMap" id="communityMap">
+		<result property="no"  				column="no" 			javaType="String"/> 
+		<result property="exhibitionname"  	column="exhibitionname" javaType="String"/> 
+		<result property="exhibitionno"  	column="exhibitionno" 	javaType="String"/> 
+		<result property="title"  			column="title" 			javaType="String"/> 
+		<result property="name"  			column="name" 			javaType="String"/> 
+		<result property="writeday"  		column="writeday" 		javaType="String"/> 
+		<result property="readcount"  		column="readcount" 		javaType="String"/> 
+	</resultMap>
+	
+	<!-- 글 조회하기 -->
+	<select id="getCommunity" parameterType="HashMap" resultMap="communityMap" >
+		select *
+        from (
+        select rownum as rno, no, exhibitionname, exhibitionno, title, name, writeday, readcount, content
+        from (
+        select C.content, C.no, E.exhibitionname, E.exhibitionno, C.title, C.name, C.writeday, C.readcount
+		from (
+		select V.*, M.name
+		from community V join member M 
+		on V.fk_idx = M.idx
+		) C  join exhibition E 
+		on C.fk_exhibitionno = E.exhibitionno
+        where 1= 1 
+        <if test=' searchType!=null'>
+        	<if test=' searchType.equals("name") '>
+        		and exhibitionname like '%' || #{searchWord} || '%'
+        	</if>
+	        <if test=' searchType.equals("titleContents") '>
+		        and (title like '%' || #{searchWord} || '%'
+		        or content like '%' || #{searchWord} || '%')
+	        </if>
+	        <if test=' searchType.equals("writer") '>
+	       		and name like '%' || #{searchWord} || '%'
+	        </if>
+        </if>
+        
+        
+		order by C.no desc
+        ) T ) Z
+        <if test=" startRno != null ">
+        where rno between #{startRno} and #{endRno}
+        </if>
+	</select>
+	
 	<resultMap type="HashMap" id="Exhibit">
-		<result property="exhibitionno"  	 column="exhibitionno" 		javaType="String"/> 
+		<result property="exhibitionno"  	column="exhibitionno" 		javaType="String"/> 
 		<result property="exhibitionname"   column="exhibitionname" 	javaType="String"/> 
 		<result property="author"   		column="author" 			javaType="String"/> 
 		<result property="galleryname"  	column="galleryname" 		javaType="String"/> 
@@ -37,4 +82,45 @@
 		values(seq_community.nextval, #{fk_exhibitionno}, #{title}, #{content}, sysdate, 0, #{fk_idx}, 0)
 	</insert>
 	
+	<resultMap type="HashMap" id="detailMap">
+		<result property="previousno"  		column="previousno" 	javaType="String"/> 
+		<result property="previoustitle"  	column="previoustitle" 	javaType="String"/> 
+		<result property="mainposter"  		column="mainposter" 	javaType="String"/> 
+		<result property="exhibitionname"  	column="exhibitionname" javaType="String"/> 
+		<result property="title"  			column="title" 			javaType="String"/> 
+		<result property="name"  			column="name" 			javaType="String"/> 
+		<result property="fk_idx"  			column="fk_idx" 		javaType="String"/> 
+		<result property="writeday"  		column="writeday" 		javaType="String"/> 
+		<result property="content"  		column="content" 		javaType="String"/> 
+		<result property="exhibitionno"  	column="exhibitionno" 	javaType="String"/> 
+		<result property="nextno"  			column="nextno" 		javaType="String"/> 
+		<result property="nexttitle"  		column="nexttitle" 		javaType="String"/> 
+	</resultMap>
+	
+	<!-- 해당 글번호의 글 정보 가져오기  --> 
+	<select id="getCommunityDetail" parameterType="String" resultMap="detailMap" >
+		select 
+        previousno, previoustitle, no, mainposter, exhibitionname, exhibitionno, title, name, C.fk_idx, writeday, content, nextno, nexttitle
+		from
+		(select D.*
+                , M.name  
+		from ( select no, title, fk_idx, writeday, content, fk_exhibitionno
+                , lag(no, 1) over(order by no desc) as nextno
+                , lag(title, 1) over(order by no desc) as nexttitle
+                , lead(no, 1) over(order by no desc) as previousno
+		        , lead(title, 1) over(order by no desc) as previoustitle
+		from community) D join member M 
+		on D.fk_idx = M.idx where no = #{no} ) C join 
+		(select A.exhibitionno, A.exhibitionname, B.mainposter from 
+		(exhibition A join exhibitionDetail B 
+		on A.exhibitionno = B.fk_exhibitionno)
+		) E on C.fk_exhibitionno = E.exhibitionno
+	</select>
+
+	<!-- 글 수정하기 -->
+	<update id="modifyCommunity" parameterType="HashMap" >
+		update community set fk_exhibitionNo = #{exhibitionno} , title = #{title}, content = #{content}
+		where no = #{no}
+	</update>
+
 </mapper>

@@ -19,7 +19,7 @@
     
     <!-- 로그인 처리 -->
     <select id="getLoginMember" parameterType="HashMap" resultType="masterpiece.exhibition.member.model.MemberVO">
-      select idx, email, name, gender, agegroup, area, status
+      select idx, email, name, gender, agegroup, area, status, password
           , trunc( months_between(sysdate, lastLoginDate) ) AS lastlogindategap 
           , trunc( months_between(sysdate, lastPasswordDate) ) AS pwdchangegap 
       from member
@@ -93,9 +93,16 @@
    	  update member set password=#{tempPassword} where email=#{email}
    </update>
    
+   <!-- word cloud 개인 선호 태그 select -->
+   <select id="myfavorTag" parameterType="String" resultType="String">
+   		select favortag
+		from wishlist
+		where fk_idx=#{idx}
+   </select>
    
    <!-- 하트 눌렀을 때 가고싶어요 select -->
    <resultMap type="HashMap" id="WishMap">
+   		<result property="exhibitionno" 	column="exhibitionno" 		javaType="String"/>
 	 	<result property="exhibitionname" 	column="exhibitionname" 	javaType="String"/>
 	 	<result property="startdate" 		column="startdate" 			javaType="String"/>
 	 	<result property="enddate" 			column="enddate" 			javaType="String"/>
@@ -106,7 +113,7 @@
    
    <select id="selectWannaGo" parameterType="String" resultMap="WishMap">
    		select 
-		    V.exhibitionname, V.startdate, V.enddate, V.status,
+		    V.exhibitionno, V.exhibitionname, V.startdate, V.enddate, V.status,
 		    D.mainposter, 
 		    G.galleryname  
 		from 
@@ -123,6 +130,7 @@
    
    <!-- 책갈피 눌렀을 때 다녀왔어요 select -->
    <resultMap type="HashMap" id="goMap">
+   		<result property="exhibitionno" 	column="exhibitionno" 		javaType="String"/>
 	 	<result property="exhibitionname" 	column="exhibitionname" 	javaType="String"/>
 	 	<result property="startdate" 		column="startdate" 			javaType="String"/>
 	 	<result property="enddate" 			column="enddate" 			javaType="String"/>
@@ -133,7 +141,7 @@
    
    <select id="selectGo" parameterType="String" resultMap="goMap">
    		select 
-		    V.exhibitionname, V.startdate, V.enddate, V.status,
+		    V.exhibitionno, V.exhibitionname, V.startdate, V.enddate, V.status,
 		    D.mainposter, 
 		    G.galleryname  
 		from 
@@ -148,6 +156,40 @@
 		    exhibitiondetail D on V.exhibitionno = D.fk_exhibitionno left outer join 
 		    gallery G on V.fk_galleryno = G.galleryno
 		order by 1 asc
+   </select>
+   
+   <!-- 선호 작가 select -->
+   <resultMap type="HashMap" id="authorMap">
+   		<result property="exhibitionno" 	column="exhibitionno" 	javaType="String"/>
+	 	<result property="author" 			column="author" 		javaType="String"/>
+	 	<result property="image1" 			column="image1" 		javaType="String"/>
+   </resultMap>
+   <select id="selectFavorAuthor" parameterType="String" resultMap="authorMap">
+   		select exhibitionno, author, image1
+		from
+		(
+		select ROW_NUMBER() OVER(ORDER BY wishno) as num, wishno, exhibitionno, author
+		from wishList W join exhibition E 
+		on W.fk_exhibitionno = E.exhibitionno
+		where W.fk_idx = #{idx} order by 1 desc) T join exhibitiondetail D
+		on T.exhibitionno = D.fk_exhibitionno
+		where <![CDATA[num > 2]]>
+   </select>
+   
+   <!-- 선호 전시관 -->
+   <resultMap type="HashMap" id="galMap">
+   		<result property="galleryno" 		column="galleryno" 		javaType="String"/>
+	 	<result property="galleryname" 		column="galleryname" 	javaType="String"/>
+	 	<result property="detailaddress" 	column="detailaddress" 	javaType="String"/>
+	 	<result property="mainpicture" 		column="mainpicture" 	javaType="String"/>
+   </resultMap>
+   <select id="selectfavorGal" parameterType="String" resultMap="galMap">
+   		select galleryno, galleryname, detailaddress, mainpicture
+		from
+		(select fk_galleryno
+		from galwishList
+		where fk_idx=#{idx}) W join gallery G
+		on W.fk_galleryno = G.galleryno
    </select>
    
    <!-- 마이페이지 - 작품 재설정 -->
@@ -175,4 +217,25 @@
 					  ) V
 					  where rno = 2)
    </update>
+
+	<!-- 닉네임 변경 -->
+	<update id="changeName" parameterType="HashMap">
+		update member set name=#{name} where idx=#{idx}
+	</update>
+	
+	<!-- 비밀번호 변경 -->
+	<update id="changePwd" parameterType="HashMap">
+		update member set password=#{password} where idx=#{idx}
+	</update>
+	
+	<!-- 회원탈퇴 -->
+	<!-- 탈퇴 사유 입력 -->
+	<update id="updateWithdrawal" parameterType="HashMap">
+		update member set withdrawal=#{withdrawal} where idx=#{idx}
+	</update>
+	<!-- status 0 으로 변경 -->
+	<update id="updateStatus" parameterType="String">
+		update member set status=0 where idx=#{idx}
+	</update>
+	
 </mapper>

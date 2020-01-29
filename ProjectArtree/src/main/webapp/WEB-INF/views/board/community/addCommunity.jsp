@@ -45,20 +45,8 @@
 		font-weight: bold;
 	}	
 	
-	div#myPoster {
-		padding-top : 10px;
-	}
-	
-	div#myPoster:after {
-		content: "";
-	  	display: block;
-		width : 80%;		
-		padding-top : 30px;
-		border-bottom : solid 2px lightgray;
-	}
-	
 	div#detailContents {
-		width: 80%;
+		width: 70%;
 		margin: 0 auto;
 		padding-bottom: 20px;
 		border-bottom : solid 2px lightgray;
@@ -87,7 +75,7 @@
 	}
 	
 	table#detailTable tr td:nth-child(2) input {
-		width : 100%;
+		width : 97%;
 		border : 1px solid lightgray;
 	}
 	
@@ -99,7 +87,7 @@
 
 	div#myBtns {
 		float : right;
-		padding-right : 22px;
+		padding-right : 50px;
 	}
 	
 	div#myBtns img {
@@ -107,7 +95,7 @@
 		cursor : pointer;
 	}
 	
-	div#preNext {
+	/* div#preNext {
 		width: 80%;
 		margin: 0 auto;
 	}
@@ -120,7 +108,7 @@
 	
 	div#preNext table tr td {
 		cursor : pointer;
-	}
+	} */
 	
 	div#toListBtn {
 		padding-top : 20px;
@@ -340,7 +328,7 @@
 			</div>
 		</div>
 		
-		<div id="preNext">
+		<!-- <div id="preNext">
 			<table>
 				<tr>
 					<td class="prev"><i class='fa fa-angle-up' style='font-size:32px'></i></td>
@@ -353,7 +341,7 @@
 					<td class="next">다음글제목다음글제목다음글제목다음글제목다음글제목다음글제목</td>
 				</tr>
 			</table>
-		</div>
+		</div> -->
 		<div id="toListBtn" align="center">
 			<img id="toListBtn" src="<%= ctxPath %>/resources/images/board/toListBtn.JPG" />
 		</div>

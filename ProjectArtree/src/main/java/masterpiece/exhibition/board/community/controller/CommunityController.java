@@ -37,72 +37,127 @@ public class CommunityController {
 		HttpSession session = request.getSession();
 		String goBackURL = MyUtil.getCurrentURL(request);	
 		session.setAttribute("goBackURL", goBackURL);
-		// 아래는 페이지 바 샘플인데 여유 되면 진행합니다...
-				/*
-				String sizePerPage = "10";	// 한 페이지에 보여줄 상품(게시글 등) 갯수
-				String currentShowPageNo = request.getParameter("currentShowPageNo");
-				// 띄울(보여줄) 페이지
+		
+		// 페이징 처리 ----------------------------------------------------
+		 String str_currentShowPageNo = request.getParameter("currentShowPageNo");
+	      
+	     int totalCount = 0; // 총게시물 건수
+	     int sizePerPage = 10; // 한 페이지당 보여줄 게시물 수
+	     int currentShowPageNo = 0;
+	     int totalPage = 0; // 총 페이지 수
+	     int startRno = 0; // 시작 행번호
+	     int endRno = 0; // 끝 행번호
+	      
+	     String searchType = request.getParameter("searchType");
+	     String searchWord = request.getParameter("searchWord");
+	      
+	     if(searchWord == null || searchWord.trim().isEmpty()) {
+	         searchWord = "";
+	     }
 
-				if(currentShowPageNo == null) {
-					currentShowPageNo = "1";	
-				}
-				// 해당하는 주문 개수/보여줄 개수 == 전체 페이지 개수
-				int totalPage = 100; // 뷰단 생성
+		// -------------------------------------------------------------
+		HashMap<String,String> searchMap = new HashMap<String,String>();
+		searchMap.put("searchWord", searchWord);
+		searchMap.put("searchType", searchType);
+		//--------------------------------------------------------
+		// 현재까지 조건에 해당되는 모든 게시글의 수 (count용)
+		List<HashMap<String,String>> communityList = service.getCommunity(searchMap);
+		totalCount = communityList.size();
+		totalPage = (int)Math.ceil( (double)totalCount/sizePerPage );
+		
+		// 초기화면의 페이지수 == 1
+	      if(str_currentShowPageNo == null) {
+	    	  currentShowPageNo = 1;
+	      } 
+	      else {
+	    	  try {
+	    		  currentShowPageNo = Integer.parseInt(str_currentShowPageNo);
+	    		  if( currentShowPageNo < 1 || currentShowPageNo> totalPage ) {
+	    			  currentShowPageNo = 1;
+	    		  }
+	    	  } catch (NumberFormatException e) {
+	    		  currentShowPageNo = 1;
+	    	  }
+	      }
+		
+	      // 가져올 게시글의 범위를 구한다 (공식) 
+	      startRno = ((currentShowPageNo-1)*sizePerPage)+1;
+	      endRno = startRno+sizePerPage-1;
 
-				int pageNo = 1;
-				// pageNo 가 페이지바에서 보여지는 첫번째 페이지 번호이다.
-				int blockSize = 10;
-				// blockSize 는 블럭(토막) 당 보여지는 페이지 번호의 갯수이다.
-				int loop = 1;
-				// loop 는 1 부터 증가하여 1 개 블럭을 이루는 페이지번호의 갯수(지금은 10개)까지는 증가하는 용도이다.
-				pageNo = ( ( Integer.parseInt(currentShowPageNo) - 1 )/ blockSize ) * blockSize + 1; 
-				String pageBar = "";
-				
-				pageBar += "<a href = '/Semi/myshop/order/list.sa?currentShowPageNo=1'><i class='fa fa-angle-double-left' style='font-size:32px'></i></a>";
-				
-				if(pageNo!=1) {
-					pageBar += "&nbsp;<a href = '/Semi/myshop/order/list.sa?currentShowPageNo="+ (pageNo-1)+"'><i class='fa fa-angle-left' style='font-size:32px'></i></a>&nbsp;";
-				} else {
-					pageBar += "&nbsp;<a href = '/Semi/myshop/order/list.sa?currentShowPageNo="+ (pageNo) +"'><i class='fa fa-angle-left' style='font-size:32px'></i></a>&nbsp;";
-				}
-				
-				while(!( loop > blockSize || pageNo > totalPage )) {	// 반복 횟수 ; 10번 반복
-					
-					if(pageNo == Integer.parseInt(currentShowPageNo)) {	// 보고자 하는 페이지 == 현재 페이지
-						pageBar += "&nbsp;<span class = 'active' style='display:inline-block;'>"+pageNo+"</span>&nbsp;";
-							//	= "&nbsp;<span style = 'border : solid 2px gray; padding : 2px;>'"+pageNo+"</span>&nbsp;";
-					}
-					else {
-						pageBar += "&nbsp;<a class = 'pageNumber' href = '/Semi/myshop/order/list.sa?currentShowPageNo="+ pageNo +"'>"+pageNo+"</a>&nbsp;";
-					}
-					
-					pageNo++;	// 1 부터 10 까지
-								// 11 부터 20 까지
-								// 21 부터 30 까지
-								// 31 부터 40 까지
-								// 41 
-					loop++;
-					// 매번 loop 가 1씩 증가	
-				} // end of while() -------------------
+	      searchMap.put("startRno", String.valueOf(startRno));
+	      searchMap.put("endRno", String.valueOf(endRno));
+	      
+	      // 페이징 적용한 게시글 리스트
+	      communityList = service.getCommunity(searchMap);
+	      
+	      // === 페이징 바 만들기 ===
+	      int pageNo = 1;
+	      // pageNo 가 페이지바에서 보여지는 첫번째 페이지 번호이다.
+	      int blockSize = 3;
+	      // blockSize 는 블럭(토막) 당 보여지는 페이지 번호의 갯수이다.
+	      int loop = 1;
+	      // loop 는 1 부터 증가하여 1 개 블럭을 이루는 페이지번호의 갯수(지금은 10개)까지는 증가하는 용도이다.
+	      pageNo = (((currentShowPageNo) - 1 )/ blockSize ) * blockSize + 1; 
+	      String pageBar = "";
+      
+	      pageBar += "<a href = '/artree/communityList.at?currentShowPageNo="+1+"&searchType="+searchType+"&searchWord="+searchWord+"'><i class='fa fa-angle-double-left' style='font-size:20px'></i></a>";
 			
-				// 다음 만들기
-				if(pageNo <= totalPage) {
-					pageBar += "&nbsp;<a href = '/artree/reviewList.artree?currentShowPageNo="+pageNo+"'></i></a>&nbsp;";
-				} else {
-					pageBar += "&nbsp;<a href = '/artree/reviewList.artree?currentShowPageNo="+totalPage+"'><i class='fa fa-angle-right' style='font-size:32px'></i></a>&nbsp;";
-					
+			if(pageNo!=1) {
+				pageBar += "&nbsp;<a href = '/artree/communityList.at?currentShowPageNo="+ (pageNo-1)+"&searchType="+searchType+"&searchWord="+searchWord+"'><i class='fa fa-angle-left' style='font-size:20px'></i></a>&nbsp;";
+			} else {
+				pageBar += "&nbsp;<a href = '/artree/communityList.at?currentShowPageNo="+ (pageNo) +"&searchType="+searchType+"&searchWord="+searchWord+"'><i class='fa fa-angle-left' style='font-size:20px'></i></a>&nbsp;";
+			}
+			
+			while(!( loop > blockSize || pageNo > totalPage )) {	// 반복 횟수 ; 10번 반복
+				
+				if(pageNo == currentShowPageNo) {	// 보고자 하는 페이지 == 현재 페이지
+					pageBar += "&nbsp;<span class = 'active' style='display:inline-block;'>"+pageNo+"</span>&nbsp;";
 				}
-				pageBar += "&nbsp;<a href = '/artree/reviewList.artreea?currentShowPageNo="+totalPage+"'><i class='fa fa-angle-double-right' style='font-size:32px'></i></a>&nbsp;";
+				else {
+					pageBar += "&nbsp;<a class = 'pageNumber' href = '/artree/communityList.at?currentShowPageNo="+ pageNo +"&searchType="+searchType+"&searchWord="+searchWord+"'>"+pageNo+"</a>&nbsp;";
+				}
 				
-				request.setAttribute("sizePerPage", sizePerPage);
-				request.setAttribute("pageBar", pageBar);*/
+				pageNo++;	// 1 부터 10 까지
+							// 11 부터 20 까지
+							// 21 부터 30 까지
+							// 31 부터 40 까지
+							// 41 
+				loop++;
+				// 매번 loop 가 1씩 증가	
+			} // end of while() -------------------
+		
+			// 다음 만들기
+			if(pageNo <= totalPage) {
+				pageBar += "&nbsp;<a href = '/artree/communityList.at?currentShowPageNo="+pageNo+"&searchType="+searchType+"&searchWord="+searchWord+"'><i class='fa fa-angle-right' style='font-size:20px'></i></a>&nbsp;";
+			} else {
+				pageBar += "&nbsp;<a href = '/artree/communityList.at?currentShowPageNo="+totalPage+"&searchType="+searchType+"&searchWord="+searchWord+"'><i class='fa fa-angle-right' style='font-size:20px'></i></a>&nbsp;";
 				
+			}
+			pageBar += "&nbsp;<a href = '/artree/communityList.at?currentShowPageNo="+totalPage+"&searchType="+searchType+"&searchWord="+searchWord+"'><i class='fa fa-angle-double-right' style='font-size:20px'></i></a>&nbsp;";
+			
+			request.setAttribute("sizePerPage", sizePerPage);
+			request.setAttribute("pageBar", pageBar);
+
+			request.setAttribute("communityList", communityList);
+			
 		return "board/community/communityList.tiles";
 	} // end of communityList -------------------------------------------
 	
 	@RequestMapping(value="/communityDetail.at")
 	public String communityDetail(HttpServletRequest request) {
 		
+		// 게시판 글 번호
+		String no = request.getParameter("no");
+		
+		HashMap<String,String> communityDetail = new HashMap<String,String>();
+		
+		// 해당 글번호의 글 정보 가져오기
+		communityDetail = service.getCommunityDetail(no);
+		//mainposter, exhibitionname, title, name, fk_idx, writeday, content
+		communityDetail.put("no", no);
+
+		request.setAttribute("communityDetail", communityDetail);
+	
 		return "board/community/communityDetail.tiles";
 	} // end of communityDetail -------------------------------------------
 	
@@ -190,10 +245,109 @@ public class CommunityController {
 		} catch (ServletException | IOException e) {
 			e.printStackTrace();
 		} 
-		
 	} // end of requireLogin_addCommunityEnd --------------------------------------------
 	
+	// 글 수정하기
+	@RequestMapping(value="modifyCommunity.at")
+	public String modifyCommunity(HttpServletRequest request) {
+
+		String no = request.getParameter("no");
+		// 글 번호를 key로하여 글 관련 정보(제목, 내용 등)을 가져와서 글수정 폼에 띄운다
+		// 글 수정폼은 글 입력폼 재활용
+		
+		HashMap<String,String> modifycommu = new HashMap<String,String>();
+		
+		// 수정할 글 정보 가져오기
+		modifycommu = service.getCommunityDetail(no);
+		modifycommu.put("no", no);
+		request.setAttribute("modifycommu", modifycommu);
+		
+		// 모든 전시회 정보를 가져와서 넘긴다 (전시회 검색용)
+		String searchWord = "";
+		List<HashMap<String,String>> exhibitionList = service.getExhibit(searchWord);
+		request.setAttribute("exhibitionList", exhibitionList);
+		
+		return "board/community/modifyCommunity.tiles";	
+	} // end of modifyCommunity --------------------------------------------------
+
+	// 글 수정 완료
+	@RequestMapping(value="modifyCommunityEnd.at")
+	public void modifyCommunityEnd(HttpServletRequest request, HttpServletResponse response) {
+	
+		/*no, title, contents*/
+		String exhibitionno = request.getParameter("exhibitionno");
+		String title = request.getParameter("title");
+		String contents = request.getParameter("contents");
+		String no = request.getParameter("no");
+		
+		HashMap<String,String> modifycommu = new HashMap<String,String>();
+		modifycommu.put("exhibitionno", exhibitionno);
+		modifycommu.put("title", title);
+		modifycommu.put("content", contents);
+		modifycommu.put("no", no);
+		
+		// 글 수정하기 
+		int n = service.modifyCommunity(modifycommu);
+		try {
+			String msg = "";
+			
+			if(n==1) { msg = "글이 수정되었습니다."; }
+			else { msg = "에러가 발생했습니다."; 
+			}
+			
+			String loc = "/artree/communityList.at";
+			
+			request.setAttribute("msg", msg); 
+			request.setAttribute("loc", loc);
+			
+			RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/msg.jsp");
+			dispatcher.forward(request, response);
+				
+		} catch (ServletException | IOException e) {
+			e.printStackTrace();
+		} 
+	} // end of modifyCommunityEnd --------------------------------------
 	
 	
+	// 댓글 입력하기
+	@RequestMapping(value="addComment.at")
+	public void requireLogin_addComment(HttpServletRequest request, HttpServletResponse response) {
+		
+		HttpSession session = request.getSession();
+		MemberVO loginuser = (MemberVO)session.getAttribute("loginuser");
+		
+		String idx = "";
+		if(loginuser!=null) {
+			idx = loginuser.getIdx();
+		}
+		String comContent = request.getParameter("commentContents");
+		String fk_no = request.getParameter("fk_no");
+		
+		HashMap<String,String> comment = new HashMap<String,String>();
+		comment.put("idx", idx);
+		comment.put("comContent", comContent);
+		comment.put("fk_no", fk_no); // 댓글을 등록하려는 원글 번호
+		
+		// 새 댓글 등록하기
+		int n = service.addComment(comment);
+		try {
+			String msg = "";
+			
+			if(n==1) { msg = "댓글 등록 완료"; }
+			else { msg = "에러가 발생했습니다."; }
+			
+			String loc = "/artree/communityDetail.at?no="+fk_no;
+			
+			request.setAttribute("msg", msg); 
+			request.setAttribute("loc", loc);
+			
+			RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/msg.jsp");
+			dispatcher.forward(request, response);
+				
+		} catch (ServletException | IOException e) {
+			e.printStackTrace();
+		} 
+
+	} // end of requireLogin_addComment -----------------------
 	
 }

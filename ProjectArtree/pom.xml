@@ -124,6 +124,14 @@
 			<version>2.2</version>
 			<scope>provided</scope>
 		</dependency>
+		
+		<!-- ===== #12. log4j 관련1 jar 추가하기 ===== -->
+		<dependency>
+			<groupId>org.lazyluke</groupId>
+			<artifactId>log4jdbc-remix</artifactId>
+			<version>0.2.7</version>
+		</dependency>	
+		
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>jstl</artifactId>

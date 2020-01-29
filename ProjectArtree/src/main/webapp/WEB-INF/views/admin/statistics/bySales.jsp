@@ -4,6 +4,7 @@
 <%
 	String ctxPath = request.getContextPath();
 %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <!DOCTYPE html>
 
@@ -13,6 +14,14 @@
 
 <style type="text/css">
 @import url(//fonts.googleapis.com/earlyaccess/notosanskr.css);
+	
+	.tooltip {
+		position: sticky !important;
+	}
+	
+	.tooltip.top {
+		margin-top: 2% !important;
+	}
 
 	body {
 		font-family: 'Noto Sans Kr', sans-serif;
@@ -107,29 +116,223 @@
 		padding-bottom : 10px; 
 	}
 	
-	/* == 통계 영역 == */
-	#statistics-area {
-		height: 60vh;
-		border: 2px solid red;
+	/* == 통계 영역 == */		
+	.table th {
+		text-align: center;
 	}
 	
-	#table-area {
-		border: 2px solid navy;
-		height: 50vh;
-	}
-	
+/* drilldown */
+.highcharts-figure, .highcharts-data-table table {
+    min-width: 310px; 
+    max-width: 800px;
+    margin: 1em auto;
+}
+
+#container {
+    height: 400px;
+}
+
+.highcharts-data-table table {
+	font-family: Verdana, sans-serif;
+	border-collapse: collapse;
+	border: 1px solid #EBEBEB;
+	margin: 10px auto;
+	text-align: center;
+	width: 100%;
+	max-width: 500px;
+}
+.highcharts-data-table caption {
+    padding: 1em 0;
+    font-size: 1.2em;
+    color: #555;
+}
+.highcharts-data-table th {
+	font-weight: 600;
+    padding: 0.5em;
+}
+.highcharts-data-table td, .highcharts-data-table th, .highcharts-data-table caption {
+    padding: 0.5em;
+}
+.highcharts-data-table thead tr, .highcharts-data-table tr:nth-child(even) {
+    background: #f8f8f8;
+}
+.highcharts-data-table tr:hover {
+    background: #f1f7ff;
+}
+/* drilldown end*/	
 </style>
 
-<script src="<%= ctxPath%>/resources/js/jquery-3.3.1.min.js"></script>
-<script type="text/javascript">
-	$(document).ready(function(){ 
-	
-		
-		
-		
-	});
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  
+<!-- drilldown -->
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/data.js"></script>
+<script src="https://code.highcharts.com/modules/drilldown.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
+<script src="https://code.highcharts.com/modules/export-data.js"></script>
+<script src="https://code.highcharts.com/modules/accessibility.js"></script>
+<!-- drilldown end -->
 
+<script type="text/javascript">
+	$(document).ready(function(){ 					
+		$('[data-toggle="checktip"]').tooltip('show');
+		drilldown();			
+		MonthGraph();
+		$(document).on("click",".month",function(event){
+			var reserdate = $(this).find("input[name=reserdate]").val();
+			DayGraph(reserdate);
+		});		
+	});
+	
+	function DayGraph(reserdate) {		
+		$.ajax({
+			url:"<%=ctxPath%>/dailySales.at",
+			dataType:"JSON",
+			data:{"reserdate":reserdate},
+			success:function(json2) {
+				html2 = "";
+				
+				html2 += "<table class=\"table table-hover\">";
+				$.each(json2,function(index2,item2){
+					html2 += "<tr>";
+					html2 += "<th>"+item2.reserdate+"일</th>";
+					html2 += "<td>"+item2.dailySales+"만원</td>";
+					html2 += "</tr>";
+					html2 += "";						
+				});				
+				html2 += "</table>";
+				$("#daily").html(html2);
+			}					
+		});
+	}
+	
+	function MonthGraph() {
+		$.ajax({
+			url:"<%=ctxPath%>/monthlySales.at",
+			dataType:"JSON",
+			success:function(json) {
+				html = "";	
+				
+				html += "<table class=\"month table table-hover\">";																	
+				$.each(json,function(index,item){
+					html += "<tr>";
+					html += "<th>"+item.reserdate+"월</th>";
+					html += "<td>"+item.monthlySales+"만원</td>";
+					html += "<td style=\"padding: 0px !important; width: 0% !important;\"><input type=\"text\" hidden=\"hidden\" value=\""+item.reserdate+"\" name=\"reserdate\"></td>";					
+					html += "</tr>";																
+					html += "";				
+				});
+				html += "</table>";				
+				$("#monthly").html(html);							
+			}
+		});
+	}
+	
+	function drilldown() {
+		$.ajax({
+			url:"<%=ctxPath%>/monthlySales.at",
+			dataType:"JSON",
+			success:function(json) {
+			$("#container").empty();				
+			var resultArr = [];	
+			var drillArr = [];
+			for(var i=0; i<json.length; i++) {
+				var obj = {name:json[i].reserdate+"월",y:Number(json[i].monthlySales),drilldown:json[i].reserdate+"월"};																		
+				resultArr.push(obj);
+			}			
+			$.each(json, function(index2, item2){
+				$.ajax({
+					url:"<%=ctxPath%>/dailySales.at",
+					data:{reserdate : item2.reserdate},					
+					dataType:"JSON",
+					success:function(json2) {	
+						var subArr = [];							
+						$.each(json2, function(index3, item3){																	
+							subArr.push([
+										item3.reserdate+"일",
+										Number(item3.dailySales)
+							]);								
+						});																		
+						drillArr.push({
+							name:item2.reserdate+"월",
+							id:item2.reserdate+"월",
+							data:subArr
+						});
+					},
+					error: function(request, status, error){
+						alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+					}	
+				}); // json2
+			});//each
+			
+			// Create the chart
+			Highcharts.chart('container', {
+			    chart: {
+			        type: 'column'
+			    },
+			    title: {
+			        text: 'Artree 매출'
+			    },
+			    subtitle: {
+			        text: '클릭하면 일별 매출이 나옵니다.'
+			    },
+			    accessibility: {
+			        announceNewData: {
+			            enabled: true
+			        }
+			    },
+			    xAxis: {
+			        type: 'category'
+			    },
+			    yAxis: {
+			        title: {
+			            text: ''
+			        }
+
+			    },
+			    legend: {
+			        enabled: false
+			    },
+			    
+			    plotOptions: {
+			        series: {
+			            borderWidth: 0,
+			            dataLabels: {
+			                enabled: true,			                
+			                format: '{point.y:.0f}만원'			                	
+			            }
+			        }
+			    },
+
+			    tooltip: {
+			        headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
+			        pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y:.0f}만원</b><br/>'
+			    },
+
+			    series: [
+			        {
+			            name: "월별 매출",
+			            colorByPoint: true,
+			            data: resultArr
+			        }
+			    ],
+			    drilldown: {
+			        series: drillArr
+			    }
+			});
+			
+		    },
+			error: function(request, status, error){
+				alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+			}				
+		});
+				
+	} // drill
 </script>
+
 </head>
 <body>
 	<div id="statisticsContainer" class="container">
@@ -154,22 +357,22 @@
 			
 			<div id="statistics-area">
 				<%-- 통계차트 여기다 넣으시면 됩니다 --%>
+				<figure class="highcharts-figure">
+    				<div id="container"></div>   
+				</figure>					
 			</div>
 			
-			<div id="table-area">
-				
+			<div id="table-area" style="overflow: hidden;">				
 				<%-- 차트에 대한 데이터 테이블은 이곳에 넣으세요 !! --%>
-				
-				<table class="table">
-					<thead>
-					
-					</thead>
-					
-					<tbody>
-					
-					</tbody>
-				</table>
-				
+				<div style="float: left; width: 40%; text-align: center;">
+					<div style="font-size: 18px; padding: 3%;"><span data-placement="top" data-toggle="checktip" title="클릭하여 확인해보세요!">월별매출</span></div>					
+					<div id="monthly"></div>						
+				</div>	
+			
+				<div style="float: right; width: 40%;">
+					<div style="font-size: 18px; padding: 3%;">일별매출</div>
+					<div id="daily"></div>
+				</div>					
 			</div>
 			
 		</div>

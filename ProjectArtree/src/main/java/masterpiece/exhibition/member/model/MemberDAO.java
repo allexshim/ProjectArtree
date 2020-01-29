@@ -88,6 +88,13 @@ public class MemberDAO implements InterMemberDAO {
 	}
 
 	// *********************** 마이페이지 *********************** //
+	// ========= word cloud 개인 선호 태그 select =========
+	@Override
+	public List<String> myfavorTag(String idx) {
+		List<String> myfavorTag = sqlsession.selectList("member.myfavorTag", idx);
+		return myfavorTag;
+	}
+	
 	// ========= 하트 눌렀을 때 가고싶어요 select =========
 	@Override
 	public List<HashMap<String, String>> selectWannaGo(String idx) {
@@ -101,6 +108,20 @@ public class MemberDAO implements InterMemberDAO {
 		List<HashMap<String, String>> goList = sqlsession.selectList("member.selectGo", idx);
 		return goList;
 	}
+	
+	// ========= 하트 눌렀을 때 전시회의 작가 select =========
+	@Override
+	public List<HashMap<String, String>> selectFavorAuthor(String idx) {
+		List<HashMap<String, String>> favorAuthor = sqlsession.selectList("member.selectFavorAuthor", idx);
+		return favorAuthor;
+	}
+	
+	// ========= 선호 전시관 =========
+	@Override
+	public List<HashMap<String, String>> selectfavorGal(String idx) {
+		List<HashMap<String, String>> favorGal = sqlsession.selectList("member.selectfavorGal", idx);
+		return favorGal;
+	}
 
 	// ========= 마이페이지 - 작품 재설정 =========
 	@Override
@@ -113,5 +134,40 @@ public class MemberDAO implements InterMemberDAO {
 		int m = sqlsession.update("member.updateFavor2", paraMap);
 		return m;
 	}
+
+	// ========= 닉네임 변경 =========
+	@Override
+	public int changeName(HashMap<String, String> paraMap) {
+		int n = sqlsession.update("member.changeName", paraMap);
+		return n;
+	}
+
+	// ========= 비밀번호 변경 =========
+	@Override
+	public int changePwd(HashMap<String, String> paraMap) {
+		int n = sqlsession.update("member.changePwd", paraMap);
+		return n;
+	}
+
+	// ========= 회원탈퇴 =========
+	// ========= 탈퇴 사유 member insert =========
+	@Override
+	public int updateWithdrawal(HashMap<String, String> paraMap) {
+		int n = sqlsession.insert("member.updateWithdrawal", paraMap);
+		return n;
+	}
+	// ========= status 0 으로 변경 =========
+	@Override
+	public int updateStatus(String idx) {
+		int m = sqlsession.update("member.updateStatus", idx);
+		return m;
+	}
+
+
+
+
+
+	
+	
 
 }

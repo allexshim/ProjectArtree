@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.json.JSONArray;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import masterpiece.exhibition.common.MyUtil;
 import masterpiece.exhibition.member.model.MemberVO;
 import masterpiece.exhibition.order.service.InterOrderService;
 
@@ -27,18 +29,22 @@ public class OrderController {
 	private InterOrderService service;
 
 	@RequestMapping(value = "/ticketsbin.at")
-	public String ticketsbin(HttpServletRequest request) {
-
-		//String no = request.getParameter("eno");
-		HashMap<String, String> map = new HashMap<String, String>();
-
-		String no = "4901"; // 구매하기 눌렀을때 전시회 번호 받아와야함 지금은 임시
-		if (no == null || no.trim().isEmpty()) {
-			no = "";
-		}
-
-		map.put("no", no);
-
+	public String ticketsbin(HttpServletRequest request, HttpServletResponse response) {
+		
+		HttpSession session = request.getSession();
+		String goBackURL = MyUtil.getCurrentURL(request);
+		session.setAttribute("goBackURL",goBackURL);		
+		String eno = request.getParameter("eno");
+		
+		if (eno != null) {
+			session.setAttribute("eno", eno);
+		}		
+		
+		HashMap<String, String> map = new HashMap<String, String>();		
+		
+		String exno = (String) session.getAttribute("eno");		
+		map.put("no", exno);
+		
 		List<HashMap<String, String>> exList = service.getEx(map);
 
 		// 키값 꺼내서 리퀘스트셋
@@ -51,9 +57,7 @@ public class OrderController {
 
 		request.setAttribute("exList", exList);
 
-		int price = Integer.parseInt(exList.get(0).get("price"));
-		String img = "base.jpg";
-
+		int price = Integer.parseInt(exList.get(0).get("price"));		
 		int price20 = (int) (price * 0.8);
 		int price30 = (int) (price * 0.7);
 		int price50 = (int) (price * 0.5);
@@ -61,11 +65,8 @@ public class OrderController {
 		request.setAttribute("price", price);
 		request.setAttribute("price20", price20);
 		request.setAttribute("price30", price30);
-		request.setAttribute("price50", price50);
-		request.setAttribute("img", img);
-
-		HttpSession session = request.getSession();
-		session.setAttribute("no", no);
+		request.setAttribute("price50", price50);		
+		
 		String[] qt = null;
 		String bin = "";
 		qt = (String[]) session.getAttribute("qt");
@@ -90,8 +91,8 @@ public class OrderController {
 
 	@RequestMapping(value = "/insertCart.at")
 	public ModelAndView insertCart(HttpServletRequest request, ModelAndView mav) {
-
-		HttpSession session = request.getSession();
+		
+		HttpSession session = request.getSession();		
 		HashMap<String, String> map = new HashMap<String, String>();
 		String dateBin = request.getParameter("dateBin");
 		String exname = request.getParameter("exhibitionname");
@@ -153,7 +154,9 @@ public class OrderController {
 
 	@RequestMapping(value = "/paymentGatebin.at")
 	public String paymentGatebin(HttpServletRequest request, HashMap<String,String> map) {
-		String idx = "1";
+		HttpSession session = request.getSession();		
+		MemberVO mvo = (MemberVO)session.getAttribute("loginuser");		
+		String idx = mvo.getIdx();	
 		map.put("idx", idx);
 		List<HashMap<String,String>> mapList = service.selectCartNoList(map);
 		
@@ -175,21 +178,29 @@ public class OrderController {
 	public String orderEnd(HttpServletRequest request, HashMap<String, String> map) {
 		DecimalFormat dec = new DecimalFormat("#,###");		
 		String html = "";
+		HttpSession session = request.getSession();		
+		MemberVO mvo = (MemberVO)session.getAttribute("loginuser");		
+		String idx = mvo.getIdx();
+		map.put("idx", idx);
 		
 		String Subtotal = request.getParameter("Subtotal");
 		String Discount = request.getParameter("Discount");
 		String orderpri = request.getParameter("orderpri");
-		
+					
+		if(Subtotal != null) {
 		map.put("Subtotal", Subtotal);
 		map.put("Discount", Discount);
-		map.put("orderpri", orderpri);	
+		map.put("orderpri", orderpri);			
 		
-		String idx = "1";
-		map.put("idx", idx);
 		service.order(map); // 예매 입력, 카트 삭제
 		
 		String reserNo = service.selectReserNo(map);
 		map.put("reserNo", reserNo);
+		}
+		
+		String reserNo = request.getParameter("reserNo");
+		map.put("reserNo", reserNo);
+		request.setAttribute("reserNo", reserNo);
 		
 		List<HashMap<String,String>> reserList = service.selectReser(map);
 		for(int a=0; a<reserList.size(); a++) {
@@ -332,5 +343,77 @@ public class OrderController {
 
 		return jsonStr;
 	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/monthlySales.at", produces = "text/plain;charset=UTF-8")
+	public String monthlySales(HttpServletRequest request) {
+		HashMap<String,String> map = new HashMap<String,String>();
+		List<HashMap<String, String>> monthlySalesList = service.monthlySalesList(map);
+		String jsonStr = "";
+		JSONArray jsonArr = new JSONArray();		
+		
+		for (int a = 0; a < monthlySalesList.size(); a++) {
+		
+			JSONObject jsonObj = new JSONObject();
+			
+			Set key = monthlySalesList.get(a).keySet();
+			Iterator iterator = key.iterator();		
+			for (iterator = key.iterator(); iterator.hasNext();) {
+			   String keyName = (String) iterator.next();		
+			   jsonObj.put(keyName, monthlySalesList.get(a).get(keyName));			   
+			}	
+			
+			jsonArr.put(jsonObj);
+		}
 
+		jsonStr = jsonArr.toString();
+
+		return jsonStr;
+	}
+
+	@ResponseBody
+	@RequestMapping(value = "/dailySales.at", produces = "text/plain;charset=UTF-8")
+	public String dailySales(HttpServletRequest request) {		
+
+		HashMap<String,String> map = new HashMap<String,String>();
+		String reserdate =request.getParameter("reserdate");		
+		map.put("reserdate", reserdate);
+		List<HashMap<String, String>> dailySalesList = service.dailySalesList(map);
+		String jsonStr = "";
+		JSONArray jsonArr = new JSONArray();		
+		
+		for (int a = 0; a < dailySalesList.size(); a++) {
+		
+			JSONObject jsonObj = new JSONObject();
+			
+			Set key = dailySalesList.get(a).keySet();
+			Iterator iterator = key.iterator();		
+			for (iterator = key.iterator(); iterator.hasNext();) {
+			   String keyName = (String) iterator.next();		
+			   jsonObj.put(keyName, dailySalesList.get(a).get(keyName));			   
+			}				
+			jsonArr.put(jsonObj);
+		}
+
+		jsonStr = jsonArr.toString();		
+		return jsonStr;
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/delReser.at")
+	public void delReser(HttpServletRequest request) {
+		HashMap<String,String> map = new HashMap<String,String>();
+		String reserNo = request.getParameter("reserNo");
+		map.put("reserNo", reserNo);
+		System.out.println(reserNo);
+		List<HashMap<String,String>> reserDetailNo = service.reserDetailNo(map);
+		
+		for (int a=0; a<reserDetailNo.size(); a++) {
+			String detailNo = reserDetailNo.get(a).get("RESERDETAILNO");
+			service.delReserEx(detailNo);				
+		}
+		service.delReserDetail(reserNo);
+		service.delReser(reserNo);		
+	}
+	
 }

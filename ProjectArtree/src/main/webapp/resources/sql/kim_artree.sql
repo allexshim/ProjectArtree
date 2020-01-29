@@ -4,7 +4,9 @@ select*
 from tab;
 
 select*
-from exhibition;
+from gallery;
+
+desc exhibition;
 
 select*
 from exhibitiondetail;
@@ -204,3 +206,58 @@ nocycle
 nocache;
 
 COMMIT
+
+select*
+from wishList A left join member B
+on A.fk_idx = B.idx
+where fk_exhibitionno = 1094
+
+commit
+select func_gender(gender) AS gender, count(*) AS cnt
+from wishList A left join member B
+on A.fk_idx = B.idx 
+where fk_exhibitionno = 1094
+group by gender
+
+create or replace function func_gender(p_gender IN varchar2)
+return varchar2
+is
+    v_gender varchar2(6);
+begin
+   if( p_gender = '1' ) then v_gender := '남성';
+   -- 오라클은 else if가 아니라 elsif 이다.
+   -- elsif( 조건 ) then v_gender := '중간';
+   else v_gender := '여성';
+   end if;
+   
+   return v_gender;
+end func_gender;
+
+select agegroup AS age, count(*) AS cnt
+from wishList A left join member B
+on A.fk_idx = B.idx 
+where fk_exhibitionno = 1094
+group by agegroup
+order by agegroup asc
+
+
+		select *
+		from
+		(
+		select row_number() over(order by exhibitionno desc) AS RNO
+			 , exhibitionno, fk_galleryno, B.galleryname, B.location, exhibitionname
+			 , startdate ||' - '|| enddate AS schedule
+			 , price, D.mainposter, A.status
+		from exhibition A left join gallery B
+		on A.fk_galleryno = B.galleryno
+		left join exhibitiondetail D
+		on A.exhibitionno = d.fk_exhibitionno
+        where location = '서울' and A.status = '전시종료'
+		) V
+		where RNO between 1 and 16
+        
+        
+        select *
+        from exhibition A left join gallery B
+        on A.fk_galleryno = B.galleryno
+       
