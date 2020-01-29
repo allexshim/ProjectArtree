@@ -1,5 +1,6 @@
 package masterpiece.exhibition.board.community.model;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -53,6 +54,21 @@ public class CommunityDAO implements InterCommunityDAO {
 	@Override
 	public int addComment(HashMap<String, String> comment) {
 		int n = sqlsession.insert("community.addComment",comment);
+		return n;
+	}
+
+	// 해당 글번호에 달린 댓글 가져오기
+	@Override
+	public List<HashMap<String,String>> getCommunityComment(String no) {
+		List<HashMap<String,String>> commentList = new ArrayList<HashMap<String,String>>();
+		commentList = sqlsession.selectList("community.getComment",no);
+		return commentList;
+	}
+
+	// 수정한 댓글 update하기
+	@Override
+	public int modifyComment(HashMap<String, String> comment) {
+		int n = sqlsession.update("community.modifyComment",comment);
 		return n;
 	}
 
