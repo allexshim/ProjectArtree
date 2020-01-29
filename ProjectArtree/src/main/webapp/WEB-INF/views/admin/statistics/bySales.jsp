@@ -14,6 +14,14 @@
 
 <style type="text/css">
 @import url(//fonts.googleapis.com/earlyaccess/notosanskr.css);
+	
+	.tooltip {
+		position: sticky !important;
+	}
+	
+	.tooltip.top {
+		margin-top: 2% !important;
+	}
 
 	body {
 		font-family: 'Noto Sans Kr', sans-serif;
@@ -179,7 +187,7 @@
 <!-- drilldown end -->
 
 <script type="text/javascript">
-	$(document).ready(function(){ 			
+	$(document).ready(function(){ 					
 		$('[data-toggle="checktip"]').tooltip('show');
 		drilldown();			
 		MonthGraph();
@@ -367,7 +375,7 @@
 			<div id="table-area" style="overflow: hidden;">				
 				<%-- 차트에 대한 데이터 테이블은 이곳에 넣으세요 !! --%>
 				<div style="float: left; width: 40%; text-align: center;">
-					<div style="font-size: 18px; padding: 3%;"><span data-placement="right" data-toggle="checktip" title="클릭하여 확인해보세요!">월별매출</span></div>					
+					<div style="font-size: 18px; padding: 3%;"><span data-placement="top" data-toggle="checktip" title="클릭하여 확인해보세요!">월별매출</span></div>					
 					<div id="monthly"></div>						
 				</div>	
 			
