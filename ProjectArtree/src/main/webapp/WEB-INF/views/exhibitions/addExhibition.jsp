@@ -282,11 +282,11 @@
 		top: 45%;
 	}
 	
-	#posterInput:hover {
+	#mainposter:hover {
 		cursor: pointer;
 	}
 	
-	#posterInput {
+	#mainposter {
 		text-align: center;
 		width : 200px !important;
 		border : none !important;
@@ -375,6 +375,10 @@
 <script type="text/javascript">
 	$(document).ready(function() { 
 
+		$("#mainposter").bind("change", function(){
+			console.log($(this).val());
+		});
+		
 		// datePicker
 	//	$("#startDate").datepicker();
 	//	$("#endDate").datepicker();
@@ -530,7 +534,7 @@
 		// ------------------------------------ spinner 끝 ---------------------------------- //
 		
 		// 상단 대표 포스터
-		$("#posterInput").on("change", handleImgFileSelect);
+		$("#mainposter").on("change", handleImgFileSelect);
 		
 		// 하단 작품 전경
 	//	$(".image-input").on("change", handleSubImgFileSelect);
@@ -617,7 +621,7 @@
 				alert("가격 정보를 입력하세요.");
 				$(this).focus();
 			}
-			else if($("#posterInput").val()==""){
+			else if($("#mainposter").val()==""){
 				alert("대표 포스터를 입력하세요.");
 				$(this).focus();
 			}
@@ -847,11 +851,11 @@
 			<table id="detailTable">
 				<tr>
 					<td>신청자 이름</td>
-					<td><input type="text" name="applier" id="applier" /></td> <!-- ${session.loginuser.username} -->
+					<td><input type="text" name="applier" id="applier" value="${ name }" readonly /></td> <!-- ${session.loginuser.username} -->
 				<tr>
 				<tr>
 					<td>전시회명</td>
-					<td><input type="text" name="exhibitionName" id="exhibitionName" /></td>
+					<td><input type="text" name="exhibitionname" id="exhibitionName" /></td>
 				<tr>
 				<tr>
 					<td>작가명</td>
@@ -860,36 +864,36 @@
 				<tr>
 					<td style="vertical-align: top;">작가정보</td>
 					<td>
-						<textarea id="authorInfo" name="authorInfo" style="resize:none; border:solid 1px lightgray; padding:10px;" rows="5">
+						<textarea id="authorInfo" name="authorinfo" style="resize:none; border:solid 1px lightgray; padding:10px;" rows="5">
 						</textarea>
 					</td>
 				<tr>
 				<tr>
 					<td style="vertical-align: top;">전시정보</td>
 					<td>
-						<textarea id="exhibitionInfo" name="exhibitionInfo" style="resize:none; border:solid 1px lightgray; padding:10px;" rows="5">
+						<textarea id="exhibitionInfo" name="exhibitioninfo" style="resize:none; border:solid 1px lightgray; padding:10px;" rows="5">
 						</textarea>
 					</td>
 				<tr>
 				<tr>
 					<td>전시관</td>
 					<td>
-						<input type="text" name="gallery" id="gallery" />
+						<input type="text" name="gallery" id="gallery" autocomplete="off" />
 						<input type="hidden" name="galleryno" id="galleryno"/>
 					</td>
 				<tr>
 				<tr>
 					<td>일정</td>
-					<td><input style="width:130px;" class="pickDate" type="text" name="startDate" id="startDate" autocomplete="off" />
+					<td><input style="width:130px;" class="pickDate" type="text" name="startdate" id="startDate" autocomplete="off" />
 						- 
-						<input style="width:130px;" class="pickDate" type="text" name="endDate" id="endDate" autocomplete="off" />
+						<input style="width:130px;" class="pickDate" type="text" name="enddate" id="endDate" autocomplete="off" />
 					</td>
 				<tr>
 				<tr>
 					<td>운영시간</td>
-					<td><input style="width:130px;" type="text" name="openTime" id="openTime" />
+					<td><input style="width:130px;" type="text" name="opentime" id="openTime" />
 						- 
-						<input style="width:130px;" type="text" name="closeTime" id="closeTime" />
+						<input style="width:130px;" type="text" name="closetime" id="closeTime" />
 					</td>
 				<tr>
 				<tr>
@@ -921,7 +925,7 @@
 			</div>
 			
 			<div align="center" style="margin: 0 auto;">
-				<input type="file" id="posterInput" name="posterInput" />
+				<input type="file" id="mainposter" name="mainposter" />
 			</div>
 		</div>
 		
@@ -933,12 +937,11 @@
 				<input id="spinnerOqty" value="0" style="width: 30px; height: 20px;">
 			</div>
 			
-			<!--  썸네일 아직 안배워서 일단 이렇게 처리 -->
 			<div id="thumbNail-container" style="width:700px; height:200px; overflow:hidden;">
-				<div class="thumbNail-wrap"><img class="thumbNail" src="" alt="" style="border:none;" /></div>
-<!-- 				<div class="thumbNail-wrap"><img class="thumbNail" src="" alt="" style="border:none;" /></div>
-				<div class="thumbNail-wrap"><img class="thumbNail" src="" alt="" style="border:none;" /></div>
-			 --></div>
+				<div class="thumbNail-wrap"><img class="thumbNail" src="" alt="" style="border:none;" />
+					<%-- 이미지 썸네일 들어갈 자리 --%>
+				</div>
+			</div>
 			<div id="myCarousel" class="carousel slide"  style="display:inline-block; overflow:hidden;">
 				<div id="bigImage" align="center" style="display:inline-block; vertical-align: middle;">
 					<a class="left" style="display:inline-block;">
@@ -949,13 +952,7 @@
  					    <div class="item active">
 					      <img src="" alt="">
 					    </div>
-					    <!--
- 					    <div class="item">
-					      <img src="" alt="">
-					    </div>
-					    <div class="item">
-					      <img src="" alt="">
-					    </div> -->
+					    <%--  --%>
 				 	</div>
 
 					<a class="right" style="display:inline-block;">
@@ -966,22 +963,17 @@
 		</div>	
 			
 			<div id="imageInput-container" align="center" style="margin: 0 auto;">
-<!-- 				<input type="file" class="image-input" name="imageInput1" id="imageInput1" />
- 				<input type="file" class="image-input" name="imageInput2" id="imageInput2" />
-				<input type="file" class="image-input" name="imageInput3" id="imageInput3" /> -->
+				<%-- 이미지 carrousel --%>
 			</div>
 		
 		<div id="extraInfo">
 			<table id="imgInfoTable" style="width: 95%; margin: 0 auto;">
-<!-- 				<tr>
-					<td>이미지 설명</td>
-					<td><input type="text" class="extraInfo" name="imageInfo" id="imageInfo" /></td>
-				</tr> -->
+				<%-- 이미지설명 인풋 자리 --%>
 			</table>
 			<table id="extraInfoTable">	
 	 			<tr>
 					<td>식음료 반입 가능 여부</td>
-					<td><input type="text" class="extraInfo" name="foodorDrink" id="foodorDrink" /></td>
+					<td><input type="text" class="extraInfo" name="foodordrink" id="foodorDrink" /></td>
 				</tr>
 				<tr>
 					<td>촬영 가능 여부</td>
@@ -989,7 +981,7 @@
 				</tr>
 				<tr>
 					<td>기타 관람 제한 사항</td>
-					<td><input type="text" class="extraInfo" name="extraRestriction" id="extraRestriction" /></td>
+					<td><input type="text" class="extraInfo" name="extrarestriction" id="extraRestriction" /></td>
 				</tr>
 				<tr>
 					<td>분야</td>

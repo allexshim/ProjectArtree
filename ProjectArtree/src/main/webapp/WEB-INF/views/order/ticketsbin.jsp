@@ -190,7 +190,7 @@
 			${startdate } - ${enddate }
 		</div>
 		
-		<div style="width: 80%; height: 400px;"><img style="width: 60%; height: 100%;" src="${mainposter}"></div>
+		<div style="width: 80%; height: 400px;"><img style="width: 40%; height: 100%;" src="${mainposter}"></div>
 		
 		<div style="margin:2% 0; font-size: 22px; font-weight: bold; text-align: left;">
 			${exhibitionname}<input hidden="hidden" name="exhibitionname" value="${exhibitionname}">

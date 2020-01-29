@@ -123,4 +123,40 @@
 		where no = #{no}
 	</update>
 
+	<!-- 새 댓글 등록하기 -->
+	<insert id="addComment" parameterType="HashMap" >
+		insert into board_comment(commentNo, boardNo, fk_idx, fk_no, comContent, comwriteDay)
+		values(seq_board_comment.nextval, 2, #{ fk_idx } , #{ fk_no }, #{ comContent } , sysdate)
+	</insert>
+	
+	<resultMap type="HashMap" id="commentMap">
+		<result property="commentNo"  	column="commentNo" 	 javaType="String"/> 
+		<result property="fk_idx"  		column="fk_idx" 	 javaType="String"/> 
+		<result property="comContent"  	column="comContent"  javaType="String"/> 
+		<result property="comwriteDay"  column="comwriteDay" javaType="String"/> 
+		<result property="name"  		column="name" 		 javaType="String"/> 
+	</resultMap>
+	
+	<!-- 해당 글의 댓글 불러오기 -->
+	<select id="getComment" parameterType="String" resultMap="commentMap" >
+		select commentNo, fk_idx, comContent, comwriteDay, M.name
+		from 
+		(select commentNo, fk_idx, comContent, comwriteDay
+		from board_comment 
+		where fk_no = #{no} ) C join member M
+		on C.fk_idx = M.idx
+		order by commentNo desc
+	</select>
+
+	<!-- 댓글 수정하기 -->
+	<insert id="modifyComment" parameterType="HashMap" >
+		update board_comment set comContent = #{comContent} 
+		where commentNo = #{commentNo}
+	</insert>
+	
+	<!-- 댓글 삭제하기 -->
+	<delete id="deleteComment" parameterType="String" >
+		delete from board_comment where commentno = #{commentNo}
+	</delete>
+
 </mapper>

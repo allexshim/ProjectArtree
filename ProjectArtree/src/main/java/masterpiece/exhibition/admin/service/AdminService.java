@@ -21,8 +21,8 @@ public class AdminService implements InterAdminService {
 	
 	// 전시회등록
 	@Override
-	public int addExhibition(HashMap<String, String> newExhibitMap) {
-		int n = dao.addExhibition(newExhibitMap);
+	public int applyExhibition(HashMap<String, String> newExhibitMap) {
+		int n = dao.applyExhibition(newExhibitMap);
 		return n;
 	}
 	
@@ -87,6 +87,48 @@ public class AdminService implements InterAdminService {
 	public HashMap<String, String> getExhibitionDetail(String no) {
 		HashMap<String, String> exhibitionInfo = dao.getExhibitionDetail(no);
 		return exhibitionInfo;
+	}
+
+	// 새로운 전시회목록 가져오기
+	@Override
+	public List<ExhibitsVO> getNewExhibitionList() {
+		List<ExhibitsVO> exhibitionList = dao.getNewExhibitionList();
+		return exhibitionList;
+	}
+
+	// 전시 대기 -> 전시중으로 바꾸기
+	@Override
+	public int changeExhibitStatus(String exhibitionno) {
+		int n = dao.changeExhibitStatus(exhibitionno);
+		return n;
+	}
+
+	// 종료된 전시목록 조회
+	@Override
+	public List<ExhibitsVO> getAfterExhibitionList() {
+		List<ExhibitsVO> exhibitionList = dao.getAfterExhibitionList();
+		return exhibitionList;
+	}
+
+	// 검토할 전시회 목록 조회
+	@Override
+	public List<HashMap<String, String>> getAppliedExhibitionList() {
+		List<HashMap<String, String>> exhibitionList = dao.getAppliedExhibitionList();
+		return exhibitionList;
+	}
+
+	// 검토할 전시회 조회
+	@Override
+	public HashMap<String, String> getAppliedExhibitionDetail(String no) {
+		HashMap<String, String> exhibitionInfo = dao.getAppliedExhibitionDetail(no);
+		return exhibitionInfo;
+	}
+
+	// 이미지 가져오기
+	@Override
+	public List<HashMap<String, String>> getAppliedExhibitionImage(String no) {
+		List<HashMap<String, String>> imgList = dao.getAppliedExhibitionImage(no);
+		return imgList;
 	}
 
 

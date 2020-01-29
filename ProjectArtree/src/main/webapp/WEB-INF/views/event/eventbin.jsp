@@ -20,6 +20,7 @@
 		float: left;
 		width: 280px;
 		height: 380px;
+		cursor: pointer;
 	}
 	
 </style>
@@ -30,7 +31,7 @@
 		<div style="font-size: 47px; font-weight: bold;">EVENTS</div>
 	</div>
 	
-	<div style="padding: 0px 75px;">	
+	<div style="padding: 0px 75px; overflow: hidden;">	
 		${content}
 	</div>
 	<div style="margin: 10px 0px;"></div>
