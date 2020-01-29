@@ -158,6 +158,13 @@ public class CommunityController {
 
 		request.setAttribute("communityDetail", communityDetail);
 	
+		// 댓글 ------------------------------------------------------
+		// 해당 글번호에 달린 댓글 가져오기
+		List<HashMap<String,String>> commentList = new ArrayList<HashMap<String,String>>();
+		// commentNo, fk_idx, comContent, name
+		commentList = service.getCommunityComment(no);
+		request.setAttribute("commentList", commentList);
+
 		return "board/community/communityDetail.tiles";
 	} // end of communityDetail -------------------------------------------
 	
@@ -324,7 +331,7 @@ public class CommunityController {
 		String fk_no = request.getParameter("fk_no");
 		
 		HashMap<String,String> comment = new HashMap<String,String>();
-		comment.put("idx", idx);
+		comment.put("fk_idx", idx);
 		comment.put("comContent", comContent);
 		comment.put("fk_no", fk_no); // 댓글을 등록하려는 원글 번호
 		
@@ -349,5 +356,43 @@ public class CommunityController {
 		} 
 
 	} // end of requireLogin_addComment -----------------------
+	
+	
+	// 댓글 수정하기
+	@ResponseBody
+	@RequestMapping(value="goModifyComm.at", produces="text/plain;charset=UTF-8")
+	public String modifyComment(HttpServletRequest request) {
+	
+		JSONArray jsarr = new JSONArray();
+		
+		//"commentNo":commentNo,"content":content, "no":${communityDetail.no}
+		String commentNo = request.getParameter("commentNo");
+		String comContent = request.getParameter("content");
+		String fk_no = request.getParameter("no");
+		
+		HashMap<String,String> comment = new HashMap<String,String>();
+		comment.put("commentNo", commentNo);
+		comment.put("comContent", comContent);
+		comment.put("fk_no", fk_no);
+
+		// 수정한 댓글을 update하고 해당 글의 댓글 목록을 가져온다.
+		List<HashMap<String,String>> commentList = service.modifyComment(comment);
+		
+		for(HashMap<String,String> map : commentList) {
+			JSONObject jsobj = new JSONObject();
+			// commentNo, fk_idx, comContent, comwriteDay, M.name
+			jsobj.put("commentNo", map.get("commentNo"));
+			jsobj.put("fk_idx", map.get("fk_idx"));
+			jsobj.put("comContent", map.get("comContent"));
+			jsobj.put("comwriteDay", map.get("comwriteDay"));
+			jsobj.put("name", map.get("name"));
+			
+			jsarr.put(jsobj);
+		}
+		
+		return jsarr.toString();
+	} // end of modifyComment ---------------------------------------------------------
+	
+	
 	
 }

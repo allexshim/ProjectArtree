@@ -22,6 +22,12 @@ public interface InterCommunityService {
 
 	// 새 댓글 등록하기
 	int addComment(HashMap<String, String> comment);
+	
+	// 해당 글번호에 달린 댓글 가져오기
+	List<HashMap<String,String>> getCommunityComment(String no);
+
+	// 수정한 댓글을 update하고 해당 글의 댓글 목록을 가져온다.
+	List<HashMap<String, String>> modifyComment(HashMap<String, String> comment);
 
 
 

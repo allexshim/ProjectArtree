@@ -410,6 +410,22 @@ create table board_comment
 ,constraint FK_cmt_fk_idx foreign key(fk_idx) 
                                                         references member(idx)                                               
 );
+
+select commentNo, fk_idx, comContent, comwriteDay, M.name
+from 
+(select commentNo, fk_idx, comContent, comwriteDay
+from board_comment 
+where fk_no = 2) C join member M
+on C.fk_idx = M.idx
+order by commentNo desc;
+
+ALTER TABLE community MODIFY(content VARCHAR2(4000));
+x
+select * from community;
+
+insert into board_comment(commentNo, boardNo, fk_idx, fk_no, comContent, comwriteDay
+values(seq_board_comment.nextval, 2, '', '', '', sysdate);
+
 commit;
 rollback;
 select * from board_comment;
