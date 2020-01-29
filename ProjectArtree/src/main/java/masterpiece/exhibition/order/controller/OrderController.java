@@ -182,23 +182,29 @@ public class OrderController {
 	public String orderEnd(HttpServletRequest request, HashMap<String, String> map) {
 		DecimalFormat dec = new DecimalFormat("#,###");		
 		String html = "";
-		
-		String Subtotal = request.getParameter("Subtotal");
-		String Discount = request.getParameter("Discount");
-		String orderpri = request.getParameter("orderpri");
-		
-		map.put("Subtotal", Subtotal);
-		map.put("Discount", Discount);
-		map.put("orderpri", orderpri);	
-		
 		HttpSession session = request.getSession();		
 		MemberVO mvo = (MemberVO)session.getAttribute("loginuser");		
 		String idx = mvo.getIdx();
 		map.put("idx", idx);
+		
+		String Subtotal = request.getParameter("Subtotal");
+		String Discount = request.getParameter("Discount");
+		String orderpri = request.getParameter("orderpri");
+					
+		if(Subtotal != null) {
+		map.put("Subtotal", Subtotal);
+		map.put("Discount", Discount);
+		map.put("orderpri", orderpri);			
+		
 		service.order(map); // 예매 입력, 카트 삭제
 		
 		String reserNo = service.selectReserNo(map);
 		map.put("reserNo", reserNo);
+		}
+		
+		String reserNo = request.getParameter("reserNo");
+		map.put("reserNo", reserNo);
+		request.setAttribute("reserNo", reserNo);
 		
 		List<HashMap<String,String>> reserList = service.selectReser(map);
 		for(int a=0; a<reserList.size(); a++) {
@@ -395,6 +401,23 @@ public class OrderController {
 
 		jsonStr = jsonArr.toString();		
 		return jsonStr;
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/delReser.at")
+	public void delReser(HttpServletRequest request) {
+		HashMap<String,String> map = new HashMap<String,String>();
+		String reserNo = request.getParameter("reserNo");
+		map.put("reserNo", reserNo);
+		System.out.println(reserNo);
+		List<HashMap<String,String>> reserDetailNo = service.reserDetailNo(map);
+		
+		for (int a=0; a<reserDetailNo.size(); a++) {
+			String detailNo = reserDetailNo.get(a).get("RESERDETAILNO");
+			service.delReserEx(detailNo);				
+		}
+		service.delReserDetail(reserNo);
+		service.delReser(reserNo);		
 	}
 	
 }

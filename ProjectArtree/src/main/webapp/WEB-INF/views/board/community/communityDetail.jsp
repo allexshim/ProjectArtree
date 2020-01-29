@@ -326,7 +326,7 @@
 						<td colspan="2">작성된 댓글이 없습니다.</td>
 					</tr>
 				</c:if>
-			</table>
+			</table> 
 			
 			<c:if test="${loginuser != null}">
 				<form id="newComment" name="newComment" style="padding-top:20px;">

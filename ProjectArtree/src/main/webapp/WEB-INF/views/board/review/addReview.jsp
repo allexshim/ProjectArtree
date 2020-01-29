@@ -19,12 +19,9 @@
 	
 	#detailContainer {
 		padding-bottom : 100px;
+		margin: 200px 0 100px 0; 
 	}
-	
-	#detailContainer {	
-		margin: 100px 0 100px 0;
-	}	
-		
+
 	#detailContainer .Title_Area {	
 		margin: 0 auto;
 		width: 100%;
@@ -192,11 +189,7 @@
 			<span class="st">Membership</span>
 			<span class="lt">Review</span>
 		</div>
-		
-		<div id="myPoster" align="center">
-			<img src="<%= ctxPath %>/resources/images/exhibition/poster1.JPG" />
-		</div>
-		
+
 		<div id="detailContents">
 		<form name="addReview">
 			<table id="detailTable">

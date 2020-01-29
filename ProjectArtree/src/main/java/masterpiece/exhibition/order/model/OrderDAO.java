@@ -129,5 +129,39 @@ public class OrderDAO implements InterOrderDAO {
 		List<HashMap<String, String>> dailySalesList = sqlsession.selectList("order.dailySalesList",map);
 		return dailySalesList;
 	}
+
+	@Override
+	public List<HashMap<String, String>> reserList(HashMap<String, String> map) {
+		List<HashMap<String, String>> reserList = sqlsession.selectList("order.reserList",map);
+		return reserList;
+	}
+
+	@Override
+	public List<HashMap<String, String>> reserDetailNo(HashMap<String, String> map) {
+		List<HashMap<String, String>> reserDetailNo = sqlsession.selectList("order.reserDetailNo",map);
+		return reserDetailNo;
+		
+	}
+
+	@Override
+	public List<String> reserExNo(String detailNo) {
+		List<String> reserExNo = sqlsession.selectList("order.reserExNo",detailNo);
+		return reserExNo;
+	}
+
+	@Override
+	public void delReserEx(String reserExNoList) {
+		sqlsession.delete("order.delReserEx",reserExNoList);		
+	}
+
+	@Override
+	public void delReserDetail(String reserNo) {
+		sqlsession.delete("order.delReserDetail",reserNo);		
+	}
+
+	@Override
+	public void delReser(String reserNo) {
+		sqlsession.delete("order.delReser",reserNo);			
+	}
 	
 }

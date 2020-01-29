@@ -90,7 +90,8 @@
 	}
 	
 	table.order_tbl td img {
-		width: 160px;
+		width: 120px;
+		height: 100px;
 	}
 	
 	table.order_tbl th, table.order_tbl td{
@@ -109,6 +110,11 @@
 <script type="text/javascript">
 
 	$(function() {
+		var loginuser = "${sessionScope.loginuser}";
+		if (loginuser == "") {
+			location.href="javascript:layer_open('layer')";
+		}
+		
 		$(".tab").mouseover(function(){
 			$(this).addClass("on");
 		});
@@ -118,16 +124,27 @@
 			$("#myOrder").addClass("on");
 		});
 	
+		$(document).on("click",".orderDetail",function(){			
+			var reserNo = $(this).find("input[name=orderDetail]").val();
+			$("#reserNo").val(reserNo);
+			var frm = document.goOrderDetail;		
+			frm.method="POST";
+			frm.action="<%=ctxPath%>/orderEnd.at";		
+			frm.submit();
+		});
 	});
 	
 </script>
 
 <body>
+	<form name="goOrderDetail">
+		<input id="reserNo" type="text" hidden="hidden" value="" name="reserNo">
+	</form>
 	<div class="myPage_wrap">
 	<div class="myPage_header">
 		<h1 class="header_name">${loginuser.name}</h1>
 		<nav class="myPage_tabs">
-			<a href="/artree/mypage.at" class="tab">My Artmap</a>
+			<a href="/artree/mypage.at" class="tab">My Artree</a>
 			<a href="/artree/mypage_order.at" class="tab on" id="myOrder">주문내역</a>
 			<a href="/artree/mypage_set.at" class="tab">설정</a>
 			<div class="tab_last"></div>
@@ -139,34 +156,12 @@
 			<table class="order_tbl">
 				<tr>
 					<th>주문일</th>
-					<th>제품정보</th>
-					<th>수량</th>
+					<th>제품정보</th>					
 					<th>주문번호</th>
 					<th>결제금액</th>
 					<th>처리상태</th>
 				</tr>
-				<tr>
-					<td>2020-01-03</td>
-					<td class="order_info">
-						<img src="http://app.art-map.co.kr/upload/exhibition/artmap_20200113_135646935.jpg">
-						<span>아트라벨</span>
-					</td>
-					<td>1</td>
-					<td>AAA01131240</td>
-					<td>33,500</td>
-					<td>결제완료</td>
-				</tr>
-				<tr>
-					<td>2020-01-13</td>
-					<td class="order_info">
-						<img src="http://app.art-map.co.kr/upload/exhibition/artmap_20200113_135646935.jpg">
-						<span>아트라벨</span>
-					</td>
-					<td>3</td>
-					<td>AAA01131241</td>
-					<td>73,900</td>
-					<td>결제전취소</td>
-				</tr>
+				${html }
 			</table>
 		</div>
 	</div>	

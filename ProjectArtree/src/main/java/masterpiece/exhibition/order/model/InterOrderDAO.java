@@ -40,4 +40,16 @@ public interface InterOrderDAO {
 
 	List<HashMap<String, String>> dailySalesList(HashMap<String, String> map); // 일별매출 조회
 
+	List<HashMap<String, String>> reserList(HashMap<String, String> map); // 예매 리스트 조회
+
+	List<HashMap<String, String>> reserDetailNo(HashMap<String, String> map); // 예매상세 번호 조회
+
+	List<String> reserExNo(String detailNo); // 예매전시 번호 조회
+
+	void delReserEx(String reserExNoList); // 예매전시 삭제
+
+	void delReserDetail(String reserNo); // 예매상세 삭제
+
+	void delReser(String reserNo); // 예매삭제
+
 }
