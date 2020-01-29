@@ -5,11 +5,17 @@ create table notice
 ( notNo         number        not null
  ,notTitle      varchar2(30)  not null
  ,notContent    varchar2(200) not null
- ,notCategory   varchar2(30)  not null
  ,notWriteday   varchar2(30)  not null
- ,notReadcount  number  not   null
+ ,notReadcount  number        not null
  ,constraint PK_notice_notNo primary key(notNo)
  );
+ 
+ drop table notice purge;
+ 
+ drop sequence seq_notice_notNO;
+ 
+ select *
+ from member desc;
  
  create sequence seq_notice_notNo
  start with 1
@@ -21,6 +27,9 @@ create table notice
  
  select *
  from notice;
+ 
+ insert into notice(notNo ,notTitle, notContent,  notWriteday, notReadcount)
+		values(seq_notice.nextval, #{}, #{}, default, 0)
  
  select *
  from member;

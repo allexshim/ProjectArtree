@@ -4,15 +4,18 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="notice">
-	<!--
-	<resultMap type="HashMap" id="selectMap">
+
+	<resultMap type="HashMap" id="noticeMap">
 		<result property="notNo"   		column="notNo" 			javaType="String"/> 
 	 	<result property="notTitle"   	column="notTitle" 		javaType="String"/>
 	 	<result property="notContent" 	column="notContent" 	javaType="String"/>
-	 	<result property="notCategory"  column="notCategory" 	javaType="String"/>
 	 	<result property="notWrithday"  column="notWrithday" 	javaType="String"/>
 	 	<result property="notReadcount" column="notReadcount" 	javaType="String"/>
 	</resultMap>
-	-->
+	
+	<insert id="addNotice" parameterType="HashMap">
+		insert into notice(notNo, notTitle, notContent, notWriteday, notReadcount)
+		values(seq_notice_notNo.nextval, #{notTitle}, #{notContent}, default, 0)
+	</insert>
 	
 </mapper>

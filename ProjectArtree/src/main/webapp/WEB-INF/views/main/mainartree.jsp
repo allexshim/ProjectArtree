@@ -674,8 +674,8 @@ function exhDetail(eno){
 		    <!-- Add Pagination -->
 		    <div class="swiper-pagination"></div>
 		    <!-- Add Arrows -->
-		    <div class="swiper-button-next"></div>
-		    <div class="swiper-button-prev"></div>
+		    <div class="swiper-button-next" style=""></div>
+		    <div class="swiper-button-prev" style=""></div>
 		  </div>
 			
 			<div id="div2" class="recom-exh-title" style="float: center; transform:translate(0,-680px);">
@@ -736,7 +736,7 @@ function exhDetail(eno){
 
 <script>
 var swiper;
-<!-- Initialize Swiper -->
+<%-- Initialize Swiper --%>
 function doInitializeSwiper() {
 	swiper = new Swiper('.swiper-container', {
 	    slidesPerView: 3,
