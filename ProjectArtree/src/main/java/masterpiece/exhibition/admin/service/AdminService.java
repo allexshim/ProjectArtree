@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import masterpiece.exhibition.common.AES256;
 import masterpiece.exhibition.exhibits.model.ExhibitsVO;
+import masterpiece.exhibition.member.model.MemberVO;
 import masterpiece.exhibition.admin.model.AppliedExhibitionVO;
 import masterpiece.exhibition.admin.model.GalleryVO;
 import masterpiece.exhibition.admin.model.InterAdminDAO;
@@ -150,6 +151,48 @@ public class AdminService implements InterAdminService {
 	public int displayNewExhibitionImg(HashMap<String, String> newExhibitImgMap) {
 		int m = dao.displayNewExhibitionImg(newExhibitImgMap);
 		return m;
+	}
+
+	// 지원된 전시회 테이블(appliedExhibits) 의 status 데이터를 '검토완료'로 변경
+	@Override
+	public int changeAppliedExhibitsStatus(String no) {
+		int l = dao.changeAppliedExhibitsStatus(no);
+		return l;
+	}
+
+	// 회원목록 불러오기
+	@Override
+	public List<MemberVO> getMemberList() {
+		List<MemberVO> memberList = dao.getMemberList();
+		return memberList;
+	}
+
+	// 검색조건이 없을 경우의 총 게시물 건수(totalCount)
+	@Override
+	public int getTotalCountWithoutSearch() {
+		int n = dao.getTotalCountWithoutSearch();
+		return n;
+	}
+
+	// 검색조건이 있을 경우의 총 게시물 건수(totalCount)
+	@Override
+	public int getTotalCountWithSearch(HashMap<String, String> paraMap) {
+		int n = dao.getTotalCountWithSearch(paraMap);
+		return n;
+	}
+
+	// 페이징바 있는 회원목록
+	@Override
+	public List<MemberVO> memberListWithPaging(HashMap<String, String> paraMap) {
+		List<MemberVO> memberList = dao.memberListWithPaging(paraMap);
+		return memberList;
+	}
+
+	// 탈퇴한 회원목록
+	@Override
+	public List<MemberVO> deactivatedMemberList(HashMap<String, String> paraMap) {
+		List<MemberVO> memberList = dao.deactivatedMemberList(paraMap);
+		return memberList;
 	}
 
 

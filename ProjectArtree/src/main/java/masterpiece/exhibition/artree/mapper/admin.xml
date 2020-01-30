@@ -192,10 +192,10 @@
 	<insert id="displayNewExhibition" parameterType="HashMap">
 		insert into exhibition ( exhibitionno, fk_galleryno, exhibitionname, applier, author, startdate, enddate
 			, email, tel, genre, tag, authorinfo, exhibitioninfo, price, foodordrink, extrarestriction, photo
-			, openclosetime, status, readcount, status )
+			, openclosetime, status, readcount )
 		values ( #{ exhibitionno }, #{ fk_galleryno }, #{ exhibitionname }, #{ applier }, #{ author }
 			, #{ startdate }, #{ enddate }, #{ email }, #{ tel }, #{ genre }, #{ tag }, #{ authorinfo }, #{ exhibitioninfo }, #{ price }
-   			, #{ foodordrink }, #{ extrarestriction }, #{ photo }, #{ openclosetime }, '전시예정', 0, '검토완료' )
+   			, #{ foodordrink }, #{ extrarestriction }, #{ photo }, #{ openclosetime }, '전시예정', 0 )
 	</insert>
 	
 	<!-- 전시회의 이미지 테이블에 insert -->
@@ -203,5 +203,66 @@
 		insert into exhibitiondetail ( fk_exhibitionno, image1, image2, image3, image1info, image2info, image3info, mainposter )
 		values( #{ fk_exhibitionno }, #{ image1 }, #{ image2 }, #{ image3 }, #{ image1info }, #{ image2info }, #{ image3info }, #{ mainposter } )
 	</insert>
+	
+	<!-- 지원된 전시회 테이블(appliedExhibits) 의 status 데이터를 '검토완료'로 변경 -->
+	<update id="changeAppliedExhibitsStatus" parameterType="String">
+		update appliedExhibits set status = '검토완료' where applyingno = #{ no }
+	</update>
+	
+	<!-- 회원목록 불러오기 -->
+	<select id="getMemberList" resultType="masterpiece.exhibition.member.model.MemberVO">
+		select idx, email, name, status from member order by idx
+	</select>
+	
+	<!-- 검색조건이 없을 경우의 총 게시물 건수(totalCount) -->
+	<select id="getTotalCountWithoutSearch" resultType="int">
+		select count(*) from member
+	</select>
+	
+	<!-- 검색조건이 있을 경우의 총 게시물 건수(totalCount) -->
+	<select id="getTotalCountWithSearch" resultType="int">
+		select count(*) from member where ${ searchCondition } like '%'|| #{ searchWord } ||'%'
+	</select>
+	
+	<!-- 페이징바 있는 회원목록 -->
+	<select id="memberListWithPaging" parameterType="HashMap" resultType="masterpiece.exhibition.member.model.MemberVO">
+		select idx, email, name, status
+		from 
+		(
+			select rownum AS rno
+				, idx, email, name, status
+			from   
+			(  
+				select idx, email, name, status
+				from member
+				where status = 1
+				<if test='searchWord != ""'>
+					and ${ searchCondition } like '%'|| #{ searchWord } ||'%'
+				</if>
+				order by idx desc
+			) V  
+		) T 	   
+		where rno between #{ startRno } and #{ endRno }
+	</select>
 
+	<!-- 탈퇴한 회원목록 -->
+	<select id="deactivatedMemberList" parameterType="HashMap" resultType="masterpiece.exhibition.member.model.MemberVO">
+		select idx, email, name, status
+		from 
+		(
+			select rownum AS rno
+				, idx, email, name, status
+			from   
+			(  
+				select idx, email, name, status
+				from member
+				where status = 0
+				<if test='searchWord != ""'>
+					and ${ searchCondition } like '%'|| #{ searchWord } ||'%'
+				</if>
+				order by idx desc
+			) V  
+		) T 	   
+		where rno between #{ startRno } and #{ endRno }
+	</select>
 </mapper>

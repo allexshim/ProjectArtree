@@ -854,10 +854,6 @@
 					<td><input type="text" name="applier" id="applier" value="${ name }" readonly /></td> <!-- ${session.loginuser.username} -->
 				<tr>
 				<tr>
-					<td>전시회명</td>
-					<td><input type="text" name="exhibitionname" id="exhibitionName" /></td>
-				<tr>
-				<tr>
 					<td>작가명</td>
 					<td><input type="text" name="author" id="author" /></td>
 				<tr>
@@ -869,7 +865,11 @@
 					</td>
 				<tr>
 				<tr>
-					<td style="vertical-align: top;">전시정보</td>
+					<td>전시회명</td>
+					<td><input type="text" name="exhibitionname" id="exhibitionName" /></td>
+				<tr>
+				<tr>
+					<td style="vertical-align: top;">전시회정보</td>
 					<td>
 						<textarea id="exhibitionInfo" name="exhibitioninfo" style="resize:none; border:solid 1px lightgray; padding:10px;" rows="5">
 						</textarea>

@@ -5,6 +5,7 @@ import java.util.List;
 
 import masterpiece.exhibition.admin.model.GalleryVO;
 import masterpiece.exhibition.exhibits.model.ExhibitsVO;
+import masterpiece.exhibition.member.model.MemberVO;
 
 public interface InterAdminService {
 
@@ -65,6 +66,24 @@ public interface InterAdminService {
 
 	// 전시회의 이미지 테이블에 insert
 	int displayNewExhibitionImg(HashMap<String, String> newExhibitImgMap);
+
+	// 지원된 전시회 테이블(appliedExhibits) 의 status 데이터를 '검토완료'로 변경
+	int changeAppliedExhibitsStatus(String no);
+
+	// 회원목록 불러오기
+	List<MemberVO> getMemberList();
+
+	// 검색조건이 없을 경우의 총 게시물 건수(totalCount)
+	int getTotalCountWithoutSearch();
+
+	// 검색조건이 있을 경우의 총 게시물 건수(totalCount)
+	int getTotalCountWithSearch(HashMap<String, String> paraMap);
+
+	// 페이징바 있는 회원목록
+	List<MemberVO> memberListWithPaging(HashMap<String, String> paraMap);
+
+	// 탈퇴한 회원목록
+	List<MemberVO> deactivatedMemberList(HashMap<String, String> paraMap);
 
 
 
