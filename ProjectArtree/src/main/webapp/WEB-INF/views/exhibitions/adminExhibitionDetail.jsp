@@ -244,23 +244,51 @@
 		<div id="myPoster" align="center">
 			<h2>포스터</h2>
 			<c:if test="${ not empty exhibitionInfo }">
+			
+			<c:if test="${ exhibitionInfo.mainposter.contains('http://') }">	<%-- 이미지가 url 일 때 --%>
 			<img src="${ exhibitionInfo.mainposter }" />
+			</c:if>
+			<c:if test="${ !exhibitionInfo.mainposter.contains('http://') }">	<%-- 이미지가 url 이 아닐 때 --%>
+			<img src="<%= ctxPath %>/resources/files/${ exhibitionInfo.mainposter }" />
+			</c:if>
+			
 			</c:if>
 		</div>
 		
 		<div id="myImages" align="center">
-			<h2>작품전경</h2> <!--  썸네일 아직 안배워서 일단 이렇게 처리 -->
+			<h2>작품전경</h2>
 			<div>
 				<c:if test="${ not empty exhibitionInfo }">
+				
 				<c:if test="${ exhibitionInfo.image1 != '없음' }">
+				<c:if test="${ exhibitionInfo.image1.contains('http://') }">	<%-- 이미지가 url 일 때 --%>
 				<img class="thumbNail" width="200px" height="200px" src="${ exhibitionInfo.image1 }" />
 				</c:if>
+				<c:if test="${ !exhibitionInfo.image1.contains('http://') }">	<%-- 이미지가 url 이 아닐 때 --%>
+				<img class="thumbNail" width="200px" height="200px" src="<%= ctxPath %>/resources/files/${ exhibitionInfo.image1 }" />
+				</c:if>
+				</c:if>
+				
+				
 				<c:if test="${ exhibitionInfo.image2 != '없음' }">
+				<c:if test="${ exhibitionInfo.image2.contains('http://') }">	<%-- 이미지가 url 일 때 --%>
 				<img class="thumbNail" width="200px" height="200px" src="${ exhibitionInfo.image2 }" />
 				</c:if>
+				<c:if test="${ !exhibitionInfo.image2.contains('http://') }">	<%-- 이미지가 url 이 아닐 때 --%>
+				<img class="thumbNail" width="200px" height="200px" src="<%= ctxPath %>/resources/files/${ exhibitionInfo.image2 }" />
+				</c:if>
+				</c:if>
+				
+				
 				<c:if test="${ exhibitionInfo.image3 != '없음' }">
+				<c:if test="${ exhibitionInfo.image3.contains('http://') }">	<%-- 이미지가 url 일 때 --%>
 				<img class="thumbNail" width="200px" height="200px" src="${ exhibitionInfo.image3 }" />
 				</c:if>
+				<c:if test="${ !exhibitionInfo.image3.contains('http://') }">	<%-- 이미지가 url 이 아닐 때 --%>
+				<img class="thumbNail" width="200px" height="200px" src="<%= ctxPath %>/resources/files/${ exhibitionInfo.image3 }" />
+				</c:if>
+				</c:if>
+				
 				</c:if>
 			</div>
 			
@@ -272,20 +300,44 @@
 					<i class='fa fa-angle-left arrow'></i>
 				</a>
 				<div class="carousel-inner" role="listbox" style="display:inline-block; width: 500px; overflow:hidden; vertical-align: middle;">
+				
 					<c:if test="${ exhibitionInfo.image1 != '없음' }">
+					<c:if test="${ exhibitionInfo.image1.contains('http://') }">	<%-- 이미지가 url 일 때 --%>
 				    <div class="item active">
 				      <img src="${ exhibitionInfo.image1 }" alt="" width="400px" height="400px">
 				    </div>
 				    </c:if>
+				    <c:if test="${ !exhibitionInfo.image1.contains('http://') }">	<%-- 이미지가 url 이 아닐 때 --%>
+				    <div class="item active">
+				      <img src="<%= ctxPath %>/resources/files/${ exhibitionInfo.image1 }" alt="" width="400px" height="400px">
+				    </div>
+				    </c:if>
+				    </c:if>
+				    
 				    <c:if test="${ exhibitionInfo.image2 != '없음' }">
+				    <c:if test="${ exhibitionInfo.image2.contains('http://') }">	<%-- 이미지가 url 일 때 --%>
 				    <div class="item">
 				      <img src="${ exhibitionInfo.image2 }" alt="" width="400px" height="400px">
 				    </div>
 				    </c:if>
+				    <c:if test="${ !exhibitionInfo.image2.contains('http://') }">	<%-- 이미지가 url 이 아닐 때 --%>
+				    <div class="item">
+				      <img src="<%= ctxPath %>/resources/files/${ exhibitionInfo.image2 }" alt="" width="400px" height="400px">
+				    </div>
+				    </c:if>
+				    </c:if>
+				    
 				    <c:if test="${ exhibitionInfo.image3 != '없음' }">
+				    <c:if test="${ exhibitionInfo.image3.contains('http://') }">	<%-- 이미지가 url 일 때 --%>
 				    <div class="item">
 				      <img src="${ exhibitionInfo.image3 }" alt="" width="400px" height="400px">
 				    </div>
+				    </c:if>
+				    <c:if test="${ !exhibitionInfo.image3.contains('http://') }">	<%-- 이미지가 url 이 아닐 때 --%>
+				    <div class="item">
+				      <img src="<%= ctxPath %>/resources/files/${ exhibitionInfo.image3 }" alt="" width="400px" height="400px">
+				    </div>
+				    </c:if>
 				    </c:if>
 				</div>
 					

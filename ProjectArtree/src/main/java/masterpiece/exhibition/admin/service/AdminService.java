@@ -131,6 +131,27 @@ public class AdminService implements InterAdminService {
 		return imgList;
 	}
 
+	// 등록할 전시회번호 채번해오기
+	@Override
+	public String getExhibitionno() {
+		String exhibitionno = dao.getExhibitionno();
+		return exhibitionno;
+	}
+
+	// 검토목록에 있던 전시회를 전시예정으로 변경
+	@Override
+	public int displayNewExhibition(HashMap<String, String> newExhibitMap) {
+		int n = dao.displayNewExhibition(newExhibitMap);
+		return n;
+	}
+
+	// 전시회의 이미지 테이블에 insert
+	@Override
+	public int displayNewExhibitionImg(HashMap<String, String> newExhibitImgMap) {
+		int m = dao.displayNewExhibitionImg(newExhibitImgMap);
+		return m;
+	}
+
 
 	
 }

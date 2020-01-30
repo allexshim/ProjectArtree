@@ -147,7 +147,7 @@ public class AdminController {
 	
 	// 전시예정 목록 조회
 	@RequestMapping(value="/newDisplayList.at")
-	public String newDisplayList(HttpServletRequest request, HttpServletResponse response) {
+	public String isAdmin_newDisplayList(HttpServletRequest request, HttpServletResponse response) {
 		
 		List<ExhibitsVO> exhibitionList = service.getNewExhibitionList();
 		
@@ -157,7 +157,7 @@ public class AdminController {
 	}
 	
 	@RequestMapping(value="/newDisplayDetail.at")
-	public String newDisplayDetail(HttpServletRequest request, HttpServletResponse response) {
+	public String isAdmin_newDisplayDetail(HttpServletRequest request, HttpServletResponse response) {
 		
 		String no = request.getParameter("no"); // 목록에서 넘겨준 글번호를 받아옵니다.
 		
@@ -172,7 +172,7 @@ public class AdminController {
 	
 	// 전시예정 -> 전시중으로 변경
 	@RequestMapping(value="/changeExhibitStatus.at")
-	public String changeExhibitStatus(HttpServletRequest request, HttpServletResponse response) {
+	public String isAdmin_changeExhibitStatus(HttpServletRequest request, HttpServletResponse response) {
 		
 		String exhibitionno = request.getParameter("exhibitionno");
 		
@@ -198,7 +198,7 @@ public class AdminController {
 	
 	// 종료된 전시목록 조회
 	@RequestMapping(value="/afterDisplayList.at")
-	public String afterDisplayList(HttpServletRequest request, HttpServletResponse response) {
+	public String isAdmin_afterDisplayList(HttpServletRequest request, HttpServletResponse response) {
 		
 		List<ExhibitsVO> exhibitionList = service.getAfterExhibitionList();
 		
@@ -209,7 +209,7 @@ public class AdminController {
 	
 	// 종료된 전시회 조회
 	@RequestMapping(value="/afterDisplayDetail.at")
-	public String afterDisplayDetail(HttpServletRequest request, HttpServletResponse response) {
+	public String isAdmin_afterDisplayDetail(HttpServletRequest request, HttpServletResponse response) {
 		
 		String no = request.getParameter("no"); // 목록에서 넘겨준 글번호를 받아옵니다.
 		
@@ -224,7 +224,7 @@ public class AdminController {
 	
 	// 검토할 전시회 목록 조회
 	@RequestMapping(value="/appliedDisplayList.at")
-	public String appliedDisplayList(HttpServletRequest request, HttpServletResponse response) {
+	public String isAdmin_appliedDisplayList(HttpServletRequest request, HttpServletResponse response) {
 		
 		List<HashMap<String, String>> exhibitionList = service.getAppliedExhibitionList();
 		
@@ -235,13 +235,9 @@ public class AdminController {
 	
 	// 검토할 전시회 조회
 	@RequestMapping(value="/appliedDisplayDetail.at")
-	public String appliedDisplayDetail(HttpServletRequest request, HttpServletResponse response) {
+	public String isAdmin_appliedDisplayDetail(HttpServletRequest request, HttpServletResponse response) {
 		
 		String no = request.getParameter("no"); // 목록에서 넘겨준 글번호를 받아옵니다.
-		
-		System.out.println("====================== " + no);
-		System.out.println("====================== " + no);
-		System.out.println("====================== " + no);
 		
 		HashMap<String, String> exhibitionInfo = service.getAppliedExhibitionDetail(no);
 		request.setAttribute("exhibitionInfo", exhibitionInfo);
@@ -249,7 +245,134 @@ public class AdminController {
 		List<HashMap<String, String>> getImageList = service.getAppliedExhibitionImage(no);
 		request.setAttribute("getImageList", getImageList);
 		
+		request.setAttribute("no", no);
+		
 		return "exhibitions/appliedDisplayDetail.tiles";
+	}
+	
+	// 지원된 전시회를 전시예정으로 변경하기
+	@RequestMapping(value="/displayExhibition.at", method=RequestMethod.POST)
+	public String isAdmin_displayExhibition(HttpServletRequest request, HttpServletResponse response) {
+		
+		String exhibitionno = service.getExhibitionno();
+		String fk_galleryno = request.getParameter("galleryno");
+		String exhibitionname = request.getParameter("exhibitionname");
+		String applier = request.getParameter("applier");
+		String author = request.getParameter("author");
+		String startdate = request.getParameter("startdate");
+		String enddate = request.getParameter("enddate");
+		String email = request.getParameter("email");
+		String tel = request.getParameter("tel");
+		String genre = request.getParameter("genre");
+		String tag = request.getParameter("tag");
+		String authorinfo = request.getParameter("authorinfo");
+		String exhibitioninfo = request.getParameter("exhibitioninfo");
+		String price = request.getParameter("price");
+		String foodordrink = request.getParameter("foodordrink");
+		String extrarestriction = request.getParameter("extrarestriction");
+		String photo = request.getParameter("photo");
+		String openclosetime = request.getParameter("openclosetime");
+		
+		// 1 개의 전시회
+		HashMap<String, String> newExhibitMap = new HashMap<String, String>();
+		newExhibitMap.put("exhibitionno", exhibitionno);
+		newExhibitMap.put("fk_galleryno", fk_galleryno);
+		newExhibitMap.put("exhibitionname", exhibitionname);
+		newExhibitMap.put("applier", applier);
+		newExhibitMap.put("author", author);
+		newExhibitMap.put("startdate", startdate);
+		newExhibitMap.put("enddate", enddate);
+		newExhibitMap.put("email", email);
+		newExhibitMap.put("tel", tel);
+		newExhibitMap.put("genre", genre);
+		newExhibitMap.put("tag", tag);
+		newExhibitMap.put("authorinfo", authorinfo);
+		newExhibitMap.put("exhibitioninfo", exhibitioninfo);
+		newExhibitMap.put("price", price);
+		newExhibitMap.put("foodordrink", foodordrink);
+		newExhibitMap.put("extrarestriction", extrarestriction);
+		newExhibitMap.put("photo", photo);
+		newExhibitMap.put("openclosetime", openclosetime);
+		
+		String mainposter = request.getParameter("mainposter");
+		
+		String image1 = "";
+		String image2 = "";
+		String image3 = "";
+		
+		if(request.getParameter("image1") != null) {
+			image1 = request.getParameter("image1");
+		}
+		
+		if(request.getParameter("image2") != null) {
+			image2 = request.getParameter("image2");
+		}
+		
+		if(request.getParameter("image3") != null) {
+			image3 = request.getParameter("image3");
+		}
+		
+		String image1info = "";
+		String image2info = "";
+		String image3info = "";
+		
+		if(request.getParameter("image1info") != null) {
+			image1info = request.getParameter("image1info");
+		}
+		
+		if(request.getParameter("image2info") != null) {
+			image2info = request.getParameter("image2info");
+		}
+		
+		if(request.getParameter("image3info") != null) {
+			image3info = request.getParameter("image3info");
+		}
+		
+/*		System.out.println("===========mainposter============ " + mainposter);
+		System.out.println("===========image1============ " + image1);
+		System.out.println("===========image2============ " + image2);
+		System.out.println("===========image3============ " + image3);
+		System.out.println("===========image1info============ " + image1info);
+		System.out.println("===========image2info============ " + image2info);
+*/		
+		HashMap<String, String> newExhibitImgMap = new HashMap<String, String>();
+		newExhibitImgMap.put("fk_exhibitionno", exhibitionno);
+		newExhibitImgMap.put("mainposter", mainposter);
+		newExhibitImgMap.put("image1", image1);
+		newExhibitImgMap.put("image2", image2);
+		newExhibitImgMap.put("image3", image3);
+		newExhibitImgMap.put("image1info", image1info);
+		newExhibitImgMap.put("image2info", image2info);
+		newExhibitImgMap.put("image3info", image3info);
+		
+		// 검토목록에 있던 전시회를 전시예정으로 변경
+		int n = service.displayNewExhibition(newExhibitMap);
+		
+		// 전시회의 이미지 테이블에 insert
+		int m = service.displayNewExhibitionImg(newExhibitImgMap);
+		
+		String msg = "";
+		String loc = "";
+		
+		if(n + m != 2) {
+			
+			msg = "처리중 오류가 발생하였습니다. 다시 시도하여주세요.";
+			loc = "javascript:history.back();";
+			
+			request.setAttribute("msg", msg);
+			request.setAttribute("loc", loc);
+			
+			return "msg";
+			
+		}
+		
+		msg = "성공적으로 변경되었습니다.";
+		loc = "/artree/appliedDisplayList.at";
+		
+		request.setAttribute("msg", msg);
+		request.setAttribute("loc", loc);
+		
+		return "msg";
 	}
 	
 	// ------------------------------------------------------------ //
@@ -392,7 +515,7 @@ public class AdminController {
 						String[] imageinfoArr = request.getParameterValues("imageinfo");
 						
 						for(int j = 0; j<imageinfoArr.length; j++) {
-							imageinfo = imageinfoArr[i] + ",";
+							imageinfo = imageinfoArr[i];
 						}
 						
 						imageMap.put("imageinfo", imageinfo);
@@ -400,7 +523,9 @@ public class AdminController {
 					}
 					 
 					MultipartFile mainposterFile = mreq.getFile("mainposter"); 
-					imageMap.put("mainposter", mainposterFile.getOriginalFilename());
+					
+					newFileName = fileManager.doFileUpload(bytes, mainposterFile.getOriginalFilename(), path);
+					imageMap.put("mainposter", newFileName);
 					 
 					exhibitsImgMapList.add(imageMap);
 					
@@ -476,8 +601,6 @@ public class AdminController {
 		paraMap.put("searchWord", searchWord);
 		
 		List<GalleryVO> wordList = service.wordSearchShow(paraMap); 
-		
-	//	System.out.println("===================== " + wordList.size());
 		
 		JSONArray jsonArr = new JSONArray();
 		

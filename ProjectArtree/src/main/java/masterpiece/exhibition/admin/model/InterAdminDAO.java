@@ -52,6 +52,15 @@ public interface InterAdminDAO {
 	// 이미지 가져오기
 	List<HashMap<String, String>> getAppliedExhibitionImage(String no);
 
+	// 등록할 전시회번호 채번해오기
+	String getExhibitionno();
+
+	// 검토목록에 있던 전시회를 전시예정으로 변경
+	int displayNewExhibition(HashMap<String, String> newExhibitMap);
+
+	// 전시회의 이미지 테이블에 insert
+	int displayNewExhibitionImg(HashMap<String, String> newExhibitImgMap);
+
 	
 
 }

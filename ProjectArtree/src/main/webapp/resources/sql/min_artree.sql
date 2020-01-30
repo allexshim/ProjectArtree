@@ -5,6 +5,8 @@ from dictionary;
 
 select * from tab;
 
+select * from seq;
+
 -------------------------------------
 
 select * from tag order by type;
@@ -190,9 +192,9 @@ alter table appliedDetail add mainposter VARCHAR2(500) default '없음' not null
 commit;
 
 
-select * from appliedDetail;
+select * from appliedDetail order by fk_applyingno desc;
 
-select * from appliedExhibits;
+select * from appliedExhibits order by applyingno desc;
 
 desc appliedExhibits;
 desc applieddetail;
@@ -207,10 +209,11 @@ drop column image3info;
 alter table appliedDetail
 rename column image1info to imageinfo;
 
-select * from appliedDetail;
+select * from appliedDetail order by 1 desc;
 
+select * from member;
 
-
+commit;
 
 select fk_applyingno, imagefilename, imageorgfilename, imagefilesize, thumbnailfilename, mainposter
 			, nvl(image1info, '없음') AS image1info, nvl(image2info, '없음') AS image2info, nvl(image3info, '없음') AS image3info
@@ -226,12 +229,52 @@ Alter table appliedexhibits modify (exhibitioninfo clob);
 
 commit;
 
-
-
-
 alter index ARTREE.PK_APPLIEDEXHIBITS_ANO rebuild;
 
 commit;
+
+insert into exhibition ( exhibitionno, fk_galleryno, exhibitionname, applier, author, startdate, enddate, email, tel, genre, tag, authorinfo, exhibitioninfo, price, foodofdrink, extrarestriction, photo, openclosetime, status, readcount )
+values ( #{ exhibitionno }, #{ fk_galleryno }, #{ exhibitionname }, #{ applier }, #{ author }, #{ startdate }, #{ enddate }, #{ email }, #{ tel }, #{ genre }, #{ authorinfo }, #{ exhibitioninfo }, #{ price }
+    , #{ foodofdrink }, #{ extrarestriction }, #{ photo }, #{ openclosetime }, '전시예정', '0' ) ;
+
+insert into exhibitiondetail ( fk_exhibitionno, image1, image2, image3, image1info, image2info, image3info, mainposter )
+values( #{ fk_exhibitionno }, #{ image1 }, #{ image2 }, #{ image3 }, #{ image1info }, #{ image2info }, #{ image3info }, #{ mainposter } ) ;
+
+select * from SEQ_EXHIBITION;
+
+select SEQ_EXHIBITION.nextval from dual ;
+
+delete from exhibition where exhibitionno = 5182;
+
+-----------------------------------------=======================================-----------------------------------------
+
+select * from member;
+
+select * from appliedDetail order by fk_applyingno desc;
+
+select * from appliedExhibits order by applyingno desc;
+
+select * from EXHIBITIONDETAIL;
+
+select * from EXHIBITION order by exhibitionno desc;
+
+select * from SEQ_EXHIBITION;
+
+desc exhibition;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

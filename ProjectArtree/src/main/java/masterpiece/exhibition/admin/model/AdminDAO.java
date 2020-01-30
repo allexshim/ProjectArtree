@@ -132,6 +132,44 @@ public class AdminDAO implements InterAdminDAO {
 		return imgList;
 	}
 
+	// 등록할 전시회번호 채번해오기
+	@Override
+	public String getExhibitionno() {
+		String exhibitionno = sqlsession.selectOne("admin.getExhibitionno");
+		return exhibitionno;
+	}
+
+	// 검토목록에 있던 전시회를 전시예정으로 변경
+	@Override
+	public int displayNewExhibition(HashMap<String, String> newExhibitMap) {
+		int n = sqlsession.insert("admin.displayNewExhibition", newExhibitMap);
+		
+		System.out.println("===========exhibitionno============ " + newExhibitMap.get("exhibitionno"));
+		System.out.println("===========fk_galleryno============ " + newExhibitMap.get("fk_galleryno"));
+		System.out.println("===========exhibitionname============ " + newExhibitMap.get("exhibitionname"));
+		System.out.println("===========applier============ " + newExhibitMap.get("applier"));
+		System.out.println("===========author============ " + newExhibitMap.get("author"));
+		System.out.println("===========startdate============ " + newExhibitMap.get("startdate"));
+		System.out.println("===========openclosetime============ " + newExhibitMap.get("openclosetime"));
+		System.out.println("===========price============ " + newExhibitMap.get("price"));
+		System.out.println("=======================");
+		
+		return n;
+	}
+
+	// 전시회의 이미지 테이블에 insert
+	@Override
+	public int displayNewExhibitionImg(HashMap<String, String> newExhibitImgMap) {
+		int m = sqlsession.insert("admin.displayNewExhibitionImg", newExhibitImgMap);
+		System.out.println("===========mainposter============ " + newExhibitImgMap.get("mainposter"));
+		System.out.println("===========image1============ " + newExhibitImgMap.get("image1"));
+		System.out.println("===========image2============ " + newExhibitImgMap.get("image2"));
+		System.out.println("===========image3============ " + newExhibitImgMap.get("image3"));
+		System.out.println("===========image1info============ " + newExhibitImgMap.get("image1info"));
+		System.out.println("===========image2info============ " + newExhibitImgMap.get("image2info"));
+		return m;
+	}
+
 
 	
 }
