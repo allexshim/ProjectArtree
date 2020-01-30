@@ -443,7 +443,7 @@
 					</c:forEach>
 				</c:if>
 				
-				<c:if test="${commentList == null}">
+				<c:if test="${commentList == null || commentList == ''}">
 					<tr>
 						<td colspan="2">작성된 댓글이 없습니다.</td>
 					</tr>

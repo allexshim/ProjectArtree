@@ -42,7 +42,8 @@ public class OrderController {
 		
 		HashMap<String, String> map = new HashMap<String, String>();		
 		
-		String exno = (String) session.getAttribute("eno");		
+		String exno = (String) session.getAttribute("eno");
+		System.out.println("exno"+exno);
 		map.put("no", exno);
 		
 		List<HashMap<String, String>> exList = service.getEx(map);
@@ -105,7 +106,7 @@ public class OrderController {
 		String idx = mvo.getIdx();	
 		map.put("idx", idx);		
 		
-		String no = (String) session.getAttribute("no");
+		String no = (String) session.getAttribute("eno");		
 		map.put("no", no);
 		if (dateBin != null)
 			service.insertCart(map);
