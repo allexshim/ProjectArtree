@@ -20,7 +20,7 @@
 <style type="text/css">
    
  body::-webkit-scrollbar { 
- /*    display: none;  */
+ 	display: none;
 }
    
    .btn {

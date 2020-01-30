@@ -3,8 +3,8 @@ from tabs;
 
 create table notice
 ( notNo         number        not null
- ,notTitle      varchar2(30)  not null
- ,notContent    varchar2(200) not null
+ ,notTitle      varchar2(300)  not null
+ ,notContent    varchar2(1000) not null
  ,notWriteday   varchar2(30)  not null
  ,notReadcount  number        not null
  ,constraint PK_notice_notNo primary key(notNo)
@@ -29,7 +29,7 @@ create table notice
  from notice;
  
  insert into notice(notNo ,notTitle, notContent,  notWriteday, notReadcount)
-		values(seq_notice.nextval, #{}, #{}, default, 0)
+		values(seq_notice_notNo.nextval, '공지1', '공지 1 내용', sysdate, 0);
  
  select *
  from member;

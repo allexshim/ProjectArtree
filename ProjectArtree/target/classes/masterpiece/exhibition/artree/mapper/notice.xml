@@ -15,7 +15,7 @@
 	
 	<insert id="addNotice" parameterType="HashMap">
 		insert into notice(notNo, notTitle, notContent, notWriteday, notReadcount)
-		values(seq_notice_notNo.nextval, #{notTitle}, #{notContent}, default, 0)
+		values(seq_notice_notNo.nextval, #{notTitle}, #{notContent}, sysdate, 0)
 	</insert>
 	
 </mapper>

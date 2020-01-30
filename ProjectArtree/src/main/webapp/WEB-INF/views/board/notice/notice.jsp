@@ -40,7 +40,7 @@
 		padding-top : 50px;
 		width : 500px;
 		text-align: left;
-		padding-left : 60px;
+		padding-left : 100px;
 	}
 	
 	div#topText span {
@@ -75,7 +75,7 @@
 	
 	/* 공지 추가, 삭제하기 */
 	#addNoticeContainer {
-		padding-left : 60px;
+		padding-left : 100px;
 		padding-top : 20px;
 	}
 	
@@ -107,7 +107,7 @@
 	/* 공지 내용 */
 	div#noticeList {
 		padding-top : 40px;
-		padding-left : 60px;
+		padding-left : 100px;
 		padding-bottom : 100px;
 	}
 	
@@ -182,6 +182,8 @@
 			else {
 				alert($("#notTitle").val());
 				alert($("#notContent").val());
+				alert($("#notTitle").attr("name").value);
+				alert($("#notContent").attr("name").value);
 				var frm = document.newNotice;
 				frm.method = "POST";
 				frm.action = "<%=ctxPath%>/addNotice.at";
