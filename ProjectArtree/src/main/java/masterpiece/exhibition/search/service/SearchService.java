@@ -82,6 +82,13 @@ public class SearchService implements InterSearchService {
 		List<HashMap<String,String>> ageRange = dao.getAgeDataByTags(tag);
 		return ageRange;
 	}
+
+	// 통계를 내기 위해 총 회원수를 구해서 request영역에 저장한다.
+	@Override
+	public int getMemberCnt() {
+		int totalcnt = dao.getMemberCnt();
+		return totalcnt;
+	}
 	
 	
 	

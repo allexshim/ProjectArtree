@@ -159,7 +159,7 @@
 		    	        			// agegroup, agecnt, tag
 		    	        			subArr.push({
 		    	        				"agegroup":item3.agegroup+"대",
-		    	        				"agecnt":Number(item3.agecnt)
+		    	        				"agecnt":Number(item3.agecnt),
 		    	        			}); 
 
 		    	        		}); // end of $.each(json2, function(index3, item3) --------------------------
@@ -167,8 +167,8 @@
 		    	        		// 이중 객체 배열 사용 -- [{id:tag, value : agecnt}]
 		    	        		 tagArr.push( { // 객체 배열에 직접 push한다.
 		    	        			  "tag": item2.tag,
-		    	        			  "cnt": Number(item2.cnt),
-		    	        			  "subData": subArr   
+		    	        			  "cnt":  Math.round((Number(item2.cnt)/${totalcnt} )*100),
+		    	        			  "subData": subArr    
 					             });
 		    	        	/////////////////////////////////////////////////////////////////////////////////////////////////	
 		    	        	},error: function(request, status, error){
@@ -188,9 +188,10 @@
 					   			  "<tbody>";
 					   			  //console.log(tagArr.length);
 			   			for(let i=0; i<tagArr.length; i++) {	
-							
+			   				  let totalRatio = Math.round((tagArr[i].cnt/${totalcnt} )*100);
+			   				
 							  html += "<tr><td>"+tagArr[i].tag+"</td>";
-							  html += "<td>"+tagArr[i].cnt+"명</td></tr>";
+							  html += "<td>"+totalRatio+"%</td></tr>";
 							/*   html += "<td>"+tagArr[i].subData[0].agecnt+"</td>";
 							  html += "<td>"+tagArr[i].subData[1].agecnt+"</td>";
 							  html += "<td>"+tagArr[i].subData[2].agecnt+"</td>";

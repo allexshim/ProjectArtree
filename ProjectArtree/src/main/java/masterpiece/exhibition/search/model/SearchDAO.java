@@ -92,6 +92,13 @@ public class SearchDAO implements InterSearchDAO {
 	public List<HashMap<String,String>> getAgeDataByTags(String tag) {
 		List<HashMap<String,String>> ageRange = sqlsession.selectList("search.getAgeDataByTags", tag);
 		return ageRange;
+	}
+
+	// 통계를 내기 위해 총 회원수를 구해서 request영역에 저장한다.
+	@Override
+	public int getMemberCnt() {
+		int totalcnt = sqlsession.selectOne("search.getMemberCnt");
+		return totalcnt;
 	} 
 	
 	

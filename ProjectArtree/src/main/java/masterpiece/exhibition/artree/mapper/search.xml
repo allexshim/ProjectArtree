@@ -200,4 +200,8 @@
 		order by agegroup
 	</select>
 	
+	<!-- 전체 회원 수 구해오기 -->
+	<select id="getMemberCnt" resultType="Integer" >
+		select count(*) from member
+	</select>
 </mapper>

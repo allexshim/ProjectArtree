@@ -289,6 +289,9 @@ public class SearchController {
 	@RequestMapping(value="/byTags.at")
 	public String isAdmin_byTags(HttpServletRequest request, HttpServletResponse response) {
 		
+		// 통계를 내기 위해 총 회원수를 구해서 request영역에 저장한다.
+		int totalcnt = service.getMemberCnt();
+		request.setAttribute("totalcnt", totalcnt);
 		
 		return "admin/statistics/byTags.tiles";
 	}
