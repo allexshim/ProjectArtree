@@ -164,7 +164,7 @@
 			, A.exhibitioninfo, A.price, A.foodordrink, A.extrarestriction, A.photo, A.openclosetime
 		from appliedExhibits A JOIN gallery G
 		on A.fk_galleryno = G.galleryno
-        where A.applyingno = #{ no }
+        where A.applyingno = #{ no } and status = '검토예정'
 	</select>
 	
 	<!-- 이미지 가져오기 -->
@@ -193,10 +193,10 @@
 	<insert id="displayNewExhibition" parameterType="HashMap">
 		insert into exhibition ( exhibitionno, fk_galleryno, exhibitionname, applier, author, startdate, enddate
 			, email, tel, genre, tag, authorinfo, exhibitioninfo, price, foodordrink, extrarestriction, photo
-			, openclosetime, status, readcount )
+			, openclosetime, status, readcount, status )
 		values ( #{ exhibitionno }, #{ fk_galleryno }, #{ exhibitionname }, #{ applier }, #{ author }
 			, #{ startdate }, #{ enddate }, #{ email }, #{ tel }, #{ genre }, #{ tag }, #{ authorinfo }, #{ exhibitioninfo }, #{ price }
-   			, #{ foodordrink }, #{ extrarestriction }, #{ photo }, #{ openclosetime }, '전시예정', 0 )
+   			, #{ foodordrink }, #{ extrarestriction }, #{ photo }, #{ openclosetime }, '전시예정', 0, '검토완료' )
 	</insert>
 	
 	<!-- 전시회의 이미지 테이블에 insert -->

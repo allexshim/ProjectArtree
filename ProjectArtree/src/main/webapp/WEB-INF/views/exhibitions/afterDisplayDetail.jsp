@@ -219,6 +219,9 @@
 						<td>작가명</td><td>${ exhibitionInfo.author }</td>
 					</tr>
 					<tr>
+						<td>전시회명</td><td >${ exhibitionInfo.exhibitionname }</td>
+					</tr>
+					<tr>
 						<td>전시회정보</td><td>${ exhibitionInfo.exhibitioninfo }</td>
 					</tr>
 					<tr>

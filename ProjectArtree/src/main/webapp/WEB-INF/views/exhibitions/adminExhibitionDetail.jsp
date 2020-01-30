@@ -197,8 +197,8 @@
 	<div id="detailContainer">
 		<div class="Title_Area">
 			<span class="st">ADMIN ONLY</span>
-			<span class="lt">Registeration</span>
-			<span class="titleDetail">Artree는 작가 여러분이 개최하시는 전시회를 <br/> 홈페이지, 공식 SNS에 홍보합니다.</span>
+			<span class="lt">EXHIBITION</span>
+			<span class="titleDetail">Artree 에 전시중인 전시회입니다.</span>
 		</div>
 	
 		<div id="detailContents">
