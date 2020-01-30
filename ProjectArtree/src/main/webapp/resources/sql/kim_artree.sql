@@ -257,7 +257,59 @@ order by agegroup asc
 		where RNO between 1 and 16
         
         
-        select *
+        select count(*)
         from exhibition A left join gallery B
         on A.fk_galleryno = B.galleryno
+        where A.status = '전시예정' 
+        
+        select ceil(2/16)
+        from dual
+        
+        
+        select agegroup, count(*) AS cnt
+		from wishList A left join member B
+		on A.fk_idx = B.idx 
+		where fk_exhibitionno = 5166
+		group by agegroup
+		order by agegroup asc
        
+       
+       select*
+       from wishList
+       
+       
+       
+        select *
+		from
+		(
+		select row_number() over(order by galleryno desc) AS RNO
+		     , galleryno, galleryname, detailaddress, mainpicture, location
+		     , case when length(introduction) > 60 then substr(introduction, 1, 59)||'..' else introduction end AS introduction
+		from gallery
+		where status = 1
+        and galleryname like '%'||'이'||'%' and location = '서울'
+		)
+		where RNO between 1 and 9 
+        
+        
+		select *
+		from
+		(
+		select row_number() over(order by B.readcount desc) AS RNO
+		     , galleryno, galleryname, mainpicture, location, openinghour, holiday
+		from gallery A left join exhibition B
+		on A.galleryno = B.fk_galleryno
+		where A.status = 1 and exhibitionname is not null
+		order by RNO, galleryno asc
+		)
+		where RNO between 1 and 3
+        
+		select exhibitionno, mainposter
+        from exhibition A left join exhibitiondetail B
+        on A.exhibitionno = B.fk_exhibitionno
+        where fk_galleryno = 9
+        
+        select exhibitionno, mainposter
+        from exhibition A left join exhibitiondetail B
+        on A.exhibitionno = B.fk_exhibitionno
+        where fk_galleryno = 

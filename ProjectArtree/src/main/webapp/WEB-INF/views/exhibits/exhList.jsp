@@ -113,6 +113,36 @@
 		position: relative;
 	}
 	
+	#container_exhibition .categoryList .on {
+		color: #0d0d0d;
+		font-weight: bold;
+	}
+	
+	#container_exhibition #myBtn {
+	  display: none;
+	  position: fixed;
+	  bottom: 30px;
+	  right: 30px;
+	  z-index: 99; 
+	  width: 80px;
+	  border: none;
+	  outline: none;
+	  color: white;
+	  cursor: pointer;
+	  padding: 10px;
+	  border-radius: 4px;
+	}
+	
+	#container_exhibition .emptyNoti {
+		text-align: center;
+		font-size: 20pt;
+		font-weight: bold;
+		width: 100%;
+	    display: block;
+	    border: 1px solid #e6e6e6;
+	    padding: 100px;
+	}
+	
 </style>
 
 <%-- EXHIBITION LIST SCRIPT START --%>
@@ -124,8 +154,13 @@
 
 	$(document).ready(function(){
 		
-		$("#count").show();
-		$("#tc").show();
+		window.onbeforeunload = function() {
+			sessionStorage.removeItem("type");
+			sessionStorage.removeItem("loca");
+		};
+		
+		$("#count").hide();
+		$("#tc").hide();
 		
 		/////////////// 스크롤 페이징
 		var page = 1;
@@ -134,15 +169,23 @@
 	    
 	    // 스크롤이 최하단 으로 내려가면 리스트를 조회하고 page를 증가시킨다.
 		$(window).scroll(function(){
-			
-			if( $("#count").text() != $("#tc").text() ){
-			    if($(window).scrollTop() == $(document).height() - $(window).height()){
+		    if($(window).scrollTop() == $(document).height() - $(window).height()){
+		    	if( $("#count").text() != $("#tc").text() ){
 			    	 page++; 
 			    	 getExhList(page, sessionStorage.getItem("type"), sessionStorage.getItem("loca"));
-			    }
+		    	 }
 			}
-			
 		});
+	    
+	    $(".cate_map .exh_cate_option").click(function(event){
+	    	$(".cate_map").find(".on").removeClass("on");
+	    	$(event.target).addClass("on");
+	    });
+	    
+	    $(".cate_exh .exh_cate_option").click(function(event){	
+	    	$(".cate_exh").find(".on").removeClass("on");
+	    	$(event.target).addClass("on");
+	    });
 
 		$(document).on("mouseover", ".exh_one", function(){
 			$(this).find(".forMoving").stop().animate({top:'10px'}, 180);
@@ -152,8 +195,17 @@
 			$(this).find(".forMoving").stop().animate({top:'0px'}, 180);
 		});
 		
+		$("#myBtn").hover(function() {
+			$(this).stop().animate({bottom:'40px'}, 150);
+		}, function() {
+			$(this).stop().animate({bottom:'30px'}, 150);
+		});
+		
+		// When the user scrolls down 20px from the top of the document, show the button
+		window.onscroll = function() { scrollFunction() };
+		
 	}); // end of document ready -------------------------
-
+	
 	var len = 16;
 	
 	////////////////// 전시회 목록 불러오기 /////////////////////
@@ -169,13 +221,13 @@
 			dataType: "JSON",			
 			success:function(json){
 				
-				if( (type != null || loca != null) && page == 1 ){ $(".ExhList_Area").html(""); }
+				if( (type != null || loca != null) && page == 1 ){ $(".ExhList_Area").html(""); $("#count").text("0"); }
 				
 				var html = "";
 				
 				if(json.length == 0){
 					
-					html += "<span style='text-align:center;'>준비중입니다 :></span>";
+					html += "<span class='emptyNoti'>전시회가 존재하지 않습니다. :></span>";
 					
 					$(".ExhList_Area").html(html);
 
@@ -222,27 +274,12 @@
 						$("#tc").text(item.totCount);
 						
 					});
-/* 					
-					if(json.length < 16){
-						$(".ExhList_Area").html(html);
-					}
-					else {
-						$(".ExhList_Area").append(html);
-					}	 */
-					
+
 					$(".ExhList_Area").append(html);
 
-					alert("json"+json.length);
 					//countHIT 에 지금까지 출력된 상품의 갯수를 누적해서 기록한다.
 					$("#count").text( parseInt($("#count").text())+json.length ); // 초기치 0
-					
-					alert($("#count").text()+"//"+$("#tc").text());
-					
-					if( $("#count").text() == $("#tc").text() ){
-						alert("끝");
-						$("#count").text("0");
-						return false;
-					}
+
 				}
 				
 			},
@@ -252,11 +289,24 @@
 			
 		});
 		
-	}
-		
+	} // end of exhList ---------------------------------	
 		
 	function exhDetail(eno){
 		location.href="<%= ctxPath%>/exhDetail.at?eno="+eno;
+	} // end of exhDetail ---------------------------------
+	
+	function scrollFunction() {
+	  if ($(window).scrollTop() > 20 || $(document).scrollTop()  > 20) {
+		  $("#myBtn").css("display","block");
+	  } else {
+		  $("#myBtn").css("display","none");
+	  }
+	}
+
+	// When the user clicks on the button, scroll to the top of the document
+	function topFunction() {
+		$('html, body').animate( { scrollTop : 0 }, 400 );
+        return false;
 	}
 
 </script>
@@ -293,5 +343,9 @@
 	<span id="tc"></span>
 	
 	<div class="ExhList_Area">
+	</div>
+	
+	<div style="position: relative;">
+		<img onclick="topFunction()" id="myBtn" title="Go to top" src="<%= ctxPath%>/resources/images/exhibition/ico/dropup.png">
 	</div>
 </div>

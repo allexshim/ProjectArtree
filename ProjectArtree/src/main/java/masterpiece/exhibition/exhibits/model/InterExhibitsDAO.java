@@ -14,6 +14,10 @@ public interface InterExhibitsDAO {
 	List<HashMap<String, String>> getGalList(HashMap<String, String> paraMap); // 갤러리 목록 불러오기
 
 	List<HashMap<String, String>> getGalRecomList(); // 갤러리 이번주 추천 공간
+	
+	int getExhStatus(String gno); // 갤러리 이번주 추천 공간 - 해당 갤러리의 전시회 진행 유무
+	
+	List<HashMap<String, String>> getRecomExhList(String gno); // 갤러리 이번주 추천 공간 - 해당 갤러리의 전시회 목록
 
 	HashMap<String, String> getGalDetail(String gno); // 갤러리 상세페이지
 

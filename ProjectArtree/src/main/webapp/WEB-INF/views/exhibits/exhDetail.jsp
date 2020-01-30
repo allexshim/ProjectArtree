@@ -825,10 +825,19 @@
 			success: function(json){
 				
 				var resultArr = [];
-				for(var i=0; i<json.length; i++) {
-					var obj = {name: json[i].GENDER,
-							   value: json[i].CNT};
-					resultArr.push(obj); // 배열속에 객체를 넣기
+				
+				if(json.length == 0){
+					var obj = { name: " 성별 ",
+						    	value: 0 };
+					
+					resultArr.push(obj);
+				}
+				else {
+					for(var i=0; i<json.length; i++) {
+						var obj = {name: json[i].GENDER,
+								   value: json[i].CNT};
+						resultArr.push(obj); // 배열속에 객체를 넣기
+					}
 				}
 				
 				<%-- 차트 영역 --%>
@@ -884,10 +893,19 @@
 			success: function(json){
 				
 				var resultArr = [];
-				for(var i=0; i<json.length; i++){
-					var obj = { age: json[i].AGEGROUP+"대",
-							    value: json[i].CNT };
+				
+				if(json.length == 0){
+					var obj = { age: " 연령대 ",
+						    	value: 0 };
+					
 					resultArr.push(obj);
+				}
+				else {
+					for(var i=0; i<json.length; i++){
+						var obj = { age: json[i].AGEGROUP+"대",
+								    value: json[i].CNT };
+						resultArr.push(obj);
+					}
 				}
 				
 				// 연령대 차트
@@ -945,7 +963,14 @@
 	
 	<c:if test="${not empty exhDetailMap}">
 		<div class="main_top">
-			<img class="main_img" src="${exhDetailMap.MAINPOSTER}">
+		
+			<c:if test="${exhDetailMap.MAINPOSTER.contains('http://')}">
+				<img class="main_img" src="${exhDetailMap.MAINPOSTER}"/>
+			</c:if>
+			<c:if test="${!exhDetailMap.MAINPOSTER.contains('http://')}">
+				<img class="main_img" src="<%= ctxPath%>/resources/files/${exhDetailMap.MAINPOSTER}"/>
+			</c:if>
+			
 			<div class="info_top">
 				<span class="bigSpan">${exhDetailMap.EXHIBITIONNAME}</span>
 				<span class="info_artist">${exhDetailMap.AUTHOR}</span>

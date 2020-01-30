@@ -55,8 +55,8 @@
 		display: inline-block;
 	}
 	
-	#container_gal_list .contents .recom_info { margin: 40px 0 50px 0;}
-	
+	#container_gal_list .contents .recom_info { margin: 10px 0 50px 0; }
+	 
 	#container_gal_list .contents .recom_info span {
 		width: 100%;
 		display: inline-block;
@@ -126,7 +126,7 @@
 		position: relative;
 		cursor: pointer;
 	}
-
+ 
 	#container_gal_list .galArea .gal_one img {
 		width: 100%;
 		height: 200px;
@@ -201,30 +201,58 @@
 
 	#container_gal_list .contents .thisCurExh img {
 		display: inline-block;
-		width: 25%;
-		margin-right: 35px;
-		height: 200px;
+		width: 130px;
+		margin: 0 12px 0 12px;
+		height: 200px; 
+	}
+
+	#container_gal_list #myBtn {
+	  display: none;
+	  position: fixed;
+	  bottom: 30px;
+	  right: 30px;
+	  z-index: 99; 
+	  width: 80px;
+	  border: none;
+	  outline: none;
+	  color: white;
+	  cursor: pointer;
+	  padding: 10px;
+	  border-radius: 4px;
+	}
+	
+	#container_gal_list .emptyNoti {
+		text-align: center;
+		font-size: 20pt;
+		font-weight: bold;
+		width: 100%;
+	    display: block;
+	    border: 1px solid #e6e6e6;
+	    padding: 100px;
 	}
 	
 	
+	#container_gal_list .home {
+	  position:relative;
+	  height:200px;
+	  width:420px; 
+	  overflow:hidden;
+	}
 	
-	
-	
-	.thisCurExh ul,li{list-style:none;}
-    .exhSlide{overflow:hidden;}
-    .exhSlide ul{width:calc(100% * 2);display:flex;animation:exhSlide 8s infinite;} /* slide를 8초동안 진행하며 무한반복 함 */
-    .exhSlide li{width:calc(100% / 2);height:200px;}
-    @keyframes exhSlide {
-      0% {margin-left:0;} /* 0 ~ 10  : 정지 */
-      10% {margin-left:0;} /* 10 ~ 25 : 변이 */
-      25% {margin-left:-100%;} /* 25 ~ 35 : 정지 */
-      35% {margin-left:-100%;} /* 35 ~ 50 : 변이 */ 
-/*       50% {margin-left:-200%;}
-      60% {margin-left:-200%;}
-      75% {margin-left:-300%;}
-      85% {margin-left:-300%;} */
-      100% {margin-left:0;}
-    } 
+	#container_gal_list .ani{ 
+		position: relative;
+	}  
+
+    #container_gal_list .exhStatus {
+		font-size: 12pt;
+		border: none;
+		padding: 4px 9px;
+		color: white;
+		border-radius: 5px; 
+		display: inline-block;
+		width: 100px !important;
+		margin-bottom: 20px;
+	} 
  
 </style>  
 
@@ -239,8 +267,9 @@
 		/////////////// 스크롤 페이징
 		var page = 1;
 		getGalList(page);
+		
 	    /////////////// 이번주 추천 공간
-	    getGalRecomList;
+	    getGalRecomList();
 
 		$(document).on("mouseover", ".gal_one", function(){
 			$(this).find(".galTitle").stop().animate({bottom:'5px'}, 180);
@@ -248,34 +277,37 @@
 		
 		$(document).on("mouseout", ".gal_one", function(){
 			$(this).find(".galTitle").stop().animate({bottom:'0px'}, 180);
-		});
-		
+		});		
 		
 		$("#searchText").keydown(function(event){
-			
-			if(event.keyCode == 13){
-				goSearch();
-			}
-			
+			if(event.keyCode == 13){ goSearch(1); }
 		});
 		
 		$("select[name=searchWhere]").change(function(){
-			goSearch();
+			goSearch(1);
 		});
 		
 		$("#count").hide();
 		$("#tc").hide();
 		
-		var type="";
-		var loca="";
-	    
+		$("#myBtn").hover(function() {
+			$(this).stop().animate({bottom:'40px'}, 150);
+		}, function() {
+			$(this).stop().animate({bottom:'30px'}, 150);
+		});
+
 	    // 스크롤이 최하단 으로 내려가면 리스트를 조회하고 page를 증가시킨다.
 		$(window).scroll(function(){   
-		    if($(window).scrollTop() >= $(document).height() - $(window).height()){
-		    	 page++; 
-		    	 getGalList(page);
+			if($(window).scrollTop() == $(document).height() - $(window).height()){
+		    	if( $("#count").text() != $("#tc").text() ){
+		    	 	page++; 
+		    	 	getGalList(page);
+		    	}
 		    } 
 		});
+	    
+		// When the user scrolls down 20px from the top of the document, show the button
+		window.onscroll = function() { scrollFunction() };
 	    
 	}); // end of document ready ---------------
 	
@@ -299,9 +331,166 @@
 						
 						if(index == 0){
 							// item active
+							html += '<div class="item active">'
+						    	 + '<a href="<%= ctxPath%>/galDetail.at?gno='+item.GALLERYNO+'"><img class="mainGalImg" src="'+item.MAINPICTURE+'"></a>'  
+						         + '<div class="contents">'
+						         + '<span class="recom_title">'+item.GALLERYNAME+' | '+item.LOCATION+'</span>'
+						         + '<div class="recom_info">'
+								 + '<div class="statusArea">';
+								    
+							$.ajax({
+						    	url: "<%=ctxPath%>/getExhStatus.at",
+						    	data: {"gno":item.GALLERYNO},
+						    	dataType: "JSON",
+						    	success: function(json3){
+						    		
+						    		var html3 = '';
+						    		
+						    		if(json3.exhStat == 0){
+						    			html3 += '<span class="exhStatus" style="background-color: #808080;">전시 준비중</span>';
+						    		}
+						    		else {
+						    			html3 += '<span class="exhStatus" style="background-color: #ff6666;">현재 전시중</span>';
+						    		}
+						    		$(".statusArea").html(html3);
+						    	}
+						         
+						    })
+								         
+						    html += '</div>' 
+						    	 + '<span>휴관일 '+item.HOLIDAY+'</span>'
+						         + '<span>운영시간 '+item.OPENINGHOUR+'</span>'
+						         + '</div>'
+						         + '<div class="thisCurExh">'
+						         + '<span>진행중 전시회</span>'
+						         + '<div class="slideHome'+index+' home">'
+						         + '<div class="exhSlide'+index+' ani">'
+						         
+						    $.ajax({
+						    	url: "<%= ctxPath%>/getRecomExhList.at",
+						    	data: {"gno":item.GALLERYNO},
+						    	dataType: "JSON",
+						    	success: function(json2){
+						    		
+						    		var html2 = '';
+						    		
+						    		if(json2.length == 0){
+						    			alert("실패");
+						    		}
+						    		else {
+						    			
+						    			$.each(json2, function(index2, item2){
+						    				html2 += '<a href="<%= ctxPath%>/exhDetail.at?eno='+item2.EXHIBITIONNO+'"><img src="'+item2.MAINPOSTER+'"/></a>';
+							    		});
+						    		
+						    			$(".exhSlide"+index).append(html2);
+						    			
+						    			if(json2.length > 3){
+											 
+						     				///////////////////////////////////////////////////////////////////
+											$(".exhSlide"+index).css({"width":"calc(154 * "+json2.length+"px)"});
+											
+							     			var width = $(".exhSlide"+index).width();
+							     			var showWidth = width-(154*2)-100;
+							     			
+							     	    	var $wrapper = $(".exhSlide"+index);
+											
+							     			var animator =	function(imgblock){
+							     				
+							     				$wrapper.animate({'left':-showWidth}, 1000*json2.length).animate({ left:"10px" }, 1000*json2.length);
+							     	
+			     								animator(imgblock);
+			     			                }	
+	
+							     			animator($wrapper); // 함수호출
+							     	
+						     			} // end of if ------ 
+						    		
+						    		}
+						    	}
+						    });     
+						    
+						    html += '</div></div></div></div></div>';
 						}
 						else {
 							// item
+							html += '<div class="item">'
+								 + '<a href="<%= ctxPath%>/galDetail.at?gno='+item.GALLERYNO+'"><img class="mainGalImg" src="'+item.MAINPICTURE+'"></a>'  
+						         + '<div class="contents">'
+						         + '<span class="recom_title">'+item.GALLERYNAME+' | '+item.LOCATION+'</span>'
+						         + '<div class="recom_info">'
+								 + '<div class="statusArea">';
+						    
+							$.ajax({
+						    	url: "<%=ctxPath%>/getExhStatus.at",
+						    	data: {"gno":item.GALLERYNO},
+						    	dataType: "JSON",
+						    	success: function(json3){
+						    		
+						    		var html3 = '';
+						    		
+						    		if(json3.exhStat == 0){
+						    			html3 += '<span class="exhStatus" style="background-color: #808080;">전시 준비중</span>';
+						    		}
+						    		else {
+						    			html3 += '<span class="exhStatus" style="background-color: #ff6666;">현재 전시중</span>';
+						    		}
+						    		$(".statusArea").html(html3);
+						    	}
+						         
+						    })
+						         
+						    html += '</div>' 
+						    	 + '<span>휴관일 '+item.HOLIDAY+'</span>'
+						         + '<span>운영시간 '+item.OPENINGHOUR+'</span>'
+						         + '</div>'
+						         + '<div class="thisCurExh">'
+						         + '<span>진행중 전시회</span>'
+						         + '<div class="slideHome'+index+' home">'
+						         + '<div class="exhSlide'+index+' ani">'
+									
+				         $.ajax({
+						    	url: "<%= ctxPath%>/getRecomExhList.at",
+						    	data: {"gno":item.GALLERYNO},
+						    	dataType: "JSON",
+						    	success: function(json2){
+						    		
+						    		var html2 = '';
+						    		
+						    		if(json2.length == 0){
+						    			alert("실패");
+						    		}
+						    		else {
+						    			$.each(json2, function(index2, item2){
+						    				html2 += '<a href="<%= ctxPath%>/exhDetail.at?eno='+item2.EXHIBITIONNO+'"><img src="'+item2.MAINPOSTER+'"/></a>';
+							    		});
+						    			
+						    			$(".exhSlide"+index).append(html2);
+			
+						    			if(json2.length > 3){
+							     			
+						     				$(".exhSlide"+index).css({"width":"calc(154 * "+json2.length+"px)"});
+											
+							     			var width = $(".exhSlide"+index).width();
+							     			var showWidth = width-(154*2)-100;
+							     			
+							     	    	var $wrapper = $(".exhSlide"+index);
+											
+							     			var animator =	function(imgblock){
+							     				
+							     				$wrapper.animate({'left':-showWidth}, 1000*json2.length).animate({ left:"10px" }, 1000*json2.length);
+			     								
+							     				animator(imgblock);
+			     			                }	
+	
+							     			animator($wrapper); // 함수호출
+							     	
+						     			} // end of if ------ 
+						    		}
+						    	}
+						    });     
+						         
+						    html += '</div></div></div></div></div>';
 						}
 						
 					});
@@ -316,27 +505,29 @@
 			}
 		})
 		
-	}
+	} // end of function getGalRecomList() ----------------------
 	
-	
+
 	var len = 9;
 	////////////////// 갤러리 목록 불러오기 /////////////////////
 	function getGalList(page){
-
+		
+		var searchWhere = $("#searchWhere").val();
+		var searchText = $("#searchText").val().trim();
+	
 		$.ajax({
 			url: "<%=ctxPath%>/galList.at",
-			data: {"page":page, "len":len},
+			data: {"page":page, "len":len, "searchWhere":searchWhere, "searchText":searchText},
 			dataType: "JSON",
 			success:function(json){
+				
+				if( (searchWhere != null || searchText != null) && page == 1){ $(".galArea").html(""); $("#count").text("0"); }
 				
 				var html = "";
 				
 				if(json.length == 0){
-					
-					html += "<span style='text-align:center;'>준비중입니다 :></span>";
-					
+					html += "<span class='emptyNoti'>갤러리가 존재하지 않습니다. :></span>";
 					$(".galArea").html(html);
-
 				}
 				else {
 
@@ -372,20 +563,10 @@
 						
 					});
 					
-					
 					$(".galArea").append(html);
-					
-					/* // >>> (중요@@@@@@) 더보기... 버튼의 value 속성에 값을 지정하기 <<< //
-					$("#btnMoreHIT").val(parseInt(start)+lenHIT);
-					///////////////////// Integer.parseInt - javaScript에서는 Integer 객체가 없고 var로 타입이 결정되기 때문에 parseInt만 써주면 됨.
-					///////////////////// java에서는 var가 없고 Integer 객체가 있기 때문에 Integer.parseInt를 해주는 것임 */
-					
-					//countHIT 에 지금까지 출력된 상품의 갯수를 누적해서 기록한다.
+
 					$("#count").text( parseInt($("#count").text())+json.length ); // 초기치 0
-					
-					if( $("#count").text() == $("#tc").text() ){
-						$("#count").text("0");
-					}
+
 				}
 				
 			},
@@ -397,46 +578,33 @@
 		
 	}
 	
-	function goSearch(){
-		
-		var searchWhere = $("#searchWhere").val();
-		var searchText = $("#searchText").val().trim();
+	function goSearch(page){
 
-		if ( searchWhere == '' && searchText == ''){
+		if (searchWhere == '' && searchText == ''){
 			alert("검색어를 입력 후 다시 시도해주세요.");
 			return;
 		}
 		
-		/* var formData = $("form[name=searchGalFrm]").serialize();		
-			
-			$.ajax({
-				
-				url: "",
-				data: formData,
-				type: "GET",
-				dataType: "JSON",
-				success:function(json){
-					
-					var html = "";
-					
-					$.each(json, function(){
-						
-						
-						
-					});
-					
-					
-				},
-				error: function(request, status, error){
-					alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
-				}
-			});		 */
+		getGalList(page);
 		
-	}// end of goSearch() ---------
+	}// end of goSearch(page) ---------
 	
 	function galDetail(gno){
 		location.href="<%=ctxPath%>/galDetail.at?gno="+gno;
-	}
+	}// end of galDetail ---------------------
+	
+	function scrollFunction() {
+	  if ($(window).scrollTop() > 20 || $(document).scrollTop()  > 20) {
+		  $("#myBtn").css("display","block");
+	  } else {
+		  $("#myBtn").css("display","none");
+	  }
+	}// end of scrollFunction ---------------------
+
+	function topFunction() {
+		$('html, body').animate( { scrollTop : 0 }, 400 );
+        return false;
+	}// end of topFunction ---------------------
 
 </script>
 
@@ -445,8 +613,7 @@
 	<div class="Title_Area">
 		<span class="lt">GALLERY</span>
 	</div>
-	<span id="count">0</span>
-	<span id="tc"></span>
+
 	<span class="main_title">이번주 추천 공간</span>
 
 	
@@ -461,98 +628,36 @@
 	
 	    <!-- Wrapper for slides -->
 	    <div class="carousel-inner">
-	      <div class="item active">
-	        <a href=""><img class="mainGalImg" src="<%= ctxPath%>/resources/images/exhibition/챕터투.png"></a>
-	        <div class="contents">			  	
-			  	<span class="recom_title">스튜디오퓨어파이브|부산</span>
-			  	<div class="recom_info">
-			  		<span style="color: red;">현재 전시중</span>
-			  		<span>휴관일 월요일</span>
-			  		<span>운영시간 10:00 - 18:00</span>
-			  	</div>
-			  	<div class="thisCurExh">
-			  		<span>진행중 전시회</span>
-					<div class="exhSlide">
-						<ul>
-						  <li><img src="<%= ctxPath%>/resources/images/exhibition/챕터투.png"/>
-						  <img src="<%= ctxPath%>/resources/images/exhibition/poster1.JPG"/>
-						  <img src="<%= ctxPath%>/resources/images/exhibition/챕터투.png"/></li>
-						  <li><img src="<%= ctxPath%>/resources/images/exhibition/챕터투.png"/>
-						  <img src="<%= ctxPath%>/resources/images/exhibition/챕터투.png"/>
-						  <img src="<%= ctxPath%>/resources/images/exhibition/챕터투.png"/></li>
-						</ul>
-					</div>
-				 </div>
-			  </div>
-	      </div>
-	
-	      <div class="item">
-	        <a href=""><img class="mainGalImg" src="<%= ctxPath%>/resources/images/exhibition/챕터투.png"></a>
-	        <div class="contents">			  	
-			  	<span class="recom_title">스튜디오퓨어파이브|부산</span>
-			  	<div class="recom_info">
-			  		<span style="color: red;">현재 전시중</span>
-			  		<span>휴관일 월요일</span>
-			  		<span>운영시간 10:00 - 18:00</span>
-			  	</div>
-			  	<div class="thisCurExh">
-			  		<span>진행중 전시회</span>
-					<div class="exhSlide">
-						<ul>
-						  <li><img src="<%= ctxPath%>/resources/images/exhibition/챕터투.png"/>
-						  <img src="<%= ctxPath%>/resources/images/exhibition/챕터투.png"/></li>
-						</ul>
-					</div>
-			  	</div>
-			 </div>
-	      </div>
-	    
-	      <div class="item">
-	        <a href=""><img class="mainGalImg" src="<%= ctxPath%>/resources/images/exhibition/챕터투.png"></a>
-	        <div class="contents">			  	
-			  	<span class="recom_title">스튜디오퓨어파이브|부산</span>
-			  	<div class="recom_info">
-			  		<span style="color: red;">현재 전시중</span>
-			  		<span>휴관일 월요일</span>
-			  		<span>운영시간 10:00 - 18:00</span>
-			  	</div>
-			  	<div class="thisCurExh">
-			  		<span>진행중 전시회</span>
-					<div class="exhSlide">
-						<ul>
-						  <li><img src="<%= ctxPath%>/resources/images/exhibition/챕터투.png"/>
-						  <img src="<%= ctxPath%>/resources/images/exhibition/poster1.JPG"/>
-						  <img src="<%= ctxPath%>/resources/images/exhibition/챕터투.png"/></li>
-						</ul>
-					</div>
-			  	</div>
-			 </div>
-	      </div>
 	    </div>
 	  </div>
 	</div>
 		
 
 	<div class="searchArea">
-		<form name="searchGalFrm">
-			<select name="searchWhere" id="searchWhere">
-				<option value="">지역전체</option>
-				<option value="서울">서울</option>
-				<option value="경기 인천">경기 인천</option>
-				<option value="부산 울산 경남">부산 울산 경남</option>
-				<option value="대구 경북">대구 경북</option>
-				<option value="광주 전라">광주 전라</option>
-				<option value="대전 충청 세종">대전 충청 세종</option>
-				<option value="제주 강원">제주 강원</option>
-			</select>
-			<div class="inputText">
-				<input type="text" name="searchText" id="searchText" placeholder="전시회 검색???"/>
-				<img class="icoForSearch" onclick="goSearch()" src="<%= ctxPath%>/resources/images/exhibition/ico/ico_search.png">
-			</div>
-		</form>
+		<select name="searchWhere" id="searchWhere">
+			<option value="">지역전체</option>
+			<option value="1">서울</option>
+			<option value="2">경기 인천</option>
+			<option value="3">부산 울산 경남</option>
+			<option value="4">대구 경북</option>
+			<option value="5">광주 전라</option>
+			<option value="6">대전 충청 세종</option>
+			<option value="7">제주 강원</option>
+		</select>
+		<div class="inputText">
+			<input type="text" name="searchText" id="searchText" placeholder="갤러리명으로 검색하기"/>
+			<img class="icoForSearch btn" onclick="goSearch(1);" src="<%= ctxPath%>/resources/images/exhibition/ico/ico_search.png">
+		</div>
 	</div>
 	
+	<span id="count">0</span>
+	<span id="tc"></span>
+	
 	<div class="galArea">
+	</div>
+	
+	<div style="position: relative;">
+		<img onclick="topFunction()" id="myBtn" title="Go to top" src="<%= ctxPath%>/resources/images/exhibition/ico/dropup.png">
 	</div>
 	
 </div>

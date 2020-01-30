@@ -47,7 +47,21 @@ public class ExhibitsDAO implements InterExhibitsDAO {
 		List<HashMap<String, String>> galRecomList = sql.selectList("exhibits.getGalRecomList");
 		return galRecomList;
 	}
+	
+	/////////////////// 갤러리 이번주 추천 공간 - 해당 갤러리의 전시회 진행 유무 //////////////////
+	@Override
+	public int getExhStatus(String gno) {
+		int ExhStatus = sql.selectOne("exhibits.getExhStatus", gno);
+		return ExhStatus;
+	}
 
+	//////////////////이번주 추천 공간 - 해당 갤러리의 전시회 리스트 /////////////////
+	@Override
+	public List<HashMap<String, String>> getRecomExhList(String gno) {
+		List<HashMap<String, String>> RecomExhList = sql.selectList("exhibits.getRecomExhList", gno);
+		return RecomExhList;
+	}
+	
 	////////////////////// 갤러리 상세 페이지 /////////////////////
 	@Override
 	public HashMap<String, String> getGalDetail(String gno) {
@@ -131,5 +145,8 @@ public class ExhibitsDAO implements InterExhibitsDAO {
 		List<HashMap<String, String>> AgeChart = sql.selectList("exhibits.getAgeChart", eno);
 		return AgeChart;
 	}
+	
+
+
 
 }
