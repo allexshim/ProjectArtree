@@ -282,6 +282,28 @@ public class SearchController {
 		return jsarr.toString();	
 	} // end of selectThemeSearch ------------------------------------------------------
 	
+	////////////////////////////////////////////////////////////////////////////////
+	
+	// 관리자 페이지 차트 ~ 태그
+	// /getChartDataByTags.at
+	@ResponseBody
+	@RequestMapping(value="/getChartDataByTags.at", produces="text/plain;charset=UTF-8")
+	public String getChartDataByTags(HttpServletRequest request) {
+		
+		// 각각 tag이름, tag의 빈도수를 저장하는 HashMap
+		List<HashMap<String,String>> TagList = service.getChartDataByTags();
+		// tag, CNT
+		
+		JSONArray jsarr = new JSONArray();
+		for(HashMap<String,String> map : TagList) {
+			JSONObject jsobj = new JSONObject();
+			jsobj.put("tag", map.get("tag"));
+			jsobj.put("cnt", map.get("CNT"));
+			jsobj.put("drilldown", map.get("tag"));
+			jsarr.put(jsobj);
+		}
+		return jsarr.toString();
+	} // end of getChartDataByTags ----------------------------------------
 	
 	
 }

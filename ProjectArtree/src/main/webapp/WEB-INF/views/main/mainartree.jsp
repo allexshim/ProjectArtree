@@ -9,13 +9,11 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 <link rel="stylesheet" href="https://unpkg.com/swiper/css/swiper.css">
 <link rel="stylesheet" href="https://unpkg.com/swiper/css/swiper.min.css">
-
 <script src="https://unpkg.com/swiper/js/swiper.js"></script>
 <script src="https://unpkg.com/swiper/js/swiper.min.js"></script>
 
@@ -164,6 +162,16 @@
 		flex: 1;
 		width: 25%;
 		height: 100%;
+	}
+	
+	.event_one span:hover{
+		text-decoration: none;
+		cursor: pointer;
+	}
+	
+	.event_one:hover {
+		text-decoration: none;
+		cursor: pointer;
 	}
 	
 	.event_poster {
@@ -376,6 +384,8 @@
     }
     
     .end-exp-title {
+    	width: 70%;
+    	-webkit-transform:translate(55px,0);
     	font-size: 14pt;
     }
     
@@ -490,6 +500,9 @@ $(function () {
 		},
 		error: function(request, status, error){
 			alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+		},
+		complete: function() {
+			doInitializeSwiper();
 		}
 	});
 	
@@ -641,7 +654,7 @@ function exhDetail(eno){
 	</div>
 	
 	
-	<div id="overflow" class="main-container" style="margin-bottom: 400px;">
+	<div id="overflow" class="main-container" style="margin-bottom: 700px;">
 		<div class="hot-exh">
 			<div id="div1" style="float:center; margin:0 auto; transform:translate(100px,20px);">
 				<h2>인기 전시회</h2>
@@ -658,13 +671,13 @@ function exhDetail(eno){
 	<div class="recom-exh">	
 		<div class="swiper-container">
 		    <div class="swiper-wrapper">
-		      
+		    
 		    </div>
 		    <!-- Add Pagination -->
 		    <div class="swiper-pagination"></div>
 		    <!-- Add Arrows -->
-		    <div class="swiper-button-next"></div>
-		    <div class="swiper-button-prev"></div>
+		    <div class="swiper-button-next" style=""></div>
+		    <div class="swiper-button-prev" style=""></div>
 		  </div>
 			
 			<div id="div2" class="recom-exh-title" style="float: center; transform:translate(0,-680px);">
@@ -693,26 +706,26 @@ function exhDetail(eno){
 			
 		</div>
 		
-		<div id="div4" class="new-title" style="float: right; -webkit-transform:translate(-58px, 450px);">
+		<div id="div4" class="new-title" style="float: right; -webkit-transform:translate(-58px, 550px);">
 			<h2>종료임박 전시회</h2>
 		</div>
-		<hr color="black;" style="width:90%; transform:translate(64px,500px);" />
-		<div class="end-exh" style="transform:translate(0, 170px);">
+		<hr color="black;" style="width:90%; transform:translate(64px,600px);" />
+		<div class="end-exh" style="transform:translate(0, 270px);">
 			
 		</div>
 	</div>
 	
-	<hr color="#f2f2f2;" style="transform:translate(0, 330px);" />
+	<hr color="#f2f2f2;" style="transform:translate(0, 530px);" />
 	
 	
-	<div id="div5" class="event-title" style=" float: left; transform:translate(35px, 260px);">
+	<div id="div5" class="event-title" style=" float: left; transform:translate(35px, 460px);">
 		<h2>EVENT</h2>
 	</div>
-	<div class="event-more" style="float: right; transform:translate(-35px, 500px);">
+	<div class="event-more" style="float: right; transform:translate(-35px, 700px);">
 		<a class="event-morebtn " href="<%= ctxPath%>/eventList.at">이벤트 모두보기 +</a>
 	</div>
-	<hr color="black;" style="width:94%; transform:translate(38px,525px);" />
-       	<div class="event-div" style="transform:translate(0, 280px);">
+	<hr color="black;" style="width:94%; transform:translate(38px,725px);" />
+       	<div class="event-div" style="transform:translate(0, 480px);">
            	
        	</div>
        	
@@ -723,46 +736,24 @@ function exhDetail(eno){
 </div>
 
 
-<script type="text/javascript">
-
-var slideIndex = 0;
-showSlides();
-
-function showSlides() {
-  var i;
-  var slides = document.getElementsByClassName("mySlides");
-  var dots = document.getElementsByClassName("dot");
-  for (i = 0; i < slides.length; i++) {
-    slides[i].style.display = "none";  
-  }
-  slideIndex++;
-  if (slideIndex > slides.length) {slideIndex = 1}    
-  for (i = 0; i < dots.length; i++) {
-    dots[i].className = dots[i].className.replace(" active", "");
-  }
-  slides[slideIndex-1].style.display = "block";  
-  dots[slideIndex-1].className += " active";
-  setTimeout(showSlides, 3000); // Change image every 2 seconds
-}
-
-
-</script>
-
 <script>
-<!-- Initialize Swiper -->
-var swiper = new Swiper('.swiper-container', {
-    slidesPerView: 3,
-    spaceBetween: 30,
-    slidesPerGroup: 3,
-    loop: true,
-    loopFillGroupWithBlank: true,
-    pagination: {
-      el: '.swiper-pagination',
-      clickable: true,
-    },
-    navigation: {
-      nextEl: '.swiper-button-next',
-      prevEl: '.swiper-button-prev',
-    },
-  });
+var swiper;
+<%-- Initialize Swiper --%>
+function doInitializeSwiper() {
+	swiper = new Swiper('.swiper-container', {
+	    slidesPerView: 3,
+	    spaceBetween: 30,
+	    slidesPerGroup: 3,
+	    loop: true,
+	    loopFillGroupWithBlank: true,
+	    pagination: {
+	      el: '.swiper-pagination',
+	      clickable: true,
+	    },
+	    navigation: {
+	      nextEl: '.swiper-button-next',
+	      prevEl: '.swiper-button-prev',
+	    },
+	  });	
+}
 </script>

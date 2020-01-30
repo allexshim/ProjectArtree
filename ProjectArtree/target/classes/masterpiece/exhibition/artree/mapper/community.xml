@@ -50,6 +50,14 @@
         </if>
 	</select>
 	
+	<!-- 각 게시글에 달린 댓글 개수 알아오기 -->
+	<select id="getNumberOfComment" parameterType="String" resultType="Integer" >
+		select count(*) from
+		board_comment A join (select * from community where no = #{ no }) C
+		on A.fk_no = C.no
+		where A.boardNo = '2'
+	</select>
+	
 	<resultMap type="HashMap" id="Exhibit">
 		<result property="exhibitionno"  	column="exhibitionno" 		javaType="String"/> 
 		<result property="exhibitionname"   column="exhibitionname" 	javaType="String"/> 
@@ -117,10 +125,68 @@
 		) E on C.fk_exhibitionno = E.exhibitionno
 	</select>
 
+	<!-- 조회수 증가시키기 -->
+	<update id="updateReadCount" parameterType="HashMap">
+		update community set readCount = readCount+1
+		where no = #{no} 
+		<if test=' fk_idx != "" '>
+		and fk_idx != #{fk_idx}
+		</if>
+	</update>
+	
 	<!-- 글 수정하기 -->
 	<update id="modifyCommunity" parameterType="HashMap" >
 		update community set fk_exhibitionNo = #{exhibitionno} , title = #{title}, content = #{content}
 		where no = #{no}
 	</update>
+
+	<!-- 글 삭제하기
+	1. 글에 달린 댓글 삭제하기 -->
+	<delete id="deleteCommunityComment" parameterType="String" >
+		delete from board_comment
+		where boardNo = '2' and fk_no = #{no}
+	</delete>
+	
+	<!-- 2. 글 삭제하기 -->
+	<delete id="deleteCommunity" parameterType="String" >
+		delete from community
+		where no = #{no}
+	</delete>
+
+	<!-- 새 댓글 등록하기 -->
+	<insert id="addComment" parameterType="HashMap" >
+		insert into board_comment(commentNo, boardNo, fk_idx, fk_no, comContent, comwriteDay)
+		values(seq_board_comment.nextval, 2, #{ fk_idx } , #{ fk_no }, #{ comContent } , sysdate)
+	</insert>
+	
+	<resultMap type="HashMap" id="commentMap">
+		<result property="commentNo"  	column="commentNo" 	 javaType="String"/> 
+		<result property="fk_idx"  		column="fk_idx" 	 javaType="String"/> 
+		<result property="comContent"  	column="comContent"  javaType="String"/> 
+		<result property="comwriteDay"  column="comwriteDay" javaType="String"/> 
+		<result property="name"  		column="name" 		 javaType="String"/> 
+	</resultMap>
+	
+	<!-- 해당 글의 댓글 불러오기 -->
+	<select id="getComment" parameterType="String" resultMap="commentMap" >
+		select commentNo, fk_idx, comContent, comwriteDay, M.name
+		from 
+		(select commentNo, fk_idx, comContent, comwriteDay
+		from board_comment 
+		where fk_no = #{no} ) C join member M
+		on C.fk_idx = M.idx
+		order by commentNo desc
+	</select>
+
+	<!-- 댓글 수정하기 -->
+	<insert id="modifyComment" parameterType="HashMap" >
+		update board_comment set comContent = #{comContent} 
+		where commentNo = #{commentNo}
+	</insert>
+	
+	<!-- 댓글 삭제하기 -->
+	<delete id="deleteComment" parameterType="String" >
+		delete from board_comment where commentno = #{commentNo}
+	</delete>
 
 </mapper>

@@ -9,4 +9,5 @@
     if(${loc != null}) {
     	location.href="${loc}";
     }
+
 </script> 
