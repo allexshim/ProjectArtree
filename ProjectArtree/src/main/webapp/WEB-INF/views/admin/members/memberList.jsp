@@ -240,37 +240,33 @@
 		html += "</tr></thead>";
 			
 		html += "<tbody>";
+		
+		console.log("${ memberList.size }");
 			
-		if (${ memberList != null }) {
+	/* 	if (${ memberList != null }) {
 			
 			for(var i = 0; i < ${ memberList.size }; i++) {
 				
+				html += "<tr>";
+				html += "<td>${ member.idx }</td>";
+				html += "<td>${ member.email }</td>";
+				html += "<td>${ member.name }</td>";
 				
-				
+				if(${ member.status == '0' })
+				html += "<td>탈퇴회원</td>";
+				if(${ member.status == '1' })
+				html += "<td>가입회원</td>";
+				if(${ member.status == '2' })
+				html += "<td>관리자</td>";
+			
 			}
 			
-		}
-				<c:forEach var="member" items="${ memberList }">
-				<tr>
-					<td>${ member.idx }</td>
-					<td>${ member.email }</td>
-					<td>${ member.name }</td>
-					<c:if test="${ member.status == '0' }">
-					<td>탈퇴회원</td>
-					</c:if>
-					<c:if test="${ member.status == '1' }">
-					<td>가입회원</td>
-					</c:if>
-					<c:if test="${ member.status == '2' }">
-					<td>관리자</td>
-					</c:if>
-				</tr>
-				</c:forEach>
-				</c:if>
+			html += "</tbody>";
 			
-			</tbody>"
+		}
 		
-		
+		$("#reviewContents").html(html);
+		 */
 	});
 
 </script>
