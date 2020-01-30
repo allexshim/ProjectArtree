@@ -235,39 +235,56 @@
 				else {
 
 					$.each(json, function(index, item){
-					
+						
 						if( (index+1)%4 != 0){				
 							
-							html += "<a class='exh_one' onclick='exhDetail("+item.EXHIBITIONNO+")'>"
-								 + "<img class='exh_poster' src='"+item.MAINPOSTER+"'/>"
-								 + "<div class='artInfoArea'>"
+							html += "<a class='exh_one' onclick='exhDetail("+item.EXHIBITIONNO+")'>";
+							
+								if(item.MAINPOSTER.substr(0, 4) != 'http'){
+									html += "<img class='exh_poster' src='<%= ctxPath%>/resources/files/"+item.MAINPOSTER+"'/>";
+									alert(item.MAINPOSTER.substr(0, 4));
+								}
+								else {
+									html += "<img class='exh_poster' src='"+item.MAINPOSTER+"'/>";
+								}
+							
+							html += "<div class='artInfoArea'>"
 								 + "<span class='art_info_aboutLoca InfoWhereWhen'>"+item.GALLERYNAME+" | "+item.LOCATION+"</span>"
 								 + "<span class='art_mainTitle'>"+item.EXHIBITIONNAME+"</span>";
-							if(item.PRICE == 0){
-								html += "<span class='forMoving InfoWhereWhen'>"+item.SCHEDULE+" | FREE</span>";
-							}
-							else {
-								html += "<span class='forMoving InfoWhereWhen'>"+item.SCHEDULE+" | BOOK</span>";
-							}
+							
+								if(item.PRICE == 0){
+									html += "<span class='forMoving InfoWhereWhen'>"+item.SCHEDULE+" | FREE</span>";
+								}
+								else {
+									html += "<span class='forMoving InfoWhereWhen'>"+item.SCHEDULE+" | BOOK</span>";
+								}
 							
 							html += "</div></a>";
 							
 						}
 						else {
 							
-							html += "<a class='exh_one' style='margin-right:0px;' onclick='exhDetail("+item.EXHIBITIONNO+")'>"
-							 	 + "<img class='exh_poster' src='"+item.MAINPOSTER+"'/>"
-							  	 + "<div class='artInfoArea'>"
+							html += "<a class='exh_one' style='margin-right:0px;' onclick='exhDetail("+item.EXHIBITIONNO+")'>";
+							 	 
+								if(item.MAINPOSTER.substr(0, 4) != 'http'){
+									html += "<img class='exh_poster' src='<%= ctxPath%>/resources/files/"+item.MAINPOSTER+"'/>";
+								}
+								else {
+									html += "<img class='exh_poster' src='"+item.MAINPOSTER+"'/>";
+								}
+							
+							html += "<div class='artInfoArea'>"
 							  	 + "<span class='art_info_aboutLoca InfoWhereWhen'>"+item.GALLERYNAME+" | "+item.LOCATION+"</span>"
 							 	 + "<span class='art_mainTitle'>"+item.EXHIBITIONNAME+"</span>";
-						if(item.PRICE == 0){
-							html += "<span class='forMoving InfoWhereWhen'>"+item.SCHEDULE+" | FREE</span>";
-						}
-						else {
-							html += "<span class='forMoving InfoWhereWhen'>"+item.SCHEDULE+" | BOOK</span>";
-						}
+							 	 
+								if(item.PRICE == 0){
+									html += "<span class='forMoving InfoWhereWhen'>"+item.SCHEDULE+" | FREE</span>";
+								}
+								else {
+									html += "<span class='forMoving InfoWhereWhen'>"+item.SCHEDULE+" | BOOK</span>";
+								}
 						
-						html += "</div></a><br/>";
+							html += "</div></a><br/>";
 							
 						}
 						

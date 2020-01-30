@@ -132,9 +132,27 @@
 		border-radius: 5px;
 	}
 	
+	#detailContainer .modal-dialog {
+		margin: 100px auto !important;
+	}
+	
+	#detailContainer .modalExhArea {
+		overflow: scroll;
+	}
+	
+	#detailContainer .modalSpan {
+		font-size: 15pt;
+		padding: 30px 15px;
+		border: solid 1px #e6e6e6;
+		margin: 20px auto;
+	}
+	
 </style>
 
-<script src="<%= ctxPath%>/resources/js/jquery-3.3.1.min.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
 <script type="text/javascript">
 	$(document).ready(function(){ 
 		
@@ -181,7 +199,73 @@
 			}
 		});
 		
+		$("input[id=searchName]").keyup(function() { getExhList($("#searchName").val()); });
+		
 	}); // end of $(document).ready -------------------------------------
+	
+	function getExhList(key){
+		
+		$.ajax({
+			
+			url:"<%=ctxPath%>/getModalExhList.at",
+			data: {"key":key},
+			dataType: "JSON",
+			success: function(json){
+				
+				var html = "";
+				
+				if(json.length == 0){
+					html += "<span class='modalSpan'>전시회가 존재하지 않습니다.</span>"
+				}
+				else {
+					
+					$.each(json, function(index, item){
+							
+						if( (index+1)%3 != 0){				
+							
+							html += "<a class='exh_one' onclick='goText("+item.EXHIBITIONNAME+")'>";
+							
+								if(item.MAINPOSTER.substr(0, 4) != 'http'){
+									html += "<img class='exh_poster' src='<%= ctxPath%>/resources/files/"+item.MAINPOSTER+"'/>";
+									alert(item.MAINPOSTER.substr(0, 4));
+								}
+								else {
+									html += "<img class='exh_poster' src='"+item.MAINPOSTER+"'/>";
+								}
+							
+							html += "<span class='art_mainTitle'>"+item.EXHIBITIONNAME+"</span></div></a>";
+							
+						}
+						else {
+							
+							html += "<a class='exh_one' style='margin-right:0px;' onclick='goText("+item.EXHIBITIONNAME+")'>";
+							
+							if(item.MAINPOSTER.substr(0, 4) != 'http'){
+								html += "<img class='exh_poster' src='<%= ctxPath%>/resources/files/"+item.MAINPOSTER+"'/>";
+								alert(item.MAINPOSTER.substr(0, 4));
+							}
+							else {
+								html += "<img class='exh_poster' src='"+item.MAINPOSTER+"'/>";
+							}
+						
+							html += "<span class='art_mainTitle'>"+item.EXHIBITIONNAME+"</span></div></a><br/>";
+							
+						}
+						
+					});
+					
+					$(".modalExhArea").html(html);
+					
+				}
+				
+			},
+			error: function(request, status, error){
+				alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+			}
+			
+		});
+		
+	}
 
 </script>
 
@@ -202,9 +286,11 @@
 			<table id="detailTable">
 				<tr>
 					<td>전시회명</td>
-					<td><input id="name" name="name" type="text" placeholder="전시회 이름을 입력해주세요."/></td>
+					<td>
+						<input id="name" name="name" type="text" placeholder="전시회명을 입력해주세요." readonly="readonly" data-toggle="modal" data-target="#myModal"/>
+					</td>
 				<tr>
-			
+				
 				<tr>
 					<td>제목</td>
 					<td><input id="title" name="title" type="text" placeholder="제목을 입력해주세요."/></td>
@@ -227,6 +313,24 @@
 	</form>
 			<div id="myBtns">
 				<img id="registerBtn" src="<%= ctxPath %>/resources/images/board/registerBtn.JPG" />
+			</div>
+		</div>
+		
+		<!-- Modal -->
+		<div class="modal fade" id="myModal" role="dialog">
+			<div class="modal-dialog">
+				<!-- Modal content-->
+				<div class="modal-content">
+				  <div class="modal-header">
+				    <button type="button" class="close" data-dismiss="modal">&times;</button>
+				    <h4 class="modal-title">전시회명 검색</h4>
+				  </div>
+				  <div class="modal-body">
+				    <input type="text" name="searchName" id="searchName" placeholder="전시회명을 입력해주세요." style="width: 100%;"/>
+				    <div class="modalExhArea">
+				    </div>
+				  </div>
+				</div>
 			</div>
 		</div>
 		
