@@ -150,4 +150,41 @@
         order by to_date(startdate)
 	</select>
 	
+	
+
+	<!-- 관리자 차트 -->
+	<!-- 해당 회원이 선호하는 태그를 가져온다  : String을 파라미터로 가져와서 if절에 넣으면 에러가 나서 아래처럼 value로 지정-->
+	<select id="getPreferTag" resultType="String" >
+		select favortag
+        from (
+        	select * 
+        	from member 
+        ) M join wishlist W
+        on M.idx = W.fk_idx
+	</select>
+	
+	<resultMap type="HashMap" id="ChartTagMap">
+		<result property="tag" column="tag" javaType="String"/>
+		<result property="CNT" column="CNT" javaType="String"/>
+	</resultMap>
+	
+	<!-- // 가져온 선호 태그를 split으로 자른 후, 각 태그별 빈도수를 가져온다.
+	list<String> 인경우의 resultType은 string 
+	-->
+	<select id="getChartDataByTags" parameterType="String" resultMap="ChartTagMap">
+		select TXT as tag, CNT from
+	    (select TXT, CNT, rownum as RNO
+	    from
+	    (select TXT, CNT
+	    from (select TXT, count(*) as CNT
+	    from ( WITH TT AS
+	        ( SELECT #{preferTag} TXT FROM DUAL )
+	        SELECT TRIM(REGEXP_SUBSTR(TXT, '[^,]+', 1, LEVEL)) AS TXT
+	        FROM TT CONNECT BY INSTR(TXT, ',', 1, LEVEL - 1) > 0
+	    ) V
+	    group by TXT) X
+	    order by CNT desc ) Y
+	    ) Z
+	</select>
+	
 </mapper>

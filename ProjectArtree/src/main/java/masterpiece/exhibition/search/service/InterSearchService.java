@@ -23,4 +23,10 @@ public interface InterSearchService {
 	// ajax로 호출, 선택한 갤러리에서 열리는 전시회를 가지고 옵니다.
 	List<HashMap<String, String>> getExhibitionByLocation(String galleryName);
 
+	////////////////////////////////////////////////////////////////////////////
+	
+	// 관리자 차트	
+	// 각각 tag이름, tag의 빈도수를 저장하는 HashMap
+	List<HashMap<String, String>> getChartDataByTags();
+
 }

@@ -13,7 +13,11 @@
 
 <style type="text/css">
 @import url(//fonts.googleapis.com/earlyaccess/notosanskr.css);
-
+	
+	.M1 {
+		-webkit-transform:translate(-10px,0);
+	}
+	
 	body {
 		font-family: 'Noto Sans Kr', sans-serif;
 	}
@@ -285,7 +289,7 @@
 								<td>${item.no}</td>
 								<td>${item.exhibitionname}</td>
 								<td style="display:none;">${item.exhibitionno}</td>
-								<td style="cursor:pointer;">${item.title}</td>
+								<td style="cursor:pointer;">${item.title} <c:if test="${item.CmtCount != 0}"><span style="font-weight:bold; font-size: 10pt;">[${item.CmtCount}]</span></c:if></td>
 								<td>${item.name}</td>
 								<td>${item.writeday}</td>
 								<td style="text-align: center !important;">${item.readcount}</td>		

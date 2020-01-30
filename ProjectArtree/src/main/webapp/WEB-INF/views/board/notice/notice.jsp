@@ -18,6 +18,14 @@
 		font-family: 'Noto Sans Kr', sans-serif;
 	}
 	
+	.M1 {
+		-webkit-transform:translate(-10px,0);
+	}
+	
+	.noticeContainer {
+		width: 80%;
+	}
+	
 	#reviewContainer {
 		padding-bottom : 100px;
 	}
@@ -71,7 +79,7 @@
 		padding-top : 20px;
 	}
 	
-	#addTitle, .fa-plus {
+	#notTitle, .fa-plus {
 		font-size : 25px;
 		font-weight : bold;
 		color : black;
@@ -81,11 +89,11 @@
 		color:black;
 	}
 	
-	#addTitle, #addContent {
+	#notTitle, #notContent {
 		border : none;
 	}
 	
-	#addContent {
+	#notContent {
 		font-size : 12pt;
 		width : 650px;
 		height : 200px;
@@ -163,19 +171,22 @@
 		// 새 공지를 작성 후 add를 클릭하면 유효성 검사 후 submit
 		$("#addBtn").click(function(){
 			
-			if($("#addTitle").val().trim() == ""){
+			if($("#notTitle").val().trim() == ""){
 				alert("제목을 입력하세요!");
-				$("#addTitle").focus();
+				$("#notTitle").focus();
 			}
-			else if($("#addContent").val().trim() == ""){
+			else if($("#notContent").val().trim() == ""){
 				alert("내용을 입력하세요!");
-				$("#addContent").focus();			
+				$("#notContent").focus();			
 			}
 			else {
+				alert($("#notTitle").val());
+				alert($("#notContent").val());
 				var frm = document.newNotice;
 				frm.method = "POST";
-				frm.action = "/addNotice.at";
+				frm.action = "<%=ctxPath%>/addNotice.at";
 				frm.submit();
+				
 			}
 		}); // 공지 추가 하기 끝 --------------------------------
 		
@@ -224,9 +235,7 @@
 		 
 	}); // end of document.ready ---------------------------------------
 
-	function excelbtn(){
-		location.href="<%= ctxPath%>/excelDown.at";
-	}
+	
 	
 </script>
 </head>
@@ -254,115 +263,30 @@
 			<form id="newNotice" name="newNotice">
 				<span>
 					<i class="fas fa-plus"></i>
-					<input type="text" name="addTitle" id="addTitle" placeholder="제목을 입력하세요." /><br/>
-					<textarea name="addContent" id="addContent" placeholder="내용을 입력하세요."></textarea>
+					<input type="text" name="notTitle" id="notTitle" placeholder="제목을 입력하세요." /><br/>
+					<textarea name="notContent" id="notContent" placeholder="내용을 입력하세요."></textarea>
 				</span>
 				<div align="center">
 					<img onclick="" id="addBtn" src="<%= ctxPath %>/resources/images/board/addBtn.JPG" />
 				</div>
-				
 				
 			</form>
 		</div>
 		
 		<div id="noticeList">
 			<div class="singleNotice">
-				<span class="noticeTitle">공지사항공지사항공지사항공지공지사항공지사항공지사항공지
+				<span class="noticeTitle"> ${notTitle}
 				 <i class="arrow fas fa-chevron-down"></i>
-				 <span class="noticeNo" style="display:none;">"$ {noticeNo}"</span>
+				 <span class="noticeNo" style="display:none;">${noticeNo}</span>
 				 </span>
 				<div class="noticeContent" style="width:80%;">
-					공지사항에 대한 자세한 설명을 볼수있습니다. 공지사항에 대한 자세한 설명을 볼수있습니다. 공지사항에 대한 자세한 설명을 볼수있습니다.
-					공지사항에 대한 자세한 설명을 볼수있습니다. 공지사항에 대한 자세한 설명을 볼수있습니다.
-					공지사항에 대한 자세한 설명을 볼수있습니다.공지사항에 대한 자세한 설명을 볼수있습니다.공지사항에 대한 자세한 설명을 볼수있습니다.
-					공지사항에 대한 자세한 설명을 볼수있습니다.공지사항에 대한 자세한 설명을 볼수있습니다.공지사항에 대한 자세한 설명을 볼수있습니다.
-					공지사항에 대한 자세한 설명을 볼수있습니다.공지사항에 대한 자세한 설명을 볼수있습니다.
+					${notContent}
+					
+					<p>작성일 : ${notWriteday}</p>
 				</div>	
 			</div>
 		
-			<div class="singleNotice">
-				<span class="noticeTitle">공지사항공지사항공지사항공지공지사항공지사항공지사항공지
-				 <i class="arrow fas fa-chevron-down"></i>
-				 <span class="noticeNo" style="display:none;">"$ {noticeNo}"</span>
-				 </span>
-				<div class="noticeContent">
-					공지사항에 대한 자세한 설명을 볼수있습니다. 공지사항에 대한 자세한 설명을 볼수있습니다. 공지사항에 대한 자세한 설명을 볼수있습니다.
-					공지사항에 대한 자세한 설명을 볼수있습니다. 공지사항에 대한 자세한 설명을 볼수있습니다.
-					공지사항에 대한 자세한 설명을 볼수있습니다.공지사항에 대한 자세한 설명을 볼수있습니다.공지사항에 대한 자세한 설명을 볼수있습니다.
-					공지사항에 대한 자세한 설명을 볼수있습니다.공지사항에 대한 자세한 설명을 볼수있습니다.공지사항에 대한 자세한 설명을 볼수있습니다.
-					공지사항에 대한 자세한 설명을 볼수있습니다.공지사항에 대한 자세한 설명을 볼수있습니다.
-				</div>	
-			</div>
 			
-			<div class="singleNotice">
-				<span class="noticeTitle">공지사항공지사항공지사항공지공지사항공지사항공지사항공지
-				 <i class="arrow fas fa-chevron-down"></i>
-				 <span class="noticeNo" style="display:none;">"$ {noticeNo}"</span>
-				 </span>
-				<div class="noticeContent">
-					공지사항에 대한 자세한 설명을 볼수있습니다. 공지사항에 대한 자세한 설명을 볼수있습니다. 공지사항에 대한 자세한 설명을 볼수있습니다.
-					공지사항에 대한 자세한 설명을 볼수있습니다. 공지사항에 대한 자세한 설명을 볼수있습니다.
-					공지사항에 대한 자세한 설명을 볼수있습니다.공지사항에 대한 자세한 설명을 볼수있습니다.공지사항에 대한 자세한 설명을 볼수있습니다.
-					공지사항에 대한 자세한 설명을 볼수있습니다.공지사항에 대한 자세한 설명을 볼수있습니다.공지사항에 대한 자세한 설명을 볼수있습니다.
-					공지사항에 대한 자세한 설명을 볼수있습니다.공지사항에 대한 자세한 설명을 볼수있습니다.
-				</div>	
-			</div>
-			
-			<div class="singleNotice">
-				<span class="noticeTitle">공지사항공지사항공지사항공지공지사항공지사항공지사항공지
-				 <i class="arrow fas fa-chevron-down"></i>
-				 <span class="noticeNo" style="display:none;">"$ {noticeNo}"</span>
-				 </span>
-				<div class="noticeContent">
-					공지사항에 대한 자세한 설명을 볼수있습니다. 공지사항에 대한 자세한 설명을 볼수있습니다. 공지사항에 대한 자세한 설명을 볼수있습니다.
-					공지사항에 대한 자세한 설명을 볼수있습니다. 공지사항에 대한 자세한 설명을 볼수있습니다.
-					공지사항에 대한 자세한 설명을 볼수있습니다.공지사항에 대한 자세한 설명을 볼수있습니다.공지사항에 대한 자세한 설명을 볼수있습니다.
-					공지사항에 대한 자세한 설명을 볼수있습니다.공지사항에 대한 자세한 설명을 볼수있습니다.공지사항에 대한 자세한 설명을 볼수있습니다.
-					공지사항에 대한 자세한 설명을 볼수있습니다.공지사항에 대한 자세한 설명을 볼수있습니다.
-				</div>	
-			</div>
-			
-			<div class="singleNotice">
-				<span class="noticeTitle">공지사항공지사항공지사항공지공지사항공지사항공지사항공지
-				 <i class="arrow fas fa-chevron-down"></i>
-				 <span class="noticeNo" style="display:none;">"$ {noticeNo}"</span>
-				 </span>
-				<div class="noticeContent">
-					공지사항에 대한 자세한 설명을 볼수있습니다. 공지사항에 대한 자세한 설명을 볼수있습니다. 공지사항에 대한 자세한 설명을 볼수있습니다.
-					공지사항에 대한 자세한 설명을 볼수있습니다. 공지사항에 대한 자세한 설명을 볼수있습니다.
-					공지사항에 대한 자세한 설명을 볼수있습니다.공지사항에 대한 자세한 설명을 볼수있습니다.공지사항에 대한 자세한 설명을 볼수있습니다.
-					공지사항에 대한 자세한 설명을 볼수있습니다.공지사항에 대한 자세한 설명을 볼수있습니다.공지사항에 대한 자세한 설명을 볼수있습니다.
-					공지사항에 대한 자세한 설명을 볼수있습니다.공지사항에 대한 자세한 설명을 볼수있습니다.
-				</div>	
-			</div>
-			
-			<div class="singleNotice">
-				<span class="noticeTitle">공지사항공지사항공지사항공지공지사항공지사항공지사항공지
-				 <i class="arrow fas fa-chevron-down"></i>
-				 <span class="noticeNo" style="display:none;">"$ {noticeNo}"</span>
-				 </span>
-				<div class="noticeContent">
-					공지사항에 대한 자세한 설명을 볼수있습니다. 공지사항에 대한 자세한 설명을 볼수있습니다. 공지사항에 대한 자세한 설명을 볼수있습니다.
-					공지사항에 대한 자세한 설명을 볼수있습니다. 공지사항에 대한 자세한 설명을 볼수있습니다.
-					공지사항에 대한 자세한 설명을 볼수있습니다.공지사항에 대한 자세한 설명을 볼수있습니다.공지사항에 대한 자세한 설명을 볼수있습니다.
-					공지사항에 대한 자세한 설명을 볼수있습니다.공지사항에 대한 자세한 설명을 볼수있습니다.공지사항에 대한 자세한 설명을 볼수있습니다.
-					공지사항에 대한 자세한 설명을 볼수있습니다.공지사항에 대한 자세한 설명을 볼수있습니다.
-				</div>	
-			</div>
-			
-			<div class="singleNotice">
-				<span class="noticeTitle">공지사항공지사항공지사항공지공지사항공지사항공지사항공지
-				 <i class="arrow fas fa-chevron-down"></i>
-				 <span class="noticeNo" style="display:none;">"$ {noticeNo}"</span>
-				 </span>
-				<div class="noticeContent">
-					공지사항에 대한 자세한 설명을 볼수있습니다. 공지사항에 대한 자세한 설명을 볼수있습니다. 공지사항에 대한 자세한 설명을 볼수있습니다.
-					공지사항에 대한 자세한 설명을 볼수있습니다. 공지사항에 대한 자세한 설명을 볼수있습니다.
-					공지사항에 대한 자세한 설명을 볼수있습니다.공지사항에 대한 자세한 설명을 볼수있습니다.공지사항에 대한 자세한 설명을 볼수있습니다.
-					공지사항에 대한 자세한 설명을 볼수있습니다.공지사항에 대한 자세한 설명을 볼수있습니다.공지사항에 대한 자세한 설명을 볼수있습니다.
-					공지사항에 대한 자세한 설명을 볼수있습니다.공지사항에 대한 자세한 설명을 볼수있습니다.
-				</div>	
-			</div>
 			
 		</div>
 		

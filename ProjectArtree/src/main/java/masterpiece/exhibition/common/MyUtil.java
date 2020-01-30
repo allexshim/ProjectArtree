@@ -14,6 +14,7 @@ public class MyUtil {
 			result = result.replaceAll("&","&amp;");
 			result = result.replaceAll("\"","&quot;");*/
 			result = result.replaceAll("<script","&lt;script");
+			result = result.replaceAll("script>","&lt;script");
 		}
 		return result;
 	} // end of replaceParameter---------------------------

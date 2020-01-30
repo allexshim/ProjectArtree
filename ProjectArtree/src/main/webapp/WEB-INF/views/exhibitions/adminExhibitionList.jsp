@@ -19,7 +19,7 @@
 		font-family: 'Noto Sans Kr', sans-serif;
 	}
 	
-	table#registerFormContainer {
+	div#registerFormContainer {
 		padding-bottom : 100px;
 		width: 80%;
 		margin: 0 auto;
@@ -58,13 +58,13 @@
 		padding-top : 40px;
 		padding-left : 60px;
 		font-size: 16pt;
-		cursor : pointer;
 	}
 
 	div#eachStatus .displayStatus {
 		padding-right : 20px;
 		color : gray;
 		text-align: center;
+		cursor: pointer;
 	}
 	
 	div#eachStatus .currentStatus {
@@ -156,6 +156,15 @@
 	.pagination a:hover, .pagination span:hover {
 	   text-decoration: underline;
 	}
+	
+	#newDisplay, #onDisplay {
+		margin-right: 20px;
+	}
+	
+	#afterDisplay {
+		border-right: solid 2px lightgrey;
+		margin-right: 50px;
+	}
 
 </style>
 
@@ -208,9 +217,10 @@
 		</div>
 		
 		<div id="eachStatus">
-			<span class="displayStatus currentStatus" style="margin-right: 20px;">전시중</span>
-			<span class="displayStatus" style="border-right: solid 2px lightgrey; margin-right: 50px; padding-right: 50px;">전시종료</span>
-			<span class="displayStatus" id="newList">검토 대기중</span>
+			<a class="displayStatus currentStatus" id="onDisplay" href="<%= ctxPath %>/exhibitionList.at">전시중</a>
+			<a class="displayStatus" id="newDisplay" href="<%= ctxPath %>/newDisplayList.at">새로운 전시</a>
+			<a class="displayStatus" id="afterDisplay" style="padding-right: 50px;" href="<%= ctxPath %>/afterDisplayList.at">전시종료</a>
+			<a class="displayStatus" id="appliedList" id="appliedDisplay" href="<%= ctxPath %>/appliedDisplayList.at">검토 대기중</a>
 		</div>
 
 		<div id="contentContainer">
@@ -219,7 +229,7 @@
 					<tr>
 						<td>No.</td>
 						<td>Title</td>
-						<td>Submit</td>
+						<td>Author</td>
 						<td>Status</td>
 					</tr>	
 				</thead>
@@ -233,7 +243,7 @@
 						</td>
 						<td>${ exhibit.exhibitionname }</td>
 						<td>${ exhibit.author }</td>
-						<td><img src="<%= ctxPath %>/resources/images/exhibition/watingBtn.JPG" /></td>
+						<td><img src="<%= ctxPath %>/resources/images/exhibition/onDisplayBtn.JPG" /></td>
 					</tr>
 					</c:forEach>
 					</c:if>

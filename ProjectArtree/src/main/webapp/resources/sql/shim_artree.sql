@@ -410,8 +410,56 @@ create table board_comment
 ,constraint FK_cmt_fk_idx foreign key(fk_idx) 
                                                         references member(idx)                                               
 );
+
+select commentNo, fk_idx, comContent, comwriteDay, M.name
+from 
+(select commentNo, fk_idx, comContent, comwriteDay
+from board_comment 
+where fk_no = 2) C join member M
+on C.fk_idx = M.idx
+order by commentNo desc;
+
+ALTER TABLE community MODIFY(content VARCHAR2(4000));
+x
+select * from board_comment where boardno = '2';
+
+delete from community
+where no ='2';
+
+rollback;
+select count(*) from (board_comment A join  
+where boardNo = '2';
+
+select TXT as tag,CNT from
+	    (select TXT, CNT, rownum as RNO
+	    from
+	    (select TXT, CNT
+	    from (select TXT, count(*) as CNT
+	    from ( WITH TT AS
+	        ( SELECT '초록,초록,초록,빨강,황금,황금' TXT FROM DUAL )
+	        SELECT TRIM(REGEXP_SUBSTR(TXT, '[^,]+', 1, LEVEL)) AS TXT
+	        FROM TT CONNECT BY INSTR(TXT, ',', 1, LEVEL - 1) > 0
+	    ) V
+	    group by TXT) X
+	    order by CNT desc ) Y
+	    ) Z;
+select * from community;
+rollback;
+update community set readCount = readCount+1
+		where no = 1;
+
+update community set readCount = readCount+1
+		where no = 1 and fk_idx != 20;
+
+insert into board_comment(commentNo, boardNo, fk_idx, fk_no, comContent, comwriteDay
+values(seq_board_comment.nextval, 2, '', '', '', sysdate);
+
 commit;
 rollback;
+delete from board_comment where commentno = '4';
+
+desc board_comment;
+
 select * from board_comment;
 drop table board_comment purge;
 
@@ -446,3 +494,20 @@ drop table board_comment purge;
 		        , lead(title, 1) over(order by no desc) as nexttitle
 		from community;
 
+/*
+comment.put("commentNo", commentNo);
+comment.put("comContent", comContent);
+*/
+
+select commentNo, fk_idx, comContent, comwriteDay, M.name
+		from 
+		(select commentNo, fk_idx, comContent, comwriteDay
+		from board_comment 
+		where fk_no = 5 ) C join member M
+		on C.fk_idx = M.idx
+		order by commentNo desc;
+
+
+select * from board_comment;
+rollback;
+update board_comment set comContent = 'ddd' where commentNo = '3';

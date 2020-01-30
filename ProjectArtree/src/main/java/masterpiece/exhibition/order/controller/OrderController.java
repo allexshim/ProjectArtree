@@ -30,21 +30,22 @@ public class OrderController {
 
 	@RequestMapping(value = "/ticketsbin.at")
 	public String ticketsbin(HttpServletRequest request, HttpServletResponse response) {
-
+		
 		HttpSession session = request.getSession();
 		String goBackURL = MyUtil.getCurrentURL(request);
-		session.setAttribute("goBackURL",goBackURL);
+		session.setAttribute("goBackURL",goBackURL);		
+		String eno = request.getParameter("eno");
 		
-		//String no = request.getParameter("eno");
-		HashMap<String, String> map = new HashMap<String, String>();
-
-		String no = "4901"; // 구매하기 눌렀을때 전시회 번호 받아와야함 지금은 임시
-		if (no == null || no.trim().isEmpty()) {
-			no = "";
-		}
-
-		map.put("no", no);
-
+		if (eno != null) {
+			session.setAttribute("eno", eno);
+		}		
+		
+		HashMap<String, String> map = new HashMap<String, String>();		
+		
+		String exno = (String) session.getAttribute("eno");
+		System.out.println("exno"+exno);
+		map.put("no", exno);
+		
 		List<HashMap<String, String>> exList = service.getEx(map);
 
 		// 키값 꺼내서 리퀘스트셋
@@ -57,9 +58,7 @@ public class OrderController {
 
 		request.setAttribute("exList", exList);
 
-		int price = Integer.parseInt(exList.get(0).get("price"));
-		String img = "base.jpg";
-
+		int price = Integer.parseInt(exList.get(0).get("price"));		
 		int price20 = (int) (price * 0.8);
 		int price30 = (int) (price * 0.7);
 		int price50 = (int) (price * 0.5);
@@ -67,10 +66,8 @@ public class OrderController {
 		request.setAttribute("price", price);
 		request.setAttribute("price20", price20);
 		request.setAttribute("price30", price30);
-		request.setAttribute("price50", price50);
-		request.setAttribute("img", img);
+		request.setAttribute("price50", price50);		
 		
-		session.setAttribute("no", no);
 		String[] qt = null;
 		String bin = "";
 		qt = (String[]) session.getAttribute("qt");
@@ -109,7 +106,7 @@ public class OrderController {
 		String idx = mvo.getIdx();	
 		map.put("idx", idx);		
 		
-		String no = (String) session.getAttribute("no");
+		String no = (String) session.getAttribute("eno");		
 		map.put("no", no);
 		if (dateBin != null)
 			service.insertCart(map);
