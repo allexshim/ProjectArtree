@@ -295,7 +295,7 @@
 				</tbody>
 			</table>
 		</div>
-
+ 
 		<form name="goDetailForm">
 		<input type="hidden" name="revno"/>
 		<input type="hidden" name="gobackURL" value=""/>
