@@ -165,6 +165,10 @@
 		cursor : pointer;
 	}
 	
+	table > tbody > tr {
+		height: 4vh;
+	}
+	
 </style>
 
 
@@ -231,7 +235,7 @@
 						<td>일정</td><td>${ exhibitionInfo.startdate } - ${ exhibitionInfo.enddate }</td>
 					</tr>
 					<tr>
-						<td>운영시간</td><td>${ exhibitionInfo.openandclosetime }</td>
+						<td>운영시간</td><td>${ exhibitionInfo.openclosetime }</td>
 					</tr>
 					<tr>
 						<td>이메일</td><td>${ exhibitionInfo.email }</td>

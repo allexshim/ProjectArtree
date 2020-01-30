@@ -165,6 +165,10 @@
 		cursor : pointer;
 	}
 	
+	table > tbody > tr {
+		height: 4vh;
+	}
+	
 </style>
 
 

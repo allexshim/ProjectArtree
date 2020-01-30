@@ -66,7 +66,7 @@
 	
 	<!-- 전시회목록 가져오기 -->
 	<select id="getExhibitionList" resultType="masterpiece.exhibition.exhibits.model.ExhibitsVO">
-		select exhibitionno, exhibitionname, author, status from exhibition where status = '전시중'
+		select exhibitionno, exhibitionname, author, status from exhibition where status = '전시중' order by exhibitionno desc
 	</select>
 	
 	<!-- 전시회정보 가져오기 -->
@@ -108,7 +108,6 @@
         JOIN gallery G on E.fk_galleryno = G.galleryno
         JOIN exhibitiondetail ED on E.exhibitionno = ED.fk_exhibitionno
         where E.exhibitionno = #{ no }
-        order by E.exhibitionno desc
 	</select>
 	
 	<!-- 새로운 전시회목록 가져오기 -->
@@ -133,7 +132,7 @@
 		<result property="author" 			column="author" 			javaType="String" />
 	</resultMap>
 	<select id="getAppliedExhibitionList" resultMap="appliedExhibitionMap">
-		select applyingno, exhibitionname, author from appliedexhibits order by applyingno desc
+		select applyingno, exhibitionname, author from appliedexhibits where status = '검토예정' order by applyingno desc
 	</select>
 
 	<!-- 검토할 전시회 조회 -->
@@ -164,7 +163,7 @@
 			, A.exhibitioninfo, A.price, A.foodordrink, A.extrarestriction, A.photo, A.openclosetime
 		from appliedExhibits A JOIN gallery G
 		on A.fk_galleryno = G.galleryno
-        where A.applyingno = #{ no } and status = '검토예정'
+        where A.applyingno = #{ no }
 	</select>
 	
 	<!-- 이미지 가져오기 -->
