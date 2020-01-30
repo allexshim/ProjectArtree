@@ -212,7 +212,7 @@ public class ReviewController {
 	      
 	     // 해당 글 번호에 해당하는 댓글 가져오기
 	     List<HashMap<String, String>> commentList = service.getCommentList(revno);
-	     
+
 	     request.setAttribute("commentList", commentList);
 	     
 	     request.setAttribute("revo", revo);
@@ -425,6 +425,7 @@ public class ReviewController {
 				
 				for(HashMap<String, String> cmap:commentList) {
 					JSONObject jsonObj = new JSONObject();
+					jsonObj.put("fk_idx", cmap.get("fk_idx"));
 					jsonObj.put("name", cmap.get("name"));
 					jsonObj.put("comcontent", cmap.get("comcontent"));
 					jsonObj.put("comwriteday", cmap.get("comwriteday"));
@@ -470,6 +471,7 @@ public class ReviewController {
 				
 				for(HashMap<String, String> cmap:commentList) {
 					JSONObject jsonObj = new JSONObject();
+					jsonObj.put("fk_idx", cmap.get("fk_idx"));
 					jsonObj.put("name", cmap.get("name"));
 					jsonObj.put("comcontent", cmap.get("comcontent"));
 					jsonObj.put("comwriteday", cmap.get("comwriteday"));

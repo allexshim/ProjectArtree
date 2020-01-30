@@ -349,7 +349,7 @@
 				}
 				
 				if(${ loginuser.status == 2 }){
-					html += "<c:if test='${ loginuser.status == 2 }'>";
+					html += "<c:if test='${ item.fk_idx != loginuser.idx && loginuser.status == 2 }'>";
 					html += "<span class='commentDeleteBtn' style='padding-left:10px; padding-bottom:1px; font-weight: bold;'>삭제</span>";	
 					html += "<span class='commentNo' style='display:none'>"+item.commentNo+"</span>";	
 					html += "</c:if>";
@@ -429,7 +429,7 @@
 									<span class="commentDeleteBtn" style="padding-bottom:1px; font-weight: bold;">삭제</span>
 									<span class="commentNo" style="display:none">${item.commentNo}</span>
 								</c:if>
-								<c:if test="${ loginuser.status == 2 }">
+								<c:if test="${item.fk_idx != loginuser.idx && loginuser.status == 2 }">
 									<span class="commentDeleteBtn" style="padding-left:10px; padding-bottom:1px; font-weight: bold;">삭제</span>
 									<span class="commentNo" style="display:none">${item.commentNo}</span>
 								</c:if>

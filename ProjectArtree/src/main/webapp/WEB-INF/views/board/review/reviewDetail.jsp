@@ -246,18 +246,15 @@
 			
 		});
 		
-		// 댓글 수정하기 삭제하기
+		// 댓글 수정하기
 		$("#commentModifyBtn").click(function(){
 			var commentno = $(this).next().next().text();
 			
-			var bool = confirm('해당 댓글을 삭제하시겠습니까?');
-			
-			if (bool) {
-				
-			}
+	
 			
 		});
 		
+		// 댓글 삭제하기
 		$(".commentDeleteBtn").click(function(){
 			var commentno = $(this).next().text();
 			
@@ -317,8 +314,10 @@
 		else {
 			html += "<tr><td colspan='2'>작성된 댓글이 없습니다.</td></tr>";
 		}
+		  
 		$("#myComments > table").html(html);
 		frm.commentContents.value = "";
+		
 	}
 </script>
 
