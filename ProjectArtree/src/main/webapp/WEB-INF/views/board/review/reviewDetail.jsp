@@ -176,7 +176,7 @@
 		cursor : pointer;
 	}
 	
-	#commentModifyBtn, #commentDeleteBtn {
+	#commentModifyBtn, .commentDeleteBtn {
 		cursor : pointer;
 	}
 	
@@ -216,19 +216,8 @@
 			window.location.href="/artree/reviewList.at";
 		});
 		
-// 댓글 ------------------------------------------------
+		// 댓글 ------------------------------------------------
 		
-		// 댓글 수정, 삭제하기
-		$("#commentModifyBtn").click(function(){
-			var commentNo = $(this).next().next().text();
-			window.location.href="*.at?commentNo="+commentNo;
-		});
-		
-		$("#commentDeleteBtn").click(function(){
-			var commentNo = $(this).next().text();
-			window.location.href="*.at?commentNo="+commentNo;
-		});
-
 		// 새 댓글 등록하기
 		$("img#addComment").click(function(){
 			
@@ -244,35 +233,93 @@
 					  type:"POST",
 					  dataType:"JSON",
 					  success:function(json){
-						  var html = "";
-							$.each(json, function(index, item){
-								html += "<tr>";
-								html += "<td class='commentWriter'>"+item.name+"</td>";
-								html += "<td class='commentWriteDate'>"+item.comwriteday+"</td>";
-								html += "</tr>";
-								html += "<tr>";
-								html += "<td class='commentContents' colspan='2'>"+item.comcontent+"</td>";
-								html += "</tr>";
-								
-							});
-							
-							$("#myComments > table").html(html);
-							frm.commentContents.value = "";
+						  showCommentList(json);
+						  location.reload();
 					  },
 					  
 					  error: function(request, status, error){
 							alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
 					  }
 					  
+				   });
+			}
+			
+		});
+		
+		// 댓글 수정하기 삭제하기
+		$("#commentModifyBtn").click(function(){
+			var commentno = $(this).next().next().text();
+			
+			var bool = confirm('해당 댓글을 삭제하시겠습니까?');
+			
+			if (bool) {
+				
+			}
+			
+		});
+		
+		$(".commentDeleteBtn").click(function(){
+			var commentno = $(this).next().text();
+			
+			var bool = confirm('해당 댓글을 삭제하시겠습니까?');
+			
+			if (bool) {
+				$.ajax({
+					  url:"<%= request.getContextPath()%>/delRevComment.at",
+					  data:{"commentno":commentno, "fk_revno":$("#fk_revno").val()},
+					  type:"POST",
+					  dataType:"JSON",
+					  success:function(json){
+						  showCommentList(json);
+						  location.reload();
+					  },
+					  
+					  error: function(request, status, error){
+							alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+					  }
 					  
 				   });
 			}
 			
 		});
+
 		//----------------------------------------------------
 		
 	}); // end of $(document).ready -------------------------------------
 
+	function showCommentList(json) {
+		var html = "";
+		  if(json.length > 0) {
+		  $.each(json, function(index, item){
+				html += "<tr>";
+				html += "<td class='commentWriter' style='width:50px;'>"+item.name+"</td>";
+				html += "<td class='commentWriteDate'>"+item.comwriteday;
+				
+				if(item.fk_idx == "${loginuser.idx}"){
+					html += "<span class='commentModifyBtn' style='padding-left:10px; padding-bottom:1px; font-weight: bold;'>수정</span>&nbsp;|&nbsp;"	;
+					html += "<span class='commentDeleteBtn' style='padding-bottom:1px; font-weight: bold;'>삭제</span>";					
+					html += "<span class='commentNo' style='display:none'>"+item.commentno+"</span>";		
+				}
+				
+				if(${ loginuser.status == 2 }){
+					html += "<c:if test='${ loginuser.status == 2 }'>";
+					html += "<span class='commentDeleteBtn' style='padding-left:10px; padding-bottom:1px; font-weight: bold;'>삭제</span>";	
+					html += "<span class='commentNo' style='display:none'>"+item.commentno+"</span>";	
+					html += "</c:if>";
+				}
+				
+				html += "</td></tr><tr>";
+				html += "<td class='commentContents' colspan='2' style='width:500px; padding-top:10px;'>";
+				html += "<textarea readonly='readonly' id='commentContents' name='commentContents' style='border:none !important;'>"+item.comcontent+"</textarea>";	
+				html += "</td></tr>";
+			});
+		} 
+		else {
+			html += "<tr><td colspan='2'>작성된 댓글이 없습니다.</td></tr>";
+		}
+		$("#myComments > table").html(html);
+		frm.commentContents.value = "";
+	}
 </script>
 
 </head>
@@ -318,7 +365,36 @@
 		
 		<div id="myComments">
 			<table>
+				<c:if test="${commentList != null}">
+					<c:forEach var="item" items="${commentList}">
+						<tr>
+							<td class="commentWriter" style="width:50px;">${item.name}</td>
+							<td class="commentWriteDate">
+								${item.comwriteday}
+								<c:if test="${item.fk_idx == loginuser.idx}">
+									<span class="commentModifyBtn" style="padding-left:10px; padding-bottom:1px; font-weight: bold;">수정</span>&nbsp;|
+									<span class="commentDeleteBtn" style="padding-bottom:1px; font-weight: bold;">삭제</span>
+									<span class="commentNo" style="display:none">${item.commentno}</span>
+								</c:if>
+								<c:if test="${ loginuser.status == 2 }">
+									<span class="commentDeleteBtn" style="padding-left:10px; padding-bottom:1px; font-weight: bold;">삭제</span>
+									<span class="commentNo" style="display:none">${item.commentno}</span>
+								</c:if>
+							</td>
+						</tr>
+						<tr>
+							<td class="commentContents" colspan="2" style="width:500px; padding-top:10px;">
+								<textarea readonly="readonly" id='commentContents' name='commentContents' style="border:none !important;">${item.comcontent}</textarea>
+							</td>
+						</tr>
+					</c:forEach>
+				</c:if>
 				
+				<c:if test="${commentList == null}">
+					<tr>
+						<td colspan="2">작성된 댓글이 없습니다.</td>
+					</tr>
+				</c:if>
 			</table>
 			
 			<form id="newComment" name="newComment">

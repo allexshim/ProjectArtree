@@ -396,7 +396,36 @@ nocache;
 -- Sequence REVIEWSEQ이(가) 생성되었습니다.
 
 select *
-from review;
+from member;
 
 select revno, exhibitionname, revTitle, to_char(revwriteday, 'yyyy-mm-dd'), readcount from review;
+
+
+       select previousno, previoustitle, 
+             revno, fk_idx, fk_name, fk_exhibitionno, exhibitionname, revTitle, revContent, readCount, revWriteday,
+             nextno, nexttitle
+           , commentCount
+      from 
+      (
+          select lag(revno, 1) over(order by revno desc) as previousno
+               , lag(revTitle, 1) over(order by revno desc) as previoustitle
+               , revno, fk_idx, fk_name, fk_exhibitionno, exhibitionname, revTitle, revContent
+               , readCount, to_char(revWriteday, 'yyyy-mm-dd hh24:mi:ss') as revWriteday
+               , lead(revno, 1) over(order by revno desc) as nextno
+               , lead(revTitle, 1) over(order by revno desc) as nexttitle
+               , commentCount
+          from review
+          where status = 1
+      ) V
+      where V.revno = 3;
+
+desc board_comment;
+
+select *
+from review;
+
+select *
+from board_comment;
+
+
 
