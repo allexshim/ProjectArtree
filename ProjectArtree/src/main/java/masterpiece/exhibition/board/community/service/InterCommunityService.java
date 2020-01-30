@@ -21,7 +21,7 @@ public interface InterCommunityService {
 	int modifyCommunity(HashMap<String, String> modifycommu);
 
 	// 새 댓글 등록하기
-	int addComment(HashMap<String, String> comment);
+	int addComment(HashMap<String, String> comment);	
 
 
 

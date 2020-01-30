@@ -1,276 +1,428 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-
-<% String ctxPath = request.getContextPath(); %>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%
+	String ctxPath = request.getContextPath();
+%>
 
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
-
-<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-<script src="<%= ctxPath %>/resources/jquery-ui-1.11.4.custom/datepicker-ko.js"></script>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 
 <style type="text/css">
+@import url(//fonts.googleapis.com/earlyaccess/notosanskr.css);
 	
-	#addEvent {   
+	body {
+		font-family: 'Noto Sans Kr', sans-serif;
+	}
+	
+	#detailContainer {
+		padding-bottom : 100px;
+	}
+	
+	#detailContainer {	
 		margin: 100px 0 100px 0;
-	}   
-      
-	#addEvent .Title_Area {   
+	}	
+		
+	#detailContainer .Title_Area {	
 		margin: 0 auto;
 		width: 100%;
 		display: inline-block;
 		text-align: center;
-		height: 20vh;
-	}   
-      
-	#addEvent .Title_Area .st {   
+		
+	}	
+		
+	#detailContainer .Title_Area .st {	
 		display: block;
 		font-size: 15pt;
-	}   
-      
-	#addEvent .Title_Area .lt {   
+		
+	}	
+		
+	#detailContainer .Title_Area .lt {	
 		display: block;
 		font-size: 35pt;
 		font-weight: bold;
+	}	
+	
+	div#detailContents {
+		width: 70%;
+		margin: 0 auto;
+		padding-bottom: 20px;
+		border-bottom : solid 2px lightgray;
+		overflow: hidden; /* div밖으로 이미지가 넘칠 때 해결 방법! 기억해둘것! */
+		padding-top : 50px;
 	}
 	
-	.labels {
-		width: 90px;
+	div#detailContents h3 {
+		padding-left : 2.5%;
 	}
 	
-	.labels-inputs {
-		height: 50px;
+	table#detailTable {
+		width: 95%;
+		margin: 0 auto;
 	}
 	
-	.inputs {
-		padding: 4px;
-		border-radius: 5px;
-		width: 91%;
+	table#detailTable tr td {
+		font-size : 12pt;
+		padding-top : 10px;
+		padding-bottom : 10px;
 	}
 	
-	#exhibitionCode {
-		width: 100px;
-	}
-	
-	#startDate, #endDate {
-		width: 100px;
-	}
-	
-	.ui-widget-header {
-		background : #ccb3ff !important;
-	}
-	
-	.ui-state-active, .ui-state-active {
-		background : #ccb3ff !important;
-		border: none !important;
-	}
-	
-	.ui-datepicker {
-		box-shadow: 5px 5px 5px grey;
-	}
-	
-	#poster-area {
-		width: 40%;
-		height: 50vh;
-/* 		border: solid 2px black; */
-		margin: 50px auto; 
-	}
-	
-	#poster-wrap {
-		margin: 30px auto;
-		border: solid 2px black;
-		border-radius: 10px;
-		height: 80%;
-		width: 60%;
-		box-shadow: 5px 5px 5px grey;
-	}
-	
-	#poster {
-		width: 100%;
-		height: 100%;
-/* 		border: solid 2px red; */
-/* 		display: none; */
-		border-radius: 10px;
-	}
-	
-	#poster-explain {
+	table#detailTable tr td:first-child {
+		width : 80px;
 		font-weight: bold;
-		font-size: 1.2em;
-		position: relative;
-		top: 45%;
 	}
 	
-	#poster-input:hover {
-		cursor: pointer;
+	table#detailTable tr td:nth-child(2) input {
+		width : 97%;
+		border : 1px solid lightgray;
 	}
 	
-	#poster-input {
+	table#detailTable > tbody > tr:nth-child(8) > td {
+		/* width : 100%; */
+		font-weight: normal;
+		padding-top : 20px;
+	}
+
+	div#myBtns {
+		float : right;
+		padding-right : 50px;
+	}
+	
+	div#myBtns img {
+		padding : 10px;
+		cursor : pointer;
+	}
+	
+	/* div#preNext {
+		width: 80%;
+		margin: 0 auto;
+	}
+	
+	div#preNext table tr td:nth-child(2) {
+		font-weight: bold;
+		width : 80px;
 		text-align: center;
 	}
 	
-	#addEventBtn {
-		margin: 8vh 0;
-		display: inline-block;
-		width: 200px;
-		height: 50px;
-		background: black;
-		color: white;
-		font-weight: bold;
-		font-size: 1.2em;
-		border: none;
+	div#preNext table tr td {
+		cursor : pointer;
+	} */
+	
+	div#toListBtn {
+		padding-top : 20px;
+		padding-bottom : 20px;
+		overflow : hidden;
+		cursor : pointer;
+	}
+	
+	div#detailContainer input, div#detailContainer textarea {
+		border-radius: 5px;
 	}
 	
 </style>
 
+<script src="<%= ctxPath%>/resources/js/jquery-3.3.1.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+<link rel="stylesheet" type="text/css" href="<%=ctxPath%>/resources/jquery-ui-1.12.1.custom/jquery-ui.css" />
+<script type="text/javascript" src="<%=ctxPath%>/resources/jquery-ui-1.12.1.custom/jquery-ui.js"></script>							
+
 <script type="text/javascript">
-	
-	$(document).ready(function(){
+	$(document).ready(function(){ 
+		$("#period").datepicker({			
+			dayNamesMin : ['월','화','수','목','금','토','일'],			
+			monthNames: ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'],
+			altField: '#calendar-date',
+			dateFormat: 'yy-mm-dd'
+		});	
 		
-	//	alert("확인용");
+		$("#periodEnd").datepicker({			
+			dayNamesMin : ['월','화','수','목','금','토','일'],			
+			monthNames: ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'],
+			altField: '#calendar-date',
+			dateFormat: 'yy-mm-dd'
+		});	
 		
-		$("#startDate").datepicker();
-		$("#endDate").datepicker();
-		
-	//	$(".ui-datepicker").css('background','#ffe680');
-		$(".ui-datepicker").css('border','none');
-		$(".ui-state-active").css('background','#ccb3ff');
-		
-		$("#poster-input").on("change", handleImgFileSelect);
-		
-		$("#addEventBtn").click(function(){
+		$("#name").focus(function(){
+
+			$("#myModal").modal('show');
+			$("searchWord").focus();
 			
-			let exhibitionCode = $("#exhibitionCode").val().trim();
-			let startDate = $("#startDate").val().trim();
-			let endDate = $("#endDate").val().trim();
-			let eventTitle = $("#eventTitle").val().trim();
-			let eventContent = $("#eventContent").val().trim();
-			let poster = $("#poster").val().trim();	
+		});
+		
+		// 이전글 클릭시 이벤트
+		$(".prev").click(function(){
 			
-			if(exhibitionCode == null	|| exhibitionCode == ""
-				|| startDate  == null 	|| startDate == ""
-				|| endDate == null 		|| endDate == ""
-				|| eventTitle == null 	|| eventTitle == ""
-				|| eventContent == null || eventContent == "") {
+		}) // 이전글 클릭시 이벤트 -------------
+		
+		
+		// 다음글 클릭시 이벤트
+		$(".next").click(function(){
+			
+			
+		}) // 다음글 클릭시 이벤트 --------------
+		
+		$("#searchWord").keydown(function(){
+			if(event.keyCode==13) {
+				event.preventDefault();
+				searchExhibition($("#searchWord").val());
+			}	
+		});
+		
+		$(".searchBtn").click(function(){
+			searchExhibition($("#searchWord").val());
+		});
+
+		
+		// 글목록으로 돌아가기
+		$("#toListBtn").click(function(){
+			window.location.href="/artree/event.at";
+		});
+		
+		$("#registerBtn").click(function(){
+			// 유효성 검사
+			var name = $("#name").val().trim();
+			var title = $("#title").val().trim();
+			var contents = $("#contents").val().trim();
+			
+			if(name == ""){
+				alert("전시회 이름을 입력하세요!");
+				$("#name").focus();
+			} 
+			else if(title == ""){
+				alert("글 제목을 입력하세요!");
+				$("#title").focus();
+			} 
+			else if(contents == ""){
+				alert("내용을 입력하세요!");
+				$("#contents").focus();
+			} 
+			else {
+				var frm = document.addEvent;
+				frm.method = "GET";
+				frm.action = "addEventEnd.at";
+				frm.submit();
+			}
+		});
+		
+		
+	}); // end of $(document).ready -------------------------------------
+
+	function searchExhibition(searchWord) {
+		$.ajax({
+			url: "<%= ctxPath %>/searchExhibitInModal.at",
+			type: "GET",
+			data: { "searchWord":searchWord },
+			dataType: "JSON",
+			success: function(json){
+				$("#galleryListTable").empty();				
 				
-				alert("빈칸을 채워주세요");
-				return;
+				let html ="";
+				html += "<thead>";
+				html += "<tr>";
+				html += "<th>번호</th>";
+				html += "<th>전시회 이름</th>";
+				html += "<th>작가</th>";
+				html += "<th>장소</th>";
+				html += "</tr>";
+				html += "</thead>";
+				html += "<tbody>";
+				
+				if(json.length == 0) {
+					html += "<tr class='' style='cursor: pointer;'>";
+					html += "<td colspan='4'>";
+					html += "조회된 갤러리가 없습니다.";
+					html += "</td>";
+					html += "</tr>";
+				}
+				
+				else {	
+					$.each(json, function(index, item) {
+						html += "<tr style='cursor: pointer;' onclick='selectedExhibition()' class='selectedExhibition'>";
+						html += "<td style='width: 5px !important;' class='exhibitno'>" + item.exhibitionno + "</td>";
+						html += "<td style='width: 300px !important' class='exhibitionname'>" + item.exhibitionname + "</td>";
+						html += "<td style='width: 50px !important'>" + item.author + "</td>";
+						html += "<td style='width: 80px !important'>" + item.galleryname + "</td>";
+						html += "</tr>";
+					});					
+				}
+				
+				html += "</tbody>";
+				
+				$("#exhibitionListTable").html(html);
+			},
+			error: function(request, status, error){
+				alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
 			}
-			
-			var frm = document.addEventFrm;
-			frm.method="POST";
-			frm.action="<%= ctxPath %>/addEvent.at";
-			frm.submit();
-			
 		});
-		
-	});
+	} // end of searchExhibition ----------------------------------------
 	
-	function handleImgFileSelect(e) {
-		
-		let files = e.target.files;
-		let filesArr = Array.prototype.slice.call(files);
-		
-		filesArr.forEach(function(f) {
+	
+	function selectedExhibition(){
+		$(document).on("click", ".selectedExhibition", function() {
 			
-			if(!f.type.match("image.*")) {
-				alert("확장자는 이미지 확장자만 가능합니다.");
-				return;
-			}
+			/*exhibitionno, exhibitionname, author, galleryname*/
+			let exhibitionname = $(this).find(".exhibitionname").text();
+			let exhibitionno = $(this).find(".exhibitno").text();
+			// sessionStorage에 데이터 저장
+			sessionStorage.setItem("exhibitionname", exhibitionname);
+			sessionStorage.setItem("exhibitionno", exhibitionno);
+			$("#myModal").modal('hide');
 			
-			sel_file = f;
-			
-			let reader = new FileReader();
-			reader.onload = function(e) {
-				$("#poster").attr("src", e.target.result);
-			}
-			reader.readAsDataURL(f);
-			
+			writeExhibition();		
 		});
+	} // end of selectedExhibition -----------------------------------------
+	
+	
+	function writeExhibition() {
 		
-	}
+		let exhibitionname = sessionStorage.getItem("exhibitionname");
+		let exhibitionno = sessionStorage.getItem("exhibitionno");
+		
+		if( (exhibitionname != null) && (exhibitionname != "" )) {
+		    $("#name").val(exhibitionname);
+		    $("#no").val(exhibitionno);
+		    
+		    // modal에 남아있는 검색 데이터를 초기화한다.
+		    sessionStorage.removeItem("exhibitionname");
+		    $("#searchWord").val("");
+		    searchExhibition("");
+		}	
+	} // end of writeExhibition ----------------------------------------
 	
 </script>
 
 </head>
 <body>
-
-	<div id="addEvent">
-		<div class="container">
-			<div class="row">
-				<div class="Title_Area">
-					<span class="st">ADMIN ONLY</span>
-					<span class="lt">NEW EVENT</span>
-				</div>
-				
-				<div class="content-area">
-					<h3 style="font-weight: bold;">이벤트 등록하기</h3>
-					<hr style="border: 1px solid grey">
-					
-					<div class="form-area">
-						
-						<form name="addEventFrm">
-							
-							<div class="labels-inputs">
-								<label class="labels" for="exhibitionCode">전시회코드</label>
-								<input type="text" class="inputs" id="exhibitionCode" name="exhibitionCode" />
-							</div>
-							
-							<div class="labels-inputs">
-								<label class="labels">이벤트기간</label>
-								<input type="text" class="inputs" id="startDate" name="startDate" placeholder="시작일" /><span>&emsp;-&emsp;</span>
-								<input type="text" class="inputs" id="endDate" name="endDate" placeholder="종료일" />
-							</div>
-							
-							<div class="labels-inputs">
-								<label class="labels" for="eventTitle">이벤트명</label>
-								<input type="text" class="inputs" placeholder="이벤트명을 입력해주세요" id="eventTitle" name="eventTitle" />
-							</div>
-							
-							<div class="labels-inputs">
-								<label class="labels" for="eventContent">이벤트내용</label>
-								<input type="text" class="inputs" placeholder="이벤트내용을 입력해주세요" id="eventContent" name="eventContent" />
-							</div>
-						
-							<div id="poster-area" align="center">
-							
-								<h3 style="font-weight: bold;">포스터</h3>
-								
-								<div id="poster-wrap">
-									
-<%-- 										<c:if test="${ eventImg == null }"> --%>
-<!-- 											<span id="poster-explain">클릭해서 포스터를 등록해주세요.<br/>전시회 대표 포스터와 동일합니다.</span> -->
-<%-- 										</c:if> --%>
-<!-- 									</input> -->
-									<img id="poster" style="border: none;"/>
-									<c:if test="${ eventImg != null }">
-											<input type="text" />
-									</c:if>
-								</div>
-								
-								<div align="center" style="margin: 0 auto;">
-									<input type="file" id="poster-input" />
-								</div>
-								<input type="hidden" />
-								<button type="button" id="addEventBtn">REGISTER</button>
-							</div>
-							
-						</form>
+	<div id="detailContainer">
+		<div class="Title_Area">
+			<span class="st">Membership</span>
+			<span class="lt">Event</span>
+		</div>
+		
+	<%-- 	<div id="myPoster" align="center">
+			<img src="<%= ctxPath %>/resources/images/exhibition/poster1.JPG" />
+		</div>
+		 --%>
+		<div id="detailContents">
+		<form name="addEvent">
+			<table id="detailTable">
+				<tr>
+					<td>전시회명</td>
+					<td>
+						<input id="name" name="name" type="text" placeholder="전시회 이름을 입력해주세요." autocomplete="off" />
+						<input id="no" name="no" type="hidden"/>
+					</td>
+				<tr>
+			
+				<tr>
+					<td>제목</td>
+					<td><input id="title" name="title" type="text" placeholder="제목을 입력해주세요."/></td>
+				<tr>
+				<tr>
+					<td>작성자</td>
+					<td>${loginuser.name}</td>
+				<tr>
+				<tr>
+					<td>기간</td>
+					<td>
+						<input style="width: 10%; text-align: center;" size="2" id="period" name="period" type="text"/>
+						~ <input style="width: 10%; text-align: center;" size="2" id="periodEnd" name="periodEnd" type="text"/>
+					</td>					
+				<tr>
+				<tr>
+					<td colspan="2">
+						<textarea id="contents" name="contents" style="resize:none; border:solid 1px lightgray; font-weight:normal !important;" rows="10" cols="120">
+						</textarea>
+					</td>
+				<tr>
+			</table>
+	</form>
+			<div id="myBtns">
+				<img id="registerBtn" src="<%= ctxPath %>/resources/images/board/registerBtn.JPG" />
+			</div>
+		</div>
+		
+		<!-- <div id="preNext">
+			<table>
+				<tr>
+					<td class="prev"><i class='fa fa-angle-up' style='font-size:32px'></i></td>
+					<td class="prev">이전글</td>
+					<td class="prev">이전글제목이전글제목이전글제목이전글제목이전글제목이전글제목</td>
+				</tr>
+				<tr>
+					<td class="next"><i class='fa fa-angle-down' style='font-size:32px'></i></td>
+					<td class="next">다음글</td>
+					<td class="next">다음글제목다음글제목다음글제목다음글제목다음글제목다음글제목</td>
+				</tr>
+			</table>
+		</div> -->
+		<div id="toListBtn" align="center">
+			<img id="toListBtn" src="<%= ctxPath %>/resources/images/board/toListBtn.JPG" />
+		</div>
+	</div>
+	
+	<!-- ==================== 전시회 검색 모달 =================================== -->
+	<div class="container" id="modalContainer">
+		<!-- Modal -->
+		<div class="modal fade" id="myModal" role="dialog">
+			<div class="modal-dialog modal-lg">
+			    
+				<!-- Modal content-->
+				<div class="modal-content" id="exhibitionModal">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal">&times;</button>
+						<h4 class="modal-title">전시회 검색</h4>
 					</div>
+					<div class="modal-body">
+					
+						<div id="searchArea" align="center" style="margin-top: 3vh">
+							<input type="text" name="searchWord" id="searchWord" style="width: 60%; margin: 0 auto;" autocomplete="off" placeholder="전시회 이름으로 검색" /><i class="fas fa-search searchBtn" style="font-size:15pt; padding-left:10px; cursor:pointer;"></i>
+						</div>
 						
+						<div id="listArea" style="margin-top: 5vh">
+							<table id="exhibitionListTable" class="table" style="cursor:pointer;">
+								<thead style="font-weight: bold">
+									<tr>
+										<td>번호</td>
+										<td>전시회 이름</td>
+										<td>작가</td>
+										<td>장소</td>
+									</tr>
+								</thead>
+								
+								<tbody>
+									<c:if test="${ not empty exhibitionList  }">
+									<c:forEach var="exhibit" items="${ exhibitionList }" varStatus="status">
+										<tr onclick='selectedExhibition()' class="selectedExhibition">
+											<td style='width: 5px !important;' class='exhibitno'>${ exhibit.exhibitionno }</td>
+											<td style="width: 300px !important" class="exhibitionname">${ exhibit.exhibitionname }</td> 
+											<td style="width: 50px !important">${ exhibit.author }</td>
+											<td style="width: 80px !important">${ exhibit.galleryname }</td>
+										</tr>
+									</c:forEach>
+									</c:if>
+									<c:if test="${ empty exhibitionList }">
+										<tr><td>결과가 없습니다.</td>
+										</tr>
+									</c:if>
+								</tbody>
+							</table>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+					</div>
 				</div>
+			      
 			</div>
 		</div>
 	</div>
-
+		
+		
 </body>
 </html>
