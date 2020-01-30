@@ -120,12 +120,170 @@
 	
 </style>
 
+<%-- chart --%>
+<script src="https://www.amcharts.com/lib/4/core.js"></script>
+<script src="https://www.amcharts.com/lib/4/charts.js"></script>
+<script src="https://www.amcharts.com/lib/4/themes/animated.js"></script>
+
 <script src="<%= ctxPath%>/resources/js/jquery-3.3.1.min.js"></script>
 <script type="text/javascript">
 	$(document).ready(function(){ 
-	
-		
+		genreChart();
 	});
+	
+	function genreChart() {
+		
+		$.ajax({
+			url:"<%= request.getContextPath()%>/getAllGenreData.at",
+			dataType:"json",
+			type:"GET",
+			success:function(json){
+		
+				am4core.useTheme(am4themes_animated);
+		
+				var chart = am4core.create("statistics-area", am4charts.RadarChart);
+				chart.hiddenState.properties.opacity = 0; // this creates initial fade-in
+		
+				var label = chart.createChild(am4core.Label);
+		
+				chart.data = [
+				  {
+				    category: "One",
+				    value1: 8
+				  },
+				  {
+				    category: "Two",
+				    value1: 11
+				  },
+				  {
+				    category: "Three",
+				    value1: 7
+				  },
+				  {
+				    category: "Four",
+				    value1: 13
+				  },
+				  {
+				    category: "Five",
+				    value1: 12
+				  },
+				  {
+				    category: "Six",
+				    value1: 15
+				  },
+				  {
+				    category: "Seven",
+				    value1: 9
+				  },
+				  {
+				    category: "Eight",
+				    value1: 6
+				  }
+				];
+				chart.radius = am4core.percent(95);
+				chart.startAngle = 270 - 180;
+				chart.endAngle = 270 + 180;
+				chart.innerRadius = am4core.percent(60);
+		
+				var categoryAxis = chart.xAxes.push(new am4charts.CategoryAxis());
+				categoryAxis.dataFields.category = "category";
+				categoryAxis.renderer.labels.template.location = 0.5;
+				categoryAxis.renderer.grid.template.strokeOpacity = 0.1;
+				categoryAxis.renderer.axisFills.template.disabled = true;
+				categoryAxis.mouseEnabled = false;
+		
+				var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
+				valueAxis.tooltip.disabled = true;
+				valueAxis.renderer.grid.template.strokeOpacity = 0.05;
+				valueAxis.renderer.axisFills.template.disabled = true;
+				valueAxis.renderer.axisAngle = 260;
+				valueAxis.renderer.labels.template.horizontalCenter = "right";
+				valueAxis.min = 0;
+		
+				var series1 = chart.series.push(new am4charts.RadarColumnSeries());
+				series1.columns.template.radarColumn.strokeOpacity = 1;
+				series1.name = "Series 1";
+				series1.dataFields.categoryX = "category";
+				series1.columns.template.tooltipText = "{name}: {valueY.value}";
+				series1.dataFields.valueY = "value1";
+				series1.stacked = true;
+		
+				var series2 = chart.series.push(new am4charts.RadarColumnSeries());
+				series2.columns.template.radarColumn.strokeOpacity = 1;
+				series2.columns.template.tooltipText = "{name}: {valueY.value}";
+				series2.name = "Series 2";
+				series2.dataFields.categoryX = "category";
+				series2.dataFields.valueY = "value2";
+				series2.stacked = true;
+		
+				var series3 = chart.series.push(new am4charts.RadarColumnSeries());
+				series3.columns.template.radarColumn.strokeOpacity = 1;
+				series3.columns.template.tooltipText = "{name}: {valueY.value}";  
+				series3.name = "Series 3";
+				series3.dataFields.categoryX = "category";
+				series3.dataFields.valueY = "value3";
+				series3.stacked = true;
+		
+				var series4 = chart.series.push(new am4charts.RadarColumnSeries());
+				series4.columns.template.radarColumn.strokeOpacity = 1;
+				series4.columns.template.tooltipText = "{name}: {valueY.value}";
+				series4.name = "Series 4";
+				series4.dataFields.categoryX = "category";
+				series4.dataFields.valueY = "value4";
+				series4.stacked = true;
+		
+				var series1 = chart.series.push(new am4charts.RadarColumnSeries());
+				series1.columns.template.radarColumn.strokeOpacity = 1;
+				series1.name = "Series 5";
+				series1.dataFields.categoryX = "category";
+				series1.columns.template.tooltipText = "{name}: {valueY.value}";
+				series1.dataFields.valueY = "value5";
+				series1.stacked = true;
+
+				var series2 = chart.series.push(new am4charts.RadarColumnSeries());
+				series2.columns.template.radarColumn.strokeOpacity = 1;
+				series2.columns.template.tooltipText = "{name}: {valueY.value}";
+				series2.name = "Series 6";
+				series2.dataFields.categoryX = "category";
+				series2.dataFields.valueY = "value6";
+				series2.stacked = true;
+
+				var series3 = chart.series.push(new am4charts.RadarColumnSeries());
+				series3.columns.template.radarColumn.strokeOpacity = 1;
+				series3.columns.template.tooltipText = "{name}: {valueY.value}";  
+				series3.name = "Series 7";
+				series3.dataFields.categoryX = "category";
+				series3.dataFields.valueY = "value7";
+				series3.stacked = true;
+
+				var series4 = chart.series.push(new am4charts.RadarColumnSeries());
+				series4.columns.template.radarColumn.strokeOpacity = 1;
+				series4.columns.template.tooltipText = "{name}: {valueY.value}";
+				series4.name = "Series 8";
+				series4.dataFields.categoryX = "category";
+				series4.dataFields.valueY = "value8";
+				series4.stacked = true;
+				
+				chart.seriesContainer.zIndex = -1;
+		
+				var slider = chart.createChild(am4core.Slider);
+				slider.start = 0.5;
+				slider.exportable = false;
+				slider.events.on("rangechanged", function() {
+				  var start = slider.start;
+		
+				  chart.startAngle = 270 - start * 179 - 1;
+				  chart.endAngle = 270 + start * 179 + 1;
+		
+				  valueAxis.renderer.axisAngle = chart.startAngle;
+				});
+			},
+			  
+		    error: function(request, status, error){
+		 		alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+		    }
+		});
+	}
 
 </script>
 </head>
