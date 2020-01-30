@@ -176,8 +176,8 @@
 				$("#notContent").focus();			
 			}
 			else {
-				alert($("textarea[name='notContent']").attr("value"));
-				alert($("input[name='notTitle']").attr("value"));
+				alert($("#notTitle").val());
+				alert($("#notContent").val());
 				var frm = document.newNotice;
 				frm.method = "POST";
 				frm.action = "<%=ctxPath%>/addNotice.at";
@@ -265,7 +265,6 @@
 				<div align="center">
 					<img onclick="" id="addBtn" src="<%= ctxPath %>/resources/images/board/addBtn.JPG" />
 				</div>
-				
 				
 			</form>
 		</div>

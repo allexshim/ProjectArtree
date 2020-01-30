@@ -45,7 +45,6 @@ public class NoticeController {
 		addNotice.put("notTitle", notTitle);
 		addNotice.put("notContent",notContent);
 		
-		
 		// 새 글 추가하기
 		int n = service.addNotice(addNotice);
 		

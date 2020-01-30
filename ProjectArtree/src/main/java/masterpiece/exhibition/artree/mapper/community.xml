@@ -50,6 +50,14 @@
         </if>
 	</select>
 	
+	<!-- 각 게시글에 달린 댓글 개수 알아오기 -->
+	<select id="getNumberOfComment" parameterType="String" resultType="Integer" >
+		select count(*) from
+		board_comment A join (select * from community where no = #{ no }) C
+		on A.fk_no = C.no
+		where A.boardNo = '2'
+	</select>
+	
 	<resultMap type="HashMap" id="Exhibit">
 		<result property="exhibitionno"  	column="exhibitionno" 		javaType="String"/> 
 		<result property="exhibitionname"   column="exhibitionname" 	javaType="String"/> 
@@ -117,11 +125,33 @@
 		) E on C.fk_exhibitionno = E.exhibitionno
 	</select>
 
+	<!-- 조회수 증가시키기 -->
+	<update id="updateReadCount" parameterType="HashMap">
+		update community set readCount = readCount+1
+		where no = #{no} 
+		<if test=' fk_idx != "" '>
+		and fk_idx != #{fk_idx}
+		</if>
+	</update>
+	
 	<!-- 글 수정하기 -->
 	<update id="modifyCommunity" parameterType="HashMap" >
 		update community set fk_exhibitionNo = #{exhibitionno} , title = #{title}, content = #{content}
 		where no = #{no}
 	</update>
+
+	<!-- 글 삭제하기
+	1. 글에 달린 댓글 삭제하기 -->
+	<delete id="deleteCommunityComment" parameterType="String" >
+		delete from board_comment
+		where boardNo = '2' and fk_no = #{no}
+	</delete>
+	
+	<!-- 2. 글 삭제하기 -->
+	<delete id="deleteCommunity" parameterType="String" >
+		delete from community
+		where no = #{no}
+	</delete>
 
 	<!-- 새 댓글 등록하기 -->
 	<insert id="addComment" parameterType="HashMap" >

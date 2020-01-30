@@ -118,7 +118,7 @@
 		
 		// 수정에서 등록 버튼 누르면 등록 말고 수정되게 바꾸세요------------------------
 		// 전시회name, 전시회no, title, content
-		if(${modifycommu != null}){
+		if(${modifycommu.size != 0}){
 			
 			$("#name").val("${modifycommu.exhibitionname}");
 			$("#exhibitionno").val("${modifycommu.exhibitionno}");
