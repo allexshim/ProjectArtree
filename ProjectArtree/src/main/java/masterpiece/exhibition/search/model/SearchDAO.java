@@ -85,6 +85,13 @@ public class SearchDAO implements InterSearchDAO {
 		// tag, CNT
 		List<HashMap<String,String>> TagList = sqlsession.selectList("search.getChartDataByTags", preferTag);
 		return TagList;
+	}
+
+	// 해당 태그를 선호하는 연령대,해당회원수 를 가져온다.
+	@Override
+	public List<HashMap<String,String>> getAgeDataByTags(String tag) {
+		List<HashMap<String,String>> ageRange = sqlsession.selectList("search.getAgeDataByTags", tag);
+		return ageRange;
 	} 
 	
 	

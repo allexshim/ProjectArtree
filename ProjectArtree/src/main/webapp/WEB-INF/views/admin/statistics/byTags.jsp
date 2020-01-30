@@ -74,7 +74,7 @@
 	/* == 내용물 부분 == */
 	#contentContainer {
 		padding-top : 100px;
-		width : 60%;
+		width : 80%;
 		margin : 0 auto;
 	}
 	
@@ -84,17 +84,17 @@
 	}
 	
 	div#contentContainer table thead td:nth-child(2), div#contentContainer table tbody td:nth-child(2) {
-		width : 50%;
+		width : 20%;
 		text-align: center;
 	}
 	
 	div#contentContainer table thead td:nth-child(3), div#contentContainer table tbody td:nth-child(3) {
-		width : 15%;
+		width : 10%;
 		text-align: center;
 	}
 	
 	div#contentContainer table thead td:nth-child(4), div#contentContainer table tbody td:nth-child(4) {
-		width : 20%;
+		width : 10%;
 		text-align: center;
 	}
 
@@ -109,10 +109,10 @@
 	
 	/* == 통계 영역 == */
 	#statistics-area {
-		height: 70vh;
+		height: 80vh;
 		/* border: 2px solid red; */
-		vertical-align: middle;
-		padding-top : 20px;
+		/* vertical-align: middle; */
+		/* padding-top : 20px; */
 	}
 	
 	#table-area {
@@ -126,53 +126,18 @@
 	  margin : 0 auto;
 	  height: 600px;
 	}
-
-	.highcharts-figure, .highcharts-data-table table {
-	    min-width: 320px; 
-	    max-width: 660px;
-	    margin: 1em auto;
-	}
-	
-	.highcharts-data-table table {
-		font-family: Verdana, sans-serif;
-		border-collapse: collapse;
-		border: 1px solid #EBEBEB;
-		margin: 10px auto;
-		text-align: center;
-		width: 100%;
-		max-width: 500px;
-	}
-	.highcharts-data-table caption {
-	    padding: 1em 0;
-	    font-size: 1.2em;
-	    color: #555;
-	}
-	.highcharts-data-table th {
-		font-weight: 600;
-	    padding: 0.5em;
-	}
-	.highcharts-data-table td, .highcharts-data-table th, .highcharts-data-table caption {
-	    padding: 0.5em;
-	}
-	.highcharts-data-table thead tr, .highcharts-data-table tr:nth-child(even) {
-	    background: #f8f8f8;
-	}
-	.highcharts-data-table tr:hover {
-	    background: #f1f7ff;
-	}
-	
 </style>
 
-<script src="https://code.highcharts.com/highcharts.js"></script>
-<script src="https://code.highcharts.com/modules/data.js"></script>
-<script src="https://code.highcharts.com/modules/drilldown.js"></script>
-<script src="https://code.highcharts.com/modules/exporting.js"></script>
-<script src="https://code.highcharts.com/modules/export-data.js"></script>
-<script src="https://code.highcharts.com/modules/accessibility.js"></script>
+
+<!-- Resources -->
+<script src="https://www.amcharts.com/lib/4/core.js"></script>
+<script src="https://www.amcharts.com/lib/4/charts.js"></script>
+<script src="https://www.amcharts.com/lib/4/themes/dataviz.js"></script>
+<script src="https://www.amcharts.com/lib/4/themes/animated.js"></script>
 
 <script src="<%= ctxPath%>/resources/js/jquery-3.3.1.min.js"></script>
 <script type="text/javascript">
-
+	let tagArr = [];
 	$(document).ready(function(){ 
 		
 		$.ajax({ // 아래 url은 임시로 service controller에 저장합니다.
@@ -180,282 +145,202 @@
 	          type:"GET",
 	          dataType:"JSON",
 	          success: function(json) { 
-	        	  getChartByTag(json);
-	          },
-	          error: function(request, status, error){
-	                alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
-	          }
-		});
+	        	  $.each(json, function(index2, item2){
+		        		$.ajax({ // 각 태그를 선택한 연령대를 가져오는 ajax
+		        			url : "<%=request.getContextPath()%>/getAgeDataByTags.at",
+		        			type : "GET",
+		    	        	data : {'tag' : item2.tag},
+		        			// 각각 태그마다 ajax를 실행
+		        			dataType:"JSON",
+		    	        	success:function(json2) {
+		    	        		let subArr = []; // data : [{}, {}, {}]... 부분에 해당하는 배열
+		    	        		
+		    	        		$.each(json2, function(index3, item3){
+		    	        			// agegroup, agecnt, tag
+		    	        			subArr.push({
+		    	        				"agegroup":item3.agegroup+"대",
+		    	        				"agecnt":Number(item3.agecnt)
+		    	        			}); 
+
+		    	        		}); // end of $.each(json2, function(index3, item3) --------------------------
+		    	        		
+		    	        		// 이중 객체 배열 사용 -- [{id:tag, value : agecnt}]
+		    	        		 tagArr.push( { // 객체 배열에 직접 push한다.
+		    	        			  "tag": item2.tag,
+		    	        			  "cnt": Number(item2.cnt),
+		    	        			  "subData": subArr   
+					             });
+		    	        	/////////////////////////////////////////////////////////////////////////////////////////////////	
+		    	        	},error: function(request, status, error){
+		    		               alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+		    		        }
+		        		});
+	        		}); // end of $.each(json, function(index2, item2)--------------------------------------------
+					///////////////////////////// 데이터 가져오기 끝 /////////////////////////////////////////////////////////////
+					 window.setTimeout(function(){
+						getChartByChart(tagArr);
+
+		        		/////// 데이터 테이블 만들기 //////////////////////////////////////////////////////////////////////////
+		        		let html = "<table><thead>"+
+					   			  "<tr><td>태그</td><td>선호하는 회원 수</td>"+
+					   			  "<td>20대</td><td>30대</td><td>40대</td>"+
+					   			  "<td>50대</td><td>60대 이상</td></tr></thead>"
+					   			  "<tbody>";
+					   			  //console.log(tagArr.length);
+			   			for(let i=0; i<tagArr.length; i++) {	
+							
+							  html += "<tr><td>"+tagArr[i].tag+"</td>";
+							  html += "<td>"+tagArr[i].cnt+"명</td></tr>";
+							/*   html += "<td>"+tagArr[i].subData[0].agecnt+"</td>";
+							  html += "<td>"+tagArr[i].subData[1].agecnt+"</td>";
+							  html += "<td>"+tagArr[i].subData[2].agecnt+"</td>";
+							  html += "<td>"+tagArr[i].subData[3].agecnt+"</td>"; */
+							 // html += "<td>"+tagArr[i].subData[4].agecnt+"</td></tr>";
+						}		  
+						html += "</tbody></table>";
+						$("#table-area").html(html);	
+		        		//////////////////////////////////////////////////////////////////////////////////////////
+					}, 500);
+				},
+	            error: function(request, status, error){
+	               alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+	            } 
+	         }); // end of ajax-------------
+	         
+	}); // end of document.ready ----------------------------------------------     
+
+	function getChartByChart(tagArr){
 		
-	});
+		am4core.ready(function() {
+			
+			// Themes begin
+			am4core.useTheme(am4themes_animated);
+			// Themes end
+			
+			var container = am4core.create("chartdiv", am4core.Container);
+			container.width = am4core.percent(100);
+			container.height = am4core.percent(100);
+			container.layout = "horizontal";
+				
+			var chart = container.createChild(am4charts.PieChart);
+			
+			var label = chart.createChild(am4core.Label);
 
-</script>
+			// Add data
+			chart.data = tagArr;
+			
+			// Add and configure Series
+			var pieSeries = chart.series.push(new am4charts.PieSeries());
+			pieSeries.dataFields.value = "cnt";
+			pieSeries.dataFields.category = "tag";
+			pieSeries.slices.template.states.getKey("active").properties.shiftRadius = 0;
+			//pieSeries.labels.template.text = "{category}\n{value.percent.formatNumber('#.#')}%";
+			//pieSeries.labels.template.radius = -10;
+			
+			pieSeries.fontSize = 18;
+			pieSeries.tooltip.fontSize = 15;
+			
+			pieSeries.slices.template.events.on("hit", function(event) {
+			  selectSlice(event.target.dataItem);
+			})
+		
+			var chart2 = container.createChild(am4charts.PieChart);
+			chart2.width = am4core.percent(30);
+			chart2.radius = am4core.percent(80);
+		
+			// Add and configure Series
+			var pieSeries2 = chart2.series.push(new am4charts.PieSeries());
+			pieSeries2.dataFields.value = "agecnt";
+			pieSeries2.dataFields.category = "agegroup";
+			pieSeries2.slices.template.states.getKey("active").properties.shiftRadius = 0;	
 
-<!-- Chart code -->
-<script>
- function getChartByTag(json){
-	//Create the chart
-	Highcharts.chart('container', {
-	    chart: {
-	        type: 'pie'
-	    },
-	    title: {
-	        text: 'Browser market shares. January, 2018'
-	    },
-	    subtitle: {
-	        text: 'Click the slices to view versions. Source: <a href="http://statcounter.com" target="_blank">statcounter.com</a>'
-	    },
+			pieSeries2.fontSize = 18;
+			pieSeries2.tooltip.fontSize = 15;
+			// pieSeries2.labels.template.radius = -20;
+			//pieSeries2.labels.template.inside = true;
+			//pieSeries2.labels.template.fill = am4core.color("#ffffff");
+			pieSeries2.labels.template.disabled = true;
+			pieSeries2.ticks.template.disabled = true;
+			pieSeries2.alignLabels = false;
+			pieSeries2.events.on("positionchanged", updateLines);
+		
+			var interfaceColors = new am4core.InterfaceColorSet();
+		
+			var line1 = container.createChild(am4core.Line);
+			line1.strokeDasharray = "2,2";
+			line1.strokeOpacity = 0.5;
+			line1.stroke = interfaceColors.getFor("alternativeBackground");
+			line1.isMeasured = false;
+		
+			var line2 = container.createChild(am4core.Line);
+			line2.strokeDasharray = "2,2";
+			line2.strokeOpacity = 0.5;
+			line2.stroke = interfaceColors.getFor("alternativeBackground");
+			line2.isMeasured = false;
+		
+			var selectedSlice;
+		
+			function selectSlice(dataItem) {
+		
+			  selectedSlice = dataItem.slice;
+		
+			  var fill = selectedSlice.fill;
+		
+			  var count = dataItem.dataContext.subData.length;
+			  pieSeries2.colors.list = [];
+			  for (var i = 0; i < count; i++) {
+			    pieSeries2.colors.list.push(fill.brighten(i * 2 / count));
+			  }
+		
+			  chart2.data = dataItem.dataContext.subData;
+			  pieSeries2.appear();
+		
+			  var middleAngle = selectedSlice.middleAngle;
+			  var firstAngle = pieSeries.slices.getIndex(0).startAngle;
+			  var animation = pieSeries.animate([{ property: "startAngle", to: firstAngle - middleAngle }, { property: "endAngle", to: firstAngle - middleAngle + 360 }], 600, am4core.ease.sinOut);
+			  animation.events.on("animationprogress", updateLines);
+		
+			  selectedSlice.events.on("transformed", updateLines);
+		
+			//  var animation = chart2.animate({property:"dx", from:-container.pixelWidth / 2, to:0}, 2000, am4core.ease.elasticOut)
+			//  animation.events.on("animationprogress", updateLines)
+			}
+		
+		
+			function updateLines() {
+			  if (selectedSlice) {
+			    var p11 = { x: selectedSlice.radius * am4core.math.cos(selectedSlice.startAngle), y: selectedSlice.radius * am4core.math.sin(selectedSlice.startAngle) };
+			    var p12 = { x: selectedSlice.radius * am4core.math.cos(selectedSlice.startAngle + selectedSlice.arc), y: selectedSlice.radius * am4core.math.sin(selectedSlice.startAngle + selectedSlice.arc) };
+		
+			    p11 = am4core.utils.spritePointToSvg(p11, selectedSlice);
+			    p12 = am4core.utils.spritePointToSvg(p12, selectedSlice);
+		
+			    var p21 = { x: 0, y: -pieSeries2.pixelRadius };
+			    var p22 = { x: 0, y: pieSeries2.pixelRadius };
+		
+			    p21 = am4core.utils.spritePointToSvg(p21, pieSeries2);
+			    p22 = am4core.utils.spritePointToSvg(p22, pieSeries2);
+		
+			    line1.x1 = p11.x;
+			    line1.x2 = p21.x;
+			    line1.y1 = p11.y;
+			    line1.y2 = p21.y;
+		
+			    line2.x1 = p12.x;
+			    line2.x2 = p22.x;
+			    line2.y1 = p12.y;
+			    line2.y2 = p22.y;
+			  }
+			}
+		
+			chart.events.on("datavalidated", function() {
+			  setTimeout(function() {
+			    selectSlice(pieSeries.dataItems.getIndex(0));
+			  }, 1000);
+			});
 	
-	    accessibility: {
-	        announceNewData: {
-	            enabled: true
-	        },
-	        point: {
-	            valueSuffix: '%'
-	        }
-	    },
-	
-	    plotOptions: {
-	        series: {
-	            dataLabels: {
-	                enabled: true,
-	                format: '{point.name}: {point.y:.1f}%'
-	            }
-	        }
-	    },
-	
-	    tooltip: {
-	        headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
-	        pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y:.2f}%</b> of total<br/>'
-	    },
-	
-	    series: [
-	        {
-	            name: "Browsers",
-	            colorByPoint: true,
-	            data: json,
-	    drilldown: {
-	        series: [
-	            {
-	                name: "Chrome",
-	                id: "Chrome",
-	                data: [
-	                    [
-	                        "v65.0",
-	                        0.1
-	                    ],
-	                    [
-	                        "v64.0",
-	                        1.3
-	                    ],
-	                    [
-	                        "v63.0",
-	                        53.02
-	                    ],
-	                    [
-	                        "v62.0",
-	                        1.4
-	                    ],
-	                    [
-	                        "v61.0",
-	                        0.88
-	                    ],
-	                    [
-	                        "v60.0",
-	                        0.56
-	                    ],
-	                    [
-	                        "v59.0",
-	                        0.45
-	                    ],
-	                    [
-	                        "v58.0",
-	                        0.49
-	                    ],
-	                    [
-	                        "v57.0",
-	                        0.32
-	                    ],
-	                    [
-	                        "v56.0",
-	                        0.29
-	                    ],
-	                    [
-	                        "v55.0",
-	                        0.79
-	                    ],
-	                    [
-	                        "v54.0",
-	                        0.18
-	                    ],
-	                    [
-	                        "v51.0",
-	                        0.13
-	                    ],
-	                    [
-	                        "v49.0",
-	                        2.16
-	                    ],
-	                    [
-	                        "v48.0",
-	                        0.13
-	                    ],
-	                    [
-	                        "v47.0",
-	                        0.11
-	                    ],
-	                    [
-	                        "v43.0",
-	                        0.17
-	                    ],
-	                    [
-	                        "v29.0",
-	                        0.26
-	                    ]
-	                ]
-	            },
-	            {
-	                name: "Firefox",
-	                id: "Firefox",
-	                data: [
-	                    [
-	                        "v58.0",
-	                        1.02
-	                    ],
-	                    [
-	                        "v57.0",
-	                        7.36
-	                    ],
-	                    [
-	                        "v56.0",
-	                        0.35
-	                    ],
-	                    [
-	                        "v55.0",
-	                        0.11
-	                    ],
-	                    [
-	                        "v54.0",
-	                        0.1
-	                    ],
-	                    [
-	                        "v52.0",
-	                        0.95
-	                    ],
-	                    [
-	                        "v51.0",
-	                        0.15
-	                    ],
-	                    [
-	                        "v50.0",
-	                        0.1
-	                    ],
-	                    [
-	                        "v48.0",
-	                        0.31
-	                    ],
-	                    [
-	                        "v47.0",
-	                        0.12
-	                    ]
-	                ]
-	            },
-	            {
-	                name: "Internet Explorer",
-	                id: "Internet Explorer",
-	                data: [
-	                    [
-	                        "v11.0",
-	                        6.2
-	                    ],
-	                    [
-	                        "v10.0",
-	                        0.29
-	                    ],
-	                    [
-	                        "v9.0",
-	                        0.27
-	                    ],
-	                    [
-	                        "v8.0",
-	                        0.47
-	                    ]
-	                ]
-	            },
-	            {
-	                name: "Safari",
-	                id: "Safari",
-	                data: [
-	                    [
-	                        "v11.0",
-	                        3.39
-	                    ],
-	                    [
-	                        "v10.1",
-	                        0.96
-	                    ],
-	                    [
-	                        "v10.0",
-	                        0.36
-	                    ],
-	                    [
-	                        "v9.1",
-	                        0.54
-	                    ],
-	                    [
-	                        "v9.0",
-	                        0.13
-	                    ],
-	                    [
-	                        "v5.1",
-	                        0.2
-	                    ]
-	                ]
-	            },
-	            {
-	                name: "Edge",
-	                id: "Edge",
-	                data: [
-	                    [
-	                        "v16",
-	                        2.6
-	                    ],
-	                    [
-	                        "v15",
-	                        0.92
-	                    ],
-	                    [
-	                        "v14",
-	                        0.4
-	                    ],
-	                    [
-	                        "v13",
-	                        0.1
-	                    ]
-	                ]
-	            },
-	            {
-	                name: "Opera",
-	                id: "Opera",
-	                data: [
-	                    [
-	                        "v50.0",
-	                        0.96
-	                    ],
-	                    [
-	                        "v49.0",
-	                        0.82
-	                    ],
-	                    [
-	                        "v12.1",
-	                        0.14
-	                    ]
-	                ]
-	            }
-	        ]
-	    }
-	});
- }
+		}); // end am4core.ready()	
+	}
 </script>
 
 </head>
@@ -481,26 +366,10 @@
 		<div id="contentContainer">
 			
 			<div id="statistics-area">
-				<figure class="highcharts-figure">
-				   <div id="container"></div>  
-				</figure>
+				<div id="chartdiv"></div>
 			</div>
 			
-			<div id="table-area">
-				
-				<%-- 차트에 대한 데이터 테이블은 이곳에 넣으세요 !! --%>
-				
-				<table class="table">
-					<thead>
-					
-					</thead>
-					
-					<tbody>
-					
-					</tbody>
-				</table>
-				
-			</div>
+			<div id="table-area"></div>
 			
 		</div>
 			

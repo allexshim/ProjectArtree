@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.json.JSONArray;
@@ -285,6 +286,13 @@ public class SearchController {
 	////////////////////////////////////////////////////////////////////////////////
 	
 	// 관리자 페이지 차트 ~ 태그
+	@RequestMapping(value="/byTags.at")
+	public String isAdmin_byTags(HttpServletRequest request, HttpServletResponse response) {
+		
+		
+		return "admin/statistics/byTags.tiles";
+	}
+	
 	// /getChartDataByTags.at
 	@ResponseBody
 	@RequestMapping(value="/getChartDataByTags.at", produces="text/plain;charset=UTF-8")
@@ -299,11 +307,34 @@ public class SearchController {
 			JSONObject jsobj = new JSONObject();
 			jsobj.put("tag", map.get("tag"));
 			jsobj.put("cnt", map.get("CNT"));
-			jsobj.put("drilldown", map.get("tag"));
 			jsarr.put(jsobj);
+			/*System.out.println("tag"+map.get("tag"));
+			System.out.println("cnt"+map.get("CNT"));*/
 		}
 		return jsarr.toString();
 	} // end of getChartDataByTags ----------------------------------------
+	
+	
+	@ResponseBody
+	@RequestMapping(value="/getAgeDataByTags.at", produces="text/plain;charset=UTF-8")
+	public String getAgeDataByTags(HttpServletRequest request) {
+		
+		String tag = request.getParameter("tag");
+		// 해당 태그를 선호하는 연령대,해당회원수 를 가져온다.
+		List<HashMap<String,String>> ageRange = service.getAgeDataByTags(tag);
+		// agegroup, agecnt
+		JSONArray jsarr = new JSONArray();
+		for(HashMap<String,String> map : ageRange) {
+			JSONObject jsobj = new JSONObject();
+			jsobj.put("agegroup", map.get("agegroup"));
+			jsobj.put("agecnt", map.get("agecnt"));
+			jsobj.put("tag", map.get("tag"));
+			jsarr.put(jsobj);
+			/*System.out.println("agegroup"+map.get("agegroup"));
+			System.out.println("agecnt"+map.get("agecnt"));*/
+		}
+		return jsarr.toString();
+	} // end of getAgeDataByTags ----------------------------------------
 	
 	
 }
