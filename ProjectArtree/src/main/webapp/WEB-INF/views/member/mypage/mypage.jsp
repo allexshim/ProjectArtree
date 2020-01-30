@@ -209,6 +209,16 @@
 		margin-top: 30px;
 	}
 	
+	/* 선호 장르 차트 */
+	div#chart_cont {
+		width: 500px;
+		height: 300px;
+		padding-right: 0;
+		padding-left: 120px;
+		margin-right: 0;
+		text-align: center;
+	}
+	
 </style>
 
 <script type="text/javascript" src="<%= ctxPath%>/resources/js/jquery-3.3.1.min.js"></script>
@@ -220,6 +230,10 @@
 <script src="https://code.highcharts.com/modules/export-data.js"></script>
 <script src="https://code.highcharts.com/modules/accessibility.js"></script>
 
+<!-- 선호 장르 차트 -->
+<script src="https://www.amcharts.com/lib/4/core.js"></script>
+<script src="https://www.amcharts.com/lib/4/charts.js"></script>
+<script src="https://www.amcharts.com/lib/4/themes/animated.js"></script>
 
 <script type="text/javascript">
 
@@ -271,6 +285,43 @@
 		    }
 		}); 
 	
+		
+		// 선호 장르 차트
+		$.ajax({
+			url:"<%= request.getContextPath()%>/getGenreData.at",
+			dataType:"json",
+			type:"GET",
+			success:function(json){
+			
+				am4core.useTheme(am4themes_animated);
+				
+				var chart = am4core.create("chart_cont", am4charts.PieChart);
+				
+				chart.data = json;
+				
+				// Set inner radius
+				chart.innerRadius = am4core.percent(50);
+
+				// Add and configure Series
+				var pieSeries = chart.series.push(new am4charts.PieSeries());
+				pieSeries.dataFields.value = "cnt";
+				pieSeries.dataFields.category = "genre";
+				pieSeries.slices.template.stroke = am4core.color("#fff");
+				pieSeries.slices.template.strokeWidth = 2;
+				pieSeries.slices.template.strokeOpacity = 1;
+
+				// This creates initial animation
+				pieSeries.hiddenState.properties.opacity = 1;
+				pieSeries.hiddenState.properties.endAngle = -90;
+				pieSeries.hiddenState.properties.startAngle = -90;
+			},
+			  
+		    error: function(request, status, error){
+		 		alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+		    }
+		});
+		
+		
 	});
 	
 	// 가고싶어요 다녀왔어요 변경
@@ -280,6 +331,7 @@
 		$("#tab_nav"+n).addClass("onNav");
 		$("#tab_wrap"+n).css("display", "");
 	}
+	
 	
 </script>
 
@@ -302,12 +354,7 @@
 					<div class="genre_header">
 						<span>선호장르</span>
 					</div>
-					<div class="chart_cont">
-						차트차트차트차트차트<br/>
-						차트차트차트차트차트<br/>
-						차트차트차트차트차트<br/>
-						차트차트차트차트차트<br/>
-						차트차트차트차트차트
+					<div class="chart_cont" id="chart_cont">
 					</div>
 				</div>
 				<div class="favor_tag">

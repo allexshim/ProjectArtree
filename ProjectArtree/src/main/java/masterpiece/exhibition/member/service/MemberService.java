@@ -115,6 +115,21 @@ public class MemberService implements InterMemberService {
 
 
 	// *********************** 마이페이지 *********************** //
+	// ========= chart 개인 선호 장르 select =========
+	@Override
+	public List<String> myfavorGenre(String idx) {
+		List<String> myfavorGenre = dao.myfavorGenre(idx);
+		return myfavorGenre;
+	}
+	// ========= 선호 장르 차트 data =========
+	@Override
+	public List<HashMap<String, String>> myGenreData(String genre) {
+		List<HashMap<String, String>> genreData = dao.myGenreData(genre);
+		return genreData;
+	}
+
+
+	
 	// ========= word cloud 개인 선호 태그 select =========
 	@Override
 	public List<String> myfavorTag(String idx) {
@@ -185,6 +200,8 @@ public class MemberService implements InterMemberService {
 		
 		return n+m;
 	}
+
+
 
 
 

@@ -93,6 +93,35 @@
    	  update member set password=#{tempPassword} where email=#{email}
    </update>
    
+   <!-- chart 개인 선호 장르 select -->
+   <select id="myfavorGenre" parameterType="String" resultType="String">
+   	  select favorgenre
+	  from (select * 
+	  		from member 
+        	where idx= #{idx}) M join wishlist W
+	  on M.idx = W.fk_idx
+   </select>
+   <!-- 선호 장르 차트 data -->
+    <resultMap type="HashMap" id="genreMap">
+	 	<result property="genre" 	column="genre" 	javaType="String"/>
+	 	<result property="cnt" 		column="cnt" 	javaType="String"/>
+   </resultMap>
+   <select id="myGenreData" parameterType="String" resultMap="genreMap">
+   	  select genre, cnt from
+	  (select genre, cnt, rownum as RNO
+	  from
+	  (select genre, cnt
+	  from (select genre, count(*) as cnt
+	  from ( WITH TT AS
+	       ( SELECT #{genre} genre FROM DUAL )
+	       SELECT TRIM(REGEXP_SUBSTR(genre, '[^,]+', 1, LEVEL)) AS genre
+	       FROM TT CONNECT BY INSTR(genre, ',', 1, LEVEL - 1) <![CDATA[>]]> 0
+	  ) V
+	  group by genre) X
+	  order by cnt desc ) Y
+	  ) Z
+   </select>
+   
    <!-- word cloud 개인 선호 태그 select -->
    <select id="myfavorTag" parameterType="String" resultType="String">
    		select favortag

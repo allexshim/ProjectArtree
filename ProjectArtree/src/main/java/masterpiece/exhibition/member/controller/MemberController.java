@@ -440,12 +440,12 @@ public class MemberController {
 		
 		String idx = loginuser.getIdx();
 
-		// word cloud 개인 선호 태그 select
+		// ======= word cloud =======
+		// 개인 선호 태그 select
 		List<String> myfavorTag = service.myfavorTag(idx);
-		
 		String text = String.valueOf(myfavorTag).substring(1, String.valueOf(myfavorTag).length()-1);
-		
 		request.setAttribute("text", text);
+		// ==========================
 		
 		// 하트 눌렀을 때 가고싶어요 select
 		List<HashMap<String, String>> wantList = service.selectWannaGo(idx);
@@ -471,6 +471,34 @@ public class MemberController {
 		
 		return "member/mypage/mypage.tiles";
 	} // end of mypage --------------------------------------------
+	
+	
+	@ResponseBody
+	@RequestMapping(value="/getGenreData.at", produces="text/plain;charset=UTF-8") 
+	public String getGenreData(HttpServletRequest request) {
+
+		HttpSession session = request.getSession();
+		MemberVO loginuser = (MemberVO)session.getAttribute("loginuser");
+		
+		String idx = loginuser.getIdx();
+		
+		// 개인 선호 장르 select
+		List<String> myfavorGenre = service.myfavorGenre(idx);
+		String genre = String.valueOf(myfavorGenre).substring(1, String.valueOf(myfavorGenre).length()-1);
+		
+		// 선호 장르 차트 data
+		List<HashMap<String, String>> genreData = service.myGenreData(genre);
+		
+		JSONArray jsarr = new JSONArray();
+		for(HashMap<String,String> map : genreData) {
+			JSONObject jsobj = new JSONObject();
+			jsobj.put("genre", map.get("genre"));
+			jsobj.put("cnt", map.get("cnt"));
+			jsarr.put(jsobj);
+		}
+		
+		return jsarr.toString();
+	}
 	
 	@RequestMapping(value="/mypage_order.at")
 	public String mypage_order(HttpServletRequest request) {

@@ -25,6 +25,10 @@ public interface InterMemberDAO {
 
 	int updatePwd(HashMap<String, String> updateMap); // 임시 비밀번호로 현재 비밀번호 변경
 
+	// 선호 장르 chart
+	List<String> myfavorGenre(String idx); // chart 개인 선호 장르 select
+	List<HashMap<String, String>> myGenreData(String genre); // 선호 장르 차트 data
+	
 	List<String> myfavorTag(String idx); // word cloud 개인 선호 태그 select
 	
 	List<HashMap<String, String>> selectWannaGo(String idx); // 하트 눌렀을 때 가고싶어요 select
@@ -44,6 +48,11 @@ public interface InterMemberDAO {
 
 	int updateWithdrawal(HashMap<String, String> paraMap); // 탈퇴 사유 입력
 	int updateStatus(String idx); // status 0 으로 변경
+
+	
+
+	
+
 
 
 

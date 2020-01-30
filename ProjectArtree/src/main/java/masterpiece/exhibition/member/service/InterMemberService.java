@@ -21,7 +21,12 @@ public interface InterMemberService {
 
 	int updatePwd(HashMap<String, String> updateMap); // 임시 비밀번호로 현재 비밀번호 변경
 
-	List<String> myfavorTag(String idx); // word cloud 개인 선호 태그 select
+	// 선호 장르 차트
+	List<String> myfavorGenre(String idx); // 개인 선호 장르 select
+	List<HashMap<String, String>> myGenreData(String genre); // 선호 장르 차트 data
+	
+	// word cloud
+	List<String> myfavorTag(String idx);  // 개인 선호 태그 select
 	
 	List<HashMap<String, String>> selectWannaGo(String idx); // 하트 눌렀을 때 가고싶어요 select 
 
@@ -38,6 +43,11 @@ public interface InterMemberService {
 	int changePwd(HashMap<String, String> paraMap); // 비밀번호 변경
 
 	int withdrawal(HashMap<String, String> paraMap); // 회원탈퇴
+
+
+
+	
+
 
 
 
