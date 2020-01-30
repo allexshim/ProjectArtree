@@ -9,12 +9,12 @@ public class MyUtil {
 		String result = param;
 		
 		if(param != null) {
-			result = result.replaceAll("<","&lt;");
+			/*result = result.replaceAll("<","&lt;");
 			result = result.replaceAll(">","&gt;");
 			result = result.replaceAll("&","&amp;");
-			result = result.replaceAll("\"","&quot;");
-			//result = result.replaceAll("<script","&lt;script");
-			//result = result.replaceAll("script>","&lt;script");
+			result = result.replaceAll("\"","&quot;");*/
+			result = result.replaceAll("<script","&lt;script");
+			result = result.replaceAll("script>","&lt;script");
 		}
 		return result;
 	} // end of replaceParameter---------------------------
