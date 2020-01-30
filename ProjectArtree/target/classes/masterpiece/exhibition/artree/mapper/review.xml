@@ -155,6 +155,16 @@
     <!-- review 테이블에 commentCount 컬럼의 값을 1증가 (update) -->  
     <update id="updateCommentCount" parameterType="String">
        update review set commentCount = commentCount + 1 
-       where revno = #{fk_revno}
+       where revno=#{fk_revno}
+    </update>
+    
+    <!-- 댓글삭제 -->
+    <delete id="delComment" parameterType="String">
+    	delete from board_comment where commentno=#{commentno}
+    </delete>
+    <!-- commentCount 1 감소 -->
+    <update id="delCommentCount" parameterType="String">
+    	update review set commentCount = commentCount - 1 
+        where revno=#{fk_revno}
     </update>
 </mapper>

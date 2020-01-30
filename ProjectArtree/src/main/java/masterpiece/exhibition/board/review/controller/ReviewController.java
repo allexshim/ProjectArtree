@@ -120,17 +120,22 @@ public class ReviewController {
 			url += "?"; 
 		
 		// *** [이전] 만들기 *** //    
-		if(pageNo != 1) {
-			pageBar += "<li style='display: inline; list-style: none; margin-right: 10px;'><a href='"+url+"&currentShowPageNo="+(pageNo-1)+"&sizePerPage="+sizePerPage+"&searchType="+searchType+"&searchWord="+searchWord+"'>[이전]</a></li>";
+		pageBar += "<a href = '/artree/reviewList.at?currentShowPageNo="+1+"&searchType="+searchType+"&searchWord="+searchWord+"'><i class='fa fa-angle-double-left' style='font-size:20px'></i></a>";
+			
+		if(pageNo!=1) {
+			pageBar += "&nbsp;<a href = '/artree/reviewList.at?currentShowPageNo="+ (pageNo-1)+"&searchType="+searchType+"&searchWord="+searchWord+"'><i class='fa fa-angle-left' style='font-size:20px'></i></a>&nbsp;";
+		} else {
+			pageBar += "&nbsp;<a href = '/artree/reviewList.at?currentShowPageNo="+ (pageNo) +"&searchType="+searchType+"&searchWord="+searchWord+"'><i class='fa fa-angle-left' style='font-size:20px'></i></a>&nbsp;";
 		}
+			
 		
 		while( !(loop>blockSize || pageNo>totalPage) ) {
 			
 			if(pageNo == currentShowPageNo) {
-				pageBar += "<li style='display: inline; list-style-type: none; margin-right: 10px;'><span style='color: red; border: 1px solid gray; padding: 2px 4px;'>"+pageNo+"</span></li>";
+				pageBar += "<li style='display: inline; list-style-type: none; margin-right: 10px;'><span class = 'active' style='display:inline-block;'>"+pageNo+"</span></li>";
 			}
 			else {
-				pageBar += "<li style='display: inline; list-style-type: none; margin-right: 10px;'><a href='"+url+"&currentShowPageNo="+pageNo+"&sizePerPage="+sizePerPage+"&searchType="+searchType+"&searchWord="+searchWord+"'>"+pageNo+"</a></li>"; 
+				pageBar += "<li style='display: inline; list-style-type: none; margin-right: 10px;'><a class = 'pageNumber' href='"+url+"&currentShowPageNo="+pageNo+"&sizePerPage="+sizePerPage+"&searchType="+searchType+"&searchWord="+searchWord+"'>"+pageNo+"</a></li>"; 
 				       // ""+1+"&nbsp;"+2+"&nbsp;"+3+"&nbsp;"+......+10+"&nbsp;"
 			}
 			
@@ -139,10 +144,12 @@ public class ReviewController {
 		}// end of while---------------------------------
 		
 		// *** [다음] 만들기 *** //
-		if( !(pageNo>totalPage) ) {
-			pageBar += "<li style='display: inline; list-style-type: none; margin-right: 10px;'><a href='"+url+"&currentShowPageNo="+pageNo+"&sizePerPage="+sizePerPage+"&searchType="+searchType+"&searchWord="+searchWord+"'>[다음]</a></li>"; 
+		if(pageNo <= totalPage) {
+			pageBar += "&nbsp;<a href = '/artree/reviewList.at?currentShowPageNo="+pageNo+"&searchType="+searchType+"&searchWord="+searchWord+"'><i class='fa fa-angle-right' style='font-size:20px'></i></a>&nbsp;";
+		} else {
+			pageBar += "&nbsp;<a href = '/artree/reviewList.at?currentShowPageNo="+totalPage+"&searchType="+searchType+"&searchWord="+searchWord+"'><i class='fa fa-angle-right' style='font-size:20px'></i></a>&nbsp;";
 		}
-
+		pageBar += "&nbsp;<a href = '/artree/reviewList.at?currentShowPageNo="+totalPage+"&searchType="+searchType+"&searchWord="+searchWord+"'><i class='fa fa-angle-double-right' style='font-size:20px'></i></a>&nbsp;";
 
 
 		pageBar += "</ul>";
@@ -396,12 +403,6 @@ public class ReviewController {
     	String comcontent = request.getParameter("commentContents");
     	String fk_revno = request.getParameter("fk_revno");
     	
-    	System.out.println("idx"+idx);
-    	System.out.println("name"+name);
-    	System.out.println("comcontent"+comcontent);
-    	System.out.println("fk_revno"+fk_revno);
-    	
-    	
     	HashMap<String, String> paraMap = new HashMap<String, String>();
     	paraMap.put("idx", idx);
     	paraMap.put("name", name);
@@ -412,7 +413,6 @@ public class ReviewController {
     	try {
     		// 댓글 등록
 			int n = service.addComment(paraMap);
-			System.out.println("n~~~!"+n);
 			
 			if(n==1) {
 				// 댓글쓰기(insert) 및
@@ -420,7 +420,6 @@ public class ReviewController {
 
 				List<HashMap<String, String>> commentList = service.getCommentList(fk_revno);
 				// 원게시물에 딸린 댓글들을 조회해오는 것
-				System.out.println("조회~~!"+commentList);
 				
 				JSONArray jsonArr = new JSONArray();
 				
@@ -434,7 +433,6 @@ public class ReviewController {
 				}
 				
 				jsonStr = jsonArr.toString();
-				System.out.println("jsonStr"+jsonStr);
 			}
 			
 		} catch (Throwable e) {
@@ -442,6 +440,51 @@ public class ReviewController {
 		}
    	 
    	 return jsonStr;
+    }
+    
+    // 댓글 삭제
+    @ResponseBody
+    @RequestMapping(value="/delRevComment.at", method= {RequestMethod.POST}, produces="text/plain;charset=UTF-8") 
+    public String delRevComment(HttpServletRequest request) {
+    	
+    	String jsonStr = "";
+    	
+    	String commentno = request.getParameter("commentno");
+    	String fk_revno = request.getParameter("fk_revno");
+    	
+    	HashMap<String, String> paraMap = new HashMap<String, String>();
+    	paraMap.put("commentno", commentno);
+    	paraMap.put("fk_revno", fk_revno);
+    	
+    	try {
+    		// 댓글 삭제
+			int n = service.delComment(paraMap);
+			
+			if(n==1) {
+				// 댓글 삭제 성공시
+
+				List<HashMap<String, String>> commentList = service.getCommentList(fk_revno);
+				// 원게시물에 딸린 댓글들을 조회해오는 것
+				
+				JSONArray jsonArr = new JSONArray();
+				
+				for(HashMap<String, String> cmap:commentList) {
+					JSONObject jsonObj = new JSONObject();
+					jsonObj.put("name", cmap.get("name"));
+					jsonObj.put("comcontent", cmap.get("comcontent"));
+					jsonObj.put("comwriteday", cmap.get("comwriteday"));
+					
+					jsonArr.put(jsonObj);
+				}
+				
+				jsonStr = jsonArr.toString();
+			}
+			
+		} catch (Throwable e) {
+			e.printStackTrace();
+		}
+    	
+    	return jsonStr;
     }
 }
 
