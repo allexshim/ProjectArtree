@@ -14,7 +14,7 @@
 		select exhibitionname, B.mainposter
 		from exhibition A left join exhibitiondetail B
 		on A.exhibitionno = B.fk_exhibitionno
-		where exhibitionname like '%'|| #{key} ||'%'
+		where exhibitionname like '%'|| #{key} ||'%' 
 	</select>
 
 </mapper>
