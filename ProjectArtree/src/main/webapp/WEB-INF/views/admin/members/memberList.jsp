@@ -76,7 +76,7 @@
 	}
 	
 	div#contentContainer {
-		padding-top : 50px;
+		padding-top : 50px;7
 	}
 	
 	/* == 테이블 부분 == */

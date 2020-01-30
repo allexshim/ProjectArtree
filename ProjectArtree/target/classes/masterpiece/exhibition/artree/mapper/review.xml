@@ -12,7 +12,7 @@
 		<result property="author"   		column="author" 			javaType="String"/> 
 		<result property="galleryname"  	column="galleryname" 		javaType="String"/> 
 	</resultMap>
-
+ 
 	<select id="getExhibit" parameterType="String" resultMap="Exhibit" >
 		select exhibitionno, exhibitionname, author, galleryname
         from 
