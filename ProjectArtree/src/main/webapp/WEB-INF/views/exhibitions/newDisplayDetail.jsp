@@ -181,11 +181,14 @@
 		    $("#myCarousel").carousel("next");
 		  });
 		 
-		 
 		// open 버튼을 클릭한다면 해당 전시회를 '전시중' 상태로 변경한다.
 		$("#openBtn").click(function(){
-			var exhibitionCode = "${exhibitionCode}"; // 상세 페이지로 넘어올때 해당 전시회의 전시회 코드를 함께 넘긴다.
-			window.location.href="/artree/*.at?exhibitionCode="+exhibitionCode;	
+			
+			if(confirm("정말로 전시중 상태로 바꾸시겠습니까?")) {
+				var exhibitionno = "${ exhibitionInfo.exhibitionno }"; // 상세 페이지로 넘어올때 해당 전시회의 전시회 코드를 함께 넘긴다.
+				window.location.href="/artree/changeExhibitStatus.at?exhibitionno=" + exhibitionno;	
+			}
+			
 		}); // end of $("#openBtn").click -----------------------------
 		
 		
@@ -207,7 +210,7 @@
 				<tbody>
 				<c:if test="${ not empty exhibitionInfo }">
 					<tr>
-						<td>no.</td><td>${ exhibitionInfo.exhibitionno }</td>
+						<td>no.</td><td>${ exhibitionInfo.exhibitionno }<input type="hidden" name="exhibitionno" value="${ exhibitionInfo.exhibitionno }" /></td>
 					</tr>
 					<tr>
 						<td>지원자명</td><td>${ exhibitionInfo.applier }</td>
@@ -331,9 +334,9 @@
 					</tr>
 					</c:if>
 				</table>
-	<%-- 			<div align="center">
+				<div align="center">
 					<img id="openBtn" src="<%= ctxPath %>/resources/images/board/openDisplyBtn.JPG" />
-				</div> --%>
+				</div>
 			</div>
 		</div>
 	</div>
