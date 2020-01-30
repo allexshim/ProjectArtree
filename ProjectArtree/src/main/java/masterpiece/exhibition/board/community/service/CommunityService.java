@@ -78,7 +78,7 @@ public class CommunityService implements InterCommunityService {
 		return n;
 	}
 
-	// 새 댓글 등록하기
+	// 새 댓글 등록하기 
 	@Override
 	public List<HashMap<String,String>> addComment(HashMap<String, String> comment) {
 		int n = dao.addComment(comment);

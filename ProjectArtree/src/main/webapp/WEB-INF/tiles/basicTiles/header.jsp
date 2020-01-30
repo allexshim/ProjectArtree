@@ -13,8 +13,13 @@
 html,body{
 	font-family: 'Noto Sans Kr', sans-serif !important; 
 }
-
+	
+	#myheader {
+		z-index: 9999;
+	}
+	
 	#myheader a.header-nav {
+	  
 	  font-weight: bold;
 	  text-align: center;
 	  margin: 20px;
@@ -302,7 +307,7 @@ function goCart() {
 
 </script>
 
-		<div class="row">
+	<div class="row">
 		<div class="col-sm-2"></div>
 			<div class="col-sm-8" style="float: center;" id="bs-slide-dropdown">
 				<a class="active header-nav" href="<%=ctxPath%>/galHome.at">GALLARY</a>
@@ -344,9 +349,9 @@ function goCart() {
 				    <div class="dropdown-content-R2 dropdown-menu" role="menu">
 					    <a onclick="goMypage()">마이페이지</a>
 					    <a onclick="goCart()">장바구니</a>
-					    <c:if test="${sessionScope.loginuser.status == 2}">
-					    	<a href="<%=ctxPath%>/admin.at">관리자페이지</a>
-				    	</c:if>
+				    <c:if test="${sessionScope.loginuser.status == 2}">
+				    	<a href="<%=ctxPath%>/admin.at">관리자페이지</a>
+			    	</c:if>
 				  </div>
 			</div>	  
 		</div>
@@ -354,25 +359,25 @@ function goCart() {
 
 	<%-- 로그인 레이어 --%>
   	<div class="layer" style="display: none;">
-  	<div class="bg"></div>
-	<div id="layer" class="pop">
-		<div class="pop-container">
-		<div class="pop-conts">
-		<div class="login_wrap">
-			<form name="loginForm" id="loginForm">
-			<div class="login_box">
-				<input type="text" placeholder="이메일로 로그인" name="email_login" id="email_login" class="login_input"/>
-				<input type="password" placeholder="비밀번호" name="password_login" id="password_login" class="login_input"/>
-				
-				<div class="login_find">
-					<a href="/artree/idFind.at" class="find_btn">아이디 찾기&nbsp;&nbsp;|&nbsp;&nbsp;</a>
-					<a href="/artree/passwordFind.at" class="find_btn">비밀번호 찾기</a>
+  		<div class="bg"></div>
+		<div id="layer" class="pop">
+			<div class="pop-container">
+				<div class="pop-conts">
+					<div class="login_wrap">
+						<form name="loginForm" id="loginForm">
+							<div class="login_box">
+								<input type="text" placeholder="이메일로 로그인" name="email_login" id="email_login" class="login_input"/>
+								<input type="password" placeholder="비밀번호" name="password_login" id="password_login" class="login_input"/>
+								
+								<div class="login_find">
+									<a href="/artree/idFind.at" class="find_btn">아이디 찾기&nbsp;&nbsp;|&nbsp;&nbsp;</a>
+									<a href="/artree/passwordFind.at" class="find_btn">비밀번호 찾기</a>
+								</div>
+								<input type="button" id="login_btn" value="로그인" onClick="goLogin()"/>
+							</div>
+						</form>
+					</div>
 				</div>
-				<input type="button" id="login_btn" value="로그인" onClick="goLogin()"/>
 			</div>
-			</form>
-		</div>
-		</div>
 		</div>
 	</div>
-</div>

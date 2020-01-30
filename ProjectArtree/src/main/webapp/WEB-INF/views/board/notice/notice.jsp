@@ -18,6 +18,10 @@
 		font-family: 'Noto Sans Kr', sans-serif;
 	}
 	
+	.M1 {
+		-webkit-transform:translate(-10px,0);
+	}
+	
 	.noticeContainer {
 		width: 80%;
 	}

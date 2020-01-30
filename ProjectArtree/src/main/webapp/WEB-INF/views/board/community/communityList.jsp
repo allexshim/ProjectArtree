@@ -13,7 +13,11 @@
 
 <style type="text/css">
 @import url(//fonts.googleapis.com/earlyaccess/notosanskr.css);
-
+	
+	.M1 {
+		-webkit-transform:translate(-10px,0);
+	}
+	
 	body {
 		font-family: 'Noto Sans Kr', sans-serif;
 	}
