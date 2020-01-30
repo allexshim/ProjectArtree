@@ -109,8 +109,10 @@
 	
 	/* == 통계 영역 == */
 	#statistics-area {
-		height: 60vh;
-		border: 2px solid red;
+		height: 70vh;
+		/* border: 2px solid red; */
+		vertical-align: middle;
+		padding-top : 20px;
 	}
 	
 	#table-area {
@@ -118,16 +120,49 @@
 		height: 50vh;
 	}
 	
+/* 차트 관련 */
+	#chartdiv {
+	  width: 80%;
+	  margin : 0 auto;
+	  height: 600px;
+	}
+
 </style>
+
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/data.js"></script>
+<script src="https://code.highcharts.com/modules/drilldown.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
+<script src="https://code.highcharts.com/modules/export-data.js"></script>
+<script src="https://code.highcharts.com/modules/accessibility.js"></script>
 
 <script src="<%= ctxPath%>/resources/js/jquery-3.3.1.min.js"></script>
 <script type="text/javascript">
+
 	$(document).ready(function(){ 
-	
+		
+		$.ajax({ // 아래 url은 임시로 service controller에 저장합니다.
+			url:"<%=request.getContextPath()%>/getChartDataByTags.at",
+	          type:"GET",
+	          dataType:"JSON",
+	          success: function(json) { 
+	        	  getChartByTag(json);
+	          },
+	          error: function(request, status, error){
+	                alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+	          }
+		});
 		
 	});
 
 </script>
+
+<!-- Chart code -->
+<script>
+	
+
+</script>
+
 </head>
 <body>
 	<div id="statisticsContainer" class="container">
@@ -151,7 +186,9 @@
 		<div id="contentContainer">
 			
 			<div id="statistics-area">
-				<%-- 통계차트 여기다 넣으시면 됩니다 --%>
+				<figure class="highcharts-figure">
+				   <div id="container"></div>  
+				</figure>
 			</div>
 			
 			<div id="table-area">
