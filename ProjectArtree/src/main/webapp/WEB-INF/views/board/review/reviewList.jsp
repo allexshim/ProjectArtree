@@ -14,6 +14,10 @@
 <style type="text/css">
 @import url(//fonts.googleapis.com/earlyaccess/notosanskr.css);
 
+	.M1 {
+      -webkit-transform:translate(-10px,0);
+    }
+
 	body {
 		font-family: 'Noto Sans Kr', sans-serif;
 	}
@@ -221,7 +225,13 @@
 		
 		// 글쓰기 페이지로 가기
 		$("div#goWrite").click(function(){
-			window.location.href="/artree/addReview.at";	
+			if(${loginuser != null}) {
+				window.location.href="/artree/addReview.at";
+			}
+			else {
+				location.href="javascript:layer_open('layer')";
+				return;
+			}
 		});
 		
 	});
@@ -273,7 +283,7 @@
 						<input type="hidden" class="eno" value="${rev.fk_exhibitionno}"/>
 						</td>
 						<c:if test="${rev.commentCount > 0}">	
-			   	   		<td>${rev.revTitle}&nbsp;<span style="vertical-align: super;">[<span style="color: red; font-size: 9pt; font-style: italic; font-weight: bold;">${rev.commentCount}</span>]</span></td>
+			   	   		<td>${rev.revTitle}&nbsp;<span style="margin-left: 5px; ">[<span style="color: red; font-size: 9pt; font-weight: bold; font-style: italic;">${rev.commentCount}</span>]</span></td>
 			    		</c:if>
 			    		<c:if test="${rev.commentCount == 0}">
 			   	   		<td>${rev.revTitle}</td>

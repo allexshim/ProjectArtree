@@ -130,6 +130,15 @@
       where revno = #{revno}
     </update>
     
+    <!-- 글 삭제 -->
+    <delete id="delReview">
+    	delete from review where revno = #{revno}
+    </delete>
+    <!-- 해당되는 글의 모든 댓글 삭제 -->
+    <delete id="delAllComment">
+    	delete from board_comment where fk_no=#{revno} and boardno = 1
+    </delete>
+    
     <!-- ================== 댓글 ================== -->
     <!-- 해당 글 번호에 해당하는 댓글 가져오기 -->
     <resultMap type="HashMap" id="commMap">
@@ -156,6 +165,12 @@
     <update id="updateCommentCount" parameterType="String">
        update review set commentCount = commentCount + 1 
        where revno=#{fk_revno}
+    </update>
+    
+    <!-- 댓글수정 -->
+    <update id="modifyComment" parameterType="HashMap">
+    	update board_comment set comcontent=#{content}
+    	where commentno=#{commentno} and fk_no=#{fk_revno}
     </update>
     
     <!-- 댓글삭제 -->

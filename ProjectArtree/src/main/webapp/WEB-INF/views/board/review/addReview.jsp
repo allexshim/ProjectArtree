@@ -319,7 +319,7 @@
 				<tr>
 				<tr>
 					<td colspan="2">
-						<textarea id="contents" name="contents" style="resize:none; border:solid 1px lightgray" rows="10" cols="120">
+						<textarea id="contents" name="contents" style="resize:none; border:solid 1px lightgray; width: 100%;" rows="10" cols="120">
 						</textarea>
 					</td>
 				<tr>
@@ -330,20 +330,7 @@
 			</div>
 		</div>
 		
-		<div id="preNext">
-			<table>
-				<tr>
-					<td class="prev"><i class='fa fa-angle-up' style='font-size:32px'></i></td>
-					<td class="prev">이전글</td>
-					<td class="prev">이전글제목이전글제목이전글제목이전글제목이전글제목이전글제목</td>
-				</tr>
-				<tr>
-					<td class="next"><i class='fa fa-angle-down' style='font-size:32px'></i></td>
-					<td class="next">다음글</td>
-					<td class="next">다음글제목다음글제목다음글제목다음글제목다음글제목다음글제목</td>
-				</tr>
-			</table>
-		</div>
+		
 		<div id="toListBtn" align="center">
 			<img id="toListBtn" src="<%= ctxPath %>/resources/images/board/toListBtn.JPG" />
 		</div>

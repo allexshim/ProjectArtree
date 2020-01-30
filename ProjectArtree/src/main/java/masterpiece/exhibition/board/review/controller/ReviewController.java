@@ -32,7 +32,7 @@ public class ReviewController {
 	
 	@RequestMapping(value="/reviewList.at")
 	public String reviewList(HttpServletRequest request) {
-
+		
 		// ========================= 페이징 =========================
 		List<ReviewVO> revList = null;
 		
@@ -156,15 +156,11 @@ public class ReviewController {
 		
 		request.setAttribute("pageBar", pageBar);
 		
-		String gobackURL = MyUtil.getCurrentURL(request);
-		// 페이징 처리되어진 후 특정글제목을 클릭하여 상세내용을 본 이후
-		// 사용자가 목록보기 버튼을 클릭했을 때 돌아갈 페이지를 알려주기 위해
-		// 현재 페이지 주소를 뷰단으로 넘겨준다.
-		
-		request.setAttribute("gobackURL", gobackURL);
-		
 		HttpSession session = request.getSession();
 		session.setAttribute("readCountPermission", "yes"); 
+		
+		String goBackURL = MyUtil.getCurrentURL(request);
+	    session.setAttribute("goBackURL", goBackURL);
 		
 		request.setAttribute("revList", revList);
 		
@@ -383,7 +379,28 @@ public class ReviewController {
     @RequestMapping(value="/delReview.at", method= {RequestMethod.GET}) 
     public ModelAndView requireLogin_del(HttpServletRequest request, HttpServletResponse response, ModelAndView mav) {
     	
+    	String revno = request.getParameter("revno");
     	
+    	int n = service.delReview(revno);
+    	
+    	if(n>0) {
+    		String msg = "해당 글이 삭제되었습니다.";
+    		String loc = "/artree/reviewList.at";
+    		
+    		mav.addObject("msg", msg);
+    		mav.addObject("loc", loc);
+    		
+    	}
+    	else {
+    		String msg = "글 삭제에 실패하였습니다. 관리자에게 문의해 주세요.";
+    		String loc = "javascript:history.back()";
+    		
+    		mav.addObject("msg", msg);
+    		mav.addObject("loc", loc);
+    		
+    	}
+
+		mav.setViewName("msg");
     	
     	return mav;
     }
@@ -437,11 +454,60 @@ public class ReviewController {
 			}
 			
 		} catch (Throwable e) {
+				e.printStackTrace();
+		}
+	   	 
+	   	 return jsonStr;
+    }
+    
+    // 댓글 수정
+    @ResponseBody
+    @RequestMapping(value="/modifyRevComment.at", method= {RequestMethod.POST}, produces="text/plain;charset=UTF-8") 
+    public String modifyRevComment(HttpServletRequest request) {
+    	
+    	String jsonStr = "";
+    	
+    	String commentno = request.getParameter("commentno");
+    	String content = request.getParameter("content");
+    	String fk_revno = request.getParameter("fk_revno");
+    	
+    	HashMap<String, String> paraMap = new HashMap<String, String>();
+    	paraMap.put("commentno", commentno);
+    	paraMap.put("content", content);
+    	paraMap.put("fk_revno", fk_revno);
+    	
+    	try {
+    		// 댓글 수정
+			int n = service.modifyComment(paraMap);
+			
+			if(n==1) {
+				// 댓글 삭제 성공시
+
+				List<HashMap<String, String>> commentList = service.getCommentList(fk_revno);
+				// 원게시물에 딸린 댓글들을 조회해오는 것
+				
+				JSONArray jsonArr = new JSONArray();
+				
+				for(HashMap<String, String> cmap:commentList) {
+					JSONObject jsonObj = new JSONObject();
+					jsonObj.put("fk_idx", cmap.get("fk_idx"));
+					jsonObj.put("name", cmap.get("name"));
+					jsonObj.put("comcontent", cmap.get("comcontent"));
+					jsonObj.put("comwriteday", cmap.get("comwriteday"));
+					
+					jsonArr.put(jsonObj);
+				}
+				
+				jsonStr = jsonArr.toString();
+			}
+			
+		} catch (Throwable e) {
 			e.printStackTrace();
 		}
-   	 
-   	 return jsonStr;
+    	
+    	return jsonStr;
     }
+    
     
     // 댓글 삭제
     @ResponseBody

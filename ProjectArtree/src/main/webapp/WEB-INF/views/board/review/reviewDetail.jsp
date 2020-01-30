@@ -96,12 +96,12 @@
 		padding-top : 20px;
 	}
 
-	div#myBtns {
+	div.myBtns {
 		float : right;
 		padding-right : 22px;
 	}
 	
-	div#myBtns img {
+	div.myBtns img {
 		padding : 10px;
 		cursor : pointer;
 	}
@@ -138,6 +138,7 @@
 	div#myComments img {
 		padding : 10px;
 		padding-bottom : 0;
+		float: right;
 	}
 	
 	.commentWriter {
@@ -148,6 +149,14 @@
 	
 	.commentContents {
 		padding-bottom : 10px;
+	}
+	
+	div#myComments table {
+		width: 100%;
+	}
+	
+	div#myComments table textarea {
+		width: 100%;
 	}
 	
 	/* 새 댓글 작성하기 */
@@ -176,7 +185,7 @@
 		cursor : pointer;
 	}
 	
-	#commentModifyBtn, .commentDeleteBtn {
+	.commentModifyBtn, .commentDeleteBtn {
 		cursor : pointer;
 	}
 	
@@ -247,10 +256,15 @@
 		});
 		
 		// 댓글 수정하기
-		$("#commentModifyBtn").click(function(){
+		$(".commentModifyBtn").click(function(){
 			var commentno = $(this).next().next().text();
 			
-	
+			var content = $(this).parent().parent().next().children().text().trim();
+		    
+			var text = "<textarea id='commentContents' class='newContent' name='commentContents'>"+content+"</textarea>";
+			text += '<img id="modifyComment" onclick="goRevModifyComm('+commentno+');" src="/artree/resources/images/board/registerBtn.JPG" />';
+
+		    $(this).parent().parent().next().children().html(text);
 			
 		});
 		
@@ -268,7 +282,6 @@
 					  dataType:"JSON",
 					  success:function(json){
 						  showCommentList(json);
-						  location.reload();
 					  },
 					  
 					  error: function(request, status, error){
@@ -284,6 +297,24 @@
 		
 	}); // end of $(document).ready -------------------------------------
 
+	// 댓글 수정
+	function goRevModifyComm(commentno) {
+		$.ajax({
+			  url:"<%= request.getContextPath()%>/modifyRevComment.at",
+			  data:{"commentno":commentno, "content":$(".newContent").val(), "fk_revno":$("#fk_revno").val()},
+			  type:"POST",
+			  dataType:"JSON",
+			  success:function(json){
+				  showCommentList(json);
+			  },
+			  
+			  error: function(request, status, error){
+					alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+			  }
+			  
+		   });
+	}
+	
 	function showCommentList(json) {
 		var html = "";
 		  if(json.length > 0) {
@@ -355,11 +386,19 @@
 					</td>
 				<tr>
 			</table>
-	
-			<div id="myBtns">
-				<img id="modifyBtn" src="<%= ctxPath %>/resources/images/board/modifyBtn.JPG" />
-				<img id="deleteBtn" src="<%= ctxPath %>/resources/images/board/deleteBtn.JPG" />
-			</div>
+			
+			<c:if test="${revo.fk_idx == loginuser.idx}">
+				<div class="myBtns">
+					<img id="modifyBtn" src="<%= ctxPath %>/resources/images/board/modifyBtn.JPG" />
+					<img id="deleteBtn" src="<%= ctxPath %>/resources/images/board/deleteBtn.JPG" />
+				</div>
+			</c:if>
+			<c:if test="${ loginuser.status == 2 }">
+				<div class="myBtns">
+					<img id="deleteBtn" src="<%= ctxPath %>/resources/images/board/deleteBtn.JPG" />
+				</div>
+			</c:if>
+			
 		</div>
 		
 		<div id="myComments">
@@ -396,12 +435,14 @@
 				</c:if>
 			</table>
 			
+			<c:if test="${loginuser != null}">
 			<form id="newComment" name="newComment">
 				<input id="commentWriter" name="commentWriter" type="text" value="${loginuser.name}" readonly="readonly"/><br/>
 				<textarea id="commentContents" name="commentContents" placeholder="댓글 내용을 입력하세요."></textarea>
 				<input id="fk_revno" name="fk_revno" type="hidden" value="${revo.revno}">
 				<img id="addComment" src="<%= ctxPath %>/resources/images/board/registerBtn.JPG" />
 			</form>
+			</c:if>
 		</div>
 		
 		<div id="preNext">
