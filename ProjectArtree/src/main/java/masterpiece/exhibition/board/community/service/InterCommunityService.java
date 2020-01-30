@@ -38,8 +38,4 @@ public interface InterCommunityService {
 	// 글 삭제하기 >> 1.해당 글의 댓글 삭제 2.해당 글 삭제
 	int deleteCommunity(String no);
 
-	
-
-
-
 }

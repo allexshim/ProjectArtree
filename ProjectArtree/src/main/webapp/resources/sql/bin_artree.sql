@@ -213,3 +213,24 @@ select * from reserDetail
 sELECT * FROM tabs        
 
 desc event;
+
+select * from event a inner join exhibitionDetail b
+on a.fk_exhibitionno = b.fk_exhibitionno;
+
+select *
+from(select row_number() over(order by a.no desc) as rno, eventname, content, startdate, enddate, mainposter, no from event a inner join exhibitionDetail b
+on a.fk_exhibitionno = b.fk_exhibitionno)
+where rno between 1 and 3
+
+select * from event a inner join exhibitionDetail b
+on a.fk_exhibitionno = b.fk_exhibitionno
+where no = 1 ;
+
+select * from event where no = 1;
+
+ALTER TABLE event DROP COLUMN mainposter
+select * from user_sequences
+
+select * from event a inner join exhibitionDetail b
+		on a.fk_exhibitionno = b.fk_exhibitionno
+		where no = 1
