@@ -193,6 +193,15 @@ public class MemberDAO implements InterMemberDAO {
 		return genreCnt;
 	}
 
+	// 지역별 선호장르 카운트 총 합
+	@Override
+	public int getTotalCnt(String genre) {
+		int totalCnt = sqlsession.selectOne("member.getTotalCnt", genre);
+		return totalCnt;
+	}
+	
+	
+
 	
 	
 

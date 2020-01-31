@@ -683,16 +683,19 @@ public class MemberController {
 			// 선호 장르 가져가서 카운트
 			List<HashMap<String, String>> genreCnt = service.getGenreCnt(genre);
 			
+			// 지역별 선호장르 카운트 총 합
+			int totalCnt = service.getTotalCnt(genre);
+			
 				if (genreCnt != null) {
 					JSONObject jsobj = new JSONObject();
 					for (HashMap<String, String> map : genreCnt) {
-
 						for (int j = 0; j < map.size(); j++) {
 							String singleGenre = map.get("genre");
 							String singleCnt = map.get("cnt");
+							
 							jsobj.put(singleGenre, singleCnt);
+							jsobj.put("totalCnt", totalCnt);
 						}
-
 					}
 
 					jsobj.put("지역", areaArr[i]);
