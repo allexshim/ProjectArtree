@@ -103,6 +103,7 @@
 		width: 5%;
 		float: right;
 		cursor: pointer;
+		height: 100%;
 	}
 	
 	#container_gal_list .inputText {
@@ -114,16 +115,17 @@
 	#container_gal_list .galArea {
 		display: inline-block;
 		width: 100%;
+		padding-left: 2%;
 	}
 	
 	#container_gal_list .galArea .gal_one {
 		display: inline-block;
 		width: 28%;
-		margin: 0 5% 80px 0;
+		margin: 0 7% 80px 0;
 		text-align: left;
 		text-decoration: none;
 		height: 350px;
-		position: relative;
+		position: relative; 
 		cursor: pointer;
 	}
  
@@ -380,7 +382,14 @@
 						    		else {
 						    			
 						    			$.each(json2, function(index2, item2){
-						    				html2 += '<a href="<%= ctxPath%>/exhDetail.at?eno='+item2.EXHIBITIONNO+'"><img src="'+item2.MAINPOSTER+'"/></a>';
+						    				html2 += '<a href="<%= ctxPath%>/exhDetail.at?eno='+item2.EXHIBITIONNO+'">';
+						    				
+						    				if(item2.MAINPOSTER.substr(0, 4) != 'http'){
+												html2 += "<img src='<%= ctxPath%>/resources/files/"+item2.MAINPOSTER+"'/></a>";
+											}
+											else {
+												html2 += "<img src='"+item2.MAINPOSTER+"'/></a>";
+											}						    				
 							    		});
 						    		
 						    			$(".exhSlide"+index).append(html2);
@@ -462,7 +471,14 @@
 						    		}
 						    		else {
 						    			$.each(json2, function(index2, item2){
-						    				html2 += '<a href="<%= ctxPath%>/exhDetail.at?eno='+item2.EXHIBITIONNO+'"><img src="'+item2.MAINPOSTER+'"/></a>';
+						    				html2 += '<a href="<%= ctxPath%>/exhDetail.at?eno='+item2.EXHIBITIONNO+'">';
+						    				
+						    				if(item2.MAINPOSTER.substr(0, 4) != 'http'){
+												html2 += "<img src='<%= ctxPath%>/resources/files/"+item2.MAINPOSTER+"'/></a>";
+											}
+											else {
+												html2 += "<img src='"+item2.MAINPOSTER+"'/></a>";
+											}						    				
 							    		});
 						    			
 						    			$(".exhSlide"+index).append(html2);
@@ -646,14 +662,14 @@
 		</select>
 		<div class="inputText">
 			<input type="text" name="searchText" id="searchText" placeholder="갤러리명으로 검색하기"/>
-			<img class="icoForSearch btn" onclick="goSearch(1);" src="<%= ctxPath%>/resources/images/exhibition/ico/ico_search.png">
+			<img class="icoForSearch" onclick="goSearch(1);" src="<%= ctxPath%>/resources/images/exhibition/ico/ico_search.png">
 		</div>
 	</div>
 	
 	<span id="count">0</span>
 	<span id="tc"></span>
 	
-	<div class="galArea">
+	<div class="galArea" style="text-align: left;">
 	</div>
 	
 	<div style="position: relative;">

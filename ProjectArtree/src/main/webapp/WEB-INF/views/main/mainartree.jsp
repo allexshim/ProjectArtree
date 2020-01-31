@@ -639,14 +639,13 @@ function exhDetail(eno){
 }
 
 
-
 </script>
 
 
     
 
 	<div id="slider" style="width: 100%; height: 800px; display: inline-block;">
-       	<div style="background-size: cover; width:100%; height:100%; z-index:1000; margin-top:0; background-image: url('<%= ctxPath%>/resources/images/main/mainImg1.jpg')">
+       	<div style="background-size: cover; width:100vw; height:100%; z-index:1000; margin-top:0; background-image: url('<%= ctxPath%>/resources/images/main/mainImg1.jpg')">
        		 <div class="main-logo" style="z-index: 5; width: 400px; height: 300px;">
        			<img style="width: 255px; height: 255px; -webkit-transform:translate(300px,350px);" alt="로고이미지" src="<%= ctxPath%>/resources/images/main/logo_black_new.png" />
        		 </div>
@@ -685,13 +684,6 @@ function exhDetail(eno){
 				<span>ARTREE 추천전시회를 보여줍니다.</span>
 			</div>
 			<hr color="black;" style="width:100%; transform:translate(0,-680px);" />
-			<div style="text-align:center; display: none;">
-			  <span class="dot"></span>
-			  <span class="dot"></span>
-			  <span class="dot"></span>
-			  <span class="dot"></span>
-			</div>
-		
 	</div>
 	
 	<hr color="#f2f2f2;" style=" transform:translate(0, 100px);" />

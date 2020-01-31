@@ -419,7 +419,7 @@ public class ExhibitsController {
 	/////////////////////////// 전시회 좋아요 지정 및 해제 ////////////////////////////
 	@ResponseBody
 	@RequestMapping(value = "/ExhLike.at", produces = "text/plain;charset=UTF-8")
-	public String ajaxRequireLogin_exhLike(HttpServletRequest request) {
+	public String exhLike(HttpServletRequest request) {
 
 		String eno = request.getParameter("eno");
 		String gno = request.getParameter("gno");
@@ -452,7 +452,7 @@ public class ExhibitsController {
 	/////////////////////////// 갤러리 좋아요 지정 및 해제 ////////////////////////////
 	@ResponseBody
 	@RequestMapping(value = "/GalLike.at", produces = "text/plain;charset=UTF-8")
-	public String requireLogin_galLike(HttpServletRequest request, HttpServletResponse response) {
+	public String galLike(HttpServletRequest request, HttpServletResponse response) {
 
 		String gno = request.getParameter("gno");
 

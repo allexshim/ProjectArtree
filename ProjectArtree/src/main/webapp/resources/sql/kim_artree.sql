@@ -3,11 +3,13 @@ show user;
 select*
 from tab;
 
-desc precomment
+desc PREVIEW
 
+ALTER TABLE PREVIEW MODIFY(name NVARCHAR2(300));
+COMMIT
 
-select*
-from gallery;
+select 
+from preview;
 
 desc exhibition;
 
@@ -325,34 +327,18 @@ desc member
 
 ------------------------------------------------------------------- 기대평
 create table preview
-(seq            number                not null   -- 글번호
+(boardno        number              not null
+,seq            number                not null   -- 글번호
 ,fk_idx         number                not null   -- 사용자ID
+,fk_exhibitionno number               not null
 ,name           Nvarchar2(20)         not null   -- 글쓴이
-,subject        Nvarchar2(200)        not null   -- 글제목
+,title          Nvarchar2(200)        not null   -- 글제목
 ,content        Nvarchar2(2000)       not null   -- 글내용    -- clob
-,pw             varchar2(20)          not null   -- 글암호
 ,readCount      number default 0      not null   -- 글조회수
 ,regDate        date default sysdate  not null   -- 글쓴시간
-,commentCount   number default 0      not null   -- 댓글의 갯수
-,groupno        number                not null   -- 답변글쓰기에 있어서 그룹번호 
-                                                 -- 원글(부모글)과 답변글은 동일한 groupno 를 가진다.
-                                                 -- 답변글이 아닌 원글(부모글)인 경우 groupno 의 값은 groupno 컬럼의 최대값(max)+1 로 한다.
-
-,fk_seq         number default 0      not null   -- fk_seq 컬럼은 절대로 foreign key가 아니다.!!!!!!
-                                                 -- fk_seq 컬럼은 자신의 글(답변글)에 있어서 
-                                                 -- 원글(부모글)이 누구인지에 대한 정보값이다.
-                                                 -- 답변글쓰기에 있어서 답변글이라면 fk_seq 컬럼의 값은 
-                                                 -- 원글(부모글)의 seq 컬럼의 값을 가지게 되며,
-                                                 -- 답변글이 아닌 원글일 경우 0 을 가지도록 한다.
-
-,depthno        number default 0       not null  -- 답변글쓰기에 있어서 답변글 이라면
-                                                 -- 원글(부모글)의 depthno + 1 을 가지게 되며,
-                                                 -- 답변글이 아닌 원글일 경우 0 을 가지도록 한다.
-
-,fileName       varchar2(255)                    -- WAS(톰캣)에 저장될 파일명(20190725092715353243254235235234.png)   나노초까지 적혀져서 중복될수없음                                    
-,orgFilename    varchar2(255)                    -- 진짜 파일명(강아지.png)  // 사용자가 파일을 업로드 하거나 파일을 다운로드 할때 사용되어지는 파일명  
-
+,commentcnt     number default 0      not null   -- 댓글의 갯수
 ,constraint  PK_preview_seq primary key(seq)
+,constraint  FK_preview_fk_exhibitionno foreign key(fk_exhibitionno) references exhibition(exhibitionno)
 ,constraint  FK_preview_fk_idx foreign key(fk_idx) references member(idx)
 );
 
@@ -374,10 +360,10 @@ create table precomment
 ,name          varchar2(20)         not null   -- 성명
 ,content       varchar2(1000)       not null   -- 댓글내용
 ,regDate       date default sysdate not null   -- 작성일자
-,parentSeq     number               not null   -- 원게시물 글번호
+,fk_Seq     number               not null   -- 원게시물 글번호
 ,constraint PK_precomment_seq primary key(seq)
 ,constraint FK_precomment_fk_idx foreign key(fk_idx) references member(idx)
-,constraint FK_precomment_parentSeq foreign key(parentSeq) references preview(seq) on delete cascade
+,constraint FK_precomment_fk_Seq foreign key(fk_Seq) references preview(seq) on delete cascade
 );
 
 create sequence seq_precomment
@@ -389,3 +375,27 @@ nocycle
 nocache;
 ----------------------------------------------------------------------------------------------
 
+		select *
+		from
+		(
+		select row_number() over(order by B.readcount desc) AS RNO
+		     , galleryno, galleryname, mainpicture, location, openinghour, holiday
+		from gallery A left join exhibition B
+		on A.galleryno = B.fk_galleryno
+		where A.status = 1 and exhibitionname is not null and B.status = '전시중'
+		order by RNO, galleryno asc
+		)
+		where RNO between 1 and 3
+        
+        select *
+        from
+        (
+        select rownum AS RNO, exhibitionname, B.mainposter
+		from exhibition A left join exhibitiondetail B
+		on A.exhibitionno = B.fk_exhibitionno
+		where exhibitionname like '%'|| '이정' ||'%' 
+        )
+        where RNO between 1 and 6
+
+select*
+from preview

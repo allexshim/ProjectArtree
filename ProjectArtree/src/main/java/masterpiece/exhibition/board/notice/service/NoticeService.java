@@ -21,6 +21,16 @@ public class NoticeService implements InterNoticeService {
 		return n;
 	}
 	
+	// 공지 글 개수
+	@Override
+	public int getCountNotice() {
+		
+		int n = dao.getCountNotice();
+		
+		return n;
+	}
+	
+	
 	// 공지 목록 보여주기
 	@Override
 	public List<HashMap<String, String>> getNotice(HashMap<String, String> noticeMap) {
@@ -30,6 +40,7 @@ public class NoticeService implements InterNoticeService {
 		
 		return noticeList;
 	}
+	
 
 	// 공지 삭제하기
 	@Override
@@ -39,13 +50,9 @@ public class NoticeService implements InterNoticeService {
 		
 		return n;
 	}
-
-	@Override
-	public int getCount() {
-		
-		int n = dao.getCount();
-		
-		return n;
-	}
+	
+	
+	
+	
 
 }
