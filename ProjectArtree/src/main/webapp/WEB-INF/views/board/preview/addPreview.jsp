@@ -1,6 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%
 	String ctxPath = request.getContextPath();
 %>
@@ -46,7 +48,7 @@
 	}	
 	
 	div#myPoster {
-		padding-top : 10px;
+		padding-top : 20px;
 	}
 	
 	div#myPoster:after {
@@ -55,6 +57,13 @@
 		width : 80%;		
 		padding-top : 30px;
 		border-bottom : solid 2px lightgray;
+	}
+	
+	div#myPoster img {
+		width: 30%;
+	    border-radius: 5px;
+	    box-shadow: 10px 10px 5px lightgrey;
+	    margin: 40px 0 50px 0px;
 	}
 	
 	div#detailContents {
@@ -91,9 +100,8 @@
 	}
 	
 	table#detailTable > tbody > tr:nth-child(8) > td {
-		/* width : 100%; */
 		font-weight: normal;
-		padding-top : 20px;
+		padding-top : 20px; 
 	}
 
 	div#myBtns {
@@ -134,10 +142,13 @@
 	
 	#detailContainer .modal-dialog {
 		margin: 100px auto !important;
+		margin-bottom: 0px;
+		height: 500px;
 	}
 	
-	#detailContainer .modalExhArea {
-		overflow: scroll;
+	#detailContainer .modal-body {
+		overflow-y: scroll;
+		height: 600px;
 	}
 	
 	#detailContainer .modalSpan {
@@ -145,6 +156,42 @@
 		padding: 30px 15px;
 		border: solid 1px #e6e6e6;
 		margin: 20px auto;
+	}
+	
+	#detailContainer .modalExhArea {
+		width: 100%;
+		display: inline-block;
+		margin: 30px auto;
+	}
+	
+	#detailContainer .modalExhArea a {
+		margin-top: 20px;
+		text-decoration: none;
+		color: #000;
+		transition: opacity 0.5s ease;
+		width: 30%;
+		display: inline-block;
+		margin-right: 25px;
+		height: 280px;
+	}
+	
+	#detailContainer .modalExhArea a:hover {
+		cursor: pointer;
+		box-shadow: 10px 10px 5px grey;
+	}
+	
+	#detailContainer .modalExhArea .art_mainTitle { 
+		font-size: 10pt;
+		font-weight: bold;
+		display: table-cell;
+		margin-top: 10px;
+	}
+	
+	#detailContainer .modalExhArea img {
+		width: 100%;
+		height: 193px;
+		display: inline-block;
+		margin-bottom: 10px;
 	}
 	
 </style>
@@ -193,13 +240,13 @@
 			} 
 			else {
 				var frm = document.addpreview;
-				frm.method = "GET";
-				frm.action = "*.at";
+				frm.method = "POST";
+				frm.action = "<%=ctxPath%>/addEnd.at";
 				frm.submit();
 			}
 		});
 		
-		$("input[id=searchName]").keyup(function() { getExhList($("#searchName").val()); });
+		$("input[id=searchName]").keyup(function() { getExhList($("#searchName").val()); });	
 		
 	}); // end of $(document).ready -------------------------------------
 	
@@ -215,19 +262,20 @@
 				var html = "";
 				
 				if(json.length == 0){
-					html += "<span class='modalSpan'>전시회가 존재하지 않습니다.</span>"
+					html += "<span class='modalSpan'>전시회가 존재하지 않습니다.</span>";
 				}
 				else {
 					
 					$.each(json, function(index, item){
-							
+
 						if( (index+1)%3 != 0){				
+																
+							var exhibitionname = item.EXHIBITIONNAME.replace(/'/gi,"ㅊ");
 							
-							html += "<a class='exh_one' onclick='goText("+item.EXHIBITIONNAME+")'>";
+							html += '<a class=\'exh_one\' onclick="goText(\''+exhibitionname+'\',\''+item.EXHIBITIONNO+'\',\''+item.MAINPOSTER+'\')" class=\'close\' data-dismiss=\'modal\'>';
 							
 								if(item.MAINPOSTER.substr(0, 4) != 'http'){
 									html += "<img class='exh_poster' src='<%= ctxPath%>/resources/files/"+item.MAINPOSTER+"'/>";
-									alert(item.MAINPOSTER.substr(0, 4));
 								}
 								else {
 									html += "<img class='exh_poster' src='"+item.MAINPOSTER+"'/>";
@@ -238,19 +286,22 @@
 						}
 						else {
 							
-							html += "<a class='exh_one' style='margin-right:0px;' onclick='goText("+item.EXHIBITIONNAME+")'>";
+							var exhibitionname = item.EXHIBITIONNAME.replace(/'/gi,"ㅊ");
+							
+							html += '<a class=\'exh_one\' onclick="goText(\''+exhibitionname+'\',\''+item.EXHIBITIONNO+'\',\''+item.MAINPOSTER+'\')" class=\"close\" data-dismiss=\"modal\" style=\'margin-right:0px;\'>';
 							
 							if(item.MAINPOSTER.substr(0, 4) != 'http'){
 								html += "<img class='exh_poster' src='<%= ctxPath%>/resources/files/"+item.MAINPOSTER+"'/>";
-								alert(item.MAINPOSTER.substr(0, 4));
 							}
 							else {
 								html += "<img class='exh_poster' src='"+item.MAINPOSTER+"'/>";
 							}
 						
 							html += "<span class='art_mainTitle'>"+item.EXHIBITIONNAME+"</span></div></a><br/>";
-							
+
 						}
+						
+						
 						
 					});
 					
@@ -266,6 +317,21 @@
 		});
 		
 	}
+	
+	function goText(name, eno, poster){
+		name = name.replace(/ㅊ/gi,"'");
+		
+		$("input[id=name]").val( name );
+		$("input[id=eno]").val( eno );
+		
+		if(poster.substr(0, 4) != 'http'){
+			$("#myPoster").html("<img src='<%= ctxPath%>/resources/files/"+poster+"'>");
+		}
+		else {
+			$("#myPoster").html("<img src='"+poster+"'>");
+		}
+	}
+
 
 </script>
 
@@ -278,7 +344,6 @@
 		</div>
 		
 		<div id="myPoster" align="center">
-			<img src="<%= ctxPath %>/resources/images/exhibition/poster1.JPG" />
 		</div>
 		
 		<div id="detailContents">
@@ -288,20 +353,27 @@
 					<td>전시회명</td>
 					<td>
 						<input id="name" name="name" type="text" placeholder="전시회명을 입력해주세요." readonly="readonly" data-toggle="modal" data-target="#myModal"/>
+						<input type="hidden" id="eno" name="eno" value="">
 					</td>
 				<tr>
 				
 				<tr>
 					<td>제목</td>
-					<td><input id="title" name="title" type="text" placeholder="제목을 입력해주세요."/></td>
+					<td><input id="title" name="title" type="text" placeholder="제목을 입력해주세요." autocomplete="off"/></td>
 				<tr>
 				<tr>
 					<td>작성자</td>
-					<td>심예은</td> <!-- $ {loginuser.getUserName} -->
+					<td>
+						${loginuser.name}
+						<input type="hidden" name="fk_idx" value="${loginuser.idx}"/>
+					</td>
 				<tr>
 				<tr>
 					<td>작성일자</td>
-					<td>2020-01-07 21:21</td>
+					<td>
+						<c:set var="now" value="<%=new java.util.Date()%>" />
+						<fmt:formatDate value="${now}" pattern="yyyy-MM-dd hh:mm" />
+					</td>
 				<tr>
 				<tr>
 					<td colspan="2">
@@ -334,7 +406,7 @@
 			</div>
 		</div>
 		
-		<div id="preNext">
+		<!-- <div id="preNext">
 			<table>
 				<tr>
 					<td class="prev"><i class='fa fa-angle-up' style='font-size:32px'></i></td>
@@ -347,10 +419,11 @@
 					<td class="next">다음글제목다음글제목다음글제목다음글제목다음글제목다음글제목</td>
 				</tr>
 			</table>
-		</div>
+		</div> -->
 		<div id="toListBtn" align="center">
 			<img id="toListBtn" src="<%= ctxPath %>/resources/images/board/toListBtn.JPG" />
 		</div>
 	</div>
+
 </body>
 </html>
