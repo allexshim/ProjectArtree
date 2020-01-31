@@ -109,14 +109,17 @@
 	
 	/* == 통계 영역 == */
 	#statistics-area {
-		height: 60vh;
-		border: 2px solid red;
+		height: 90vh;
+		/* border: 2px solid red; */
+		width: 95%;
 	}
 	
 	#table-area {
 		border: 2px solid navy;
 		height: 50vh;
 	}
+	
+
 	
 </style>
 
@@ -142,51 +145,19 @@
 				am4core.useTheme(am4themes_animated);
 		
 				var chart = am4core.create("statistics-area", am4charts.RadarChart);
-				chart.hiddenState.properties.opacity = 0; // this creates initial fade-in
+				chart.hiddenState.properties.opacity = 0;
 		
 				var label = chart.createChild(am4core.Label);
 		
-				chart.data = [
-				  {
-				    category: "One",
-				    value1: 8
-				  },
-				  {
-				    category: "Two",
-				    value1: 11
-				  },
-				  {
-				    category: "Three",
-				    value1: 7
-				  },
-				  {
-				    category: "Four",
-				    value1: 13
-				  },
-				  {
-				    category: "Five",
-				    value1: 12
-				  },
-				  {
-				    category: "Six",
-				    value1: 15
-				  },
-				  {
-				    category: "Seven",
-				    value1: 9
-				  },
-				  {
-				    category: "Eight",
-				    value1: 6
-				  }
-				];
+				chart.data = json;
+				
 				chart.radius = am4core.percent(95);
 				chart.startAngle = 270 - 180;
 				chart.endAngle = 270 + 180;
 				chart.innerRadius = am4core.percent(60);
 		
 				var categoryAxis = chart.xAxes.push(new am4charts.CategoryAxis());
-				categoryAxis.dataFields.category = "category";
+				categoryAxis.dataFields.category = "지역";
 				categoryAxis.renderer.labels.template.location = 0.5;
 				categoryAxis.renderer.grid.template.strokeOpacity = 0.1;
 				categoryAxis.renderer.axisFills.template.disabled = true;
@@ -202,67 +173,59 @@
 		
 				var series1 = chart.series.push(new am4charts.RadarColumnSeries());
 				series1.columns.template.radarColumn.strokeOpacity = 1;
-				series1.name = "Series 1";
-				series1.dataFields.categoryX = "category";
+				series1.name = "회화";
+				series1.dataFields.categoryX = "지역";
 				series1.columns.template.tooltipText = "{name}: {valueY.value}";
-				series1.dataFields.valueY = "value1";
+				series1.dataFields.valueY = "회화";
 				series1.stacked = true;
-		
+				
 				var series2 = chart.series.push(new am4charts.RadarColumnSeries());
 				series2.columns.template.radarColumn.strokeOpacity = 1;
 				series2.columns.template.tooltipText = "{name}: {valueY.value}";
-				series2.name = "Series 2";
-				series2.dataFields.categoryX = "category";
-				series2.dataFields.valueY = "value2";
+				series2.name = "조각";
+				series2.dataFields.categoryX = "지역";
+				series2.dataFields.valueY = "조각";
 				series2.stacked = true;
 		
 				var series3 = chart.series.push(new am4charts.RadarColumnSeries());
 				series3.columns.template.radarColumn.strokeOpacity = 1;
 				series3.columns.template.tooltipText = "{name}: {valueY.value}";  
-				series3.name = "Series 3";
-				series3.dataFields.categoryX = "category";
-				series3.dataFields.valueY = "value3";
+				series3.name = "디자인";
+				series3.dataFields.categoryX = "지역";
+				series3.dataFields.valueY = "디자인";
 				series3.stacked = true;
 		
 				var series4 = chart.series.push(new am4charts.RadarColumnSeries());
 				series4.columns.template.radarColumn.strokeOpacity = 1;
 				series4.columns.template.tooltipText = "{name}: {valueY.value}";
-				series4.name = "Series 4";
-				series4.dataFields.categoryX = "category";
-				series4.dataFields.valueY = "value4";
+				series4.name = "미디어";
+				series4.dataFields.categoryX = "지역";
+				series4.dataFields.valueY = "미디어";
 				series4.stacked = true;
 		
-				var series1 = chart.series.push(new am4charts.RadarColumnSeries());
-				series1.columns.template.radarColumn.strokeOpacity = 1;
-				series1.name = "Series 5";
-				series1.dataFields.categoryX = "category";
-				series1.columns.template.tooltipText = "{name}: {valueY.value}";
-				series1.dataFields.valueY = "value5";
-				series1.stacked = true;
+				var series5 = chart.series.push(new am4charts.RadarColumnSeries());
+				series5.columns.template.radarColumn.strokeOpacity = 1;
+				series5.name = "공예";
+				series5.dataFields.categoryX = "지역";
+				series5.columns.template.tooltipText = "{name}: {valueY.value}";
+				series5.dataFields.valueY = "공예";
+				series5.stacked = true;
 
-				var series2 = chart.series.push(new am4charts.RadarColumnSeries());
-				series2.columns.template.radarColumn.strokeOpacity = 1;
-				series2.columns.template.tooltipText = "{name}: {valueY.value}";
-				series2.name = "Series 6";
-				series2.dataFields.categoryX = "category";
-				series2.dataFields.valueY = "value6";
-				series2.stacked = true;
+				var series6 = chart.series.push(new am4charts.RadarColumnSeries());
+				series6.columns.template.radarColumn.strokeOpacity = 1;
+				series6.columns.template.tooltipText = "{name}: {valueY.value}";
+				series6.name = "설치미술";
+				series6.dataFields.categoryX = "지역";
+				series6.dataFields.valueY = "설치미술";
+				series6.stacked = true;
 
-				var series3 = chart.series.push(new am4charts.RadarColumnSeries());
-				series3.columns.template.radarColumn.strokeOpacity = 1;
-				series3.columns.template.tooltipText = "{name}: {valueY.value}";  
-				series3.name = "Series 7";
-				series3.dataFields.categoryX = "category";
-				series3.dataFields.valueY = "value7";
-				series3.stacked = true;
-
-				var series4 = chart.series.push(new am4charts.RadarColumnSeries());
-				series4.columns.template.radarColumn.strokeOpacity = 1;
-				series4.columns.template.tooltipText = "{name}: {valueY.value}";
-				series4.name = "Series 8";
-				series4.dataFields.categoryX = "category";
-				series4.dataFields.valueY = "value8";
-				series4.stacked = true;
+				var series7 = chart.series.push(new am4charts.RadarColumnSeries());
+				series7.columns.template.radarColumn.strokeOpacity = 1;
+				series7.columns.template.tooltipText = "{name}: {valueY.value}";  
+				series7.name = "사진";
+				series7.dataFields.categoryX = "지역";
+				series7.dataFields.valueY = "사진";
+				series7.stacked = true;
 				
 				chart.seriesContainer.zIndex = -1;
 		
@@ -276,6 +239,7 @@
 				  chart.endAngle = 270 + start * 179 + 1;
 		
 				  valueAxis.renderer.axisAngle = chart.startAngle;
+				  
 				});
 			},
 			  
