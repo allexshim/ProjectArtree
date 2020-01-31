@@ -29,4 +29,10 @@ public interface InterSearchService {
 	// 각각 tag이름, tag의 빈도수를 저장하는 HashMap
 	List<HashMap<String, String>> getChartDataByTags();
 
+	// 해당 태그를 선호하는 연령대,해당회원수 를 가져온다.
+	List<HashMap<String,String>> getAgeDataByTags(String tag);
+
+	// 통계를 내기 위해 총 회원수를 구해서 request영역에 저장한다.
+	int getMemberCnt();
+
 }

@@ -209,11 +209,10 @@
 	</div>
 
 	<div id="registerFormContainer">
-		
 
 		<div id="topText">
 			<span>ADMIN ONLY</span>
-			<h1 style="margin:0;">Exhibition List</h1>
+			<h1 style="margin:0; font-weight: bold;">Exhibition List</h1>
 		</div>
 		
 		<div id="eachStatus">

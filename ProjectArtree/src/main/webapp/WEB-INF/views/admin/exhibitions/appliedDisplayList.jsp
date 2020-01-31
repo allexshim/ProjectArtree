@@ -213,7 +213,7 @@
 
 		<div id="topText">
 			<span>ADMIN ONLY</span>
-			<h1 style="margin:0;">Applied Exhibition List</h1>
+			<h1 style="margin:0; font-weight: bold;">Applied Exhibition List</h1>
 		</div>
 		
 		<div id="eachStatus">

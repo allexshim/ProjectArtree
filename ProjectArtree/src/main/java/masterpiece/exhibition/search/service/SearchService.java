@@ -75,6 +75,20 @@ public class SearchService implements InterSearchService {
 		return TagList;
 
 	}
+
+	// 해당 태그를 선호하는 연령대,해당회원수 를 가져온다.
+	@Override
+	public List<HashMap<String,String>> getAgeDataByTags(String tag) {
+		List<HashMap<String,String>> ageRange = dao.getAgeDataByTags(tag);
+		return ageRange;
+	}
+
+	// 통계를 내기 위해 총 회원수를 구해서 request영역에 저장한다.
+	@Override
+	public int getMemberCnt() {
+		int totalcnt = dao.getMemberCnt();
+		return totalcnt;
+	}
 	
 	
 	

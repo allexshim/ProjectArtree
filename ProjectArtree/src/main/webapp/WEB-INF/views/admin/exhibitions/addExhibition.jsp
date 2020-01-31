@@ -854,10 +854,6 @@
 					<td><input type="text" name="applier" id="applier" value="${ name }" readonly /></td> <!-- ${session.loginuser.username} -->
 				<tr>
 				<tr>
-					<td>전시회명</td>
-					<td><input type="text" name="exhibitionname" id="exhibitionName" /></td>
-				<tr>
-				<tr>
 					<td>작가명</td>
 					<td><input type="text" name="author" id="author" /></td>
 				<tr>
@@ -869,7 +865,11 @@
 					</td>
 				<tr>
 				<tr>
-					<td style="vertical-align: top;">전시정보</td>
+					<td>전시회명</td>
+					<td><input type="text" name="exhibitionname" id="exhibitionName" /></td>
+				<tr>
+				<tr>
+					<td style="vertical-align: top;">전시회정보</td>
 					<td>
 						<textarea id="exhibitionInfo" name="exhibitioninfo" style="resize:none; border:solid 1px lightgray; padding:10px;" rows="5">
 						</textarea>
@@ -988,13 +988,13 @@
 					<td>
 						<select id="genre" name="genre" style="width:100%;">
 							<option value="">:: 선택하세요 ::</option>
-							<option value="media">미디어</option>
-							<option value="design">디자인</option>
-							<option value="drawing">회화</option>
-							<option value="picture">사진</option>
-							<option value="sculpture">조각</option>
-							<option value="installation">설치미술</option>
-							<option value="crafts">공예</option>
+							<option value="미디어">미디어</option>
+							<option value="디자인">디자인</option>
+							<option value="회화">회화</option>
+							<option value="사진">사진</option>
+							<option value="조각">조각</option>
+							<option value="설치미술">설치미술</option>
+							<option value="공예">공예</option>
 						</select>
 					</td>
 				<tr>

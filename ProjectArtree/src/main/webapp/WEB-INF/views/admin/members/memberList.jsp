@@ -18,8 +18,10 @@
 		font-family: 'Noto Sans Kr', sans-serif;
 	}
 	
-	#reviewContainer {
+	#memberContainer {
 		padding-bottom : 100px;
+		width: 80%;
+		margin: 0 auto;
 	}
 	
 	img#boardtop {
@@ -31,7 +33,6 @@
 	div#topText {
 		padding-top : 610px;
 		width : 40vw;
-		text-align: center;
 		padding-left : 60px;
 	}
 	
@@ -53,15 +54,17 @@
 	
 	div#searchContainer input#searchWord {
 		border : none;
-		padding-bottom: 5px;
+		padding: 5px;
 		border-bottom : solid 1px black;
 		font-size : 12pt;
+		text-align: center;
+		margin-right: 10px;
 	} 
 	
 	div#searchContainer #searchCondition {
 		font-size : 12pt;
-		height : 30px;
-		margin-right : 10px;
+		margin-right : 15px;
+		padding: 5px;
 	}
 	
 	div#searchContainer #searchicon {
@@ -73,12 +76,12 @@
 	}
 	
 	div#contentContainer {
-		padding-top : 50px;
+		padding-top : 50px;7
 	}
 	
 	/* == 테이블 부분 == */
 	
-	table#reviewContents {
+	table#memberContents {
 		width : 90%;
 		margin : 0 auto;
 		border-collapse: collapse;
@@ -130,7 +133,7 @@
 		padding-bottom : 10px; 
 	}
 	
-	#reviewContents > tbody > tr:hover {
+	#memberContents > tbody > tr:hover {
 		cursor: pointer;
 		box-shadow: 3px 3px 3px 3px grey;
 	}
@@ -173,149 +176,212 @@
 		padding-right : 7%;
 		cursor : pointer;
 	}
-		
+	
+	div#eachStatus {
+		padding-top : 40px;
+		padding-left : 60px;
+		font-size: 16pt;
+	}
+
+	div#eachStatus .memberStatus {
+		padding-right : 20px;
+		color : gray;
+		text-align: center;
+		cursor: pointer;
+	}
+	
+	div#eachStatus .currentStatus {
+		color : black !important;
+		font-weight: bold !important;
+	}	
 	
 </style>
 
 <script src="<%= ctxPath%>/resources/js/jquery-3.3.1.min.js"></script>
 <script type="text/javascript">
-	$(document).ready(function(){ 
+	$(document).ready(function(){
+		
+		$("#allMember").addClass("currentStatus");
 		
 		// 검색하기 버튼 클릭
 		$("#searchicon").click(function(){
 			
-			// 유효성 검사
-			var searchCondition = $("#searchCondition").val().trim();
-			var searchWord = $("#searchWord").val().trim();
-			
-			if( searchCondition == "" ){
-				alert("검색 조건을 선택하세요.");
-				return;
-			}
-			
-			else if( searchWord == "" ){
-				alert("검색어를 입력하세요.");
-				$("#searchWord").focus();
-				return;
-			}
-			
-			window.location.href="**.at?searchCondition="+searchCondition+"&searchWord="+searchWord;
+			goSearch();
 
 		}); // end of $("#searchicon").click()
 		
 		// 각 글제목을 클릭하면 상세 페이지로 이동
-		$("div#contentContainer table tbody td:nth-child(2)").click(function(){
-			var no = $(this).prev().text(); // 클릭한 글번호를 받아온다.
+	//	$("#memberContents tbody tr").click(function(){
+		//	var no = $(this).text(); // 클릭한 글번호를 받아온다.
 
+		//	console.log(no);
+		
+	//		alert("선택");
+			
+		//	window.location.href="/artree/memberInfo.at?no="+no;
+			
+	//	}); // end of $("#memberContents tbody tr").click
+		
+		$(document).on("click", "#memberContents tbody tr", function(){
+		//	alert("선택");
+			
+			var no = $(this).find("td:nth-child(1)").text(); // 클릭한 글번호를 받아온다.
+			
+			console.log(no);
+			
 			window.location.href="/artree/memberInfo.at?no="+no;
 			
-		}); // end of $("div#contentContainer table tbody td:nth-child(2)").click
+		});
+	
+		$("#searchWord").keydown(function(event){
+			if(event.keyCode == 13) {
+				// 엔터를 했을 경우
+				goSearch();
+			}
+		});
+		
+		// 검색시 검색조건 및 검색어 값 유지시키기 
+		if(${paraMap != null}) {
+			$("#searchCondition").val("${paraMap.searchCondition}");
+			$("#searchWord").val("${paraMap.searchWord}");
+		}
+		
+		let html = "";
+		html += "<thead><tr>";
+		html += "<td>No.</td>";
+		html += "<td>EMAIL</td>";
+		html += "<td>NAME</td>";
+		html += "<td>STATUS</td>";
+		html += "</tr></thead>";
+			
+		html += "<tbody>";
+		
+		if (${ memberList != null }) {
+			
+			<c:forEach var="member" items="${ memberList }">
+				
+				html += "<tr>";
+				html += "<td>${ member.idx }</td>";
+				html += "<td>${ member.email }</td>";
+				html += "<td>${ member.name }</td>";
+				
+				if(${ member.status == '0' })
+				html += "<td>탈퇴회원</td>";
+				if(${ member.status == '1' })
+				html += "<td>가입회원</td>";
+				if(${ member.status == '2' })
+				html += "<td>관리자</td>";
+				html += "</tr>";
+			</c:forEach>
+			
+			html += "</tbody>";
+			
+		} else {
+			
+			html += "<tr>";
+			html += "<td colspan='4'>검색 결과가 없습니다.</td>";
+			html += "</tr>";
+			html += "</tbody>";
+			
+		}
+		
+		$("#memberContents").html(html);
+		
+		// -------------------------------------------- //
+		
+		let link = document.location.href
+		
+		if(link.includes("http://localhost:9090/artree/memberList.at")) {
+			$("a.memberStatus").removeClass("currentStatus");
+			$("#allMember").addClass("currentStatus");
+		}
+		
+		if(link.includes("http://localhost:9090/artree/activatedMemberList.at")) {
+			$("a.memberStatus").removeClass("currentStatus");
+			$("#activatedMember").addClass("currentStatus");
+		}
+		
+		if(link.includes("http://localhost:9090/artree/deactivatedMemberList.at")) {
+			$("a.memberStatus").removeClass("currentStatus");
+			$("#deactivatedMember").addClass("currentStatus");
+		}
+		
+		if(link.includes("http://localhost:9090/artree/adminList.at")) {
+			$("a.memberStatus").removeClass("currentStatus");
+			$("#adminMember").addClass("currentStatus");
+		}
 		
 	});
+	
+	function goSearch() {
+		
+		// 유효성 검사
+		var searchCondition = $("#searchCondition").val().trim();
+		var searchWord = $("#searchWord").val().trim();
+		
+		if( searchCondition == "" ){
+			alert("검색 조건을 선택하세요.");
+			return;
+		}
+		
+		else if( searchWord == "" ){
+			alert("검색어를 입력하세요.");
+			$("#searchWord").focus();
+			return;
+		}
+		
+		var frm = document.searchFrm;
+		frm.method = "GET";
+		frm.action = "<%= request.getContextPath()%>/memberList.at?searchCondition="+searchCondition+"&searchWord="+searchWord;
+		frm.submit();
+	}
 
 </script>
 </head>
 <body>
-	<div id="reviewContainer">
-		<div id="imgcontainer">	
-	  		<img id="boardtop" src="<%= ctxPath %>/resources/images/board/boardImage1.jpg" />
-		</div>
+	
+	<div id="imgcontainer">	
+  		<img id="boardtop" src="<%= ctxPath %>/resources/images/board/boardImage1.jpg" />
+	</div>
+
+	<div id="memberContainer">
 
 		<div id="topText">
-			<span style="text-align:center">Membership</span>
-			<h1 style="margin:0;">Member List</h1>
+			<span>Membership</span>
+			<h1 style="margin:0; font-weight: bold;">Member List</h1>
+		</div>
+		<div id="eachStatus">
+			<a class="memberStatus" id="allMember" href="<%= ctxPath %>/memberList.at">모든회원</a>
+			<a class="memberStatus" id="activatedMember" href="<%= ctxPath %>/activatedMemberList.at">가입회원</a>
+			<a class="memberStatus" id="deactivatedMember" href="<%= ctxPath %>/deactivatedMemberList.at">탈퇴회원</a>
+			<a class="memberStatus" id="adminMember" href="<%= ctxPath %>/adminList.at">관리자</a>
 		</div>
 		
 		<div id="searchContainer">	
-			<select id="searchCondition">
-				<option value="">검색조건</option>
-				<option value="name">회원명</option>
-				<option value="no">회원번호</option>	<%-- 회원번호 value 바꾸기 --%>
-				<option value="email">이메일</option>
-			</select>
-			<input id="searchWord" type="text" placeholder="검색어를 입력하세요." />
-		
-			<a style="vertical-align: middle;"><img id="searchicon" src="<%= ctxPath %>/resources/images/board/searchicon.PNG" /></a>
+			<form name="searchFrm">
+				<select id="searchCondition" name="searchCondition">
+					<option value="">검색조건</option>
+					<option value="name">회원명</option>
+					<option value="idx">회원번호</option>
+					<option value="email">이메일</option>
+				</select>
+				<input type="text" id="searchWord" name="searchWord" placeholder="검색어를 입력하세요" />
+				<input type="hidden" value="" />
+			
+				<a style="vertical-align: middle;"><img id="searchicon" src="<%= ctxPath %>/resources/images/board/searchicon.PNG" /></a>
+			</form>
 		</div>
 		
 		<div id="contentContainer">
-			<table id="reviewContents">
-				<thead>
-					<tr>
-						<td>No.</td>
-						<td>NAME</td>
-						<td>PHONE</td>
-						<td>STATUS</td>
-					</tr>	
-				</thead>
+			<table id="memberContents">
 				
-				<tbody>
-					<tr>
-						<td>1</td>
-						<td>심예은</td>
-						<td>010-9479-4312</td>
-						<td>가입</td>
-					</tr>
-					<tr>
-						<td>2</td>
-						<td>이다희</td>
-						<td>010-9479-4312</td>
-						<td>가입</td>
-					</tr>
-					<tr>
-						<td>3</td>
-						<td>박서준</td>
-						<td>010-9479-4312</td>
-						<td>탈퇴</td>
-					</tr>
-					<tr>
-						<td>4</td>
-						<td>김민하</td>
-						<td>010-9479-4312</td>
-						<td>가입</td>
-					</tr>
-					<tr>
-						<td>5</td>
-						<td>박수연</td>
-						<td>010-9479-4312</td>
-						<td>가입</td>
-					</tr>
-					<tr>
-						<td>6</td>
-						<td>김현준</td>
-						<td>010-9479-4312</td>
-						<td>탈퇴</td>
-					</tr>
-					<tr>
-						<td>7</td>
-						<td>김현지</td>
-						<td>010-9479-4312</td>
-						<td>탈퇴</td>
-					</tr>
-					<tr>
-						<td>8</td>
-						<td>정하빈</td>
-						<td>010-9479-4312</td>
-						<td>가입</td>
-					</tr>
-					<tr>
-						<td>9</td>
-						<td>임소미</td>
-						<td>010-9479-4312</td>
-						<td>가입</td>
-					</tr>
-					<tr>
-						<td>10</td>
-						<td>지서영</td>
-						<td>010-9479-4312</td>
-						<td>탈퇴</td>
-					</tr>
-				</tbody>
 			</table>
 		</div>
 
 		<%-- 페이지바 --%>
-		<div></div>
+		<div align="center" style="margin-top: 8vh;">
+			${ pageBar }
+		</div>
 
 	</div>
 

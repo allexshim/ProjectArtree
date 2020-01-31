@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import masterpiece.exhibition.exhibits.model.ExhibitsVO;
+import masterpiece.exhibition.member.model.MemberVO;
 
 public interface InterAdminDAO {
 
@@ -60,6 +61,54 @@ public interface InterAdminDAO {
 
 	// 전시회의 이미지 테이블에 insert
 	int displayNewExhibitionImg(HashMap<String, String> newExhibitImgMap);
+
+	// 지원된 전시회 테이블(appliedExhibits) 의 status 데이터를 '검토완료'로 변경
+	int changeAppliedExhibitsStatus(String no);
+
+	// 회원목록 불러오기
+	List<MemberVO> getMemberList();
+
+	// 검색조건이 없을 경우의 총 게시물 건수(totalCount)
+	int getTotalCountWithoutSearch();
+
+	// 검색조건이 있을 경우의 총 게시물 건수(totalCount)
+	int getTotalCountWithSearch(HashMap<String, String> paraMap);
+
+	// 페이징바 있는 회원목록
+	List<MemberVO> memberListWithPaging(HashMap<String, String> paraMap);
+
+	// 탈퇴한 회원목록
+	List<MemberVO> deactivatedMemberList(HashMap<String, String> paraMap);
+
+	// 가입회원목록
+	List<MemberVO> activatedMemberList(HashMap<String, String> paraMap);
+
+	// 관리자목록
+	List<MemberVO> adminList(HashMap<String, String> paraMap);
+
+	// 검색조건이 없을시 탈퇴한 회원목록의 총 게시물건수
+	int getTotalCountWithoutSearchDeactivated();
+
+	// 검색조건이 있을시 탈퇴한 회원목록의 총 게시물건수
+	int getTotalCountWithSearchDeactivated(HashMap<String, String> paraMap);
+
+	// 검색조건이 없을시 가입회원목록의 총 게시물건수
+	int getTotalCountWithoutSearchActivated();
+
+	// 검색조건이 있을시 가입회원목록의 총 게시물건수
+	int getTotalCountWithSearchActivated(HashMap<String, String> paraMap);
+
+	// 검색조건이 없을시 관리자목록의 총 게시물건수
+	int getTotalCountWithoutSearchAdmin();
+
+	// 검색조건이 있을시 관리자목록의 총 게시물건수
+	int getTotalCountWithSearchAdmin(HashMap<String, String> paraMap);
+
+	// 회원상세정보출력
+	MemberVO getMemberInfo(String no);
+
+	// 주문목록출력
+	List<HashMap<String, String>> getOrderList(String no);
 
 	
 

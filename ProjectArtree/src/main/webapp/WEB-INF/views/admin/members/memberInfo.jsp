@@ -150,13 +150,14 @@
 		
 			<ul style="list-style-type: none;">
 			
-				<li><label>No.</label><span>2</span></li>
-				<li><label>EMAIL</label><span>leedh&#64;gmail.com</span></li>
-				<li><label>NAME</label><span>이다희</span></li>
-				<li><label>GENDER</label><span>여성</span></li>
-				<li><label>AGELINE</label><span>20대</span></li>
-				<li><label>PHONE</label><span>010-1234-5678</span></li>
-				<li><label>STATUS</label><span>가입</span></li>
+				<li><label>No.</label><span>${ memberInfo.idx }</span></li>
+				<li><label>EMAIL</label><span>${ memberInfo.email }</span></li>
+				<li><label>NAME</label><span>${ memberInfo.name }</span></li>
+				<li><label>GENDER</label><span>${ memberInfo.gender }</span></li>
+				<li><label>AGELINE</label><span>${ memberInfo.agegroup }</span></li>
+				<li><label>AREA</label><span>${ memberInfo.area }</span></li>
+				<li><label>PHONE</label><span>${ memberInfo.hp }</span></li>
+				<li><label>STATUS</label><span>${ memberInfo.status }</span></li>
 			
 			</ul>
 		
@@ -174,83 +175,29 @@
 					<tr>
 						<th>No.</th>
 						<th>DATE</th>
+						<th>PRICE</th>
 						<th>NAME</th>
 						<th>PHONE</th>
-						<th>PRICE</th>
 					</tr>	
 				</thead>
 				
 				<tbody>
+					<c:if test="${ not empty orderList }">
+					<c:forEach var="order" items="${ orderList }">
 					<tr>
-						<td>11111</td>
-						<td>2020-01-13 14:21</td>
-						<td>이다희</td>
-						<td>010-9479-4312</td>
-						<td>59,000 원</td>
+						<td>${ order.reserno }</td>
+						<td>${ order.reserdate }</td>
+						<td>${ order.resertotal }</td>
+						<td>${ order.name }</td>
+						<td>${ order.hp }</td>
 					</tr>
+					</c:forEach>
+					</c:if>
+					<c:if test="${ empty orderList }">
 					<tr>
-						<td>13661</td>
-						<td>2020-01-13 14:21</td>
-						<td>이다희</td>
-						<td>010-2424-4312</td>
-						<td>11,000 원</td>
+						<td colspan="5">주문내역이 없습니다.</td>
 					</tr>
-					<tr>
-						<td>11312</td>
-						<td>2020-01-13 14:21</td>
-						<td>이다희</td>
-						<td>010-9479-4312</td>
-						<td>35,000 원</td>
-					</tr>
-					<tr>
-						<td>98749</td>
-						<td>2020-01-13 14:21</td>
-						<td>이다희</td>
-						<td>010-4892-4312</td>
-						<td>86,000 원</td>
-					</tr>
-					<tr>
-						<td>13404</td>
-						<td>2020-01-13 14:21</td>
-						<td>이다희</td>
-						<td>010-4892-4312</td>
-						<td>69,000 원</td>
-					</tr>
-					<tr>
-						<td>97428</td>
-						<td>2020-01-13 14:21</td>
-						<td>이다희</td>
-						<td>010-1234-4312</td>
-						<td>41,000 원</td>
-					</tr>
-					<tr>
-						<td>17804</td>
-						<td>2020-01-13 14:21</td>
-						<td>이다희</td>
-						<td>010-1234-4312</td>
-						<td>22,000 원</td>
-					</tr>
-					<tr>
-						<td>13695</td>
-						<td>2020-01-13 14:21</td>
-						<td>이다희</td>
-						<td>010-1234-4312</td>
-						<td>52,000 원</td>
-					</tr>
-					<tr>
-						<td>73159</td>
-						<td>2020-01-13 14:21</td>
-						<td>이다희</td>
-						<td>010-1234-4312</td>
-						<td>184,000 원</td>
-					</tr>
-					<tr>
-						<td>15804</td>
-						<td>2020-01-13 14:21</td>
-						<td>이다희</td>
-						<td>010-1234-4312</td>
-						<td>274,000 원</td>
-					</tr>
+					</c:if>
 				</tbody>
 			</table>
 			<div style="margin: 0 auto" align="center">

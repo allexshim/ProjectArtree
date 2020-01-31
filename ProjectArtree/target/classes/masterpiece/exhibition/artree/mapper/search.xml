@@ -187,4 +187,21 @@
 	    ) Z
 	</select>
 	
+	<resultMap type="HashMap" id="ageTagMap">
+		<result property="agegroup" column="agegroup" javaType="String"/>
+		<result property="agecnt" column="agecnt" javaType="String"/>
+	</resultMap>
+	
+	<select id="getAgeDataByTags" parameterType="String" resultMap="ageTagMap" >
+		select agegroup, count(*) as agecnt
+		from member M join (select * from wishlist where favortag like '%' || #{tag} || '%') W
+		on M.idx = W.fk_idx
+		group by agegroup
+		order by agegroup
+	</select>
+	
+	<!-- 전체 회원 수 구해오기 -->
+	<select id="getMemberCnt" resultType="Integer" >
+		select count(*) from member
+	</select>
 </mapper>

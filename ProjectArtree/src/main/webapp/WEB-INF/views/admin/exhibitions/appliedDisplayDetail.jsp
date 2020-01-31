@@ -243,7 +243,7 @@
 					<tbody>
 					<c:if test="${ not empty exhibitionInfo }">
 						<tr>
-							<td>no.</td><td><input type="text" name="exhibitionno" id="no" value="${ no }" readonly /></td>
+							<td>no.</td><td><input type="text" name="no" id="no" value="${ no }" readonly /></td>
 						</tr>
 						<tr>
 							<td>지원자명</td><td ><input type="text" name="applier" id="applier" value="${ exhibitionInfo.applier }" readonly /></td>
@@ -257,15 +257,12 @@
 							</textarea></td>
 						</tr>
 						<tr>
-							<td>전시회명</td><td><input type="text" name="exhibitionname" id="exhibitionname" value="${ exhibitionInfo.exhibitionname }" readonly /></td>
+							<td>전시회명</td><td><input type="text" name="exhibitionname" id="exhibitionname" value="${ exhibitionInfo.exhibitionname }" /></td>
 						</tr>
 						<tr>
 							<td>전시회 정보</td><td><textarea id="exhibitioninfo"name="exhibitioninfo"  style="resize:none; border:solid 1px lightgray; padding:10px;" rows="5">
 							${ exhibitionInfo.exhibitioninfo }
 							</textarea></td>
-						</tr>
-						<tr>
-							<td>전시회명</td><td ><input type="text" name="exhibitionname" id="exhibitionname" value="${ exhibitionInfo.exhibitionname }" readonly /></td>
 						</tr>
 						<tr>
 							<td>전시관</td><td><input type="text" name="gallery" id="gallery" value="${ exhibitionInfo.galleryname }" autocomplete="off" />

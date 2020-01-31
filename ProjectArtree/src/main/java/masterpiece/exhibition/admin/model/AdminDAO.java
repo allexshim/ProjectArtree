@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import masterpiece.exhibition.exhibits.model.ExhibitsVO;
+import masterpiece.exhibition.member.model.MemberVO;
 
 @Repository
 public class AdminDAO implements InterAdminDAO {
@@ -151,6 +152,119 @@ public class AdminDAO implements InterAdminDAO {
 	public int displayNewExhibitionImg(HashMap<String, String> newExhibitImgMap) {
 		int m = sqlsession.insert("admin.displayNewExhibitionImg", newExhibitImgMap);
 		return m;
+	}
+
+	// 지원된 전시회 테이블(appliedExhibits) 의 status 데이터를 '검토완료'로 변경
+	@Override
+	public int changeAppliedExhibitsStatus(String no) {
+		int l = sqlsession.update("admin.changeAppliedExhibitsStatus", no);
+		return l;
+	}
+
+	// 회원목록 불러오기
+	@Override
+	public List<MemberVO> getMemberList() {
+		List<MemberVO> memberList = sqlsession.selectList("admin.getMemberList");
+		return memberList;
+	}
+
+	// 검색조건이 없을 경우의 총 게시물 건수(totalCount)
+	@Override
+	public int getTotalCountWithoutSearch() {
+		int n = sqlsession.selectOne("admin.getTotalCountWithoutSearch");
+		return n;
+	}
+
+	// 검색조건이 있을 경우의 총 게시물 건수(totalCount)
+	@Override
+	public int getTotalCountWithSearch(HashMap<String, String> paraMap) {
+		int n = sqlsession.selectOne("admin.getTotalCountWithSearch", paraMap);
+		return n;
+	}
+
+	// 페이징바 있는 회원목록
+	@Override
+	public List<MemberVO> memberListWithPaging(HashMap<String, String> paraMap) {
+		List<MemberVO> memberList = sqlsession.selectList("admin.memberListWithPaging", paraMap);
+		return memberList;
+	}
+
+	// 탈퇴한 회원목록
+	@Override
+	public List<MemberVO> deactivatedMemberList(HashMap<String, String> paraMap) {
+		List<MemberVO> memberList = sqlsession.selectList("admin.deactivatedMemberList", paraMap);
+		return memberList;
+	}
+
+	// 가입회원목록
+	@Override
+	public List<MemberVO> activatedMemberList(HashMap<String, String> paraMap) {
+		List<MemberVO> memberList = sqlsession.selectList("admin.activatedMemberList", paraMap);
+		return memberList;
+	}
+
+	// 관리자목록
+	@Override
+	public List<MemberVO> adminList(HashMap<String, String> paraMap) {
+		List<MemberVO> memberList = sqlsession.selectList("admin.adminList", paraMap);
+		return memberList;
+	}
+
+	// 검색조건이 없을시 탈퇴한 회원목록의 총 게시물건수
+	@Override
+	public int getTotalCountWithoutSearchDeactivated() {
+		int n = sqlsession.selectOne("admin.getTotalCountWithoutSearchDeactivated");
+		return n;
+	}
+
+	// 검색조건이 있을시 탈퇴한 회원목록의 총 게시물건수
+	@Override
+	public int getTotalCountWithSearchDeactivated(HashMap<String, String> paraMap) {
+		int n = sqlsession.selectOne("admin.getTotalCountWithSearchDeactivated", paraMap);
+		return n;
+	}
+
+	// 검색조건이 없을시 가입회원목록의 총 게시물건수
+	@Override
+	public int getTotalCountWithoutSearchActivated() {
+		int n = sqlsession.selectOne("admin.getTotalCountWithoutSearchActivated");
+		return n;
+	}
+
+	// 검색조건이 있을시 가입회원목록의 총 게시물건수
+	@Override
+	public int getTotalCountWithSearchActivated(HashMap<String, String> paraMap) {
+		int n = sqlsession.selectOne("admin.getTotalCountWithSearchActivated", paraMap);
+		return n;
+	}
+
+	// 검색조건이 없을시 관리자목록의 총 게시물건수
+	@Override
+	public int getTotalCountWithoutSearchAdmin() {
+		int n = sqlsession.selectOne("admin.getTotalCountWithoutSearchAdmin");
+		return n;
+	}
+	
+	// 검색조건이 있을시 관리자목록의 총 게시물건수
+	@Override
+	public int getTotalCountWithSearchAdmin(HashMap<String, String> paraMap) {
+		int n = sqlsession.selectOne("admin.getTotalCountWithSearchAdmin", paraMap);
+		return n;
+	}
+
+	// 회원상세정보출력
+	@Override
+	public MemberVO getMemberInfo(String no) {
+		MemberVO member = sqlsession.selectOne("admin.getMemberInfo", no);
+		return member;
+	}
+
+	// 주문목록출력
+	@Override
+	public List<HashMap<String, String>> getOrderList(String no) {
+		List<HashMap<String, String>> orderList = sqlsession.selectList("admin.getOrderList", no);
+		
+		return orderList;
 	}
 
 

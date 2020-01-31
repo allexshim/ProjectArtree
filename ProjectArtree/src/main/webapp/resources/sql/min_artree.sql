@@ -244,7 +244,34 @@ select * from SEQ_EXHIBITION;
 
 select SEQ_EXHIBITION.nextval from dual ;
 
-delete from exhibition where exhibitionno = 5182;
+delete from exhibition where exhibitionno = 5187;
+
+alter table appliedExhibits add status varchar2(30) default '검토예정';
+
+update appliedExhibits set status = '검토완료' where applyingno = 26;
+
+commit;
+
+update appliedExhibits set status = '검토완료' where applyingno = #{ applyingno }
+
+
+select idx, email, name, status
+		from 
+		(
+			select rownum AS rno
+				, idx, email, name, status
+			from   
+			(  
+				select idx, email, name, status
+				from member
+				where status = 1
+				
+				order by idx desc
+			) V  
+		) T 	   
+		where rno between 1 and 10;
+
+select idx, email, name, agegroup, gender, area, hp, status, registerday, lastlogindate, 
 
 -----------------------------------------=======================================-----------------------------------------
 
@@ -254,13 +281,26 @@ select * from appliedDetail order by fk_applyingno desc;
 
 select * from appliedExhibits order by applyingno desc;
 
-select * from EXHIBITIONDETAIL;
+select * from EXHIBITIONDETAIL order by fk_exhibitionno desc;
 
 select * from EXHIBITION order by exhibitionno desc;
 
 select * from SEQ_EXHIBITION;
 
 desc exhibition;
+
+commit;
+
+
+delete from exhibition where exhibitionno = 5183;
+
+
+delete from EXHIBITIONDETAIL where fk_exhibitionno = 5183;
+commit;
+
+-----------------------------------------=======================================-----------------------------------------
+
+select idx, email, name, status from member order by idx ;
 
 
 

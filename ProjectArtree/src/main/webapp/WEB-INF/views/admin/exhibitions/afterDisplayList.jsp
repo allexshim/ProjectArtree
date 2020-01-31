@@ -193,7 +193,7 @@
 			
 		//	console.log(no);
 
-			window.location.href="/artree/newDisplayDetail.at?no=" + no;
+			window.location.href="/artree/afterDisplayDetail.at?no=" + no;
 			
 		}); // end of $("#contentContainer table tbody tr").click
 		
@@ -213,13 +213,13 @@
 
 		<div id="topText">
 			<span>ADMIN ONLY</span>
-			<h1 style="margin:0;">New Exhibition List</h1>
+			<h1 style="margin:0; font-weight: bold;">Finished Exhibition List</h1>
 		</div>
 		
 		<div id="eachStatus">
 			<a class="displayStatus" id="onDisplay" href="<%= ctxPath %>/exhibitionList.at">전시중</a>
-			<a class="displayStatus currentStatus" id="newDisplay" href="<%= ctxPath %>/newDisplayList.at">새로운 전시</a>
-			<a class="displayStatus" id="afterDisplay" style="padding-right: 50px;" href="<%= ctxPath %>/afterDisplayList.at">전시종료</a>
+			<a class="displayStatus" id="newDisplay" href="<%= ctxPath %>/newDisplayList.at">새로운 전시</a>
+			<a class="displayStatus currentStatus" id="afterDisplay" style="padding-right: 50px;" href="<%= ctxPath %>/afterDisplayList.at">전시종료</a>
 			<a class="displayStatus" id="appliedList" id="appliedDisplay" href="<%= ctxPath %>/appliedDisplayList.at">검토 대기중</a>
 		</div>
 
@@ -243,7 +243,7 @@
 						</td>
 						<td>${ exhibit.exhibitionname }</td>
 						<td>${ exhibit.author }</td>
-						<td><img src="<%= ctxPath %>/resources/images/exhibition/onDisplayBtn.JPG" /></td>
+						<td><img src="<%= ctxPath %>/resources/images/exhibition/endDisplayBtn.JPG" /></td>
 					</tr>
 					</c:forEach>
 					</c:if>

@@ -17,6 +17,10 @@
 		font-family: 'Noto Sans Kr', sans-serif;
 	}
 	
+	.M1 {
+      -webkit-transform:translate(-10px,0);
+   }
+	
 	#detailContainer {
 		padding-bottom : 100px;
 	}
@@ -317,7 +321,7 @@
 				<tr>
 				<tr>
 					<td colspan="2">
-						<textarea id="contents" name="contents" style="resize:none; border:solid 1px lightgray; font-weight:normal !important;" rows="10" cols="120">
+						<textarea id="contents" name="contents" style="width: 97%; resize:none; border:solid 1px lightgray; font-weight:normal !important;" rows="10" cols="120">
 						</textarea>
 					</td>
 				<tr>

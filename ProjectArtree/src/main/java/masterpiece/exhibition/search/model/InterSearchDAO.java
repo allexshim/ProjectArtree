@@ -34,4 +34,10 @@ public interface InterSearchDAO {
 	// 2. 잘라서 각각 태그의 빈도수를 얻어온다.
 	List<HashMap<String, String>> getChartDataByTags(String preferTag);
 
+	// 해당 태그를 선호하는 연령대,해당회원수 를 가져온다.
+	List<HashMap<String,String>> getAgeDataByTags(String tag);
+
+	// 통계를 내기 위해 총 회원수를 구해서 request영역에 저장한다.
+	int getMemberCnt();
+
 }

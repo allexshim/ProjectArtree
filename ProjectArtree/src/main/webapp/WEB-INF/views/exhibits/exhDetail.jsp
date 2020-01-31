@@ -567,6 +567,8 @@
 		goCheckLikeGal('${exhDetailMap.FK_GALLERYNO}');
 		getGenderChart('${exhDetailMap.EXHIBITIONNO}');
 		getAgeChart('${exhDetailMap.EXHIBITIONNO}');
+		getReview('${exhDetailMap.EXHIBITIONNO}');
+		getPreview('${exhDetailMap.EXHIBITIONNO}');
 		
 		$(".forIco").hover(function(){
 			$(this).children(".forMoving").stop().animate({left:'5px'}, 'fast');
@@ -951,6 +953,51 @@
 		});
 		
 	}
+	
+	////////////////////////////////// 리뷰 게시판 불러오기
+	function getReview(eno){
+		
+		$.ajax({
+			url:"<%=ctxPath%>/reviewList.at",
+			data: {"eno":eno},
+			dataType: "JSON",
+			success:function(json){
+				
+				$.each(json, function(index, item){
+					
+					
+					
+				});
+				
+			},
+			error: function(request, status, error){
+				alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+			}
+		}) // end of ajax ----
+	}
+	
+	///////////////////////////////// 기대평 게시판 불러오기 
+	function getPreview(eno){
+		
+		$.ajax({
+			url:"<%=ctxPath%>/previewList.at",
+			data: {"eno":eno},
+			dataType: "JSON",
+			success:function(json){
+				
+				$.each(json, function(index, item){
+					
+					
+					
+				});
+				
+			},
+			error: function(request, status, error){
+				alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+			}
+		}) // end of ajax ----
+		
+	}
 </script>
 <%-- EXHIBITION LIST SCRIPT END --%>
 
@@ -1053,14 +1100,24 @@
 			<div class="slideshow">
 			  <div class="mySlides">
 			    <div class="numbertext" style="display: none;">1 / 3</div>
-			    <img class="slideView" src="${exhDetailMap.IMAGE1}">
+					<c:if test="${exhDetailMap.IMAGE1.contains('http://')}">
+						<img class="slideView" src="${exhDetailMap.IMAGE1}"/>
+					</c:if>
+					<c:if test="${!exhDetailMap.IMAGE1.contains('http://')}">
+						<img class="slideView" src="<%= ctxPath%>/resources/files/${exhDetailMap.IMAGE1}"/>
+					</c:if>
 			    <div class="text">${exhDetailMap.IMAGE1INFO}</div>
 			  </div>
 			  
 			  <c:if test="${not empty exhDetailMap.IMAGE2}">
 				  <div class="mySlides">
 				    <div class="numbertext" style="display: none;">2 / 3</div>
-				    <img class="slideView" src="${exhDetailMap.IMAGE2}">
+				    	<c:if test="${exhDetailMap.IMAGE2.contains('http://')}">
+							<img class="slideView" src="${exhDetailMap.IMAGE2}"/>
+						</c:if>
+						<c:if test="${!exhDetailMap.IMAGE2.contains('http://')}">
+							<img class="slideView" src="<%= ctxPath%>/resources/files/${exhDetailMap.IMAGE2}"/>
+						</c:if>
 				    <div class="text">${exhDetailMap.IMAGE2INFO}</div>
 				  </div>
 			  </c:if>
@@ -1068,7 +1125,12 @@
 			  <c:if test="${not empty exhDetailMap.IMAGE3}">
 				  <div class="mySlides">
 				    <div class="numbertext" style="display: none;">3 / 3</div>
-				    <img class="slideView" src="${exhDetailMap.IMAGE3}">
+				    	<c:if test="${exhDetailMap.IMAGE3.contains('http://')}">
+							<img class="slideView" src="${exhDetailMap.IMAGE3}"/>
+						</c:if>
+						<c:if test="${!exhDetailMap.IMAGE3.contains('http://')}">
+							<img class="slideView" src="<%= ctxPath%>/resources/files/${exhDetailMap.IMAGE3}"/>
+						</c:if>
 				    <div class="text">${exhDetailMap.IMAGE3INFO}</div>
 				  </div>
 			  </c:if>
@@ -1145,7 +1207,7 @@
 		<%-- ------------------------------------------기대평 영역 --%>
 		<div class="comment_area">
 			<table class="basic_table">
-			<caption class="tableTitle">COMMENT</caption>
+			<caption class="tableTitle">PREVIEW</caption>
 				<thead>
 					<tr>
 						<th style="width: 65px;">NO</th>
