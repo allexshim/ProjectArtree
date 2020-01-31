@@ -282,7 +282,7 @@
 		$("#date").css('display','inline-block');
 		
 		// 각 월별 전시회 목록을 불러오는 ajax를 함수로 빼서 사용 (초기값 2020년 1월로)
-		getListByMonth("2020","1");
+		getListByMonth("2020","2");
 	} //----------------------------------------------------------------------------
 	
 	function getListByMonth(year,month){ // 해당 달에 열리는 전시회목록을 가져온다.------------
@@ -394,7 +394,7 @@
 		        averageCenter: true, // 클러스터에 포함된 마커들의 평균 위치를 클러스터 마커 위치로 설정
 		        minLevel: 10, // 클러스터 할 최소 지도 레벨
 		        calculator: [10, 30, 50],
-		        disableClickZoom: true, // 클러스터 마커를 클릭했을 때 지도가 확대되지 않도록 설정한다
+		        disableClickZoom: true,
 		        styles: [{ // calculator 각 사이 값 마다 적용될 스타일을 지정한다
 	                width : '30px', height : '30px',
 	                background: 'rgb(112, 171, 158)', /*현지 연두*/
@@ -579,7 +579,7 @@
 		          success: function(json) { 
 		        	  // 차트 만들기
 		        	  getThemeChart("${allTag}");
-		        	 /*  console.log("${allTag}"); */
+		
 		        	  // 모든 전시회 정보 뿌리기
 		        	  listofExhibition(json);
 		          },
@@ -607,7 +607,7 @@
 		}
 		
 		function getThemeChart(text){
-/* 			console.log(text); */
+
 		var lines = text.split(/[,\. ]+/g),
 		    data = Highcharts.reduce(lines, function (arr, word) {
 		        var obj = Highcharts.find(arr, function (obj) {
