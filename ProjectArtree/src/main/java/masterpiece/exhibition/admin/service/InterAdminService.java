@@ -85,6 +85,36 @@ public interface InterAdminService {
 	// 탈퇴한 회원목록
 	List<MemberVO> deactivatedMemberList(HashMap<String, String> paraMap);
 
+	// 가입회원목록
+	List<MemberVO> activatedMemberList(HashMap<String, String> paraMap);
+
+	// 관리자목록
+	List<MemberVO> adminList(HashMap<String, String> paraMap);
+
+	// 검색조건이 없을시 탈퇴한 회원목록의 총 게시물건수
+	int getTotalCountWithoutSearchDeactivated();
+	
+	// 검색조건이 있을시 탈퇴한 회원목록의 총 게시물건수
+	int getTotalCountWithSearchDeactivated(HashMap<String, String> paraMap);
+
+	// 검색조건이 없을시 가입회원목록의 총 게시물건수
+	int getTotalCountWithoutSearchActivated();
+
+	// 검색조건이 있을시 가입회원목록의 총 게시물건수
+	int getTotalCountWithSearchActivated(HashMap<String, String> paraMap);
+
+	// 검색조건이 없을시 관리자목록의 총 게시물건수
+	int getTotalCountWithoutSearchAdmin();
+
+	// 검색조건이 있을시 관리자목록의 총 게시물건수
+	int getTotalCountWithSearchAdmin(HashMap<String, String> paraMap);
+
+	// 회원상세정보출력
+	MemberVO getMemberInfo(String no) throws NoSuchMethodException;
+
+	// 주문목록출력
+	List<HashMap<String, String>> getOrderList(String no);
+
 
 
 }

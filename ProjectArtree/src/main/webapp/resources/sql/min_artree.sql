@@ -253,6 +253,26 @@ update appliedExhibits set status = '검토완료' where applyingno = 26;
 commit;
 
 update appliedExhibits set status = '검토완료' where applyingno = #{ applyingno }
+
+
+select idx, email, name, status
+		from 
+		(
+			select rownum AS rno
+				, idx, email, name, status
+			from   
+			(  
+				select idx, email, name, status
+				from member
+				where status = 1
+				
+				order by idx desc
+			) V  
+		) T 	   
+		where rno between 1 and 10;
+
+select idx, email, name, agegroup, gender, area, hp, status, registerday, lastlogindate, 
+
 -----------------------------------------=======================================-----------------------------------------
 
 select * from member;
