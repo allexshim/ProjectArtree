@@ -356,6 +356,31 @@
 		from reser R JOIN member M
 		on R.fk_idx = M.idx
 		where R.fk_idx = #{ no }
+		order by R.reserno desc
+	</select>
+	
+	<!-- 주문정보출력 -->
+	<resultMap type="HashMap" id="getOrderInfoMap">
+		<result property="reserno" 		column="reserno" 	javaType="String" />
+		<result property="reserdate" 	column="reserdate" 	javaType="String" />
+		<result property="resertotal" 	column="resertotal" javaType="String" />
+		<result property="name" 		column="name" 		javaType="String" />
+		<result property="hp" 			column="hp" 		javaType="String" />
+		<result property="reserstat" 	column="reserstat" 	javaType="String" />
+		<result property="dday" 		column="dday" 		javaType="String" />
+		<result property="purtype" 		column="purtype" 	javaType="String" />
+		<result property="qt" 			column="qt" 		javaType="String" />
+		<result property="price" 		column="price" 		javaType="String" />
+		<result property="exname" 		column="exname" 	javaType="String" />
+	</resultMap>
+	<select id="getOrderInfo" parameterType="String" resultMap="getOrderInfoMap">
+		select R.reserno, R.reserdate, R.resertotal, M.name, M.hp, D.reserstat, D.dday, E.purtype, E.qt, E.price, D.exname
+		from reser R 
+		JOIN member M on R.fk_idx = M.idx
+		JOIN reserdetail D on D.fk_reserno = R.reserno
+		JOIN reserex E on E.fk_reserdetailno = D.reserdetailno
+		where R.reserno = #{ reserno }
+		order by R.reserno desc
 	</select>
 	
 </mapper>

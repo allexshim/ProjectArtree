@@ -1,9 +1,6 @@
 package masterpiece.exhibition.admin.controller;
 
 import java.io.File;
-import java.io.UnsupportedEncodingException;
-import java.security.GeneralSecurityException;
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -12,8 +9,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.commons.codec.DecoderException;
-import org.apache.commons.codec.net.URLCodec;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +23,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import masterpiece.exhibition.admin.model.GalleryVO;
 import masterpiece.exhibition.admin.service.InterAdminService;
-import masterpiece.exhibition.common.AES256;
 import masterpiece.exhibition.common.FileManager;
 import masterpiece.exhibition.common.MyUtil;
 import masterpiece.exhibition.common.ThumbnailManager;
@@ -1100,6 +1094,7 @@ public class AdminController {
 		
 		String no = request.getParameter("no");
 		
+		//// 회원정보 ////
 		MemberVO memberInfo = null;
 		
 		try {
@@ -1110,6 +1105,7 @@ public class AdminController {
 		
 		mav.addObject("memberInfo", memberInfo);
 		
+		//// 주문목록 ////
 		List<HashMap<String, String>> orderList = service.getOrderList(no);
 		
 		mav.addObject("orderList", orderList);
@@ -1119,5 +1115,40 @@ public class AdminController {
 		return mav;
 		
 	}
+	
+	@ResponseBody
+	@RequestMapping(value="/orderInfo.at", produces="text/plain;charset=UTF-8")
+	public String orderInfo(HttpServletRequest request, HttpServletResponse response) {
+		
+		String reserno = request.getParameter("reserno");
+	//	System.out.println("============================ reserno : " + reserno);
+		
+		List<HashMap<String, String>> orderInfoList = service.getOrderInfo(reserno);
+		
+		JSONArray jsonArr = new JSONArray();
+		
+		if(orderInfoList != null) {
+			for(HashMap<String, String> info : orderInfoList) {
+				JSONObject jsonObj = new JSONObject();
+				jsonObj.put("reserno", info.get("reserno"));
+				jsonObj.put("reserdate", info.get("reserdate"));
+				jsonObj.put("resertotal", info.get("resertotal"));
+				jsonObj.put("name", info.get("name"));
+				jsonObj.put("hp", info.get("hp"));
+				jsonObj.put("reserstat", info.get("reserstat"));
+				jsonObj.put("dday", info.get("dday"));
+				jsonObj.put("purtype", info.get("purtype"));
+				jsonObj.put("qt", info.get("qt"));
+				jsonObj.put("price", info.get("price"));
+				jsonObj.put("exname", info.get("exname"));
+				
+				jsonArr.put(jsonObj);
+			}
+		}
+		
+		return jsonArr.toString(); 
+	}
+	
+	
 	
 }
