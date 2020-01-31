@@ -78,6 +78,16 @@
 		margin : 0 auto;
 	}
 	
+	.table, .table tr, .table th, .table td {
+		border: 1px solid black;
+		text-align: center;
+	}
+	
+	.table th {
+		text-align: cneter;
+	}
+	
+	/* 
 	div#contentContainer table thead td:first-child, div#contentContainer table tbody td:first-child {
 		width : 10%;
 		text-align: center;
@@ -106,17 +116,17 @@
 		padding-top : 10px;
 		padding-bottom : 10px; 
 	}
-	
+	 */
 	/* == 통계 영역 == */
 	#statistics-area {
 		height: 90vh;
 		/* border: 2px solid red; */
-		width: 95%;
+		width: 100%;
 	}
 	
 	#table-area {
 		border: 2px solid navy;
-		height: 50vh;
+		height: 90vh;
 	}
 	
 
@@ -277,17 +287,199 @@
 			</div>
 			
 			<div id="table-area">
-				
 				<%-- 차트에 대한 데이터 테이블은 이곳에 넣으세요 !! --%>
 				
 				<table class="table">
-					<thead>
-					
-					</thead>
-					
-					<tbody>
-					
-					</tbody>
+				<colgroup>
+					<col style="width: 12.5%">
+					<col style="width: 12.5%">
+					<col style="width: 12.5%">
+					<col style="width: 12.5%">
+					<col style="width: 12.5%">
+					<col style="width: 12.5%">
+					<col style="width: 12.5%">
+					<col style="width: 12.5%">
+				</colgroup>
+						<tr>
+							<th></th>
+							<th>회화</th>
+							<th>조각</th>
+							<th>디자인</th>
+							<th>미디어</th>
+							<th>공예</th>
+							<th>설치미술</th>
+							<th>사진</th> 
+						</tr>
+						<tr>
+							<td>서울</td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr>
+							<td>부산</td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr>
+							<td>대구</td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr>
+							<td>인천</td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr>
+							<td>광주</td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr>
+							<td>대전</td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr>
+							<td>울산</td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr>
+							<td>세종</td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr>
+							<td>강원</td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr>
+							<td>경기</td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr>
+							<td>경남</td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr>
+							<td>경북</td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr>
+							<td>전남</td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr>
+							<td>전북</td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr>
+							<td>제주</td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr>
+							<td>충남</td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr>
+							<td>충북</td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
 				</table>
 				
 			</div>
