@@ -240,6 +240,9 @@
 					alert("내용을 입력하세요!");
 					$("#notContent").focus();			
 				}
+				else if($(':radio[name="notCategory"]:checked').length < 1){
+					alert("공지 종류를 선택하세요!");
+				}
 				else {
 					
 					var frm = document.newNotice;
@@ -255,7 +258,7 @@
 		}); // 공지 추가 하기 끝 --------------------------------
 		
 		$("#backBtn").click(function(){
-			if(confirm("취소 하시겠습니까?") == true){
+			if(confirm("작성을 취소 하시겠습니까?") == true){
 				$("#addNoticeContainer").hide();
 			}
 			else {
@@ -281,12 +284,13 @@
 		});
 		
 		$(".arrow").click(function(){
-			if(confirm("공지를 삭제하시겠습니까?") == true){
-				// delete 모드일때만 삭제 가능하다.
-				if($(this).hasClass("fa-times")){
-					var notNo = $(this).next().text();
-					window.location.href = "<%=ctxPath%>/delNotice.at?notNo="+encodeURI(notNo);
-					// 해당 url로 이동해서 글 삭제, 이후 다시 notice.at으로 보내주면 새로고침 되게 하면 됩니다.
+			
+			// delete 모드일때만 삭제 가능하다.
+			if($(this).hasClass("fa-times")){
+				if(confirm("공지를 삭제하시겠습니까?") == true){
+				var notNo = $(this).next().text();
+				window.location.href = "<%=ctxPath%>/delNotice.at?notNo="+encodeURI(notNo);
+				// 해당 url로 이동해서 글 삭제, 이후 다시 notice.at으로 보내주면 새로고침 되게 하면 됩니다.
 				}
 			}
 			else{
@@ -344,6 +348,10 @@
 					<input type="text" name="notTitle" id="notTitle" placeholder="제목을 입력하세요." /><br/>
 					<textarea name="notContent" id="notContent" placeholder="내용을 입력하세요."></textarea>
 				</span>
+				<div class="category">
+					<input type="radio" name="notCategory" value="1" /> 공지
+					<input type="radio" name="notCategory" value="2" /> FAQ
+				</div>
 				<div align="center">
 					<img onclick="" id="addBtn" src="<%= ctxPath %>/resources/images/board/addBtn.JPG" />
 					<img onclick="" id="backBtn" src="<%= ctxPath %>/resources/images/board/backNoticeBtn.JPG" />
@@ -353,26 +361,29 @@
 		</div>
 	
 		<c:forEach var="item" items="${noticeList}">
-			<div id="noticeList">
-				<div class="singleNotice">
-					<span class="noticeTitle"> ${item.notTitle}
-					 <i class="arrow fas fa-chevron-down"></i>
-					 <span class="noticeNo" style="display:none;">${item.notNo}</span>
-					 </span>
-					<div class="noticeContent" style="width:60%;">
-						${item.notContent}
-						
-						<br/><br/><br/><br/><br/>
-						<p>작성일 : ${item.NOTWRITEDAY}</p>
-					</div>	
+			<c:if test="${item.notCategory == '1'}">
+				<div id="noticeList">
+					<div class="singleNotice">
+						<span class="noticeTitle"> ${item.notTitle}
+						 <i class="arrow fas fa-chevron-down"></i>
+						 <span class="noticeNo" style="display:none;">${item.notNo}</span>
+						 </span>
+						<div class="noticeContent" style="width:60%;">
+							${item.notContent}
+							
+							<br/><br/><br/><br/><br/>
+							<p>작성일 : ${item.NOTWRITEDAY}</p>
+						</div>	
+					</div>
 				</div>
-			</div>
+			</c:if>
 		</c:forEach>
 		
 		<!-- 페이징바  -->
 		<div class="pagination" align="center">
 			${pageBar}
 		</div>
+		
 	</div>
 </body>
 </html>
