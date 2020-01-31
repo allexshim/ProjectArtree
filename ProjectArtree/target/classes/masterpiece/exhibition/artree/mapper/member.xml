@@ -267,4 +267,15 @@
 		update member set status=0 where idx=#{idx}
 	</update>
 	
+	<!-- ************** 관리자 페이지 ************** -->
+   <!-- 지역마다 선호한 장르 다 가져온다. -->
+   <select id="getAreaFavorGenre" parameterType="String" resultType="String">
+	    select favorgenre
+		from (select idx, area
+		      from member) M join wishlist W
+		on M.idx = W.fk_idx
+		where area = #{area}
+   </select>
+   
+
 </mapper>

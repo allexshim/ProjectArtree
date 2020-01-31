@@ -78,6 +78,16 @@
 		margin : 0 auto;
 	}
 	
+	.table, .table tr, .table th, .table td {
+		border: 1px solid black;
+		text-align: center;
+	}
+	
+	.table th {
+		text-align: cneter;
+	}
+	
+	/* 
 	div#contentContainer table thead td:first-child, div#contentContainer table tbody td:first-child {
 		width : 10%;
 		text-align: center;
@@ -106,17 +116,20 @@
 		padding-top : 10px;
 		padding-bottom : 10px; 
 	}
-	
+	 */
 	/* == 통계 영역 == */
 	#statistics-area {
-		height: 60vh;
-		border: 2px solid red;
+		height: 90vh;
+		/* border: 2px solid red; */
+		width: 100%;
 	}
 	
 	#table-area {
 		border: 2px solid navy;
-		height: 50vh;
+		height: 90vh;
 	}
+	
+
 	
 </style>
 
@@ -142,51 +155,19 @@
 				am4core.useTheme(am4themes_animated);
 		
 				var chart = am4core.create("statistics-area", am4charts.RadarChart);
-				chart.hiddenState.properties.opacity = 0; // this creates initial fade-in
+				chart.hiddenState.properties.opacity = 0;
 		
 				var label = chart.createChild(am4core.Label);
 		
-				chart.data = [
-				  {
-				    category: "One",
-				    value1: 8
-				  },
-				  {
-				    category: "Two",
-				    value1: 11
-				  },
-				  {
-				    category: "Three",
-				    value1: 7
-				  },
-				  {
-				    category: "Four",
-				    value1: 13
-				  },
-				  {
-				    category: "Five",
-				    value1: 12
-				  },
-				  {
-				    category: "Six",
-				    value1: 15
-				  },
-				  {
-				    category: "Seven",
-				    value1: 9
-				  },
-				  {
-				    category: "Eight",
-				    value1: 6
-				  }
-				];
+				chart.data = json;
+				
 				chart.radius = am4core.percent(95);
 				chart.startAngle = 270 - 180;
 				chart.endAngle = 270 + 180;
 				chart.innerRadius = am4core.percent(60);
 		
 				var categoryAxis = chart.xAxes.push(new am4charts.CategoryAxis());
-				categoryAxis.dataFields.category = "category";
+				categoryAxis.dataFields.category = "지역";
 				categoryAxis.renderer.labels.template.location = 0.5;
 				categoryAxis.renderer.grid.template.strokeOpacity = 0.1;
 				categoryAxis.renderer.axisFills.template.disabled = true;
@@ -202,67 +183,59 @@
 		
 				var series1 = chart.series.push(new am4charts.RadarColumnSeries());
 				series1.columns.template.radarColumn.strokeOpacity = 1;
-				series1.name = "Series 1";
-				series1.dataFields.categoryX = "category";
+				series1.name = "회화";
+				series1.dataFields.categoryX = "지역";
 				series1.columns.template.tooltipText = "{name}: {valueY.value}";
-				series1.dataFields.valueY = "value1";
+				series1.dataFields.valueY = "회화";
 				series1.stacked = true;
-		
+				
 				var series2 = chart.series.push(new am4charts.RadarColumnSeries());
 				series2.columns.template.radarColumn.strokeOpacity = 1;
 				series2.columns.template.tooltipText = "{name}: {valueY.value}";
-				series2.name = "Series 2";
-				series2.dataFields.categoryX = "category";
-				series2.dataFields.valueY = "value2";
+				series2.name = "조각";
+				series2.dataFields.categoryX = "지역";
+				series2.dataFields.valueY = "조각";
 				series2.stacked = true;
 		
 				var series3 = chart.series.push(new am4charts.RadarColumnSeries());
 				series3.columns.template.radarColumn.strokeOpacity = 1;
 				series3.columns.template.tooltipText = "{name}: {valueY.value}";  
-				series3.name = "Series 3";
-				series3.dataFields.categoryX = "category";
-				series3.dataFields.valueY = "value3";
+				series3.name = "디자인";
+				series3.dataFields.categoryX = "지역";
+				series3.dataFields.valueY = "디자인";
 				series3.stacked = true;
 		
 				var series4 = chart.series.push(new am4charts.RadarColumnSeries());
 				series4.columns.template.radarColumn.strokeOpacity = 1;
 				series4.columns.template.tooltipText = "{name}: {valueY.value}";
-				series4.name = "Series 4";
-				series4.dataFields.categoryX = "category";
-				series4.dataFields.valueY = "value4";
+				series4.name = "미디어";
+				series4.dataFields.categoryX = "지역";
+				series4.dataFields.valueY = "미디어";
 				series4.stacked = true;
 		
-				var series1 = chart.series.push(new am4charts.RadarColumnSeries());
-				series1.columns.template.radarColumn.strokeOpacity = 1;
-				series1.name = "Series 5";
-				series1.dataFields.categoryX = "category";
-				series1.columns.template.tooltipText = "{name}: {valueY.value}";
-				series1.dataFields.valueY = "value5";
-				series1.stacked = true;
+				var series5 = chart.series.push(new am4charts.RadarColumnSeries());
+				series5.columns.template.radarColumn.strokeOpacity = 1;
+				series5.name = "공예";
+				series5.dataFields.categoryX = "지역";
+				series5.columns.template.tooltipText = "{name}: {valueY.value}";
+				series5.dataFields.valueY = "공예";
+				series5.stacked = true;
 
-				var series2 = chart.series.push(new am4charts.RadarColumnSeries());
-				series2.columns.template.radarColumn.strokeOpacity = 1;
-				series2.columns.template.tooltipText = "{name}: {valueY.value}";
-				series2.name = "Series 6";
-				series2.dataFields.categoryX = "category";
-				series2.dataFields.valueY = "value6";
-				series2.stacked = true;
+				var series6 = chart.series.push(new am4charts.RadarColumnSeries());
+				series6.columns.template.radarColumn.strokeOpacity = 1;
+				series6.columns.template.tooltipText = "{name}: {valueY.value}";
+				series6.name = "설치미술";
+				series6.dataFields.categoryX = "지역";
+				series6.dataFields.valueY = "설치미술";
+				series6.stacked = true;
 
-				var series3 = chart.series.push(new am4charts.RadarColumnSeries());
-				series3.columns.template.radarColumn.strokeOpacity = 1;
-				series3.columns.template.tooltipText = "{name}: {valueY.value}";  
-				series3.name = "Series 7";
-				series3.dataFields.categoryX = "category";
-				series3.dataFields.valueY = "value7";
-				series3.stacked = true;
-
-				var series4 = chart.series.push(new am4charts.RadarColumnSeries());
-				series4.columns.template.radarColumn.strokeOpacity = 1;
-				series4.columns.template.tooltipText = "{name}: {valueY.value}";
-				series4.name = "Series 8";
-				series4.dataFields.categoryX = "category";
-				series4.dataFields.valueY = "value8";
-				series4.stacked = true;
+				var series7 = chart.series.push(new am4charts.RadarColumnSeries());
+				series7.columns.template.radarColumn.strokeOpacity = 1;
+				series7.columns.template.tooltipText = "{name}: {valueY.value}";  
+				series7.name = "사진";
+				series7.dataFields.categoryX = "지역";
+				series7.dataFields.valueY = "사진";
+				series7.stacked = true;
 				
 				chart.seriesContainer.zIndex = -1;
 		
@@ -276,6 +249,7 @@
 				  chart.endAngle = 270 + start * 179 + 1;
 		
 				  valueAxis.renderer.axisAngle = chart.startAngle;
+				  
 				});
 			},
 			  
@@ -313,17 +287,199 @@
 			</div>
 			
 			<div id="table-area">
-				
 				<%-- 차트에 대한 데이터 테이블은 이곳에 넣으세요 !! --%>
 				
 				<table class="table">
-					<thead>
-					
-					</thead>
-					
-					<tbody>
-					
-					</tbody>
+				<colgroup>
+					<col style="width: 12.5%">
+					<col style="width: 12.5%">
+					<col style="width: 12.5%">
+					<col style="width: 12.5%">
+					<col style="width: 12.5%">
+					<col style="width: 12.5%">
+					<col style="width: 12.5%">
+					<col style="width: 12.5%">
+				</colgroup>
+						<tr>
+							<th></th>
+							<th>회화</th>
+							<th>조각</th>
+							<th>디자인</th>
+							<th>미디어</th>
+							<th>공예</th>
+							<th>설치미술</th>
+							<th>사진</th> 
+						</tr>
+						<tr>
+							<td>서울</td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr>
+							<td>부산</td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr>
+							<td>대구</td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr>
+							<td>인천</td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr>
+							<td>광주</td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr>
+							<td>대전</td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr>
+							<td>울산</td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr>
+							<td>세종</td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr>
+							<td>강원</td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr>
+							<td>경기</td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr>
+							<td>경남</td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr>
+							<td>경북</td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr>
+							<td>전남</td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr>
+							<td>전북</td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr>
+							<td>제주</td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr>
+							<td>충남</td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr>
+							<td>충북</td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
 				</table>
 				
 			</div>

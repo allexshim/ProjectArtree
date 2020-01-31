@@ -46,7 +46,6 @@
 	#container_gal_detail .specialArea .exhStatus {
 		font-size: 12pt;
 		border: none;
-		background-color: #ff6666;
 		padding: 4px 9px;
 		color: white;
 		border-radius: 5px;
@@ -172,7 +171,11 @@
 	
 	#container_gal_detail .comExh {
 		float: right;
-		width: 50%;
+		width: 50%; 
+	}
+	
+	#container_gal_detail .spanArea {
+		display: table-cell;
 	}
 	
 	#container_gal_detail .ExhList {
@@ -514,29 +517,46 @@
 				
 				if(json.length == 0){
 					
-					html += "<span style='margin-top:15%; text-align:right; margin-right:50px; display:block;'>진행중인 전시회가 없습니다.</span>";
+					html += "<span style='margin-top:18%; padding-left:28%; display:block;'>진행중인 전시회가 없습니다.</span>";
 					
 					$(".curExh > .intro_content").html(html);
+					$(".exhStatus").text("전시 준비중").css("background-color","#808080");
 				}
 				else {
+					
+					$(".exhStatus").text("현재 전시중").css("background-color","#ff6666");
 					
 					$.each(json, function(index, item){
 						
 						if((index+1)%3 != 0){
 							html += '<div class="ExhList">'
-								 + '<a href="<%=ctxPath%>/exhDetail.at?eno='+item.EXHIBITIONNO+'">'
-								 + '<img src="'+item.MAINPOSTER+'">'
-								 + '<span class="ExhTitle">'+item.EXHIBITIONNAME+'</span>'
-								 + '<span class="ExhDate">'+item.SCHEDULE+'</span>'
+								 + '<a href="<%=ctxPath%>/exhDetail.at?eno='+item.EXHIBITIONNO+'">';
+								
+							if(item.MAINPOSTER.substr(0, 4) != 'http'){
+								html += "<img src='<%= ctxPath%>/resources/files/"+item.MAINPOSTER+"'/>";
+							}
+							else {
+								html += "<img src='"+item.MAINPOSTER+"'/>";
+							}													 
+										 
+							html += '<div class="spanArea"><span class="ExhTitle">'+item.EXHIBITIONNAME+'</span>'
+								 + '<span class="ExhDate">'+item.SCHEDULE+'</span></div>'
 								 + '</a></div>';
 						}
 						else {
 							html += '<div class="ExhList">'
-								 + '<a href="<%=ctxPath%>/exhDetail.at?eno='+item.EXHIBITIONNO+'">'
-								 + '<img src="'+item.MAINPOSTER+'">'
-								 + '<span class="ExhTitle">'+item.EXHIBITIONNAME+'</span>'
-								 + '<span class="ExhDate">'+item.SCHEDULE+'</span>'
-								 + '</a></div><br/>';
+								 + '<a href="<%=ctxPath%>/exhDetail.at?eno='+item.EXHIBITIONNO+'">';
+
+							if(item.MAINPOSTER.substr(0, 4) != 'http'){
+								html += "<img src='<%= ctxPath%>/resources/files/"+item.MAINPOSTER+"'/>";
+							}
+							else {
+								html += "<img src='"+item.MAINPOSTER+"'/>";
+							}	
+										 
+							html += '<div class="spanArea"><span class="ExhTitle">'+item.EXHIBITIONNAME+'</span>'
+							 + '<span class="ExhDate">'+item.SCHEDULE+'</span></div>'
+							 + '</a></div><br/>';
 						}
 					
 					});
@@ -567,7 +587,7 @@
 				
 				if(json.length == 0){		
 					
-					html += "<span style='margin-top:25%; display:block;'>예정중인 전시회가 없습니다.</span>";
+					html += "<span style='margin-top:18%; padding-left:28%; display:block;'>예정중인 전시회가 없습니다.</span>";
 					
 					$(".comExh > .intro_content").html(html);
 				}
@@ -577,18 +597,32 @@
 						
 						if((index+1)%3 != 0){
 							html += '<div class="ExhList">'
-								 + '<a href="<%=ctxPath%>/exhDetail.at?eno='+item.EXHIBITIONNO+'">'
-								 + '<img src="'+item.MAINPOSTER+'">'
-								 + '<span class="ExhTitle">'+item.EXHIBITIONNAME+'</span>'
-								 + '<span class="ExhDate">'+item.SCHEDULE+'</span>'
+								 + '<a href="<%=ctxPath%>/exhDetail.at?eno='+item.EXHIBITIONNO+'">';
+
+							if(item.MAINPOSTER.substr(0, 4) != 'http'){
+								html += "<img src='<%= ctxPath%>/resources/files/"+item.MAINPOSTER+"'/>";
+							}
+							else {
+								html += "<img src='"+item.MAINPOSTER+"'/>";
+							}	
+										 
+							html += '<div class="spanArea"><span class="ExhTitle">'+item.EXHIBITIONNAME+'</span>'
+								 + '<span class="ExhDate">'+item.SCHEDULE+'</span></div>'
 								 + '</a></div>';
 						}
 						else {
 							html += '<div class="ExhList">'
-								 + '<a href="<%=ctxPath%>/exhDetail.at?eno='+item.EXHIBITIONNO+'">'
-								 + '<img src="'+item.MAINPOSTER+'">'
-								 + '<span class="ExhTitle">'+item.EXHIBITIONNAME+'</span>'
-								 + '<span class="ExhDate">'+item.SCHEDULE+'</span>'
+								 + '<a href="<%=ctxPath%>/exhDetail.at?eno='+item.EXHIBITIONNO+'">';
+
+							if(item.MAINPOSTER.substr(0, 4) != 'http'){
+								html += "<img src='<%= ctxPath%>/resources/files/"+item.MAINPOSTER+"'/>";
+							}
+							else {
+								html += "<img src='"+item.MAINPOSTER+"'/>";
+							}	
+										 
+							html += '<div class="spanArea"><span class="ExhTitle">'+item.EXHIBITIONNAME+'</span>'
+								 + '<span class="ExhDate">'+item.SCHEDULE+'</span></div>'
 								 + '</a></div><br/>';
 						}
 						
@@ -631,75 +665,115 @@
 						var year = item.SCHEDULE.substr(0,4);
 						
 						if(year == '2020'){ ttCnt++;
-						
-						//	tthtml += '<button class="accordion" style="padding-top:0px;">'+year+'</button><div class="panel" style="width: 100%;"><div class="ExhList_Area">';
 							
 							if(ttCnt%4 != 0){
-								tthtml += '<a class="exh_one" href="<%=ctxPath%>/exhDetail.at?eno='+item.EXHIBITIONNO+'">'
-									 	+ '<img class="exh_poster" src="'+item.MAINPOSTER+'"/>'
-										+ '<span class="art_mainTitle">'+item.EXHIBITIONNAME+'</span></a>';
+								tthtml += '<a class="exh_one" href="<%=ctxPath%>/exhDetail.at?eno='+item.EXHIBITIONNO+'">';
+									 	
+							 	if(item.MAINPOSTER.substr(0, 4) != 'http'){
+							 		tthtml += "<img class='exh_poster' src='<%= ctxPath%>/resources/files/"+item.MAINPOSTER+"'/>";
+								}
+								else {
+									tthtml += "<img class='exh_poster' src='"+item.MAINPOSTER+"'/>";
+								}	
+									 	
+								tthtml += '<span class="art_mainTitle">'+item.EXHIBITIONNAME+'</span></a>';
 							}
 							else {
-								tthtml += '<a class="exh_one" href="<%=ctxPath%>/exhDetail.at?eno='+item.EXHIBITIONNO+'" style="margin-right: 0;">'
-										+ '<img class="exh_poster" src="'+item.MAINPOSTER+'"/>'
-										+ '<span class="art_mainTitle">'+item.EXHIBITIONNAME+'</span></a><br/>';
+								tthtml += '<a class="exh_one" href="<%=ctxPath%>/exhDetail.at?eno='+item.EXHIBITIONNO+'" style="margin-right: 0;">';
+
+							 	if(item.MAINPOSTER.substr(0, 4) != 'http'){
+							 		tthtml += "<img class='exh_poster' src='<%= ctxPath%>/resources/files/"+item.MAINPOSTER+"'/>";
+								}
+								else {
+									tthtml += "<img class='exh_poster' src='"+item.MAINPOSTER+"'/>";
+								}
+								
+								tthtml += '<span class="art_mainTitle">'+item.EXHIBITIONNAME+'</span></a><br/>';
 							}
-							
-						//	tthtml += '</div></div>';
-							
+						
 						}
 						else if(year == '2019'){ ntCnt++;
-
-						//	nthtml += '<button class="accordion">'+year+'</button><div class="panel" style="width: 100%;"><div class="ExhList_Area">';
-							
+	
 							if(ntCnt%4 != 0){
-								nthtml += '<a class="exh_one" href="<%=ctxPath%>/exhDetail.at?eno='+item.EXHIBITIONNO+'">'
-									 	+ '<img class="exh_poster" src="'+item.MAINPOSTER+'"/>'
-									 	+ '<span class="art_mainTitle">'+item.EXHIBITIONNAME+'</span></a>';
+								nthtml += '<a class="exh_one" href="<%=ctxPath%>/exhDetail.at?eno='+item.EXHIBITIONNO+'">';
+							 	
+							 	if(item.MAINPOSTER.substr(0, 4) != 'http'){
+							 		nthtml += "<img class='exh_poster' src='<%= ctxPath%>/resources/files/"+item.MAINPOSTER+"'/>";
+								}
+								else {
+									nthtml += "<img class='exh_poster' src='"+item.MAINPOSTER+"'/>";
+								}	
+									 	
+							 	nthtml += '<span class="art_mainTitle">'+item.EXHIBITIONNAME+'</span></a>';
 							}
 							else {
-								nthtml += '<a class="exh_one" href="<%=ctxPath%>/exhDetail.at?eno='+item.EXHIBITIONNO+'" style="margin-right: 0;">'
-								 		+ '<img class="exh_poster" src="'+item.MAINPOSTER+'"/>'
-								 		+ '<span class="art_mainTitle">'+item.EXHIBITIONNAME+'</span></a><br/>';
+								nthtml += '<a class="exh_one" href="<%=ctxPath%>/exhDetail.at?eno='+item.EXHIBITIONNO+'" style="margin-right: 0;">';
+
+							 	if(item.MAINPOSTER.substr(0, 4) != 'http'){
+							 		nthtml += "<img class='exh_poster' src='<%= ctxPath%>/resources/files/"+item.MAINPOSTER+"'/>";
+								}
+								else {
+									nthtml += "<img class='exh_poster' src='"+item.MAINPOSTER+"'/>";
+								}
+								
+							 	nthtml += '<span class="art_mainTitle">'+item.EXHIBITIONNAME+'</span></a><br/>';
 							}
-							
-						//	nthtml += '</div></div>';
-							
+						
 						}
 						else if(year == '2018'){ etCnt++;
-							
-						//	ethtml += '<button class="accordion">'+year+'</button><div class="panel" style="width: 100%;"><div class="ExhList_Area">';
 						
 							if(etCnt%4 != 0){
-								ethtml += '<a class="exh_one" href="<%=ctxPath%>/exhDetail.at?eno='+item.EXHIBITIONNO+'">'
-									 	+ '<img class="exh_poster" src="'+item.MAINPOSTER+'"/>'
-									 	+ '<span class="art_mainTitle">'+item.EXHIBITIONNAME+'</span></a>';
+								ethtml += '<a class="exh_one" href="<%=ctxPath%>/exhDetail.at?eno='+item.EXHIBITIONNO+'">';
+							 	
+							 	if(item.MAINPOSTER.substr(0, 4) != 'http'){
+							 		ethtml += "<img class='exh_poster' src='<%= ctxPath%>/resources/files/"+item.MAINPOSTER+"'/>";
+								}
+								else {
+									ethtml += "<img class='exh_poster' src='"+item.MAINPOSTER+"'/>";
+								}	
+									 	
+							 	ethtml += '<span class="art_mainTitle">'+item.EXHIBITIONNAME+'</span></a>';
 							}
 							else {
-								ethtml += '<a class="exh_one" href="<%=ctxPath%>/exhDetail.at?eno='+item.EXHIBITIONNO+'" style="margin-right: 0;">'
-							 		    + '<img class="exh_poster" src="'+item.MAINPOSTER+'"/>'
-							 		    + '<span class="art_mainTitle">'+item.EXHIBITIONNAME+'</span></a><br/>';
+								ethtml += '<a class="exh_one" href="<%=ctxPath%>/exhDetail.at?eno='+item.EXHIBITIONNO+'" style="margin-right: 0;">';
+
+							 	if(item.MAINPOSTER.substr(0, 4) != 'http'){
+							 		ethtml += "<img class='exh_poster' src='<%= ctxPath%>/resources/files/"+item.MAINPOSTER+"'/>";
+								}
+								else {
+									ethtml += "<img class='exh_poster' src='"+item.MAINPOSTER+"'/>";
+								}
+								
+							 	ethtml += '<span class="art_mainTitle">'+item.EXHIBITIONNAME+'</span></a><br/>';
 							}
-							
-						//	ethtml += '</div></div>';
 							
 						}
 						else if(year == '2017'){ stCnt++;
-							
-						//	sthtml += '<button class="accordion">'+year+'</button><div class="panel" style="width: 100%;"><div class="ExhList_Area">';
 						
 							if(stCnt%4 != 0){
-								sthtml += '<a class="exh_one" href="<%=ctxPath%>/exhDetail.at?eno='+item.EXHIBITIONNO+'">'
-									 	+ '<img class="exh_poster" src="'+item.MAINPOSTER+'"/>'
-									 	+ '<span class="art_mainTitle">'+item.EXHIBITIONNAME+'</span></a>';
+								sthtml += '<a class="exh_one" href="<%=ctxPath%>/exhDetail.at?eno='+item.EXHIBITIONNO+'">';
+							 	
+							 	if(item.MAINPOSTER.substr(0, 4) != 'http'){
+							 		sthtml += "<img class='exh_poster' src='<%= ctxPath%>/resources/files/"+item.MAINPOSTER+"'/>";
+								}
+								else {
+									sthtml += "<img class='exh_poster' src='"+item.MAINPOSTER+"'/>";
+								}	
+									 	
+							 	sthtml += '<span class="art_mainTitle">'+item.EXHIBITIONNAME+'</span></a>';
 							}
 							else {
-								sthtml += '<a class="exh_one" href="<%=ctxPath%>/exhDetail.at?eno='+item.EXHIBITIONNO+'" style="margin-right: 0;">'
-										+ '<img class="exh_poster" src="'+item.MAINPOSTER+'"/>'
-								 		+ '<span class="art_mainTitle">'+item.EXHIBITIONNAME+'</span></a><br/>';
+								sthtml += '<a class="exh_one" href="<%=ctxPath%>/exhDetail.at?eno='+item.EXHIBITIONNO+'" style="margin-right: 0;">';
+
+							 	if(item.MAINPOSTER.substr(0, 4) != 'http'){
+							 		sthtml += "<img class='exh_poster' src='<%= ctxPath%>/resources/files/"+item.MAINPOSTER+"'/>";
+								}
+								else {
+									sthtml += "<img class='exh_poster' src='"+item.MAINPOSTER+"'/>";
+								}
+								
+							 	sthtml += '<span class="art_mainTitle">'+item.EXHIBITIONNAME+'</span></a><br/>';
 							}
-							
-						//	sthtml += '</div></div>';
 							
 						} // end of 2020 ~ 2017 if else -------------
 						
@@ -739,8 +813,7 @@
 		<div class="info_top">
 			<span class="info_title">${galDetailMap.GALLERYNAME} | ${galDetailMap.LOCATION}</span>
 			<div class="specialArea">
-				<c:if test="${galDetailMap.STATUS == 1}"><span class="exhStatus">전시중</span></c:if>
-				<c:if test="${galDetailMap.STATUS == 0}"><span class="exhStatus">전시완료</span></c:if>
+				<span class="exhStatus"></span>
 				<a href="javascript:void(0)" onclick="galLike('${galDetailMap.GALLERYNO}')" class="A_select" data-toggle="tooltip" title="갤러리 관심 지정 !" data-placement="right"  style="margin-right: 10px;"></a>
 			</div>
 			<table class="info_aboutGal">
@@ -799,7 +872,7 @@
 		</div>
 		<div class="comExh">
 			<span class="spanTitle">예정중 전시회</span>
-			<div class="intro_content comExh">
+			<div class="intro_content">
 			</div>
 		</div>
 	</div>

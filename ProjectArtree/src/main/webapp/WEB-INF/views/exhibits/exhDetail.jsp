@@ -730,7 +730,7 @@
 	////////////////////////// 전시회 좋아요 지정 및 해제 ////////////////////////
 	function exhLike(eno, gno, tag, gen){
 		
-		if(${sessionScope.loginuser == null}){
+		if(${sessionScope.loginuser == null}){ 
 			alert("먼저 로그인을 진행해주세요 !");
 			location.href="javascript:layer_open('layer')";
 			return;

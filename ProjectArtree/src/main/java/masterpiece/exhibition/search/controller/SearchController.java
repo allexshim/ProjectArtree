@@ -32,7 +32,7 @@ public class SearchController {
 	// 검색 페이지로 이동하는 url
 	@RequestMapping(value="/search.at")
 	public String goSearchPage(HttpServletRequest request) {
-		
+
 		return "search/search.tiles";
 	} // end of reviewList --------------------------------------------
 	
@@ -292,6 +292,8 @@ public class SearchController {
 		// 통계를 내기 위해 총 회원수를 구해서 request영역에 저장한다.
 		int totalcnt = service.getMemberCnt();
 		request.setAttribute("totalcnt", totalcnt);
+
+		// System.out.println("controller"+totalcnt);
 		
 		return "admin/statistics/byTags.tiles";
 	}
@@ -301,19 +303,26 @@ public class SearchController {
 	@RequestMapping(value="/getChartDataByTags.at", produces="text/plain;charset=UTF-8")
 	public String getChartDataByTags(HttpServletRequest request) {
 		
+		//HttpSession session = request.getSession();
+		
 		// 각각 tag이름, tag의 빈도수를 저장하는 HashMap
 		List<HashMap<String,String>> TagList = service.getChartDataByTags();
 		// tag, CNT
 		
+		//int totalTagCnt = 0;
 		JSONArray jsarr = new JSONArray();
 		for(HashMap<String,String> map : TagList) {
 			JSONObject jsobj = new JSONObject();
 			jsobj.put("tag", map.get("tag"));
 			jsobj.put("cnt", map.get("CNT"));
 			jsarr.put(jsobj);
-			/*System.out.println("tag"+map.get("tag"));
-			System.out.println("cnt"+map.get("CNT"));*/
+			
+			//totalTagCnt += Integer.parseInt(map.get("CNT"));
+			
 		}
+		/*System.out.println("tagArr[i].tag : "+totalTagCnt*1.0);
+		session.setAttribute("tagArr[i].tag", totalTagCnt*1.0);*/
+		
 		return jsarr.toString();
 	} // end of getChartDataByTags ----------------------------------------
 	
@@ -333,8 +342,9 @@ public class SearchController {
 			jsobj.put("agecnt", map.get("agecnt"));
 			jsobj.put("tag", map.get("tag"));
 			jsarr.put(jsobj);
-			/*System.out.println("agegroup"+map.get("agegroup"));
-			System.out.println("agecnt"+map.get("agecnt"));*/
+			
+			//System.out.println("agegroup"+map.get("agegroup"));
+			//System.out.println("agecnt"+map.get("agecnt"));
 		}
 		return jsarr.toString();
 	} // end of getAgeDataByTags ----------------------------------------

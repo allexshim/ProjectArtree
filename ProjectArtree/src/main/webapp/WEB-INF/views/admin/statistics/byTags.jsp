@@ -92,33 +92,48 @@
 		width : 10%;
 		text-align: center;
 	}
-	
-	div#contentContainer table thead td:nth-child(4), div#contentContainer table tbody td:nth-child(4) {
-		width : 10%;
-		text-align: center;
-	}
 
 	div#contentContainer table tbody td:nth-child(2) {
 		cursor : pointer;
 	}
 
 	div#contentContainer table thead td {
+		font-size : 15pt;
+		font-weight : bold;
 		padding-top : 10px;
 		padding-bottom : 10px; 
 	}
-	
+
+	div#contentContainer table tbody td {
+		font-size : 14pt;
+		line-height: 200%;
+	}
+
 	/* == 통계 영역 == */
 	#statistics-area {
-		height: 80vh;
+		height: 67vh;
+		/* width : 100%; */
 		/* border: 2px solid red; */
 		/* vertical-align: middle; */
 		/* padding-top : 20px; */
 	}
 	
 	#table-area {
-		border: 2px solid navy;
-		height: 50vh;
+		/* border: 2px solid navy; */
+		height: 100%;
+		width: 70%;
+		padding-left : 180px;
+		padding-top : 30px;
 	}
+	
+	#statistics-area:after {
+		content: "";
+	  	display: block;
+		width : 95%;		
+		padding-top : 30px;
+		border-bottom : solid 2px lightgray;
+	}
+
 	
 /* 차트 관련  ------------------------------------------------------ */
 	#chartdiv {
@@ -137,67 +152,66 @@
 
 <script src="<%= ctxPath%>/resources/js/jquery-3.3.1.min.js"></script>
 <script type="text/javascript">
+	
 	let tagArr = [];
+
+	/////// 데이터 테이블 만들기 //////////////////////////////////////////////////////////////////////////
+	let html = "<table><thead>"+
+   			  "<tr><td>태그</td><td>선호하는 회원 수</td><td>전체 회원 대비 비율</td>"+
+   			  "</tr></thead>"+
+   			  "<tbody>";
+   			  
 	$(document).ready(function(){ 
 		
 		$.ajax({ // 아래 url은 임시로 service controller에 저장합니다.
 			url:"<%=request.getContextPath()%>/getChartDataByTags.at",
 	          type:"GET",
 	          dataType:"JSON",
-	          success: function(json) { 
-	        	  $.each(json, function(index2, item2){
-		        		$.ajax({ // 각 태그를 선택한 연령대를 가져오는 ajax
-		        			url : "<%=request.getContextPath()%>/getAgeDataByTags.at",
-		        			type : "GET",
-		    	        	data : {'tag' : item2.tag},
-		        			// 각각 태그마다 ajax를 실행
-		        			dataType:"JSON",
-		    	        	success:function(json2) {
-		    	        		let subArr = []; // data : [{}, {}, {}]... 부분에 해당하는 배열
-		    	        		
-		    	        		$.each(json2, function(index3, item3){
-		    	        			// agegroup, agecnt, tag
-		    	        			subArr.push({
-		    	        				"agegroup":item3.agegroup+"대",
-		    	        				"agecnt":Number(item3.agecnt),
-		    	        			}); 
+	          success: function(json) {
 
-		    	        		}); // end of $.each(json2, function(index3, item3) --------------------------
-		    	        		
-		    	        		// 이중 객체 배열 사용 -- [{id:tag, value : agecnt}]
-		    	        		 tagArr.push( { // 객체 배열에 직접 push한다.
-		    	        			  "tag": item2.tag,
-		    	        			  "cnt":  Math.round((Number(item2.cnt)/${totalcnt} )*100),
-		    	        			  "subData": subArr    
-					             });
+	        	  $.each(json, function(index2, item2){
+	        		$.ajax({ // 각 태그를 선택한 연령대를 가져오는 ajax
+	        			url : "<%=request.getContextPath()%>/getAgeDataByTags.at",
+	        			type : "GET",
+	    	        	data : {'tag' : item2.tag},
+	        			// 각각 태그마다 ajax를 실행
+	        			dataType:"JSON",
+	    	        	success:function(json2) {
+	    	        		
+	    	        		let subArr = []; // data : [{}, {}, {}]... 부분에 해당하는 배열
+	    	        		$.each(json2, function(index3, item3){
+	    	        			
+	    	        			// agegroup, agecnt, tag
+	    	        			subArr.push({
+	    	        				"agegroup":item3.agegroup+"대",
+	    	        				"agecnt":Number(item3.agecnt),
+	    	        			});
+	    	        		}); // end of $.each(json2, function(index3, item3) --------------------------
+
+    	        			// 이중 객체 배열 사용 -- [{id:tag, value : agecnt}]
+	    	        		 tagArr.push( { // 객체 배열에 직접 push한다.
+	    	        			  "tag": item2.tag,
+	    	        			  "cnt":  item2.cnt,
+	    	        			  "subData": subArr   
+				             });
+
 		    	        	/////////////////////////////////////////////////////////////////////////////////////////////////	
 		    	        	},error: function(request, status, error){
 		    		               alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
 		    		        }
 		        		});
+
 	        		}); // end of $.each(json, function(index2, item2)--------------------------------------------
 					///////////////////////////// 데이터 가져오기 끝 /////////////////////////////////////////////////////////////
 					 window.setTimeout(function(){
 						getChartByChart(tagArr);
-
-		        		/////// 데이터 테이블 만들기 //////////////////////////////////////////////////////////////////////////
-		        		let html = "<table><thead>"+
-					   			  "<tr><td>태그</td><td>선호하는 회원 수</td>"+
-					   			  "<td>20대</td><td>30대</td><td>40대</td>"+
-					   			  "<td>50대</td><td>60대 이상</td></tr></thead>"
-					   			  "<tbody>";
-					   			  //console.log(tagArr.length);
-			   			for(let i=0; i<tagArr.length; i++) {	
-			   				  let totalRatio = Math.round((tagArr[i].cnt/${totalcnt} )*100);
-			   				
-							  html += "<tr><td>"+tagArr[i].tag+"</td>";
-							  html += "<td>"+totalRatio+"%</td></tr>";
-							/*   html += "<td>"+tagArr[i].subData[0].agecnt+"</td>";
-							  html += "<td>"+tagArr[i].subData[1].agecnt+"</td>";
-							  html += "<td>"+tagArr[i].subData[2].agecnt+"</td>";
-							  html += "<td>"+tagArr[i].subData[3].agecnt+"</td>"; */
-							 // html += "<td>"+tagArr[i].subData[4].agecnt+"</td></tr>";
-						}		  
+						
+						for(var i=0; i<tagArr.length; i++){
+							 html += "<tr><td>"+tagArr[i].tag+"</td>";
+							 html += "<td>"+tagArr[i].cnt+"명</td>";
+							html += "<td>"+((tagArr[i].cnt/${totalcnt})*100).toFixed(2)+"%</td></tr>";	
+						}
+						
 						html += "</tbody></table>";
 						$("#table-area").html(html);	
 		        		//////////////////////////////////////////////////////////////////////////////////////////
@@ -226,7 +240,12 @@
 			var chart = container.createChild(am4charts.PieChart);
 			
 			var label = chart.createChild(am4core.Label);
-
+			label.text = "태그 별 선호도 (%)";
+			label.fontSize = 25;
+			label.isMeasured = false;
+			label.x = am4core.percent(40);
+			label.horizontalCenter = "top";
+			
 			// Add data
 			chart.data = tagArr;
 			
@@ -249,6 +268,13 @@
 			chart2.width = am4core.percent(30);
 			chart2.radius = am4core.percent(80);
 		
+			var label = chart2.createChild(am4core.Label);
+			label.text = "연령대별 선호도(%)";
+			label.fontSize = 20;
+			label.isMeasured = false;
+			label.x = am4core.percent(20);
+			label.y = 150; 
+
 			// Add and configure Series
 			var pieSeries2 = chart2.series.push(new am4charts.PieSeries());
 			pieSeries2.dataFields.value = "agecnt";

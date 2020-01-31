@@ -214,17 +214,17 @@
 		select idx, email, name, status from member order by idx
 	</select>
 	
-	<!-- 검색조건이 없을 경우의 총 게시물 건수(totalCount) -->
+	<!-- 모든 회원 목록 - 검색조건이 없을 경우의 총 게시물 건수(totalCount) -->
 	<select id="getTotalCountWithoutSearch" resultType="int">
 		select count(*) from member
 	</select>
 	
-	<!-- 검색조건이 있을 경우의 총 게시물 건수(totalCount) -->
-	<select id="getTotalCountWithSearch" resultType="int">
+	<!-- 모든 회원 목록 - 검색조건이 있을 경우의 총 게시물 건수(totalCount) -->
+	<select id="getTotalCountWithSearch" parameterType="HashMap" resultType="int">
 		select count(*) from member where ${ searchCondition } like '%'|| #{ searchWord } ||'%'
 	</select>
 	
-	<!-- 페이징바 있는 회원목록 -->
+	<!-- 모든 회원목록 -->
 	<select id="memberListWithPaging" parameterType="HashMap" resultType="masterpiece.exhibition.member.model.MemberVO">
 		select idx, email, name, status
 		from 
@@ -235,14 +235,23 @@
 			(  
 				select idx, email, name, status
 				from member
-				where status = 1
 				<if test='searchWord != ""'>
-					and ${ searchCondition } like '%'|| #{ searchWord } ||'%'
+					where ${ searchCondition } like '%'|| #{ searchWord } ||'%'
 				</if>
 				order by idx desc
 			) V  
 		) T 	   
 		where rno between #{ startRno } and #{ endRno }
+	</select>
+
+	<!-- 탈퇴한 회원 목록 - 검색조건이 없을 경우의 총 게시물 건수(totalCount) -->
+	<select id="getTotalCountWithoutSearchDeactivated" resultType="int">
+		select count(*) from member where status = 0
+	</select>
+	
+	<!-- 탈퇴한 회원 목록 - 검색조건이 있을 경우의 총 게시물 건수(totalCount) -->
+	<select id="getTotalCountWithSearchDeactivated" parameterType="HashMap" resultType="int">
+		select count(*) from member where ${ searchCondition } like '%'|| #{ searchWord } ||'%' where status = 0
 	</select>
 
 	<!-- 탈퇴한 회원목록 -->
@@ -265,4 +274,88 @@
 		) T 	   
 		where rno between #{ startRno } and #{ endRno }
 	</select>
+	
+	<!-- 가입회원 목록 - 검색조건이 없을 경우의 총 게시물 건수(totalCount) -->
+	<select id="getTotalCountWithoutSearchActivated" resultType="int">
+		select count(*) from member where status = 1
+	</select>
+	
+	<!-- 가입회원 목록 - 검색조건이 있을 경우의 총 게시물 건수(totalCount) -->
+	<select id="getTotalCountWithSearchActivated" parameterType="HashMap" resultType="int">
+		select count(*) from member where ${ searchCondition } like '%'|| #{ searchWord } ||'%' where status = 1
+	</select>
+	
+	<!-- 가입회원목록 -->
+	<select id="activatedMemberList" parameterType="HashMap" resultType="masterpiece.exhibition.member.model.MemberVO">
+		select idx, email, name, status
+		from 
+		(
+			select rownum AS rno
+				, idx, email, name, status
+			from   
+			(  
+				select idx, email, name, status
+				from member
+				where status = 1
+				<if test='searchWord != ""'>
+					and ${ searchCondition } like '%'|| #{ searchWord } ||'%'
+				</if>
+				order by idx desc
+			) V  
+		) T 	   
+		where rno between #{ startRno } and #{ endRno }
+	</select>
+	
+	<!-- 관리자목록 - 검색조건이 없을 경우의 총 게시물 건수(totalCount) -->
+	<select id="getTotalCountWithoutSearchAdmin" resultType="int">
+		select count(*) from member where status = 2
+	</select>
+	
+	<!-- 관리자목록 - 검색조건이 있을 경우의 총 게시물 건수(totalCount) -->
+	<select id="getTotalCountWithSearchAdmin" parameterType="HashMap" resultType="int">
+		select count(*) from member where ${ searchCondition } like '%'|| #{ searchWord } ||'%' where status = 2
+	</select>
+	
+	<!-- 관리자목록 -->
+	<select id="adminList" parameterType="HashMap" resultType="masterpiece.exhibition.member.model.MemberVO">
+		select idx, email, name, status
+		from 
+		(
+			select rownum AS rno
+				, idx, email, name, status
+			from   
+			(  
+				select idx, email, name, status
+				from member
+				where status = 2
+				<if test='searchWord != ""'>
+					and ${ searchCondition } like '%'|| #{ searchWord } ||'%'
+				</if>
+				order by idx desc
+			) V  
+		) T 	   
+		where rno between #{ startRno } and #{ endRno }
+	</select>
+	
+	<!-- 회원상세정보출력 -->
+	<select id="getMemberInfo" parameterType="String" resultType="masterpiece.exhibition.member.model.MemberVO">
+		select idx, email, name, agegroup, gender, area, hp, status, registerday, lastlogindate from member where idx = #{ no }
+	</select>
+	
+	<!-- 주문목록출력 -->
+	<resultMap type="HashMap" id="orderListMap">
+		<result property="reserno" 		column="reserno" 	javaType="String" />
+		<result property="reserdate" 	column="reserdate" 	javaType="String" />
+		<result property="resertotal" 	column="resertotal" javaType="String" />
+		<result property="name" 		column="name" 		javaType="String" />
+		<result property="hp" 			column="hp" 		javaType="String" />
+		<result property="fk_idx" 		column="fk_idx" 	javaType="String" />
+	</resultMap>
+	<select id="getOrderList" parameterType="String" resultMap="orderListMap">
+		select R.reserno, R.fk_idx, R.reserdate, R.resertotal, M.name, M.hp
+		from reser R JOIN member M
+		on R.fk_idx = M.idx
+		where R.fk_idx = #{ no }
+	</select>
+	
 </mapper>

@@ -8,13 +8,54 @@
 	<resultMap type="HashMap" id="modalListMap">
 		<result property="EXHIBITIONNAME" column="exhibitionname" javaType="String"/>
 		<result property="MAINPOSTER" column="mainposter" javaType="String"/>
+		<result property="EXHIBITIONNO" column="exhibitionno" javaType="int"/>
 	</resultMap>
 	
 	<select id="getModalExhList" parameterType="String" resultMap="modalListMap">
-		select exhibitionname, B.mainposter
+		select exhibitionname, B.mainposter, exhibitionno
 		from exhibition A left join exhibitiondetail B
 		on A.exhibitionno = B.fk_exhibitionno
 		where exhibitionname like '%'|| #{key} ||'%' 
+	</select>
+ 
+	<!-- ////////////////////////// 기대평 글쓰기 /////////////////////////// -->
+	<insert id="addEnd" parameterType="HashMap">
+		insert into preview (boardno, seq, fk_idx, fk_exhibitionno, name, title, content, readcount, regdate, commentcnt)
+		values(3, seq_precomment.nextval, #{fk_idx}, #{eno}, #{name}, #{title}, #{contents}, default, default, default)
+	</insert>
+	
+	<!-- //////////////////////////// 기대평 글 목록 가져오기 //////////////////////////// -->
+ 	<resultMap type="HashMap" id="previewMap">
+ 		<result property="FK_IDX" column="fk_idx" javaType="int"/>
+ 		<result property="FK_EXHIBITIONNO" column="fk_exhibitionno" javaType="int"/>
+ 		<result property="NAME" column="name" javaType="String"/>
+ 		<result property="TITLE" column="title" javaType="String"/>
+ 		<result property="READCOUNT" column="readcount" javaType="int"/>
+ 		<result property="REGDATE" column="regdate" javaType="String"/>
+ 		<result property="COMMENTCNT" column="commentcnt" javaType="int"/>
+	</resultMap>
+	
+	<select id="getPreviewList" resultMap="previewMap" parameterType="HashMap">
+		select *
+		from
+		(
+		select row_number() over(order by seq desc) AS RNO, fk_idx, fk_exhibitionno
+             , name, title, readcount, to_char(regdate, 'yyyy-mm-dd hh24:mi') AS regdate, commentcnt
+		from preview
+		<if test="searchType != ''">
+        	where ${searchType} like '%'|| #{searchWord} ||'%'
+        </if>
+        )
+        where RNO between #{startRno} and #{endRno}
+	</select>
+	
+	<!-- ///////////////////////////// 기대평 게시물 총 갯수 ///////////////////////////// -->
+	<select id="getTotalCount" parameterType="HashMap" resultType="int">
+		select count(*)
+		from preview
+		<if test="searchType != ''">
+			where ${searchType} like '%'|| #{searchWord} ||'%'
+		</if>
 	</select>
 
 </mapper>

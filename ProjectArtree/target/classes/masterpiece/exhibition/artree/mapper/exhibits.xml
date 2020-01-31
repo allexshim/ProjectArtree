@@ -204,7 +204,7 @@
 		     , galleryno, galleryname, mainpicture, location, openinghour, holiday
 		from gallery A left join exhibition B
 		on A.galleryno = B.fk_galleryno
-		where A.status = 1 and exhibitionname is not null
+		where A.status = 1 and exhibitionname is not null and B.status = '전시중'
 		order by RNO, galleryno asc
 		)
 		where RNO between 1 and 3
@@ -228,7 +228,7 @@
 		select exhibitionno, mainposter
         from exhibition A left join exhibitiondetail B
         on A.exhibitionno = B.fk_exhibitionno
-        where fk_galleryno = #{gno}
+        where fk_galleryno = #{gno} and status = '전시중'
 	</select>
 	          
 	<!-- ////////////////////// 갤러리 상세 페이지 /////////////////////// -->
@@ -243,7 +243,6 @@
 		<result property="OPENINGHOUR" column="openinghour" javaType="String"/>
 		<result property="HOLIDAY" column="holiday" javaType="String"/>
 		<result property="TEL" column="tel" javaType="String"/>
-		<result property="STATUS" column="status" javaType="int"/>
 	</resultMap>
 	
 	<select id="getGalDetail" parameterType="String" resultMap="oneGalMap">
