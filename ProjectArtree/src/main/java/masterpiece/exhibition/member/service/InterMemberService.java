@@ -50,6 +50,8 @@ public interface InterMemberService {
 
 	List<HashMap<String, String>> getGenreCnt(String genre); // 선호 장르 가져가서 카운트
 
+	int getTotalCnt(String genre); // 지역별 선호장르 카운트 총 합
+
 
 
 
