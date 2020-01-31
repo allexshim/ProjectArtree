@@ -15,7 +15,33 @@
 	
 	<insert id="addNotice" parameterType="HashMap">
 		insert into notice(notNo, notTitle, notContent, notWriteday, notReadcount)
-		values(seq_notice_notNo.nextval, #{notTitle}, #{notContent}, sysdate, 0)
+		values(seq_notice_notNo.nextval, #{notTitle}, #{notContent}, default, 0)
 	</insert>
+	
+	<select id="getNotice" parameterType="HashMap" resultMap="noticeMap">
+	   select notNo ,notTitle, notContent,  notWriteday, notReadcount
+       from 
+       (
+	       select rownum AS rno
+	            , notNo ,notTitle, notContent,  notWriteday, notReadcount
+	       from   
+	       (  
+	         select notNo ,notTitle, notContent,  notWriteday, notReadcount
+			 from notice
+			 order by notNo desc
+		   ) V  
+	   ) T  	   
+	   where rno between #{startRno} and #{endRno} 
+	</select>
+	
+	<delete id="delNotice" parameterType="String" >
+		delete from notice
+		where notNo = #{notNo}
+	</delete>
+	
+	<select id="getCount" resultType="int">
+		select count(*)
+ 		from notice
+	</select>
 	
 </mapper>

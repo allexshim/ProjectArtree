@@ -49,6 +49,11 @@ public interface InterMemberDAO {
 	int updateWithdrawal(HashMap<String, String> paraMap); // 탈퇴 사유 입력
 	int updateStatus(String idx); // status 0 으로 변경
 
+	// 관리자 페이지
+	List<String> getAreaFavorGenre(String area); // 지역마다 선호한 장르 다 가져온다.
+
+	List<HashMap<String, String>> getGenreCnt(String genre); // 선호 장르 가져가서 카운트
+
 	
 
 	

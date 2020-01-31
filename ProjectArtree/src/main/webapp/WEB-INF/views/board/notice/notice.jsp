@@ -22,13 +22,12 @@
 		-webkit-transform:translate(-10px,0);
 	}
 	
-	.noticeContainer {
-		width: 80%;
+	#noticeContainer {
+		
+		padding-bottom: 300px;
 	}
 	
-	#reviewContainer {
-		padding-bottom : 100px;
-	}
+	
 	
 	img#boardtop {
 		/* position : absolute; */
@@ -37,10 +36,11 @@
 	}
 	
 	div#topText {
+		margin-bottom: 100px;
 		padding-top : 50px;
 		width : 500px;
 		text-align: left;
-		padding-left : 100px;
+		padding-left : 200px;
 	}
 	
 	div#topText span {
@@ -66,7 +66,8 @@
 	
 	/* 공지 추가, 삭제 버튼 */	
 	div#btns {
-		padding-right : 30px;
+		padding-right : 200px;
+		margin-bottom: 40px;
 	}
 	
 	div#btns img {
@@ -75,7 +76,8 @@
 	
 	/* 공지 추가, 삭제하기 */
 	#addNoticeContainer {
-		padding-left : 100px;
+		
+		padding-left : 200px;
 		padding-top : 20px;
 	}
 	
@@ -103,12 +105,16 @@
 	#addBtn {
 		cursor : pointer;
 	}
+	
+	#backBtn {
+		cursor: pointer;
+	}
 
 	/* 공지 내용 */
 	div#noticeList {
-		padding-top : 40px;
-		padding-left : 100px;
-		padding-bottom : 100px;
+		padding-top : 10px;
+		padding-left : 200px;
+		padding-bottom : 0;
 	}
 	
 	.noticeTitle {
@@ -124,6 +130,52 @@
 	
 	.showContent {
 		display : show;
+	}
+	
+	#addNotice {
+		cursor: pointer;
+	}
+	
+	#removeNotice {
+		cursor: pointer;
+	}
+	
+	#backNotice {
+		cursor: pointer;
+	}
+	
+	/* == 페이징 바 == */
+	.pageNumber {
+		font-size:16px; 
+		font-weight:bold;
+	}
+	
+	.pagination {
+	  margin-top: 100px;
+	  display: block;
+	}
+	
+	.pagination a {
+	  color: black;
+	  padding: 3px 10px;
+	  text-decoration: none;
+	  cursor : pointer;
+	  margin : 0 10px;
+	}
+		
+	.pagination span.active {
+	 	border : solid 2px black;
+	 	color: black;
+		padding: 3px 10px;
+		text-decoration: none;
+		cursor : pointer;
+		margin : 0 10px;
+		font-size: 16px; 
+		font-weight: bold;  
+	}
+		
+	.pagination a:hover, .pagination span:hover {
+	   text-decoration: underline;
 	}
 	
 </style>
@@ -168,29 +220,48 @@
 			$(this).css('opacity','1.0');
 		});
 		
+		$("#backBtn").hover(function(){
+			$(this).css('opacity','0.8');
+		}, function(){
+			$(this).css('opacity','1.0');
+		});
+		
+		
 		// 새 공지를 작성 후 add를 클릭하면 유효성 검사 후 submit
 		$("#addBtn").click(function(){
 			
-			if($("#notTitle").val().trim() == ""){
-				alert("제목을 입력하세요!");
-				$("#notTitle").focus();
-			}
-			else if($("#notContent").val().trim() == ""){
-				alert("내용을 입력하세요!");
-				$("#notContent").focus();			
+			if(confirm("공지를 등록 하시겠습니까?") == true){
+				
+				if($("#notTitle").val().trim() == ""){
+					alert("제목을 입력하세요!");
+					$("#notTitle").focus();
+				}
+				else if($("#notContent").val().trim() == ""){
+					alert("내용을 입력하세요!");
+					$("#notContent").focus();			
+				}
+				else {
+					
+					var frm = document.newNotice;
+					frm.method = "POST";
+					frm.action = "<%=ctxPath%>/addNotice.at";
+					frm.submit();
+					
+				}
 			}
 			else {
-				alert($("#notTitle").val());
-				alert($("#notContent").val());
-				alert($("#notTitle").attr("name").value);
-				alert($("#notContent").attr("name").value);
-				var frm = document.newNotice;
-				frm.method = "POST";
-				frm.action = "<%=ctxPath%>/addNotice.at";
-				frm.submit();
-				
+				return;
 			}
 		}); // 공지 추가 하기 끝 --------------------------------
+		
+		$("#backBtn").click(function(){
+			if(confirm("취소 하시겠습니까?") == true){
+				$("#addNoticeContainer").hide();
+			}
+			else {
+				return;
+			}
+		});
 		
 		// 공지 삭제하기 --------------------------------------
 		$("#removeNotice").click(function(){
@@ -210,11 +281,16 @@
 		});
 		
 		$(".arrow").click(function(){
-			// delete 모드일때만 삭제 가능하다.
-			if($(this).hasClass("fa-times")){
-				var noticeno = $(this).next().text();
-				window.location.href = "*.at?noticeno="+encodeURI(noticeno);
-				// 해당 url로 이동해서 글 삭제, 이후 다시 notice.at으로 보내주면 새로고침 되게 하면 됩니다.
+			if(confirm("공지를 삭제하시겠습니까?") == true){
+				// delete 모드일때만 삭제 가능하다.
+				if($(this).hasClass("fa-times")){
+					var notNo = $(this).next().text();
+					window.location.href = "<%=ctxPath%>/delNotice.at?notNo="+encodeURI(notNo);
+					// 해당 url로 이동해서 글 삭제, 이후 다시 notice.at으로 보내주면 새로고침 되게 하면 됩니다.
+				}
+			}
+			else{
+				return;
 			}
 		});
 		
@@ -270,28 +346,33 @@
 				</span>
 				<div align="center">
 					<img onclick="" id="addBtn" src="<%= ctxPath %>/resources/images/board/addBtn.JPG" />
+					<img onclick="" id="backBtn" src="<%= ctxPath %>/resources/images/board/backNoticeBtn.JPG" />
 				</div>
 				
 			</form>
 		</div>
-		
-		<div id="noticeList">
-			<div class="singleNotice">
-				<span class="noticeTitle"> ${notTitle}
-				 <i class="arrow fas fa-chevron-down"></i>
-				 <span class="noticeNo" style="display:none;">${noticeNo}</span>
-				 </span>
-				<div class="noticeContent" style="width:80%;">
-					${notContent}
-					
-					<p>작성일 : ${notWriteday}</p>
-				</div>	
+	
+		<c:forEach var="item" items="${noticeList}">
+			<div id="noticeList">
+				<div class="singleNotice">
+					<span class="noticeTitle"> ${item.notTitle}
+					 <i class="arrow fas fa-chevron-down"></i>
+					 <span class="noticeNo" style="display:none;">${item.notNo}</span>
+					 </span>
+					<div class="noticeContent" style="width:60%;">
+						${item.notContent}
+						
+						<br/><br/><br/><br/><br/>
+						<p>작성일 : ${item.NOTWRITEDAY}</p>
+					</div>	
+				</div>
 			</div>
+		</c:forEach>
 		
-			
-			
+		<!-- 페이징바  -->
+		<div class="pagination" align="center">
+			${pageBar}
 		</div>
-		
 	</div>
 </body>
 </html>

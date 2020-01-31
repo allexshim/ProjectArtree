@@ -424,8 +424,36 @@ desc board_comment;
 select *
 from review;
 
-select *
-from board_comment;
+select commentno, fk_idx, name, comcontent, comwriteday
+		from board_comment B join member M
+		on B.fk_idx = M.idx
+		where fk_no=4 and boardno=1;
 
+select TXT, CNT from
+	    (select TXT, CNT, rownum as RNO
+	    from
+	    (select TXT, CNT
+	    from (select TXT, count(*) as CNT
+	    from ( WITH TT AS
+	        ( SELECT '회화, 미디어, 설치미술, 설치미술, 미디어, 미디어' TXT FROM DUAL )
+	        SELECT TRIM(REGEXP_SUBSTR(TXT, '[^,]+', 1, LEVEL)) AS TXT
+	        FROM TT CONNECT BY INSTR(TXT, ',', 1, LEVEL - 1) > 0
+	    ) V
+	    group by TXT) X
+	    order by CNT desc ) Y
+	    ) Z;
 
+select favorgenre
+from (select idx, area
+      from member) M join wishlist W
+on M.idx = W.fk_idx
+where area = '서울'
 
+select area
+from member
+group by area
+
+select distinct genre
+from exhibition
+
+commit;
