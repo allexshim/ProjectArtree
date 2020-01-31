@@ -113,6 +113,36 @@
 		position: relative;
 	}
 	
+	#container_exhibition .categoryList .on {
+		color: #0d0d0d;
+		font-weight: bold;
+	}
+	
+	#container_exhibition #myBtn {
+	  display: none;
+	  position: fixed;
+	  bottom: 30px;
+	  right: 30px;
+	  z-index: 99; 
+	  width: 80px;
+	  border: none;
+	  outline: none;
+	  color: white;
+	  cursor: pointer;
+	  padding: 10px;
+	  border-radius: 4px;
+	}
+	
+	#container_exhibition .emptyNoti {
+		text-align: center;
+		font-size: 20pt;
+		font-weight: bold;
+		width: 100%;
+	    display: block;
+	    border: 1px solid #e6e6e6;
+	    padding: 100px;
+	}
+	
 </style>
 
 <%-- EXHIBITION LIST SCRIPT START --%>
@@ -124,24 +154,38 @@
 
 	$(document).ready(function(){
 		
-		$("#count").show();
-		$("#tc").show();
+		window.onbeforeunload = function() {
+			sessionStorage.removeItem("type");
+			sessionStorage.removeItem("loca");
+		};
 		
-		var type="";
-		var loca="";
+		$("#count").hide();
+		$("#tc").hide();
 		
 		/////////////// 스크롤 페이징
 		var page = 1;
-		getExhList(page);
+		getExhList(page, sessionStorage.getItem("type"), sessionStorage.getItem("loca"));
 	    ///////////////
 	    
 	    // 스크롤이 최하단 으로 내려가면 리스트를 조회하고 page를 증가시킨다.
-		$(window).scroll(function(){   
+		$(window).scroll(function(){
 		    if($(window).scrollTop() == $(document).height() - $(window).height()){
-		    	 page++; 
-		    	 getExhList(page);
-		    } 
+		    	if( $("#count").text() != $("#tc").text() ){
+			    	 page++; 
+			    	 getExhList(page, sessionStorage.getItem("type"), sessionStorage.getItem("loca"));
+		    	 }
+			}
 		});
+	    
+	    $(".cate_map .exh_cate_option").click(function(event){
+	    	$(".cate_map").find(".on").removeClass("on");
+	    	$(event.target).addClass("on");
+	    });
+	    
+	    $(".cate_exh .exh_cate_option").click(function(event){	
+	    	$(".cate_exh").find(".on").removeClass("on");
+	    	$(event.target).addClass("on");
+	    });
 
 		$(document).on("mouseover", ".exh_one", function(){
 			$(this).find(".forMoving").stop().animate({top:'10px'}, 180);
@@ -151,24 +195,39 @@
 			$(this).find(".forMoving").stop().animate({top:'0px'}, 180);
 		});
 		
+		$("#myBtn").hover(function() {
+			$(this).stop().animate({bottom:'40px'}, 150);
+		}, function() {
+			$(this).stop().animate({bottom:'30px'}, 150);
+		});
+		
+		// When the user scrolls down 20px from the top of the document, show the button
+		window.onscroll = function() { scrollFunction() };
+		
 	}); // end of document ready -------------------------
-
+	
 	var len = 16;
 	
 	////////////////// 전시회 목록 불러오기 /////////////////////
-	function getExhList(page){
-
+	function getExhList(page, type, loca){
+		
+		if(type != null){ sessionStorage.setItem("type", type); }
+		if(loca != null){ sessionStorage.setItem("loca", loca); }
+		
 		$.ajax({
 			url: "<%=ctxPath%>/exhList.at",
-			data: {"page":page, "len":len},
-			dataType: "JSON",
+			data: {"page":page, "len":len, "type":type, "loca":loca},
+			type: "POST",
+			dataType: "JSON",			
 			success:function(json){
+				
+				if( (type != null || loca != null) && page == 1 ){ $(".ExhList_Area").html(""); $("#count").text("0"); }
 				
 				var html = "";
 				
 				if(json.length == 0){
 					
-					html += "<span style='text-align:center;'>준비중입니다 :></span>";
+					html += "<span class='emptyNoti'>전시회가 존재하지 않습니다. :></span>";
 					
 					$(".ExhList_Area").html(html);
 
@@ -176,60 +235,67 @@
 				else {
 
 					$.each(json, function(index, item){
-					
+						
 						if( (index+1)%4 != 0){				
 							
-							html += "<a class='exh_one' onclick='exhDetail("+item.EXHIBITIONNO+")'>"
-								 + "<img class='exh_poster' src='"+item.MAINPOSTER+"'/>"
-								 + "<div class='artInfoArea'>"
+							html += "<a class='exh_one' onclick='exhDetail("+item.EXHIBITIONNO+")'>";
+							
+								if(item.MAINPOSTER.substr(0, 4) != 'http'){
+									html += "<img class='exh_poster' src='<%= ctxPath%>/resources/files/"+item.MAINPOSTER+"'/>";
+								}
+								else {
+									html += "<img class='exh_poster' src='"+item.MAINPOSTER+"'/>";
+								}
+							
+							html += "<div class='artInfoArea'>"
 								 + "<span class='art_info_aboutLoca InfoWhereWhen'>"+item.GALLERYNAME+" | "+item.LOCATION+"</span>"
 								 + "<span class='art_mainTitle'>"+item.EXHIBITIONNAME+"</span>";
-							if(item.PRICE == 0){
-								html += "<span class='forMoving InfoWhereWhen'>"+item.SCHEDULE+" | FREE</span>";
-							}
-							else {
-								html += "<span class='forMoving InfoWhereWhen'>"+item.SCHEDULE+" | BOOK</span>";
-							}
 							
-							html += "</div></a>";
+								if(item.PRICE == 0){
+									html += "<span class='forMoving InfoWhereWhen'>"+item.SCHEDULE+" | FREE</span>";
+								}
+								else {
+									html += "<span class='forMoving InfoWhereWhen'>"+item.SCHEDULE+" | BOOK</span>";
+								}
+							
+							html += "</div></a>";    
 							
 						}
 						else {
 							
-							html += "<a class='exh_one' style='margin-right:0px;' onclick='exhDetail("+item.EXHIBITIONNO+")'>"
-							 	 + "<img class='exh_poster' src='"+item.MAINPOSTER+"'/>"
-							  	 + "<div class='artInfoArea'>"
+							html += "<a class='exh_one' style='margin-right:0px;' onclick='exhDetail("+item.EXHIBITIONNO+")'>";
+							 	 
+								if(item.MAINPOSTER.substr(0, 4) != 'http'){
+									html += "<img class='exh_poster' src='<%= ctxPath%>/resources/files/"+item.MAINPOSTER+"'/>";
+								}
+								else {
+									html += "<img class='exh_poster' src='"+item.MAINPOSTER+"'/>";
+								}
+							
+							html += "<div class='artInfoArea'>"
 							  	 + "<span class='art_info_aboutLoca InfoWhereWhen'>"+item.GALLERYNAME+" | "+item.LOCATION+"</span>"
 							 	 + "<span class='art_mainTitle'>"+item.EXHIBITIONNAME+"</span>";
-						if(item.PRICE == 0){
-							html += "<span class='forMoving InfoWhereWhen'>"+item.SCHEDULE+" | FREE</span>";
-						}
-						else {
-							html += "<span class='forMoving InfoWhereWhen'>"+item.SCHEDULE+" | BOOK</span>";
-						}
+							 	 
+								if(item.PRICE == 0){
+									html += "<span class='forMoving InfoWhereWhen'>"+item.SCHEDULE+" | FREE</span>";
+								}
+								else {
+									html += "<span class='forMoving InfoWhereWhen'>"+item.SCHEDULE+" | BOOK</span>";
+								}
 						
-						html += "</div></a><br/>";
+							html += "</div></a><br/>";
 							
 						}
 						
 						$("#tc").text(item.totCount);
 						
 					});
-					
-					
+
 					$(".ExhList_Area").append(html);
-					
-					/* // >>> (중요@@@@@@) 더보기... 버튼의 value 속성에 값을 지정하기 <<< //
-					$("#btnMoreHIT").val(parseInt(start)+lenHIT);
-					///////////////////// Integer.parseInt - javaScript에서는 Integer 객체가 없고 var로 타입이 결정되기 때문에 parseInt만 써주면 됨.
-					///////////////////// java에서는 var가 없고 Integer 객체가 있기 때문에 Integer.parseInt를 해주는 것임 */
-					
+
 					//countHIT 에 지금까지 출력된 상품의 갯수를 누적해서 기록한다.
 					$("#count").text( parseInt($("#count").text())+json.length ); // 초기치 0
-					
-					if( $("#count").text() == $("#tc").text() ){
-						$("#count").text("0");
-					}
+
 				}
 				
 			},
@@ -239,11 +305,24 @@
 			
 		});
 		
-	}
-		
+	} // end of exhList ---------------------------------	
 		
 	function exhDetail(eno){
 		location.href="<%= ctxPath%>/exhDetail.at?eno="+eno;
+	} // end of exhDetail ---------------------------------
+	
+	function scrollFunction() {
+	  if ($(window).scrollTop() > 20 || $(document).scrollTop()  > 20) {
+		  $("#myBtn").css("display","block");
+	  } else {
+		  $("#myBtn").css("display","none");
+	  }
+	}
+
+	// When the user clicks on the button, scroll to the top of the document
+	function topFunction() {
+		$('html, body').animate( { scrollTop : 0 }, 400 );
+        return false;
 	}
 
 </script>
@@ -258,21 +337,21 @@
 	
 	<div class="ExhCategory_Area">
 		<div class="cate_exh categoryList">
-			<a href="?" class="exh_cate_option on">전체</a>
-			<a href="javaScript:void(0)" onclick="getExhList(1, 'ing', 're');" class="exh_cate_option">진행중인 전시회</a>
-			<a href="javaScript:void(0)" onclick="getExhList(1, 'exp', 're');" class="exh_cate_option">예정전시</a>
-			<a href="javaScript:void(0)" onclick="getExhList(1, 'end', 're');" class="exh_cate_option">지난전시</a>
+			<a href="javaScript:void(0)" onclick="getExhList(1, 0, sessionStorage.getItem('loca'));" class="exh_cate_option on">전체</a>
+			<a href="javaScript:void(0)" onclick="getExhList(1, 'ing', sessionStorage.getItem('loca'));" class="exh_cate_option">진행중인 전시회</a>
+			<a href="javaScript:void(0)" onclick="getExhList(1, 'com', sessionStorage.getItem('loca'));" class="exh_cate_option">예정전시</a>
+			<a href="javaScript:void(0)" onclick="getExhList(1, 'end', sessionStorage.getItem('loca'));" class="exh_cate_option">지난전시</a>
 		</div>
 		
 		<div class="cate_map categoryList">
-			<a href="?" class="exh_cate_option on">지역 전체</a>
-			<a href="javaScript:void(0)" onclick="getExhList(1, 're', '1');" class="exh_cate_option">서울</a>
-			<a href="javaScript:void(0)" onclick="getExhList(1, 're', '2');" class="exh_cate_option">경기 인천</a>
-			<a href="javaScript:void(0)" onclick="getExhList(1, 're', '3');" class="exh_cate_option">부산 울산 경남</a>
-			<a href="javaScript:void(0)" onclick="getExhList(1, 're', '4');" class="exh_cate_option">대구 경북</a>
-			<a href="javaScript:void(0)" onclick="getExhList(1, 're', '5');" class="exh_cate_option">광주 전라</a>
-			<a href="javaScript:void(0)" onclick="getExhList(1, 're', '6');" class="exh_cate_option">대전 충청 세종</a>
-			<a href="javaScript:void(0)" onclick="getExhList(1, 're', '7');" class="exh_cate_option">제주 강원</a>
+			<a href="javaScript:void(0)" onclick="getExhList(1, sessionStorage.getItem('type'), 0);" class="exh_cate_option on">지역 전체</a>
+			<a href="javaScript:void(0)" onclick="getExhList(1, sessionStorage.getItem('type'), 1);" class="exh_cate_option">서울</a>
+			<a href="javaScript:void(0)" onclick="getExhList(1, sessionStorage.getItem('type'), 2);" class="exh_cate_option">경기 인천</a>
+			<a href="javaScript:void(0)" onclick="getExhList(1, sessionStorage.getItem('type'), 3);" class="exh_cate_option">부산 울산 경남</a>
+			<a href="javaScript:void(0)" onclick="getExhList(1, sessionStorage.getItem('type'), 4);" class="exh_cate_option">대구 경북</a>
+			<a href="javaScript:void(0)" onclick="getExhList(1, sessionStorage.getItem('type'), 5);" class="exh_cate_option">광주 전라</a>
+			<a href="javaScript:void(0)" onclick="getExhList(1, sessionStorage.getItem('type'), 6);" class="exh_cate_option">대전 충청 세종</a>
+			<a href="javaScript:void(0)" onclick="getExhList(1, sessionStorage.getItem('type'), 7);" class="exh_cate_option">제주 강원</a>
 		</div>
 	</div>
 	
@@ -280,5 +359,9 @@
 	<span id="tc"></span>
 	
 	<div class="ExhList_Area">
+	</div>
+	
+	<div style="position: relative;">
+		<img onclick="topFunction()" id="myBtn" title="Go to top" src="<%= ctxPath%>/resources/images/exhibition/ico/dropup.png">
 	</div>
 </div>

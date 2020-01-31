@@ -9,20 +9,18 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 <link rel="stylesheet" href="https://unpkg.com/swiper/css/swiper.css">
 <link rel="stylesheet" href="https://unpkg.com/swiper/css/swiper.min.css">
-
 <script src="https://unpkg.com/swiper/js/swiper.js"></script>
 <script src="https://unpkg.com/swiper/js/swiper.min.js"></script>
 
 <style type="text/css">
    
  body::-webkit-scrollbar { 
- /*    display: none;  */
+ 	display: none;
 }
    
    .btn {
@@ -166,6 +164,16 @@
 		height: 100%;
 	}
 	
+	.event_one span:hover{
+		text-decoration: none;
+		cursor: pointer;
+	}
+	
+	.event_one:hover {
+		text-decoration: none;
+		cursor: pointer;
+	}
+	
 	.event_poster {
 		width: 250px;
 		height: 350px;
@@ -213,6 +221,11 @@
 		height: 100%;
 	}
 	
+	.new-one:hover {
+		text-decoration: none;
+		color: black;
+	}
+	
 	.end-one {
 		cursor: pointer;
 		text-align: center;
@@ -220,6 +233,11 @@
 		flex: 1;
 		width: 33%;
 		height: 100%;
+	}
+	
+	.end-one:hover {
+		text-decoration: none;
+		color: black;
 	}
 	
 	.new_poster {
@@ -283,6 +301,10 @@
 		display: none;
 	}
 	
+	.flash:hover {
+		cursor: pointer;
+	}
+	
 	/* Flashing */
 	.flash img:hover {
 		cursor: pointer;
@@ -317,7 +339,6 @@
     .swiper-slide {
       top: 0;
       text-align: center;
-      font-size: 18px;
       background: #fff;
 
       /* Center slide text vertically */
@@ -336,16 +357,20 @@
     }
     
     .recom-title {
+    	display: inline-block;
+    	width: 90%;
     	margin-top: 10px;
-    	font-size: 16pt;
+    	font-size: 14pt;
     	text-decoration: none;
     	color: black;
     }
     
     .recom-content {
-    	margin: 10px;
     	text-decoration: none;
-    	color: black;
+		color: black;
+		position: relative;
+		display: block;
+		margin: 10px;
     }
     
     .recom-title:hover {
@@ -357,6 +382,18 @@
     	text-decoration: none;
     	color: black;
     }
+    
+    .end-exp-title {
+    	width: 70%;
+    	-webkit-transform:translate(55px,0);
+    	font-size: 14pt;
+    }
+    
+    .new-exp-title {
+    	font-size: 14pt;
+    }
+    
+    
    
 </style>
 	
@@ -367,6 +404,22 @@
 $("#myheader").hide();
 $(".navigation").hide(); // 탑 버튼 숨김
 $(function () {
+	
+	$(document).on("mouseover", ".hover-left", function(){
+		$(this).find(".forMoving").stop().animate({left:'10px'}, 180);
+	});
+	
+	$(document).on("mouseout", ".hover-left", function(){
+		$(this).find(".forMoving").stop().animate({left:'0px'}, 180);
+	});
+	
+	$(document).on("mouseover", ".hover-top", function(){
+		$(this).find(".forMoving").stop().animate({top:'10px'}, 180);
+	});
+	
+	$(document).on("mouseout", ".hover-top", function(){
+		$(this).find(".forMoving").stop().animate({top:'0px'}, 180);
+	});
 	
 	$.ajax({
 		url: "<%=ctxPath%>/getMostPolular.at",
@@ -434,20 +487,22 @@ $(function () {
 					 + "<a class='recom-a flash hover-top' onclick='exhDetail("+item.exhibitionno+")'>"	
 					 + "<img class='slide-img' src='"+item.mainposter+"'>"
 					 + "<br/>"
-					 + "<span class='recom-title forMoving'>"+item.exhibitionname+"</span><br/>"
-					 + "<span class='recom-content forMoving'>"+item.author+"</span><br/>"
-					 + "<span class='recom-content forMoving'>"+item.location+" / "+item.galleryname+"</span><br/>"
-					 + "<span class='recom-content forMoving'>"+item.startdate+"~"+item.enddate+"</span>"
+					 + "<span class='recom-title'>"+item.exhibitionname+"</span>"
+					 + "<span class='recom-content'>"+item.author+"</span>"
+					 + "<span class='recom-content'>"+item.location+" / "+item.galleryname+"</span>"
+					 + "<span class='recom-content'>"+item.startdate+"~"+item.enddate+"</span>"
 					 + "</a>"
 					 + "</div>"
 			});
 			
 			$(".swiper-wrapper").append(html);
 			
-			
 		},
 		error: function(request, status, error){
 			alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+		},
+		complete: function() {
+			doInitializeSwiper();
 		}
 	});
 	
@@ -464,9 +519,9 @@ $(function () {
 				
 				html += "<a onclick='exhDetail("+item.exhibitionno+")' class='new-one flash hover-top'>"
 					 +	"<img class='new_poster' src='"+item.mainposter+"' >"
-					 +		"<span class='new-exp forMoving'>"+item.exhibitionname+"</span>"
-					 +		"<span class='new-exp forMoving'>"+item.author+"</span>"
-					 + "<span class='recom-content forMoving'>"+item.location+" / "+item.galleryname+"</span><br/>"
+					 +		"<span class='new-exp new-exp-title'>"+item.exhibitionname+"</span>"
+					 +		"<span class='new-exp'>"+item.author+"</span>"
+					 + 		"<span class='new-exp'>"+item.location+" / "+item.galleryname+"</span>"
 					 +		"<span class='new-exp forMoving'>"+item.startdate+"~"+item.enddate+"</span>"
 					 +	"</a>"
 			});
@@ -491,9 +546,9 @@ $(function () {
 				
 				html += "<a onclick='exhDetail("+item.exhibitionno+")' class='end-one flash hover-top'>"
 					 +	"<img class='end_poster' src='"+item.mainposter+"' >"
-					 +		"<span class='end-exp forMoving'>"+item.exhibitionname+"</span>"
-					 +		"<span class='end-exp forMoving'>"+item.author+"</span>"
-					 + "<span class='recom-content forMoving'>"+item.location+" / "+item.galleryname+"</span><br/>"
+					 +		"<span class='end-exp end-exp-title'>"+item.exhibitionname+"</span>"
+					 +		"<span class='end-exp'>"+item.author+"</span>"
+					 + 		"<span class='end-exp'>"+item.location+" / "+item.galleryname+"</span>"
 					 +		"<span class='end-exp forMoving'>"+item.startdate+"~"+item.enddate+"</span>"
 					 +	"</a>"
 			});
@@ -517,7 +572,7 @@ $(function () {
 				
 				html += "<a href='#' class='event_one flash hover-top'>"
 					 +	"<img class='event_poster' src='"+item.mainPoster+"' >"
-					 +		"<span class='end-exp forMoving'>"+item.eventName+"</span>"
+					 +		"<span class='end-exp'>"+item.eventName+"</span>"
 					 +		"<span class='end-exp forMoving'>"+item.startDate+"~"+item.endDate+"</span>"
 					 +	"</a>"
 			});
@@ -530,19 +585,7 @@ $(function () {
 	});
 		
 	
-	$('.hover-left').hover(function() {
-	    $(this).find(".forMoving").stop().animate({left: '10px'}, 500);
-	},
-	function() {
-	    $(this).find(".forMoving").stop().animate({left: '0px'}, 500);                 
-	});
 	
-	$('.hover-top').hover(function() {
-	    $(this).find(".forMoving").stop().animate({top: '10px'}, 500);
-	},
-	function() {
-	    $(this).find(".forMoving").stop().animate({top: '0px'}, 500);                 
-	});
             
 	$(window).scroll(function () {
 		if ($(this).scrollTop() > 100) { // 스크롤 내릴 표시
@@ -595,12 +638,14 @@ function exhDetail(eno){
 	location.href="<%= ctxPath%>/exhDetail.at?eno="+eno;
 }
 
+
 </script>
-   
+
+
     
 
 	<div id="slider" style="width: 100%; height: 800px; display: inline-block;">
-       	<div style="background-size: cover; width:100%; height:100%; z-index:1000; margin-top:0; background-image: url('<%= ctxPath%>/resources/images/main/mainImg1.jpg')">
+       	<div style="background-size: cover; width:100vw; height:100%; z-index:1000; margin-top:0; background-image: url('<%= ctxPath%>/resources/images/main/mainImg1.jpg')">
        		 <div class="main-logo" style="z-index: 5; width: 400px; height: 300px;">
        			<img style="width: 255px; height: 255px; -webkit-transform:translate(300px,350px);" alt="로고이미지" src="<%= ctxPath%>/resources/images/main/logo_black_new.png" />
        		 </div>
@@ -608,7 +653,7 @@ function exhDetail(eno){
 	</div>
 	
 	
-	<div id="overflow" class="main-container" style="margin-bottom: 400px;">
+	<div id="overflow" class="main-container" style="margin-bottom: 700px;">
 		<div class="hot-exh">
 			<div id="div1" style="float:center; margin:0 auto; transform:translate(100px,20px);">
 				<h2>인기 전시회</h2>
@@ -621,16 +666,17 @@ function exhDetail(eno){
 		
 	<hr color="#f2f2f2;" style="transform:translate(0,700px);" />
 	
+	
 	<div class="recom-exh">	
 		<div class="swiper-container">
 		    <div class="swiper-wrapper">
-		      
+		    
 		    </div>
 		    <!-- Add Pagination -->
 		    <div class="swiper-pagination"></div>
 		    <!-- Add Arrows -->
-		    <div class="swiper-button-next"></div>
-		    <div class="swiper-button-prev"></div>
+		    <div class="swiper-button-next" style=""></div>
+		    <div class="swiper-button-prev" style=""></div>
 		  </div>
 			
 			<div id="div2" class="recom-exh-title" style="float: center; transform:translate(0,-680px);">
@@ -638,13 +684,6 @@ function exhDetail(eno){
 				<span>ARTREE 추천전시회를 보여줍니다.</span>
 			</div>
 			<hr color="black;" style="width:100%; transform:translate(0,-680px);" />
-			<div style="text-align:center; display: none;">
-			  <span class="dot"></span>
-			  <span class="dot"></span>
-			  <span class="dot"></span>
-			  <span class="dot"></span>
-			</div>
-		
 	</div>
 	
 	<hr color="#f2f2f2;" style=" transform:translate(0, 100px);" />
@@ -659,76 +698,54 @@ function exhDetail(eno){
 			
 		</div>
 		
-		<div id="div4" class="new-title" style="float: right; -webkit-transform:translate(-58px, 450px);">
+		<div id="div4" class="new-title" style="float: right; -webkit-transform:translate(-58px, 550px);">
 			<h2>종료임박 전시회</h2>
 		</div>
-		<hr color="black;" style="width:90%; transform:translate(64px,500px);" />
-		<div class="end-exh" style="transform:translate(0, 170px);">
+		<hr color="black;" style="width:90%; transform:translate(64px,600px);" />
+		<div class="end-exh" style="transform:translate(0, 270px);">
 			
 		</div>
 	</div>
 	
-	<hr color="#f2f2f2;" style="transform:translate(0, 330px);" />
+	<hr color="#f2f2f2;" style="transform:translate(0, 530px);" />
 	
 	
-	<div id="div5" class="event-title" style=" float: left; transform:translate(35px, 260px);">
+	<div id="div5" class="event-title" style=" float: left; transform:translate(35px, 460px);">
 		<h2>EVENT</h2>
 	</div>
-	<div class="event-more" style="float: right; transform:translate(-35px, 500px);">
-		<a class="event-morebtn" href="<%= ctxPath%>/eventList.at">더보기+</a>
+	<div class="event-more" style="float: right; transform:translate(-35px, 700px);">
+		<a class="event-morebtn " href="<%= ctxPath%>/eventList.at">이벤트 모두보기 +</a>
 	</div>
-	<hr color="black;" style="width:94%; transform:translate(38px,525px);" />
-       	<div class="event-div" style="transform:translate(0, 280px);">
+	<hr color="black;" style="width:94%; transform:translate(38px,725px);" />
+       	<div class="event-div" style="transform:translate(0, 480px);">
            	
        	</div>
        	
-       	
-
 </div>
 
 <div class="navigation" style="display: block; right:50px; bottom: 20%; position:fixed; z-index:9999;">
 	<a class="return-top" href="#">[TOP]</a>
 </div>
-<script type="text/javascript">
 
-	var slideIndex = 0;
-	
-	
-	function showSlides() {
-	  var i;
-	  var slides = document.getElementsByClassName("mySlides");
-	  var dots = document.getElementsByClassName("dot");
-	  for (i = 0; i < slides.length; i++) {
-	    slides[i].style.display = "none";  
-	  }
-	  slideIndex++;
-	  if (slideIndex > slides.length) {slideIndex = 1}    
-	  for (i = 0; i < dots.length; i++) {
-	    dots[i].className = dots[i].className.replace(" active", "");
-	  }
-	  slides[slideIndex-1].style.display = "block";  
-	  dots[slideIndex-1].className += " active";
-	  setTimeout(showSlides, 3000); // Change image every 2 seconds
-	}
-	showSlides();
 
+<script>
+var swiper;
+<%-- Initialize Swiper --%>
+function doInitializeSwiper() {
+	swiper = new Swiper('.swiper-container', {
+	    slidesPerView: 3,
+	    spaceBetween: 30,
+	    slidesPerGroup: 3,
+	    loop: true,
+	    loopFillGroupWithBlank: true,
+	    pagination: {
+	      el: '.swiper-pagination',
+	      clickable: true,
+	    },
+	    navigation: {
+	      nextEl: '.swiper-button-next',
+	      prevEl: '.swiper-button-prev',
+	    },
+	  });	
+}
 </script>
-
-<!-- Initialize Swiper -->
-  <script type="text/javascript">
-    var swiper = new Swiper('.swiper-container', {
-      slidesPerView: 3,
-      spaceBetween: 30,
-      slidesPerGroup: 3,
-      loop: true,
-      loopFillGroupWithBlank: true,
-      pagination: {
-        el: '.swiper-pagination',
-        clickable: true,
-      },
-      navigation: {
-        nextEl: '.swiper-button-next',
-        prevEl: '.swiper-button-prev',
-      },
-    });
-  </script>

@@ -113,7 +113,7 @@
         E join gallery G
         on E.fk_galleryno = G.galleryno
         order by readcount desc
-        ) X ) Z where rno <![CDATA[<=]]> 3
+        ) X ) Z where rno <![CDATA[<=]]> 12
 	</select>
 	
 	<!-- 이벤트 정보 가져오기 -->

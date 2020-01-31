@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- ====  mapper 기본설정 ==== -->
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="notice">
+
+	<resultMap type="HashMap" id="noticeMap">
+		<result property="notNo"   		column="notNo" 			javaType="String"/> 
+	 	<result property="notTitle"   	column="notTitle" 		javaType="String"/>
+	 	<result property="notContent" 	column="notContent" 	javaType="String"/>
+	 	<result property="notWrithday"  column="notWrithday" 	javaType="String"/>
+	 	<result property="notCategory" column="notCategory" 	javaType="String"/>
+	</resultMap>
+	
+	<insert id="addNotice" parameterType="HashMap">
+		insert into notice(notNo, notTitle, notContent, notWriteday, notCategory)
+		values(seq_notice_notNo.nextval, #{notTitle}, #{notContent}, default, #{notCategory})
+	</insert>
+	
+	<select id="getCountNotice" resultType="int">
+		select count(*)
+ 		from notice
+ 		where notCategory = '1'
+	</select>
+
+	<select id="getNotice" parameterType="HashMap" resultMap="noticeMap">
+	   select notNo ,notTitle, notContent,  notWriteday, notCategory
+       from 
+       (
+	       select rownum AS rno
+	            , notNo ,notTitle, notContent,  notWriteday, notCategory
+	       from   
+	       (  
+	         select notNo ,notTitle, notContent,  notWriteday, notCategory
+			 from notice
+			 order by notNo desc
+		   ) V  
+	   ) T  	   
+	   where notCategory = '1' and rno between #{startRno} and #{endRno} 
+	</select>
+	
+	<delete id="delNotice" parameterType="String" >
+		delete from notice
+		where notNo = #{notNo}
+	</delete>
+	
+</mapper>

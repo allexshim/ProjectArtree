@@ -88,6 +88,26 @@ public class MemberDAO implements InterMemberDAO {
 	}
 
 	// *********************** 마이페이지 *********************** //
+	// chart 개인 선호 장르 select
+	@Override
+	public List<String> myfavorGenre(String idx) {
+		List<String> myfavorGenre = sqlsession.selectList("member.myfavorGenre", idx);
+		return myfavorGenre;
+	}
+	// 선호 장르 차트 data
+	@Override
+	public List<HashMap<String, String>> myGenreData(String genre) {
+		List<HashMap<String, String>> genreData = sqlsession.selectList("member.myGenreData", genre);
+		return genreData;
+	}
+	
+	// ========= word cloud 개인 선호 태그 select =========
+	@Override
+	public List<String> myfavorTag(String idx) {
+		List<String> myfavorTag = sqlsession.selectList("member.myfavorTag", idx);
+		return myfavorTag;
+	}
+	
 	// ========= 하트 눌렀을 때 가고싶어요 select =========
 	@Override
 	public List<HashMap<String, String>> selectWannaGo(String idx) {
@@ -101,6 +121,20 @@ public class MemberDAO implements InterMemberDAO {
 		List<HashMap<String, String>> goList = sqlsession.selectList("member.selectGo", idx);
 		return goList;
 	}
+	
+	// ========= 하트 눌렀을 때 전시회의 작가 select =========
+	@Override
+	public List<HashMap<String, String>> selectFavorAuthor(String idx) {
+		List<HashMap<String, String>> favorAuthor = sqlsession.selectList("member.selectFavorAuthor", idx);
+		return favorAuthor;
+	}
+	
+	// ========= 선호 전시관 =========
+	@Override
+	public List<HashMap<String, String>> selectfavorGal(String idx) {
+		List<HashMap<String, String>> favorGal = sqlsession.selectList("member.selectfavorGal", idx);
+		return favorGal;
+	}
 
 	// ========= 마이페이지 - 작품 재설정 =========
 	@Override
@@ -113,5 +147,76 @@ public class MemberDAO implements InterMemberDAO {
 		int m = sqlsession.update("member.updateFavor2", paraMap);
 		return m;
 	}
+
+	// ========= 닉네임 변경 =========
+	@Override
+	public int changeName(HashMap<String, String> paraMap) {
+		int n = sqlsession.update("member.changeName", paraMap);
+		return n;
+	}
+
+	// ========= 비밀번호 변경 =========
+	@Override
+	public int changePwd(HashMap<String, String> paraMap) {
+		int n = sqlsession.update("member.changePwd", paraMap);
+		return n;
+	}
+
+	// ========= 회원탈퇴 =========
+	// ========= 탈퇴 사유 member insert =========
+	@Override
+	public int updateWithdrawal(HashMap<String, String> paraMap) {
+		int n = sqlsession.insert("member.updateWithdrawal", paraMap);
+		return n;
+	}
+	// ========= status 0 으로 변경 =========
+	@Override
+	public int updateStatus(String idx) {
+		int m = sqlsession.update("member.updateStatus", idx);
+		return m;
+	}
+
+	
+	// ************** 관리자 페이지 **************
+
+	// 지역마다 선호한 장르 다 가져온다.
+	@Override
+	public List<String> getAreaFavorGenre(String area) {
+		List<String> areaFavorGenre = sqlsession.selectList("member.getAreaFavorGenre", area);
+		return areaFavorGenre;
+	}
+
+	// 선호 장르 가져가서 카운트
+	@Override
+	public List<HashMap<String, String>> getGenreCnt(String genre) {
+		List<HashMap<String, String>> genreCnt = sqlsession.selectList("member.myGenreData", genre);
+		return genreCnt;
+	}
+
+	// 지역별 선호장르 카운트 총 합
+	@Override
+	public int getTotalCnt(String genre) {
+		int totalCnt = sqlsession.selectOne("member.getTotalCnt", genre);
+		return totalCnt;
+	}
+	
+	
+
+	
+	
+
+	
+
+
+
+
+
+	
+
+
+
+
+	
+	
 
 }

@@ -155,4 +155,49 @@ public class OrderService implements InterOrderService {
 		List<HashMap<String, String>> selectReserEx = dao.selectReserEx(map);
 		return selectReserEx;		
 	}
+
+	@Override
+	public List<HashMap<String, String>> monthlySalesList(HashMap<String, String> map) {
+		List<HashMap<String, String>> monthlySalesList = dao.monthlySalesList(map);
+		return monthlySalesList;
+	}
+
+	@Override
+	public List<HashMap<String, String>> dailySalesList(HashMap<String, String> map) {
+		List<HashMap<String, String>> dailySalesList = dao.dailySalesList(map);
+		return dailySalesList;
+	}
+
+	@Override
+	public List<HashMap<String, String>> reserList(HashMap<String, String> map) {
+		List<HashMap<String, String>> reserList = dao.reserList(map);
+		return reserList;
+	}
+
+	@Override
+	public List<HashMap<String, String>> reserDetailNo(HashMap<String, String> map) {
+		List<HashMap<String, String>> reserDetailNo = dao.reserDetailNo(map);
+		return reserDetailNo;
+	}
+
+	@Override
+	public List<String> reserExNo(String detailNo) {
+		List<String> reserExNo = dao.reserExNo(detailNo);
+		return reserExNo;
+	}
+
+	@Override
+	public void delReserEx(String reserExNoList) {
+		dao.delReserEx(reserExNoList);		
+	}
+
+	@Override
+	public void delReserDetail(String reserNo) {
+		dao.delReserDetail(reserNo);		
+	}
+
+	@Override
+	public void delReser(String reserNo) {
+		dao.delReser(reserNo);		
+	}
 }

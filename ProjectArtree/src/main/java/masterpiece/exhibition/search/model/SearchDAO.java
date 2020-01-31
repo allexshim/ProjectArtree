@@ -64,6 +64,42 @@ public class SearchDAO implements InterSearchDAO {
 		List<HashMap<String,String>> ExhibitionList = sqlsession.selectList("search.getExhibitionbyLocation",galleryNo);
 		return ExhibitionList;
 	}
+
+	////////////////////////////////////////////////////////////////////////////
+	// 관리자 차트
+	// 1. 먼저 모든 회원이 선호하는 태그를 가져온 후
+	@Override
+	public String getPreferTag() {
+		List<String> TagMap = sqlsession.selectList("search.getPreferTag");
+		String preferTag = "";
+		for(int n=0; n<TagMap.size(); n++) {
+			String str = (n==0)?"":",";
+			preferTag += str+TagMap.get(n);
+		}
+		return preferTag;
+	}
+
+	// 2. 잘라서 각각 태그의 빈도수를 얻어온다.
+	@Override
+	public List<HashMap<String, String>> getChartDataByTags(String preferTag) {
+		// tag, CNT
+		List<HashMap<String,String>> TagList = sqlsession.selectList("search.getChartDataByTags", preferTag);
+		return TagList;
+	}
+
+	// 해당 태그를 선호하는 연령대,해당회원수 를 가져온다.
+	@Override
+	public List<HashMap<String,String>> getAgeDataByTags(String tag) {
+		List<HashMap<String,String>> ageRange = sqlsession.selectList("search.getAgeDataByTags", tag);
+		return ageRange;
+	}
+
+	// 통계를 내기 위해 총 회원수를 구해서 request영역에 저장한다.
+	@Override
+	public int getMemberCnt() {
+		int totalcnt = sqlsession.selectOne("search.getMemberCnt");
+		return totalcnt;
+	} 
 	
 	
 	

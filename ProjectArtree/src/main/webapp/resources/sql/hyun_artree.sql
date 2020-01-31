@@ -78,6 +78,10 @@ order by gender;
 		   ) V  
 	   ) T  	   
 	   where notCategory = 2 and rno between 1 and 10 
+<<<<<<< HEAD
     
     
     commit;
+=======
+    
+>>>>>>> branch 'master' of https://github.com/allexshim/ProjectArtree.git

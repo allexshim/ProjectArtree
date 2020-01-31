@@ -14,6 +14,10 @@
 <style type="text/css">
 @import url(//fonts.googleapis.com/earlyaccess/notosanskr.css);
 
+	.M1 {
+      -webkit-transform:translate(-10px,0);
+    }
+
 	body {
 		font-family: 'Noto Sans Kr', sans-serif;
 	}
@@ -176,6 +180,10 @@
 <script type="text/javascript">
 	$(document).ready(function(){ 
 		
+		$("#searchCondition").click(function(){
+			$("#searchType").val($("#searchCondition option:selected").val());
+		});
+		
 		// 검색하기 버튼 클릭
 		$("#searchicon").click(function(){
 			
@@ -202,21 +210,28 @@
 		// 리스트의 전시회 이름을 클릭하면 전시회 상세페이지로 이동한다.
 		$("div#contentContainer table tbody td:nth-child(2)").click(function(){
 			
-			var exhibitionCode = "${exhibitionCode}";
+			var exhibitionno = $(this).children().val();
+			
 			// 페이지로 들어올 때 전시회 코드도 같이 받아와서, 클릭한 전시회 코드를 넘겨줍니다.
-			window.location.href="/artree/*.at?exhibitionCode="+exhibitionCode;	
+			window.location.href="/artree/exhDetail.at?eno="+exhibitionno;	
 		});
 		
 		// 리스트의 리뷰 제목을 클릭하면 리뷰 상세페이지로 이동한다.
 		$("div#contentContainer table tbody td:nth-child(3)").click(function(){
 			// 글번호를 넘긴다.
 			var no = $(this).prev().prev().text();
-			window.location.href="/artree/reviewDetail.at?no="+no;	
+			window.location.href="/artree/reviewDetail.at?revno="+no;	
 		});
 		
 		// 글쓰기 페이지로 가기
 		$("div#goWrite").click(function(){
-			window.location.href="/artree/addReview.at";	
+			if(${loginuser != null}) {
+				window.location.href="/artree/addReview.at";
+			}
+			else {
+				location.href="javascript:layer_open('layer')";
+				return;
+			}
 		});
 		
 	});
@@ -241,6 +256,7 @@
 				<option value="titleContents">제목+글내용</option>
 				<option value="writer">작성자</option>
 			</select>
+			<input id="searchType" type="hidden" name="searchType" />
 			<input id="searchWord" type="text" placeholder="검색어를 입력하세요." />
 		
 			<a style="vertical-align: middle;"><img id="searchicon" src="<%= ctxPath %>/resources/images/board/searchicon.PNG" /></a>
@@ -259,84 +275,34 @@
 				</thead>
 				
 				<tbody>
+					<c:forEach items="${revList}" var="rev">
 					<tr>
-						<td>1</td>
-						<td>국립현대미술관 50주년 기념전 《광장: 미술과 사회 1900-2019》개최</td>
-						<td>리뷰제목리뷰제목리뷰제목리목</td>
-						<td>2020-01-10 22:10</td>
-						<td>5</td>
+						<td>${rev.revno}</td>
+						<td>
+						${rev.exhibitionname}
+						<input type="hidden" class="eno" value="${rev.fk_exhibitionno}"/>
+						</td>
+						<c:if test="${rev.commentCount > 0}">	
+			   	   		<td>${rev.revTitle}&nbsp;<span style="margin-left: 5px; ">[<span style="color: red; font-size: 9pt; font-weight: bold; font-style: italic;">${rev.commentCount}</span>]</span></td>
+			    		</c:if>
+			    		<c:if test="${rev.commentCount == 0}">
+			   	   		<td>${rev.revTitle}</td>
+			    		</c:if>
+						<td>${rev.revWriteday}</td>
+						<td>${rev.readCount}</td>
 					</tr>
-					<tr>
-						<td>2</td>
-						<td>국립현대미술관 50주년 기념전</td>
-						<td>리뷰제목리뷰제목리뷰제목</td>
-						<td>2020-01-10 22:10</td>
-						<td>5</td>
-					</tr>
-					<tr>
-						<td>3</td>
-						<td>가나아트 컬렉션 상설전 시대유감 時代遺憾 </td>
-						<td>리뷰제목리뷰제목리뷰제목제목리뷰제</td>
-						<td>2020-01-10 22:10</td>
-						<td>5</td>
-					</tr>
-					<tr>
-						<td>4</td>
-						<td>국립현대미술관 50주년 기념전</td>
-						<td>리뷰제목리뷰제목리뷰제목</td>
-						<td>2020-01-10 22:10</td>
-						<td>5</td>
-					</tr>
-					<tr>
-						<td>5</td>
-						<td>국립현대미술관 50주년 기념전</td>
-						<td>리뷰제목리뷰제목리뷰제목</td>
-						<td>2020-01-10 22:10</td>
-						<td>5</td>
-					</tr>
-					<tr>
-						<td>6</td>
-						<td>국립현대미술관 50주년 기념전</td>
-						<td>리뷰제목리뷰제목리뷰제목</td>
-						<td>2020-01-10 22:10</td>
-						<td>5</td>
-					</tr>
-					<tr>
-						<td>7</td>
-						<td>국립현대미술관 50주년 기념전</td>
-						<td>리뷰제목리뷰제목리뷰제목</td>
-						<td>2020-01-10 22:10</td>
-						<td>5</td>
-					</tr>
-					<tr>
-						<td>8</td>
-						<td>국립현대미술관 50주년 기념전</td>
-						<td>리뷰제목리뷰제목리뷰제목</td>
-						<td>2020-01-10 22:10</td>
-						<td>5</td>
-					</tr>
-					<tr>
-						<td>9</td>
-						<td>국립현대미술관 50주년 기념전</td>
-						<td>리뷰제목리뷰제목리뷰제목</td>
-						<td>2020-01-10 22:10</td>
-						<td>5</td>
-					</tr>
-					<tr>
-						<td>10</td>
-						<td>국립현대미술관 50주년 기념전</td>
-						<td>리뷰제목리뷰제목리뷰제목</td>
-						<td>2020-01-10 22:10</td>
-						<td>5</td>
-					</tr>
+					</c:forEach>
 				</tbody>
 			</table>
 		</div>
+ 
+		<form name="goDetailForm">
+		<input type="hidden" name="revno"/>
+		<input type="hidden" name="gobackURL" value=""/>
+		</form>
 
-		<!-- 페이징바 들어올 자리 -->
-		<!-- 페이지 바 여유되면 넣겠습니다........ㅠㅠㅠㅠㅠㅠㅠㅠㅠ-->
 		<div class="pagination" align="center">
-		<%-- 	${pageBar} --%>
+		${pageBar}
 		</div>
 		
 		<div id="goWrite">

@@ -60,6 +60,35 @@ public class SearchService implements InterSearchService {
 		
 		return ExhibitionList;
 	}
+
+	////////////////////////////////////////////////////////////////////////
+	// 각각 tag이름, tag의 빈도수를 저장하는 HashMap
+	@Override
+	public List<HashMap<String, String>> getChartDataByTags() {
+		
+		// 1. 먼저 모든 회원이 선호하는 태그를 가져온 후
+		String preferTag = dao.getPreferTag();
+		
+		// 2. 잘라서 각각 태그의 빈도수를 얻어온다.
+		// tag, CNT
+	    List<HashMap<String,String>> TagList = dao.getChartDataByTags(preferTag);
+		return TagList;
+
+	}
+
+	// 해당 태그를 선호하는 연령대,해당회원수 를 가져온다.
+	@Override
+	public List<HashMap<String,String>> getAgeDataByTags(String tag) {
+		List<HashMap<String,String>> ageRange = dao.getAgeDataByTags(tag);
+		return ageRange;
+	}
+
+	// 통계를 내기 위해 총 회원수를 구해서 request영역에 저장한다.
+	@Override
+	public int getMemberCnt() {
+		int totalcnt = dao.getMemberCnt();
+		return totalcnt;
+	}
 	
 	
 	

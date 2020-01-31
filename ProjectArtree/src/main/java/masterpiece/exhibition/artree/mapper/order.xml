@@ -139,4 +139,80 @@
 		select * from reserEx where fk_reserdetailno = #{RESERDETAILNO}
 	</select>
 	
+	<resultMap type="HashMap" id="monthlySalesMap">
+		<result property="reserdate" column="reserdate" javaType="String"></result>
+		<result property="monthlySales" column="monthlySales" javaType="String"></result>					
+	</resultMap>
+	
+	<select id="monthlySalesList" resultMap="monthlySalesMap">				
+		select to_char(reserdate, 'mm') as reserdate, substr(sum(resertotal),1,length(sum(resertotal))-4) as monthlySales from reser
+		where status = 1 and 
+		reserdate like '20/%'
+		group by to_char(reserdate, 'mm')
+		order by reserdate
+	</select>
+	
+	<resultMap type="HashMap" id="dailySalesMap">
+		<result property="reserdate" column="reserdate" javaType="String"></result>
+		<result property="dailySales" column="dailySales" javaType="String"></result>					
+	</resultMap>
+	
+	<select id="dailySalesList" resultMap="dailySalesMap">		
+		select to_char(reserdate,'dd') as reserdate, substr(sum(resertotal),1,length(sum(resertotal))-4) as dailySales from reser
+		where status = 1 and
+		reserdate like '20/' || #{reserdate} || '/%'
+		group by to_char(reserdate,'dd')
+		order by reserdate
+	</select>	
+	
+	<resultMap type="HashMap" id="reserListMap">		
+		<result property="reserno" column="reserno" javaType="String"></result>
+		<result property="reserdate" column="reserdate" javaType="String"></result>
+		<result property="resertotal" column="resertotal" javaType="String"></result>
+		<result property="fk_idx" column="fk_idx" javaType="String"></result>
+		<result property="exname" column="exname" javaType="String"></result>
+		<result property="reserstat" column="reserstat" javaType="String"></result>
+		<result property="mainimg" column="mainimg" javaType="String"></result>					
+	</resultMap>
+	
+	<select id="reserList" resultMap="reserListMap">		
+		select distinct(a.reserno), reserdate, resertotal, fk_idx
+		,exname ,reserstat ,mainimg
+		from reser a inner join reserdetail b
+		on a.reserno = b.fk_reserno
+		where a.status = 1 and 
+		fk_idx = #{idx}
+		order by reserno desc
+	</select>
+	
+	<resultMap type="HashMap" id="DetailNoListMap">		
+		<result property="RESERDETAILNO" column="RESERDETAILNO" javaType="String"></result>					
+	</resultMap>
+	
+	<select id="reserDetailNo" resultMap="DetailNoListMap">		
+		select * from reserDetail
+		where status = 1 and 
+		fk_reserno = #{reserNo}
+		order by reserdetailno desc		
+	</select>
+	
+	<select id="reserExNo" resultType="String">		
+		select * from reserEx 
+		where status = 1 and
+		fk_reserdetailno = #{detailNo}
+		order by reserexno desc		
+	</select>
+	
+	<delete id="delReserEx">
+		delete from reserEx where fk_reserdetailno = #{reserExNoList}
+	</delete>
+	
+	<delete id="delReserDetail">
+		delete from reserDetail where fk_reserno = #{reserNo}
+	</delete>
+	
+	<delete id="delReser">
+		delete from reser where reserno = #{reserNo}
+	</delete>
+	
 </mapper>

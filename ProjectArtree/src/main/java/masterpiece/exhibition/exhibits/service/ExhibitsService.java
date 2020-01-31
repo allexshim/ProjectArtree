@@ -48,7 +48,21 @@ public class ExhibitsService implements InterExhibitsService {
 		List<HashMap<String, String>> galRecomList = dao.getGalRecomList();
 		return galRecomList;
 	}
+	
+	/////////////////// 갤러리 이번주 추천 공간 - 해당 갤러리의 전시회 진행 유무 //////////////////
+	@Override
+	public int getExhStatus(String gno) {
+		int ExhStatus = dao.getExhStatus(gno);
+		return ExhStatus;
+	}
 
+	////////////////// 이번주 추천 공간 - 해당 갤러리의 전시회 리스트 /////////////////
+	@Override
+	public List<HashMap<String, String>> getRecomExhList(String gno) {
+		List<HashMap<String, String>> RecomExhList = dao.getRecomExhList(gno);
+		return RecomExhList;
+	}
+	
 	//////////////////// 갤러리 상세 페이지 ////////////////////
 	@Override
 	public HashMap<String, String> getGalDetail(String gno) {
@@ -124,5 +138,21 @@ public class ExhibitsService implements InterExhibitsService {
 		
 		return result;
 	}
+
+	/////////////////////////// 성별 차트 ///////////////////////////
+	@Override
+	public List<HashMap<String, Object>> getGenderChart(String eno) {
+		List<HashMap<String, Object>> GenderChart = dao.getGenderChart(eno);
+		return GenderChart;
+	}
+
+	////////////////////////// 연령대별 차트 ///////////////////////
+	@Override
+	public List<HashMap<String, String>> getAgeChart(String eno) {
+		List<HashMap<String, String>> AgeChart = dao.getAgeChart(eno);
+		return AgeChart;
+	}
+
+
 
 }

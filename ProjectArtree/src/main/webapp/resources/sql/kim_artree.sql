@@ -3,8 +3,15 @@ show user;
 select*
 from tab;
 
-select*
-from exhibition;
+desc PREVIEW
+
+ALTER TABLE PREVIEW MODIFY(name NVARCHAR2(300));
+COMMIT
+
+select 
+from preview;
+
+desc exhibition;
 
 select*
 from exhibitiondetail;
@@ -204,3 +211,191 @@ nocycle
 nocache;
 
 COMMIT
+
+select*
+from wishList A left join member B
+on A.fk_idx = B.idx
+where fk_exhibitionno = 1094
+
+commit
+select func_gender(gender) AS gender, count(*) AS cnt
+from wishList A left join member B
+on A.fk_idx = B.idx 
+where fk_exhibitionno = 1094
+group by gender
+
+create or replace function func_gender(p_gender IN varchar2)
+return varchar2
+is
+    v_gender varchar2(6);
+begin
+   if( p_gender = '1' ) then v_gender := '남성';
+   -- 오라클은 else if가 아니라 elsif 이다.
+   -- elsif( 조건 ) then v_gender := '중간';
+   else v_gender := '여성';
+   end if;
+   
+   return v_gender;
+end func_gender;
+
+select agegroup AS age, count(*) AS cnt
+from wishList A left join member B
+on A.fk_idx = B.idx 
+where fk_exhibitionno = 1094
+group by agegroup
+order by agegroup asc
+
+
+		select *
+		from
+		(
+		select row_number() over(order by exhibitionno desc) AS RNO
+			 , exhibitionno, fk_galleryno, B.galleryname, B.location, exhibitionname
+			 , startdate ||' - '|| enddate AS schedule
+			 , price, D.mainposter, A.status
+		from exhibition A left join gallery B
+		on A.fk_galleryno = B.galleryno
+		left join exhibitiondetail D
+		on A.exhibitionno = d.fk_exhibitionno
+        where location = '서울' and A.status = '전시종료'
+		) V
+		where RNO between 1 and 16
+        
+        
+        select count(*)
+        from exhibition A left join gallery B
+        on A.fk_galleryno = B.galleryno
+        where A.status = '전시예정' 
+        
+        select ceil(2/16)
+        from dual
+        
+        
+        select agegroup, count(*) AS cnt
+		from wishList A left join member B
+		on A.fk_idx = B.idx 
+		where fk_exhibitionno = 5166
+		group by agegroup
+		order by agegroup asc
+       
+       
+       select*
+       from wishList
+       
+       
+       
+        select *
+		from
+		(
+		select row_number() over(order by galleryno desc) AS RNO
+		     , galleryno, galleryname, detailaddress, mainpicture, location
+		     , case when length(introduction) > 60 then substr(introduction, 1, 59)||'..' else introduction end AS introduction
+		from gallery
+		where status = 1
+        and galleryname like '%'||'이'||'%' and location = '서울'
+		)
+		where RNO between 1 and 9 
+        
+        
+		select *
+		from
+		(
+		select row_number() over(order by B.readcount desc) AS RNO
+		     , galleryno, galleryname, mainpicture, location, openinghour, holiday
+		from gallery A left join exhibition B
+		on A.galleryno = B.fk_galleryno
+		where A.status = 1 and exhibitionname is not null
+		order by RNO, galleryno asc
+		)
+		where RNO between 1 and 3
+        
+		select count(*)
+        from exhibition A left join exhibitiondetail B
+        on A.exhibitionno = B.fk_exhibitionno
+        where fk_galleryno = 10 and status = '전시중'
+
+
+	select *
+        from exhibition A left join exhibitiondetail B
+        on A.exhibitionno = B.fk_exhibitionno
+where exhibitionname = '루라드'
+
+select*
+from member
+
+desc member
+
+------------------------------------------------------------------- 기대평
+create table preview
+(boardno        number              not null
+,seq            number                not null   -- 글번호
+,fk_idx         number                not null   -- 사용자ID
+,fk_exhibitionno number               not null
+,name           Nvarchar2(20)         not null   -- 글쓴이
+,title          Nvarchar2(200)        not null   -- 글제목
+,content        Nvarchar2(2000)       not null   -- 글내용    -- clob
+,readCount      number default 0      not null   -- 글조회수
+,regDate        date default sysdate  not null   -- 글쓴시간
+,commentcnt     number default 0      not null   -- 댓글의 갯수
+,constraint  PK_preview_seq primary key(seq)
+,constraint  FK_preview_fk_exhibitionno foreign key(fk_exhibitionno) references exhibition(exhibitionno)
+,constraint  FK_preview_fk_idx foreign key(fk_idx) references member(idx)
+);
+
+select*
+from member
+
+create sequence seq_preivew
+start with 1
+increment by 1
+nomaxvalue 
+nominvalue
+nocycle
+nocache;
+
+------------------------------- 댓글
+create table precomment
+(seq           number               not null   -- 댓글번호
+,fk_idx        number               not null   -- 사용자ID
+,name          varchar2(20)         not null   -- 성명
+,content       varchar2(1000)       not null   -- 댓글내용
+,regDate       date default sysdate not null   -- 작성일자
+,fk_Seq     number               not null   -- 원게시물 글번호
+,constraint PK_precomment_seq primary key(seq)
+,constraint FK_precomment_fk_idx foreign key(fk_idx) references member(idx)
+,constraint FK_precomment_fk_Seq foreign key(fk_Seq) references preview(seq) on delete cascade
+);
+
+create sequence seq_precomment
+start with 1
+increment by 1
+nomaxvalue
+nominvalue
+nocycle
+nocache;
+----------------------------------------------------------------------------------------------
+
+		select *
+		from
+		(
+		select row_number() over(order by B.readcount desc) AS RNO
+		     , galleryno, galleryname, mainpicture, location, openinghour, holiday
+		from gallery A left join exhibition B
+		on A.galleryno = B.fk_galleryno
+		where A.status = 1 and exhibitionname is not null and B.status = '전시중'
+		order by RNO, galleryno asc
+		)
+		where RNO between 1 and 3
+        
+        select *
+        from
+        (
+        select rownum AS RNO, exhibitionname, B.mainposter
+		from exhibition A left join exhibitiondetail B
+		on A.exhibitionno = B.fk_exhibitionno
+		where exhibitionname like '%'|| '이정' ||'%' 
+        )
+        where RNO between 1 and 6
+
+select*
+from preview

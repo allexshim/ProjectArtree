@@ -113,6 +113,30 @@ public class MemberService implements InterMemberService {
 		return n;
 	}
 
+
+	// *********************** 마이페이지 *********************** //
+	// ========= chart 개인 선호 장르 select =========
+	@Override
+	public List<String> myfavorGenre(String idx) {
+		List<String> myfavorGenre = dao.myfavorGenre(idx);
+		return myfavorGenre;
+	}
+	// ========= 선호 장르 차트 data =========
+	@Override
+	public List<HashMap<String, String>> myGenreData(String genre) {
+		List<HashMap<String, String>> genreData = dao.myGenreData(genre);
+		return genreData;
+	}
+
+
+	
+	// ========= word cloud 개인 선호 태그 select =========
+	@Override
+	public List<String> myfavorTag(String idx) {
+		List<String> myfavorTag = dao.myfavorTag(idx);
+		return myfavorTag;
+	}
+	
 	// ========= 하트 눌렀을 때 가고싶어요 select =========
 	@Override
 	public List<HashMap<String, String>> selectWannaGo(String idx) {
@@ -120,12 +144,25 @@ public class MemberService implements InterMemberService {
 		return wantList;
 	}
 
-	// *********************** 마이페이지 *********************** //
 	// ========= 책갈피 눌렀을 때 다녀왔어요 select =========
 	@Override
 	public List<HashMap<String, String>> selectGo(String idx) {
 		List<HashMap<String, String>> goList = dao.selectGo(idx);
 		return goList;
+	}
+
+	// ========= 하트 눌렀을 때 전시회의 작가 select =========
+	@Override
+	public List<HashMap<String, String>> selectFavorAuthor(String idx) {
+		List<HashMap<String, String>> favorAuthor = dao.selectFavorAuthor(idx);
+		return favorAuthor;
+	}
+
+	// ========= 선호 전시관 =========
+	@Override
+	public List<HashMap<String, String>> selectfavorGal(String idx) {
+		List<HashMap<String, String>> favorGal = dao.selectfavorGal(idx);
+		return favorGal;
 	}
 
 	// ========= 마이페이지 - 작품 재설정 =========
@@ -135,6 +172,57 @@ public class MemberService implements InterMemberService {
 		int n = dao.updateFavor1(paraMap);
 		int m = dao.updateFavor2(paraMap);
 		return n+m;
+	}
+
+	// ========= 닉네임 변경 =========
+	@Override
+	public int changeName(HashMap<String, String> paraMap) {
+		int n = dao.changeName(paraMap);
+		return n;
+	}
+
+	// ========= 비밀번호 변경 =========
+	@Override
+	public int changePwd(HashMap<String, String> paraMap) {
+		int n = dao.changePwd(paraMap);
+		return n;
+	}
+
+	// ========= 회원탈퇴 =========
+	@Override
+	public int withdrawal(HashMap<String, String> paraMap) {
+
+		// 탈퇴 사유 member insert
+		int n = dao.updateWithdrawal(paraMap);
+		
+		// status 0 으로 변경
+		int m = dao.updateStatus(paraMap.get("idx"));
+		
+		return n+m;
+	}
+
+	// ************** 관리자 페이지 **************
+	// ========= 지역별 선호 장르 =========
+
+	// 지역마다 선호한 장르 다 가져온다.
+	@Override
+	public List<String> getAreaFavorGenre(String area) {
+		List<String> areaFavorGenre = dao.getAreaFavorGenre(area);
+		return areaFavorGenre;
+	}
+
+	// 선호 장르 가져가서 카운트
+	@Override
+	public List<HashMap<String, String>> getGenreCnt(String genre) {
+		List<HashMap<String, String>> genreCnt = dao.getGenreCnt(genre);
+		return genreCnt;
+	}
+
+	// 지역별 선호장르 카운트 총 합
+	@Override
+	public int getTotalCnt(String genre) {
+		int totalCnt = dao.getTotalCnt(genre);
+		return totalCnt;
 	}
 
 

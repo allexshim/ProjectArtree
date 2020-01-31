@@ -17,6 +17,8 @@
 	div.myPage_wrap {
 		width: 1250px;
 		margin: 0 auto;
+		margin-top: 100px;
+		margin-bottom: 50px;
 	}
 	
 	ul {
@@ -133,8 +135,9 @@
 	
 	/* 선호 작가 */
 	div.artist_list {
-		width: 406px;
-		margin-right: 31px;
+		width: 390px;
+		margin-bottom: 20px;
+		margin-right: 40px;
 		float: left;
 		cursor: pointer;
 		text-align: center;
@@ -142,24 +145,32 @@
 	
 	div.artist_list img {
 		margin-bottom: 20px;
-		width: 406px;
+		width: 390px;
 		height: 279px;
 	}
 	
+	div.favor_artist ul :nth-child(3n) div {
+        margin-right: 0px;
+    }
+
+	
 	/* 선호 전시회 */
+	
+	div.favor_place ul :nth-child(2n) div {
+        margin-right: 0px;
+    }
+	
 	div.place_list {
-		width: 610px;
+		width: 590px;
 		height: 483px;
-		margin-right: 30px;
+		margin-right: 70px;
 		float: left;
+		display: inline-block;
 	}
 	
-	div.img_wrap {
-		width: 100%;
-		height: 414px;
-		background-image: url("http://app.art-map.co.kr/upload/museum/artmap_20191227_113539758.jpg");
-		background-position: center;
-		background-size: cover;
+	div.img_wrap img { 
+		width: 590px; 
+		height: 414px; 
 		display: block;
 	}
 	
@@ -191,10 +202,38 @@
 		font-size: 16px;
 	}
 
+	/* word chart */
+	div.wordchart_cont {
+		width: 500px;
+		height: 300px;
+		margin-top: 30px;
+	}
+	
+	/* 선호 장르 차트 */
+	div#chart_cont {
+		width: 500px;
+		height: 300px;
+		padding-right: 0;
+		padding-left: 120px;
+		margin-right: 0;
+		text-align: center;
+	}
 	
 </style>
 
 <script type="text/javascript" src="<%= ctxPath%>/resources/js/jquery-3.3.1.min.js"></script>
+
+<!-- word chart -->
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/wordcloud.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
+<script src="https://code.highcharts.com/modules/export-data.js"></script>
+<script src="https://code.highcharts.com/modules/accessibility.js"></script>
+
+<!-- 선호 장르 차트 -->
+<script src="https://www.amcharts.com/lib/4/core.js"></script>
+<script src="https://www.amcharts.com/lib/4/charts.js"></script>
+<script src="https://www.amcharts.com/lib/4/themes/animated.js"></script>
 
 <script type="text/javascript">
 
@@ -208,8 +247,80 @@
 			$("#myArtmap").addClass("on");
 		});
 		
-		$("#wantCnt").html(${wantList}.length);
-		$("#goCnt").html(${goList}.length);
+		$("#wantCnt").html(${wantCnt});
+		$("#goCnt").html(${goCnt});
+		
+		// word chart
+		var text = "${text}";
+		
+		var lines = text.split(/[,\. ]+/g),
+	    data = Highcharts.reduce(lines, function (arr, word) {
+	        var obj = Highcharts.find(arr, function (obj) {
+	            return obj.name === word;
+	        });
+	        if (obj) {
+	            obj.weight += 1;
+	        } else {
+	            obj = {
+	                name: word,
+	                weight: 1
+	            };
+	            arr.push(obj);
+	        }
+	        return arr;
+	    }, []);
+		
+		Highcharts.chart('wordchart_cont', {
+		    accessibility: {
+		        screenReaderSection: {
+		            beforeChartFormat: ''
+		        }
+		    },
+		    series: [{
+		        type: 'wordcloud',
+		        data: data
+		    }],
+		    title: {
+		        text: ''
+		    }
+		}); 
+	
+		
+		// 선호 장르 차트
+		$.ajax({
+			url:"<%= request.getContextPath()%>/getGenreData.at",
+			dataType:"json",
+			type:"GET",
+			success:function(json){
+			
+				am4core.useTheme(am4themes_animated);
+				
+				var chart = am4core.create("chart_cont", am4charts.PieChart);
+				
+				chart.data = json;
+				
+				// Set inner radius
+				chart.innerRadius = am4core.percent(50);
+
+				// Add and configure Series
+				var pieSeries = chart.series.push(new am4charts.PieSeries());
+				pieSeries.dataFields.value = "cnt";
+				pieSeries.dataFields.category = "genre";
+				pieSeries.slices.template.stroke = am4core.color("#fff");
+				pieSeries.slices.template.strokeWidth = 2;
+				pieSeries.slices.template.strokeOpacity = 1;
+
+				// This creates initial animation
+				pieSeries.hiddenState.properties.opacity = 1;
+				pieSeries.hiddenState.properties.endAngle = -90;
+				pieSeries.hiddenState.properties.startAngle = -90;
+			},
+			  
+		    error: function(request, status, error){
+		 		alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+		    }
+		});
+		
 		
 	});
 	
@@ -221,12 +332,13 @@
 		$("#tab_wrap"+n).css("display", "");
 	}
 	
+	
 </script>
 
 <body>
 	<div class="myPage_wrap">
 	<div class="myPage_header">
-		<h1 class="header_name">사용자 이름</h1>
+		<h1 class="header_name">${loginuser.name}</h1>
 		<nav class="myPage_tabs">
 			<a href="/artree/mypage.at" class="tab on" id="myArtmap">My Artmap</a>
 			<a href="/artree/mypage_order.at" class="tab">주문내역</a>
@@ -242,104 +354,18 @@
 					<div class="genre_header">
 						<span>선호장르</span>
 					</div>
-					<div class="chart_cont">
-						차트차트차트차트차트<br/>
-						차트차트차트차트차트<br/>
-						차트차트차트차트차트<br/>
-						차트차트차트차트차트<br/>
-						차트차트차트차트차트
+					<div class="chart_cont" id="chart_cont">
 					</div>
 				</div>
 				<div class="favor_tag">
 					<div class="tag_header">
 						<span>선호태그</span>
 					</div>
-					<div class="chart_cont">
-						태그태그태그태그태그<br/>
-						태그태그태그태그태그<br/>
-						태그태그태그태그태그<br/>
-						태그태그태그태그태그<br/>
-						태그태그태그태그태그
+					<div class="wordchart_cont" id="wordchart_cont">
 					</div>
 				</div>
 			</div>
 		</div>
-		
-	<!-- 	<div class="conts">
-			<div class="collection">
-				<h2>작품컬렉션</h2>
-				<div class="collect_div">
-					<ul class="collect_list">
-						<li>
-							<div class="list_div">
-								<img src="http://app.art-map.co.kr/upload/work/artmap_20191018_95021230.jpg"/>
-								<div class="list_desc">
-									<h4>무제</h4>
-									<span class="artist">임봉재</span>
-									<span class="desc">캔버스에 유채</span>
-									<span class="size">162X130.3cm 2000</span>
-								</div>
-							</div>
-						</li>
-						<li>
-							<div class="list_div">
-								<img src="http://app.art-map.co.kr/upload/work/artmap_20191018_95021230.jpg" />
-								<div class="list_desc">
-									<h4>무제</h4>
-									<span class="artist">임봉재</span>
-									<span class="desc">캔버스에 유채</span>
-									<span class="size">162X130.3cm 2000</span>
-								</div>
-							</div>
-						</li>
-						<li>
-							<div class="list_div">
-								<img src="http://app.art-map.co.kr/upload/work/artmap_20191018_95021230.jpg"/>
-								<div class="list_desc">
-									<h4>무제</h4>
-									<span class="artist">임봉재</span>
-									<span class="desc">캔버스에 유채</span>
-									<span class="size">162X130.3cm 2000</span>
-								</div>
-							</div>
-						</li>
-						<li>
-							<div class="list_div">
-								<img src="http://app.art-map.co.kr/upload/work/artmap_20191018_95021230.jpg"/>
-								<div class="list_desc">
-									<h4>무제</h4>
-									<span class="artist">임봉재</span>
-									<span class="desc">캔버스에 유채</span>
-									<span class="size">162X130.3cm 2000</span>
-								</div>
-							</div>
-						</li>
-						<li>
-							<div class="list_div">
-								<img src="http://app.art-map.co.kr/upload/work/artmap_20191018_95021230.jpg"/>
-								<div class="list_desc">
-									<h4>무제</h4>
-									<span class="artist">임봉재</span>
-									<span class="desc">캔버스에 유채</span>
-									<span class="size">162X130.3cm 2000</span>
-								</div>
-							</div>
-						</li>
-						<li>
-							<div class="list_div">
-								<img src="http://app.art-map.co.kr/upload/work/artmap_20191018_95021230.jpg"/>
-								<div class="list_desc">
-									<h4>무제</h4>
-									<span class="artist">임봉재</span>
-									<span class="desc">캔버스에 유채</span>
-									<span class="size">162X130.3cm 2000</span>
-								</div>
-							</div>
-						</li>
-					</ul>
-				</div>
-			</div>
-		</div> -->
 		
 		<div class="conts" style="padding: 0px;">
 			<div class="clip">
@@ -357,9 +383,9 @@
 						<c:forEach items="${wantList}" var="want">
 						<tr>
 							<td>
-								<img src="${want.mainposter}"/>
+								<img src="${want.mainposter}" onclick="javascript:location.href='/artree/exhDetail.at?eno=${want.exhibitionno}'" style="cursor: pointer;"/>
 							</td>
-							<td>
+							<td onclick="javascript:location.href='/artree/exhDetail.at?eno=${want.exhibitionno}'" style="cursor: pointer;">
 								<span>${want.exhibitionname}</span>
 								<span>${want.galleryname} }</span>
 								<span>${want.startdate} - ${want.enddate}</span>
@@ -382,9 +408,9 @@
 						<c:forEach items="${goList}" var="go">
 						<tr>
 							<td>
-								<img src="${go.mainposter}"/>
+								<img src="${go.mainposter}" onclick="javascript:location.href='/artree/exhDetail.at?eno=${go.exhibitionno}'" style="cursor: pointer;"/>
 							</td>
-							<td>
+							<td onclick="javascript:location.href='/artree/exhDetail.at?eno=${go.exhibitionno}'" style="cursor: pointer;">
 								<span>${go.exhibitionname}</span>
 								<span>${go.galleryname}</span>
 								<span>${go.startdate} - ${go.enddate}</span>
@@ -403,32 +429,38 @@
 			<h2>선호작가</h2>
 			<div class="favor_artist">
 				<ul>
+				<c:forEach items="${favorAuthor}" var="author">
 					<li>
-						<div class="artist_list">
-							<img src="http://app.art-map.co.kr/upload/author/artmap_20191105_131226254.jpg"/>
-							<span>공성훈</span>
+						<div class="artist_list" onclick="javascript:location.href='/artree/exhDetail.at?eno=${author.exhibitionno}'">
+							<img src="${author.image1}"/>
+							<span>${author.author}</span>
 						</div>
 					</li>
+				</c:forEach>
 				</ul>
 			</div>
 		</div>
 		
-		<div class="conts">
+		<div class="conts" style="border-bottom: 0;">
 			<h2>선호전시관</h2>
 			<div class="favor_place">
 				<ul>
+					<c:forEach items="${favorGal}" var="gal">
 					<li>
 						<div class="place_list">
-							<div class="img_wrap"></div>
+							<div class="img_wrap">
+								<img src="${gal.mainpicture}" />
+							</div>
 							<div class="place_desc">
-								<span>아라리오뮤지엄 탑동시네마/제주</span>
-								<span>제주특별자치도 제주시 삼도이동 1261-8</span>
+								<span>${gal.galleryname}</span>
+								<span>${gal.detailaddress}</span>
 							</div>
 							<div class="btn">
-								<a href="#">자세히 보러가기</a>
+								<a href="/artree/galDetail.at?gno=${gal.galleryno}">자세히 보러가기</a>
 							</div>
 						</div>
 					</li>
+					</c:forEach>
 				</ul>
 			</div>
 		</div>

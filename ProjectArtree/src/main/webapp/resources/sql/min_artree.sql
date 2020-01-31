@@ -5,6 +5,8 @@ from dictionary;
 
 select * from tab;
 
+select * from seq;
+
 -------------------------------------
 
 select * from tag order by type;
@@ -43,6 +45,10 @@ select * from exhibition;
 
 desc exhibition;
 
+desc appliedexhibits;
+
+select * from appliedExhibits;
+
 create table appliedExhibits
 (
 applyingNo	number	NOT NULL
@@ -67,10 +73,13 @@ applyingNo	number	NOT NULL
 , constraint FK_appliedExhibits_gno foreign key( fk_galleryNo ) references gallery( galleryNo )
 );
 
+select seq_appliedExhibits.nextval from dual;
 
 desc appliedexhibits;
 
 drop table appliedExhibits purge;
+
+drop sequence seq_appliedExhibits;
 
 create sequence seq_appliedExhibits
 start with 1
@@ -84,13 +93,17 @@ insert into appliedexhibits ( seq_appliedExhibits.nextval, fk_galleryNo, exhibit
 values (  );
 
 
+select * from appliedexhibits;
+
+select * from appliedDetail;
+
 create table appliedDetail
 ( appliedimgseq		number				not null
 , fk_applyingNo			number				NOT NULL
 , imagefilename			VARCHAR2(255)	not NULL
 , imageorgFilename	VARCHAR2(255)	not NULL
 , imagefileSize			VARCHAR2(100)	not NULL
-, imageinfo				VARCHAR2(500)	NULL
+, image1info				VARCHAR2(500)	NULL
 , thumbnailFileName	varchar2(255)
 , constraint PK_appliedDetail_appliedimg primary key( appliedimgseq )
 , constraint FK_appliedDetail_appliedimg foreign key( fk_applyingNo )
@@ -110,6 +123,192 @@ nocache;
 
 
 drop table appliedDetail purge;
+
+------------------------------------------------------
+
+
+select * from member;
+
+select * from exhibition;
+
+select distinct status from exhibition;
+
+select * from exhibition where status = '전시예정';
+
+desc exhibition;
+
+
+select exhibitionno, exhibitionname, author, status from exhibition where status = '전시중';
+
+select * from exhibition where status = '전시예정' order by startdate;
+
+update exhibition set status = '전시예정' where exhibitionno = 5135;
+
+commit;
+select * from cart ;
+
+
+select E.exhibitionno, E.exhibitionname, E.author, E.status, G.galleryname, E.applier, E.tel, E.email, E.startdate, E.enddate, E.genre, E.tag, E.exhibitioninfo, E.price, E.foodordrink, E.extrarestriction, E.photo, E.openclosetime
+from exhibition E JOIN gallery G
+on e.fk_galleryno = g.galleryno
+where E.fk_galleryno = 250;
+
+select E.exhibitionno, E.exhibitionname, E.author, E.status, G.galleryname
+			, E.applier, E.tel, E.email, E.startdate, E.enddate, E.genre, E.tag
+			, E.exhibitioninfo, E.price, E.foodordrink, E.extrarestriction, E.photo, E.openclosetime
+            , nvl(ED.image1, '없음') AS image1, nvl(ED.image2, '없음') AS image2, nvl(ED.image3, '없음') AS image3, nvl(ED.mainposter, '없음') AS mainposter
+            , nvl(ED.image1info, '없음') AS image1info, nvl(ED.image2info, '없음') AS image2info, nvl(ED.image3info, '없음') AS image3info
+		from exhibition E 
+        JOIN gallery G on E.fk_galleryno = G.galleryno
+        JOIN exhibitiondetail ED on E.exhibitionno = ED.fk_exhibitionno
+        where E.exhibitionno = 4922;
+
+select * from EXHIBITIONDETAIL;
+
+desc exhibition;
+
+select E.exhibitionno, E.exhibitionname, E.author, E.status, G.galleryname
+			, E.applier, E.tel, E.email, E.startdate, E.enddate, E.genre, E.tag
+			, E.exhibitioninfo, E.price, E.foodordrink, E.extrarestriction, E.photo, E.openclosetime
+			, nvl(ED.mainposter, '없음') AS mainposter
+			, nvl(ED.image1, '없음') AS image1, nvl(ED.image2, '없음') AS image2, nvl(ED.image3, '없음') AS image3
+            , nvl(ED.image1info, '없음') AS image1info, nvl(ED.image2info, '없음') AS image2info, nvl(ED.image3info, '없음') AS image3info
+		from exhibition E 
+        JOIN gallery G on E.fk_galleryno = G.galleryno
+        JOIN exhibitiondetail ED on E.exhibitionno = ED.fk_exhibitionno
+        where E.exhibitionno = 4922;
+
+Alter table exhibition modify (exhibitioninfo clob);
+
+
+alter table appliedDetail rename column imageinfo to image1info;
+
+alter table appliedDetail add image2info VARCHAR2(500) default '없음' null ;
+
+alter table appliedDetail add image3info VARCHAR2(500) default '없음' null ;
+
+alter table appliedDetail add mainposter VARCHAR2(500) default '없음' not null ;
+
+commit;
+
+
+select * from appliedDetail order by fk_applyingno desc;
+
+select * from appliedExhibits order by applyingno desc;
+
+desc appliedExhibits;
+desc applieddetail;
+desc exhibition;
+
+alter table appliedDetail
+drop column image2info;
+
+alter table appliedDetail
+drop column image3info;
+
+alter table appliedDetail
+rename column image1info to imageinfo;
+
+select * from appliedDetail order by 1 desc;
+
+select * from member;
+
+commit;
+
+select fk_applyingno, imagefilename, imageorgfilename, imagefilesize, thumbnailfilename, mainposter
+			, nvl(image1info, '없음') AS image1info, nvl(image2info, '없음') AS image2info, nvl(image3info, '없음') AS image3info
+		from appliedDetail
+		where fk_applyingno = 3
+		order by fk_applyingno desc;
+
+
+desc appliedexhibits;
+
+
+Alter table appliedexhibits modify (exhibitioninfo clob);
+
+commit;
+
+alter index ARTREE.PK_APPLIEDEXHIBITS_ANO rebuild;
+
+commit;
+
+insert into exhibition ( exhibitionno, fk_galleryno, exhibitionname, applier, author, startdate, enddate, email, tel, genre, tag, authorinfo, exhibitioninfo, price, foodofdrink, extrarestriction, photo, openclosetime, status, readcount )
+values ( #{ exhibitionno }, #{ fk_galleryno }, #{ exhibitionname }, #{ applier }, #{ author }, #{ startdate }, #{ enddate }, #{ email }, #{ tel }, #{ genre }, #{ authorinfo }, #{ exhibitioninfo }, #{ price }
+    , #{ foodofdrink }, #{ extrarestriction }, #{ photo }, #{ openclosetime }, '전시예정', '0' ) ;
+
+insert into exhibitiondetail ( fk_exhibitionno, image1, image2, image3, image1info, image2info, image3info, mainposter )
+values( #{ fk_exhibitionno }, #{ image1 }, #{ image2 }, #{ image3 }, #{ image1info }, #{ image2info }, #{ image3info }, #{ mainposter } ) ;
+
+select * from SEQ_EXHIBITION;
+
+select SEQ_EXHIBITION.nextval from dual ;
+
+delete from exhibition where exhibitionno = 5187;
+
+alter table appliedExhibits add status varchar2(30) default '검토예정';
+
+update appliedExhibits set status = '검토완료' where applyingno = 26;
+
+commit;
+
+update appliedExhibits set status = '검토완료' where applyingno = #{ applyingno }
+
+
+select idx, email, name, status
+		from 
+		(
+			select rownum AS rno
+				, idx, email, name, status
+			from   
+			(  
+				select idx, email, name, status
+				from member
+				where status = 1
+				
+				order by idx desc
+			) V  
+		) T 	   
+		where rno between 1 and 10;
+
+select idx, email, name, agegroup, gender, area, hp, status, registerday, lastlogindate, 
+
+-----------------------------------------=======================================-----------------------------------------
+
+select * from member;
+
+select * from appliedDetail order by fk_applyingno desc;
+
+select * from appliedExhibits order by applyingno desc;
+
+select * from EXHIBITIONDETAIL order by fk_exhibitionno desc;
+
+select * from EXHIBITION order by exhibitionno desc;
+
+select * from SEQ_EXHIBITION;
+
+desc exhibition;
+
+commit;
+
+
+delete from exhibition where exhibitionno = 5183;
+
+
+delete from EXHIBITIONDETAIL where fk_exhibitionno = 5183;
+commit;
+
+-----------------------------------------=======================================-----------------------------------------
+
+select idx, email, name, status from member order by idx ;
+
+
+
+
+
+
+
+
 
 
 

@@ -25,12 +25,47 @@ public interface InterMemberDAO {
 
 	int updatePwd(HashMap<String, String> updateMap); // 임시 비밀번호로 현재 비밀번호 변경
 
+	// 선호 장르 chart
+	List<String> myfavorGenre(String idx); // chart 개인 선호 장르 select
+	List<HashMap<String, String>> myGenreData(String genre); // 선호 장르 차트 data
+	
+	List<String> myfavorTag(String idx); // word cloud 개인 선호 태그 select
+	
 	List<HashMap<String, String>> selectWannaGo(String idx); // 하트 눌렀을 때 가고싶어요 select
 
 	List<HashMap<String, String>> selectGo(String idx); // 책갈피 눌렀을 때 다녀왔어요 select
 
+	List<HashMap<String, String>> selectFavorAuthor(String idx); // 하트 눌렀을 때 전시회의 작가 select
+	
+	List<HashMap<String, String>> selectfavorGal(String idx); // 선호 전시관
+	
 	int updateFavor1(HashMap<String, String> paraMap); // 마이페이지 - 작품 재설정1
 	int updateFavor2(HashMap<String, String> paraMap); // 마이페이지 - 작품 재설정2
+
+	int changeName(HashMap<String, String> paraMap); // 닉네임 변경 
+
+	int changePwd(HashMap<String, String> paraMap); // 비밀번호 변경
+
+	int updateWithdrawal(HashMap<String, String> paraMap); // 탈퇴 사유 입력
+	int updateStatus(String idx); // status 0 으로 변경
+
+	// 관리자 페이지
+	List<String> getAreaFavorGenre(String area); // 지역마다 선호한 장르 다 가져온다.
+
+	List<HashMap<String, String>> getGenreCnt(String genre); // 선호 장르 가져가서 카운트
+
+	int getTotalCnt(String genre); // 지역별 선호장르 카운트 총 합
+
+	
+
+	
+
+
+
+
+
+
+
 
 	
 

@@ -45,13 +45,13 @@
 		font-size: 25pt; 
 		font-weight: bold;
 	}
-	
+	 
 	#container_exh_detail .info_artist {
 		display: block; 
 		font-size: 20pt; 
 		font-weight: bold; 
 		margin: 20px 0 60px 0;
-	}
+	} 
 	
 	#container_exh_detail .main_btm {
 		margin: 30px 0 30px 0; 
@@ -87,7 +87,7 @@
 	
 	#container_exh_detail .span1 {
 		display: block; 
-		font-size: 15pt;
+		font-size: 13pt;
 	}
 	
 	#container_exh_detail .btmInfo_right {
@@ -98,8 +98,7 @@
 	}
 	
 	#container_exh_detail .btn1 {
-		position: relative;
-		display: block; 
+		display: inline-block; 
 		font-weight: bold;
 		background-color: #f2f2f2;
 		border: none;
@@ -110,17 +109,18 @@
 	#container_exh_detail .buyBtn {
 		margin-bottom: 10px;
 		font-size: 20pt;
+		bottom: -80px; position: relative;
 	}
 	
 	#container_exh_detail .checkBtn {
-		position: relative;
-		display: block; 
+		display: inline-block; 
 		margin-bottom: 50px;
 		font-size: 12pt;
 		font-weight: bold;
 		background-color: white;
 		border: none;
 		padding: 5px 25px 0px 25px;
+		bottom: -130px; left: -49%; position: relative;
 	}
 	
 	#container_exh_detail .ico1 {
@@ -565,6 +565,10 @@
 		
 		goCheckLikeExh('${exhDetailMap.EXHIBITIONNO}');
 		goCheckLikeGal('${exhDetailMap.FK_GALLERYNO}');
+		getGenderChart('${exhDetailMap.EXHIBITIONNO}');
+		getAgeChart('${exhDetailMap.EXHIBITIONNO}');
+		getReview('${exhDetailMap.EXHIBITIONNO}');
+		getPreview('${exhDetailMap.EXHIBITIONNO}');
 		
 		$(".forIco").hover(function(){
 			$(this).children(".forMoving").stop().animate({left:'5px'}, 'fast');
@@ -582,107 +586,6 @@
 			});
 		});
 
-		<%-- 차트 영역 --%>
-		// 성별 차트
-		am4core.ready(function() {
-
-			// Themes begin
-			am4core.useTheme(am4themes_kelly);
-			am4core.useTheme(am4themes_animated);
-			// Themes end
-
-			var iconPath = "M53.5,476c0,14,6.833,21,20.5,21s20.5-7,20.5-21V287h21v189c0,14,6.834,21,20.5,21 c13.667,0,20.5-7,20.5-21V154h10v116c0,7.334,2.5,12.667,7.5,16s10.167,3.333,15.5,0s8-8.667,8-16V145c0-13.334-4.5-23.667-13.5-31 s-21.5-11-37.5-11h-82c-15.333,0-27.833,3.333-37.5,10s-14.5,17-14.5,31v133c0,6,2.667,10.333,8,13s10.5,2.667,15.5,0s7.5-7,7.5-13 V154h10V476 M61.5,42.5c0,11.667,4.167,21.667,12.5,30S92.333,85,104,85s21.667-4.167,30-12.5S146.5,54,146.5,42 c0-11.335-4.167-21.168-12.5-29.5C125.667,4.167,115.667,0,104,0S82.333,4.167,74,12.5S61.5,30.833,61.5,42.5z"
-
-
-
-			var chart = am4core.create("genderChart", am4charts.SlicedChart);
-			chart.hiddenState.properties.opacity = 0; // this makes initial fade in effect
-
-			chart.data = [{
-			    "name": "여성",
-			    "value": 354
-			}, {
-			    "name": "남성",
-			    "value": 23
-			}];
-
-			var series = chart.series.push(new am4charts.PictorialStackedSeries());
-			series.dataFields.value = "value";
-			series.dataFields.category = "name";
-			series.alignLabels = true;
-
-			series.maskSprite.path = iconPath;
-			series.ticks.template.locationX = 1;
-			series.ticks.template.locationY = 0.5;
-
-			series.labelsContainer.width = 200;
-
-			chart.legend = new am4charts.Legend();
-			chart.legend.position = "left";
-			chart.legend.valign = "bottom";
-
-			});
-		
-		// 연령대 차트
-		am4core.ready(function() {
-
-			// Themes begin
-			am4core.useTheme(am4themes_kelly);
-			am4core.useTheme(am4themes_animated);
-			// Themes end
-
-			var chart = am4core.create("ageChart", am4charts.PieChart);
-			chart.hiddenState.properties.opacity = 0; // this creates initial fade-in
-
-			chart.data = [
-			  {
-				  age: "10대",
-			    value: 401
-			  },
-			  {
-				  age: "20대",
-			    value: 300
-			  },
-			  {
-				  age: "30대",
-			    value: 200
-			  },
-			  {
-				  age: "40대",
-			    value: 165
-			  },
-			  {
-				  age: "50대",
-			    value: 139
-			  },
-			  {
-				  age: "60대 이상",
-			    value: 128
-			  }
-			];
-			chart.radius = am4core.percent(70);
-			chart.innerRadius = am4core.percent(40);
-			chart.startAngle = 180;
-			chart.endAngle = 360;  
-
-			var series = chart.series.push(new am4charts.PieSeries());
-			series.dataFields.value = "value";
-			series.dataFields.category = "age";
-
-			series.slices.template.cornerRadius = 10;
-			series.slices.template.innerCornerRadius = 7;
-			series.slices.template.draggable = true;
-			series.slices.template.inert = true;
-			series.alignLabels = false;
-
-			series.hiddenState.properties.startAngle = 90;
-			series.hiddenState.properties.endAngle = 90;
-
-			chart.legend = new am4charts.Legend();
-
-			}); // end am4core.ready()
-			
-		<%-- 차트 영역 --%>
 			
 		<%-- http://apis.map.kakao.com/web/guide/ 카카오 지도 스크립트 --%>
 			var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
@@ -827,7 +730,7 @@
 	////////////////////////// 전시회 좋아요 지정 및 해제 ////////////////////////
 	function exhLike(eno, gno, tag, gen){
 		
-		if(${sessionScope.loginuser == null}){
+		if(${sessionScope.loginuser == null}){ 
 			alert("먼저 로그인을 진행해주세요 !");
 			location.href="javascript:layer_open('layer')";
 			return;
@@ -854,22 +757,29 @@
 	
 	////////////////////////// 갤러리 좋아요 지정 및 해제 ////////////////////////
 	function galLike(gno){
-		$.ajax({
-			
-			url: "<%=ctxPath%>/GalLike.at",
-			type: 'POST',
-			
-			data: {"gno":gno},
-			dataType: "JSON",
-			success: function(json){
-				if(json.CkGcnt == 1){
-					goCheckLikeGal(gno);
+		
+		if(${sessionScope.loginuser == null}){
+			alert("먼저 로그인을 진행해주세요 !");
+			location.href="javascript:layer_open('layer')";
+			return;
+		}
+		else {
+			$.ajax({
+				
+				url: "<%=ctxPath%>/GalLike.at",
+				type: 'POST',
+				data: {"gno":gno},
+				dataType: "JSON",
+				success: function(json){
+					if(json.CkGcnt == 1){
+						goCheckLikeGal(gno);
+					}
+				},
+				error: function(request, status, error){
+					alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
 				}
-			},
-			error: function(request, status, error){
-				alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
-			}
-		});
+			});
+		}
 	}
 	
 	
@@ -902,11 +812,191 @@
 		}
 	} // end of share --------------------
 
-	function goCtrl(){
-		<%-- 전시회넘버 / eno / ticketsbin.at post get 상관없음
-			로긴유저만 ~ 
-		--%>
-		<%-- add to cart 없애기 --%>
+	////////////////////////////////////////////// buy a ticket
+	function goCtrl(eno){
+		location.href="<%= ctxPath%>/ticketsbin.at?eno="+eno;
+	}// end of goCtrl -----------------------------
+	
+	////////////////////////////////////////////// getGenderChart
+	function getGenderChart(eno){
+		
+		$.ajax({
+			url: "<%= ctxPath%>/genderChart.at?eno="+eno,
+			data: {"eno":eno},
+			dataType: "JSON",
+			success: function(json){
+				
+				var resultArr = [];
+				
+				if(json.length == 0){
+					var obj = { name: " 성별 ",
+						    	value: 0 };
+					
+					resultArr.push(obj);
+				}
+				else {
+					for(var i=0; i<json.length; i++) {
+						var obj = {name: json[i].GENDER,
+								   value: json[i].CNT};
+						resultArr.push(obj); // 배열속에 객체를 넣기
+					}
+				}
+				
+				<%-- 차트 영역 --%>
+				// 성별 차트
+				am4core.ready(function() {
+
+					// Themes begin
+					am4core.useTheme(am4themes_kelly);
+					am4core.useTheme(am4themes_animated);
+					// Themes end
+	
+					var iconPath = "M53.5,476c0,14,6.833,21,20.5,21s20.5-7,20.5-21V287h21v189c0,14,6.834,21,20.5,21 c13.667,0,20.5-7,20.5-21V154h10v116c0,7.334,2.5,12.667,7.5,16s10.167,3.333,15.5,0s8-8.667,8-16V145c0-13.334-4.5-23.667-13.5-31 s-21.5-11-37.5-11h-82c-15.333,0-27.833,3.333-37.5,10s-14.5,17-14.5,31v133c0,6,2.667,10.333,8,13s10.5,2.667,15.5,0s7.5-7,7.5-13 V154h10V476 M61.5,42.5c0,11.667,4.167,21.667,12.5,30S92.333,85,104,85s21.667-4.167,30-12.5S146.5,54,146.5,42 c0-11.335-4.167-21.168-12.5-29.5C125.667,4.167,115.667,0,104,0S82.333,4.167,74,12.5S61.5,30.833,61.5,42.5z"
+	
+					var chart = am4core.create("genderChart", am4charts.SlicedChart);
+					chart.hiddenState.properties.opacity = 0; // this makes initial fade in effect
+				
+					chart.data = resultArr;
+	
+					var series = chart.series.push(new am4charts.PictorialStackedSeries());
+					series.dataFields.value = "value";
+					series.dataFields.category = "name";
+					series.alignLabels = true;
+	
+					series.maskSprite.path = iconPath;
+					series.ticks.template.locationX = 1;
+					series.ticks.template.locationY = 0.5;
+	
+					series.labelsContainer.width = 200;
+	
+					chart.legend = new am4charts.Legend();
+					chart.legend.position = "left";
+					chart.legend.valign = "bottom";
+
+				});
+				
+			},
+			error: function(request, status, error){
+				alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+			}
+			
+		});
+		
+		
+	}
+	
+	////////////////////////////////////////////// getAgeChart
+	function getAgeChart(eno){
+		
+		$.ajax({
+			url: "<%= ctxPath%>/ageChart.at?eno="+eno,
+			data: {"eno":eno},
+			dataType: "JSON",
+			success: function(json){
+				
+				var resultArr = [];
+				
+				if(json.length == 0){
+					var obj = { age: " 연령대 ",
+						    	value: 0 };
+					
+					resultArr.push(obj);
+				}
+				else {
+					for(var i=0; i<json.length; i++){
+						var obj = { age: json[i].AGEGROUP+"대",
+								    value: json[i].CNT };
+						resultArr.push(obj);
+					}
+				}
+				
+				// 연령대 차트
+				am4core.ready(function() {
+
+					// Themes begin
+					am4core.useTheme(am4themes_kelly);
+					am4core.useTheme(am4themes_animated);
+					// Themes end
+
+					var chart = am4core.create("ageChart", am4charts.PieChart);
+					chart.hiddenState.properties.opacity = 0; // this creates initial fade-in
+
+					chart.data = resultArr;
+					
+					chart.radius = am4core.percent(70);
+					chart.innerRadius = am4core.percent(40);
+					chart.startAngle = 180;
+					chart.endAngle = 360;  
+
+					var series = chart.series.push(new am4charts.PieSeries());
+					series.dataFields.value = "value";
+					series.dataFields.category = "age";
+
+					series.slices.template.cornerRadius = 10;
+					series.slices.template.innerCornerRadius = 7;
+					series.slices.template.draggable = true;
+					series.slices.template.inert = true;
+					series.alignLabels = false;
+
+					series.hiddenState.properties.startAngle = 90;
+					series.hiddenState.properties.endAngle = 90;
+
+					chart.legend = new am4charts.Legend();
+
+					}); // end am4core.ready()
+				
+			},
+			error: function(request, status, error){
+				alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+			}
+			
+		});
+		
+	}
+	
+	////////////////////////////////// 리뷰 게시판 불러오기
+	function getReview(eno){
+		
+		$.ajax({
+			url:"<%=ctxPath%>/reviewList.at",
+			data: {"eno":eno},
+			dataType: "JSON",
+			success:function(json){
+				
+				$.each(json, function(index, item){
+					
+					
+					
+				});
+				
+			},
+			error: function(request, status, error){
+				alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+			}
+		}) // end of ajax ----
+	}
+	
+	///////////////////////////////// 기대평 게시판 불러오기 
+	function getPreview(eno){
+		
+		$.ajax({
+			url:"<%=ctxPath%>/previewList.at",
+			data: {"eno":eno},
+			dataType: "JSON",
+			success:function(json){
+				
+				$.each(json, function(index, item){
+					
+					
+					
+				});
+				
+			},
+			error: function(request, status, error){
+				alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+			}
+		}) // end of ajax ----
+		
 	}
 </script>
 <%-- EXHIBITION LIST SCRIPT END --%>
@@ -920,24 +1010,27 @@
 	
 	<c:if test="${not empty exhDetailMap}">
 		<div class="main_top">
-			<img class="main_img" src="${exhDetailMap.MAINPOSTER}">
+		
+			<c:if test="${exhDetailMap.MAINPOSTER.contains('http://')}">
+				<img class="main_img" src="${exhDetailMap.MAINPOSTER}"/>
+			</c:if>
+			<c:if test="${!exhDetailMap.MAINPOSTER.contains('http://')}">
+				<img class="main_img" src="<%= ctxPath%>/resources/files/${exhDetailMap.MAINPOSTER}"/>
+			</c:if>
+			
 			<div class="info_top">
 				<span class="bigSpan">${exhDetailMap.EXHIBITIONNAME}</span>
 				<span class="info_artist">${exhDetailMap.AUTHOR}</span>
 				
 				<c:if test="${exhDetailMap.PRICE ne 0}">
 					<div class="top_btn_area" align="center" style="top: 720px; left: 58%; position: absolute;">
-						<button type="button" class="buyBtn btn1 forIco" onclick="goCtrl()">
+						<button type="button" class="buyBtn btn1 forIco" onclick="goCtrl('${exhDetailMap.EXHIBITIONNO}')">
 							BUY TICKETS
 							<img class="forMoving" src="<%= ctxPath%>/resources/images/exhibition/ico/right_arrow.png">
 						</button>
 						<button type="button" class="checkBtn forIco moving" >
 							CHECK THIS PRICE
 							<img class="ico1 forMoving" src="<%= ctxPath%>/resources/images/exhibition/ico/mouse.png">
-						</button>
-						<button type="button" class="addBtn btn1 forIco" onclick="">
-							ADD TO CART
-							<img class="forMoving" src="<%= ctxPath%>/resources/images/exhibition/ico/right_arrow.png">
 						</button>
 					</div>
 				</c:if>
@@ -1007,14 +1100,24 @@
 			<div class="slideshow">
 			  <div class="mySlides">
 			    <div class="numbertext" style="display: none;">1 / 3</div>
-			    <img class="slideView" src="${exhDetailMap.IMAGE1}">
+					<c:if test="${exhDetailMap.IMAGE1.contains('http://')}">
+						<img class="slideView" src="${exhDetailMap.IMAGE1}"/>
+					</c:if>
+					<c:if test="${!exhDetailMap.IMAGE1.contains('http://')}">
+						<img class="slideView" src="<%= ctxPath%>/resources/files/${exhDetailMap.IMAGE1}"/>
+					</c:if>
 			    <div class="text">${exhDetailMap.IMAGE1INFO}</div>
 			  </div>
 			  
 			  <c:if test="${not empty exhDetailMap.IMAGE2}">
 				  <div class="mySlides">
 				    <div class="numbertext" style="display: none;">2 / 3</div>
-				    <img class="slideView" src="${exhDetailMap.IMAGE2}">
+				    	<c:if test="${exhDetailMap.IMAGE2.contains('http://')}">
+							<img class="slideView" src="${exhDetailMap.IMAGE2}"/>
+						</c:if>
+						<c:if test="${!exhDetailMap.IMAGE2.contains('http://')}">
+							<img class="slideView" src="<%= ctxPath%>/resources/files/${exhDetailMap.IMAGE2}"/>
+						</c:if>
 				    <div class="text">${exhDetailMap.IMAGE2INFO}</div>
 				  </div>
 			  </c:if>
@@ -1022,7 +1125,12 @@
 			  <c:if test="${not empty exhDetailMap.IMAGE3}">
 				  <div class="mySlides">
 				    <div class="numbertext" style="display: none;">3 / 3</div>
-				    <img class="slideView" src="${exhDetailMap.IMAGE3}">
+				    	<c:if test="${exhDetailMap.IMAGE3.contains('http://')}">
+							<img class="slideView" src="${exhDetailMap.IMAGE3}"/>
+						</c:if>
+						<c:if test="${!exhDetailMap.IMAGE3.contains('http://')}">
+							<img class="slideView" src="<%= ctxPath%>/resources/files/${exhDetailMap.IMAGE3}"/>
+						</c:if>
 				    <div class="text">${exhDetailMap.IMAGE3INFO}</div>
 				  </div>
 			  </c:if>
@@ -1099,7 +1207,7 @@
 		<%-- ------------------------------------------기대평 영역 --%>
 		<div class="comment_area">
 			<table class="basic_table">
-			<caption class="tableTitle">COMMENT</caption>
+			<caption class="tableTitle">PREVIEW</caption>
 				<thead>
 					<tr>
 						<th style="width: 65px;">NO</th>

@@ -18,9 +18,16 @@
 		font-family: 'Noto Sans Kr', sans-serif;
 	}
 	
-	#reviewContainer {
-		padding-bottom : 100px;
+	.M1 {
+		-webkit-transform:translate(-10px,0);
 	}
+	
+	#noticeContainer {
+		
+		padding-bottom: 300px;
+	}
+	
+	
 	
 	img#boardtop {
 		/* position : absolute; */
@@ -29,10 +36,11 @@
 	}
 	
 	div#topText {
+		margin-bottom: 100px;
 		padding-top : 50px;
 		width : 500px;
 		text-align: left;
-		padding-left : 60px;
+		padding-left : 200px;
 	}
 	
 	div#topText span {
@@ -58,7 +66,8 @@
 	
 	/* 공지 추가, 삭제 버튼 */	
 	div#btns {
-		padding-right : 30px;
+		padding-right : 200px;
+		margin-bottom: 40px;
 	}
 	
 	div#btns img {
@@ -67,11 +76,12 @@
 	
 	/* 공지 추가, 삭제하기 */
 	#addNoticeContainer {
-		padding-left : 60px;
+		
+		padding-left : 200px;
 		padding-top : 20px;
 	}
 	
-	#addTitle, .fa-plus {
+	#notTitle, .fa-plus {
 		font-size : 25px;
 		font-weight : bold;
 		color : black;
@@ -81,11 +91,11 @@
 		color:black;
 	}
 	
-	#addTitle, #addContent {
+	#notTitle, #notContent {
 		border : none;
 	}
 	
-	#addContent {
+	#notContent {
 		font-size : 12pt;
 		width : 650px;
 		height : 200px;
@@ -95,12 +105,16 @@
 	#addBtn {
 		cursor : pointer;
 	}
+	
+	#backBtn {
+		cursor: pointer;
+	}
 
 	/* 공지 내용 */
 	div#noticeList {
-		padding-top : 40px;
-		padding-left : 60px;
-		padding-bottom : 100px;
+		padding-top : 10px;
+		padding-left : 200px;
+		padding-bottom : 0;
 	}
 	
 	.noticeTitle {
@@ -116,6 +130,52 @@
 	
 	.showContent {
 		display : show;
+	}
+	
+	#addNotice {
+		cursor: pointer;
+	}
+	
+	#removeNotice {
+		cursor: pointer;
+	}
+	
+	#backNotice {
+		cursor: pointer;
+	}
+	
+	/* == 페이징 바 == */
+	.pageNumber {
+		font-size:16px; 
+		font-weight:bold;
+	}
+	
+	.pagination {
+	  margin-top: 100px;
+	  display: block;
+	}
+	
+	.pagination a {
+	  color: black;
+	  padding: 3px 10px;
+	  text-decoration: none;
+	  cursor : pointer;
+	  margin : 0 10px;
+	}
+		
+	.pagination span.active {
+	 	border : solid 2px black;
+	 	color: black;
+		padding: 3px 10px;
+		text-decoration: none;
+		cursor : pointer;
+		margin : 0 10px;
+		font-size: 16px; 
+		font-weight: bold;  
+	}
+		
+	.pagination a:hover, .pagination span:hover {
+	   text-decoration: underline;
 	}
 	
 </style>
@@ -160,24 +220,51 @@
 			$(this).css('opacity','1.0');
 		});
 		
+		$("#backBtn").hover(function(){
+			$(this).css('opacity','0.8');
+		}, function(){
+			$(this).css('opacity','1.0');
+		});
+		
+		
 		// 새 공지를 작성 후 add를 클릭하면 유효성 검사 후 submit
 		$("#addBtn").click(function(){
 			
-			if($("#addTitle").val().trim() == ""){
-				alert("제목을 입력하세요!");
-				$("#addTitle").focus();
-			}
-			else if($("#addContent").val().trim() == ""){
-				alert("내용을 입력하세요!");
-				$("#addContent").focus();			
+			if(confirm("공지를 등록 하시겠습니까?") == true){
+				
+				if($("#notTitle").val().trim() == ""){
+					alert("제목을 입력하세요!");
+					$("#notTitle").focus();
+				}
+				else if($("#notContent").val().trim() == ""){
+					alert("내용을 입력하세요!");
+					$("#notContent").focus();			
+				}
+				else if($(':radio[name="notCategory"]:checked').length < 1){
+					alert("공지 종류를 선택하세요!");
+				}
+				else {
+					
+					var frm = document.newNotice;
+					frm.method = "POST";
+					frm.action = "<%=ctxPath%>/addNotice.at";
+					frm.submit();
+					
+				}
 			}
 			else {
-				var frm = document.newNotice;
-				frm.method = "POST";
-				frm.action = "*.at";
-				frm.submit();
+				return;
 			}
 		}); // 공지 추가 하기 끝 --------------------------------
+		
+		$("#backBtn").click(function(){
+			if(confirm("작성을 취소 하시겠습니까?") == true){
+				$("#addNoticeContainer").hide();
+			}
+			else {
+				return;
+			}
+		});
 		
 		// 공지 삭제하기 --------------------------------------
 		$("#removeNotice").click(function(){
@@ -197,11 +284,17 @@
 		});
 		
 		$(".arrow").click(function(){
+			
 			// delete 모드일때만 삭제 가능하다.
 			if($(this).hasClass("fa-times")){
-				var noticeno = $(this).next().text();
-				window.location.href = "*.at?noticeno="+encodeURI(noticeno);
+				if(confirm("공지를 삭제하시겠습니까?") == true){
+				var notNo = $(this).next().text();
+				window.location.href = "<%=ctxPath%>/delNotice.at?notNo="+encodeURI(notNo);
 				// 해당 url로 이동해서 글 삭제, 이후 다시 notice.at으로 보내주면 새로고침 되게 하면 됩니다.
+				}
+			}
+			else{
+				return;
 			}
 		});
 		
@@ -219,9 +312,13 @@
 			$(this).find("i").toggleClass("fa-chevron-down");
 			$(this).find("i").toggleClass("fa-chevron-up");
 		});
+		
+		
 		 
 	}); // end of document.ready ---------------------------------------
 
+	
+	
 </script>
 </head>
 <body>
@@ -234,128 +331,57 @@
 			<span style="text-align:center">Membership</span>
 			<h1 style="margin:0;">Notice</h1>
 			<h4 class="current">공지사항</h4>
-			<h4>자주 묻는 질문</h4>
+			<h4 >자주 묻는 질문</h4>
 		</div>
-		
-		<div id="btns" align="right">
-			<img id="addNotice" src="<%= ctxPath %>/resources/images/board/addNoticeBtn.JPG" />
-			<img id="removeNotice" src="<%= ctxPath %>/resources/images/board/deleteNoticeBtn.JPG" />
-			<img id="backNotice" src="<%= ctxPath %>/resources/images/board/backNoticeBtn.JPG" />
-		</div>
-		
+		<c:if test="${sessionScope.loginuser.status == 2}">
+			<div id="btns" align="right">
+				<img id="addNotice" src="<%= ctxPath %>/resources/images/board/addNoticeBtn.JPG" />
+				<img id="removeNotice" src="<%= ctxPath %>/resources/images/board/deleteNoticeBtn.JPG" />
+				<img id="backNotice" src="<%= ctxPath %>/resources/images/board/backNoticeBtn.JPG" />
+			</div>
+		</c:if>
 		<!--  add 버튼을 누르면 나타나는 공지 추가하기  -->
 		<div id="addNoticeContainer">
 			<form id="newNotice" name="newNotice">
 				<span>
 					<i class="fas fa-plus"></i>
-					<input type="text" name="addTitle" id="addTitle" placeholder="제목을 입력하세요." /><br/>
-					<textarea name="addContent" id="addContent" placeholder="내용을 입력하세요."></textarea>
+					<input type="text" name="notTitle" id="notTitle" placeholder="제목을 입력하세요." /><br/>
+					<textarea name="notContent" id="notContent" placeholder="내용을 입력하세요."></textarea>
 				</span>
-				<div align="center">
-					<img id="addBtn" src="<%= ctxPath %>/resources/images/board/addBtn.JPG" />
+				<div class="category">
+					<input type="radio" name="notCategory" value="1" /> 공지
+					<input type="radio" name="notCategory" value="2" /> FAQ
 				</div>
+				<div align="center">
+					<img onclick="" id="addBtn" src="<%= ctxPath %>/resources/images/board/addBtn.JPG" />
+					<img onclick="" id="backBtn" src="<%= ctxPath %>/resources/images/board/backNoticeBtn.JPG" />
+				</div>
+				
 			</form>
 		</div>
+	
+		<c:forEach var="item" items="${noticeList}">
+			<c:if test="${item.notCategory == '1'}">
+				<div id="noticeList">
+					<div class="singleNotice">
+						<span class="noticeTitle"> ${item.notTitle}
+						 <i class="arrow fas fa-chevron-down"></i>
+						 <span class="noticeNo" style="display:none;">${item.notNo}</span>
+						 </span>
+						<div class="noticeContent" style="width:60%;">
+							${item.notContent}
+							
+							<br/><br/><br/><br/><br/>
+							<p>작성일 : ${item.NOTWRITEDAY}</p>
+						</div>	
+					</div>
+				</div>
+			</c:if>
+		</c:forEach>
 		
-		<div id="noticeList">
-			<div class="singleNotice">
-				<span class="noticeTitle">공지사항공지사항공지사항공지공지사항공지사항공지사항공지
-				 <i class="arrow fas fa-chevron-down"></i>
-				 <span class="noticeNo" style="display:none;">"$ {noticeNo}"</span>
-				 </span>
-				<div class="noticeContent" style="width:80%;">
-					공지사항에 대한 자세한 설명을 볼수있습니다. 공지사항에 대한 자세한 설명을 볼수있습니다. 공지사항에 대한 자세한 설명을 볼수있습니다.
-					공지사항에 대한 자세한 설명을 볼수있습니다. 공지사항에 대한 자세한 설명을 볼수있습니다.
-					공지사항에 대한 자세한 설명을 볼수있습니다.공지사항에 대한 자세한 설명을 볼수있습니다.공지사항에 대한 자세한 설명을 볼수있습니다.
-					공지사항에 대한 자세한 설명을 볼수있습니다.공지사항에 대한 자세한 설명을 볼수있습니다.공지사항에 대한 자세한 설명을 볼수있습니다.
-					공지사항에 대한 자세한 설명을 볼수있습니다.공지사항에 대한 자세한 설명을 볼수있습니다.
-				</div>	
-			</div>
-		
-			<div class="singleNotice">
-				<span class="noticeTitle">공지사항공지사항공지사항공지공지사항공지사항공지사항공지
-				 <i class="arrow fas fa-chevron-down"></i>
-				 <span class="noticeNo" style="display:none;">"$ {noticeNo}"</span>
-				 </span>
-				<div class="noticeContent">
-					공지사항에 대한 자세한 설명을 볼수있습니다. 공지사항에 대한 자세한 설명을 볼수있습니다. 공지사항에 대한 자세한 설명을 볼수있습니다.
-					공지사항에 대한 자세한 설명을 볼수있습니다. 공지사항에 대한 자세한 설명을 볼수있습니다.
-					공지사항에 대한 자세한 설명을 볼수있습니다.공지사항에 대한 자세한 설명을 볼수있습니다.공지사항에 대한 자세한 설명을 볼수있습니다.
-					공지사항에 대한 자세한 설명을 볼수있습니다.공지사항에 대한 자세한 설명을 볼수있습니다.공지사항에 대한 자세한 설명을 볼수있습니다.
-					공지사항에 대한 자세한 설명을 볼수있습니다.공지사항에 대한 자세한 설명을 볼수있습니다.
-				</div>	
-			</div>
-			
-			<div class="singleNotice">
-				<span class="noticeTitle">공지사항공지사항공지사항공지공지사항공지사항공지사항공지
-				 <i class="arrow fas fa-chevron-down"></i>
-				 <span class="noticeNo" style="display:none;">"$ {noticeNo}"</span>
-				 </span>
-				<div class="noticeContent">
-					공지사항에 대한 자세한 설명을 볼수있습니다. 공지사항에 대한 자세한 설명을 볼수있습니다. 공지사항에 대한 자세한 설명을 볼수있습니다.
-					공지사항에 대한 자세한 설명을 볼수있습니다. 공지사항에 대한 자세한 설명을 볼수있습니다.
-					공지사항에 대한 자세한 설명을 볼수있습니다.공지사항에 대한 자세한 설명을 볼수있습니다.공지사항에 대한 자세한 설명을 볼수있습니다.
-					공지사항에 대한 자세한 설명을 볼수있습니다.공지사항에 대한 자세한 설명을 볼수있습니다.공지사항에 대한 자세한 설명을 볼수있습니다.
-					공지사항에 대한 자세한 설명을 볼수있습니다.공지사항에 대한 자세한 설명을 볼수있습니다.
-				</div>	
-			</div>
-			
-			<div class="singleNotice">
-				<span class="noticeTitle">공지사항공지사항공지사항공지공지사항공지사항공지사항공지
-				 <i class="arrow fas fa-chevron-down"></i>
-				 <span class="noticeNo" style="display:none;">"$ {noticeNo}"</span>
-				 </span>
-				<div class="noticeContent">
-					공지사항에 대한 자세한 설명을 볼수있습니다. 공지사항에 대한 자세한 설명을 볼수있습니다. 공지사항에 대한 자세한 설명을 볼수있습니다.
-					공지사항에 대한 자세한 설명을 볼수있습니다. 공지사항에 대한 자세한 설명을 볼수있습니다.
-					공지사항에 대한 자세한 설명을 볼수있습니다.공지사항에 대한 자세한 설명을 볼수있습니다.공지사항에 대한 자세한 설명을 볼수있습니다.
-					공지사항에 대한 자세한 설명을 볼수있습니다.공지사항에 대한 자세한 설명을 볼수있습니다.공지사항에 대한 자세한 설명을 볼수있습니다.
-					공지사항에 대한 자세한 설명을 볼수있습니다.공지사항에 대한 자세한 설명을 볼수있습니다.
-				</div>	
-			</div>
-			
-			<div class="singleNotice">
-				<span class="noticeTitle">공지사항공지사항공지사항공지공지사항공지사항공지사항공지
-				 <i class="arrow fas fa-chevron-down"></i>
-				 <span class="noticeNo" style="display:none;">"$ {noticeNo}"</span>
-				 </span>
-				<div class="noticeContent">
-					공지사항에 대한 자세한 설명을 볼수있습니다. 공지사항에 대한 자세한 설명을 볼수있습니다. 공지사항에 대한 자세한 설명을 볼수있습니다.
-					공지사항에 대한 자세한 설명을 볼수있습니다. 공지사항에 대한 자세한 설명을 볼수있습니다.
-					공지사항에 대한 자세한 설명을 볼수있습니다.공지사항에 대한 자세한 설명을 볼수있습니다.공지사항에 대한 자세한 설명을 볼수있습니다.
-					공지사항에 대한 자세한 설명을 볼수있습니다.공지사항에 대한 자세한 설명을 볼수있습니다.공지사항에 대한 자세한 설명을 볼수있습니다.
-					공지사항에 대한 자세한 설명을 볼수있습니다.공지사항에 대한 자세한 설명을 볼수있습니다.
-				</div>	
-			</div>
-			
-			<div class="singleNotice">
-				<span class="noticeTitle">공지사항공지사항공지사항공지공지사항공지사항공지사항공지
-				 <i class="arrow fas fa-chevron-down"></i>
-				 <span class="noticeNo" style="display:none;">"$ {noticeNo}"</span>
-				 </span>
-				<div class="noticeContent">
-					공지사항에 대한 자세한 설명을 볼수있습니다. 공지사항에 대한 자세한 설명을 볼수있습니다. 공지사항에 대한 자세한 설명을 볼수있습니다.
-					공지사항에 대한 자세한 설명을 볼수있습니다. 공지사항에 대한 자세한 설명을 볼수있습니다.
-					공지사항에 대한 자세한 설명을 볼수있습니다.공지사항에 대한 자세한 설명을 볼수있습니다.공지사항에 대한 자세한 설명을 볼수있습니다.
-					공지사항에 대한 자세한 설명을 볼수있습니다.공지사항에 대한 자세한 설명을 볼수있습니다.공지사항에 대한 자세한 설명을 볼수있습니다.
-					공지사항에 대한 자세한 설명을 볼수있습니다.공지사항에 대한 자세한 설명을 볼수있습니다.
-				</div>	
-			</div>
-			
-			<div class="singleNotice">
-				<span class="noticeTitle">공지사항공지사항공지사항공지공지사항공지사항공지사항공지
-				 <i class="arrow fas fa-chevron-down"></i>
-				 <span class="noticeNo" style="display:none;">"$ {noticeNo}"</span>
-				 </span>
-				<div class="noticeContent">
-					공지사항에 대한 자세한 설명을 볼수있습니다. 공지사항에 대한 자세한 설명을 볼수있습니다. 공지사항에 대한 자세한 설명을 볼수있습니다.
-					공지사항에 대한 자세한 설명을 볼수있습니다. 공지사항에 대한 자세한 설명을 볼수있습니다.
-					공지사항에 대한 자세한 설명을 볼수있습니다.공지사항에 대한 자세한 설명을 볼수있습니다.공지사항에 대한 자세한 설명을 볼수있습니다.
-					공지사항에 대한 자세한 설명을 볼수있습니다.공지사항에 대한 자세한 설명을 볼수있습니다.공지사항에 대한 자세한 설명을 볼수있습니다.
-					공지사항에 대한 자세한 설명을 볼수있습니다.공지사항에 대한 자세한 설명을 볼수있습니다.
-				</div>	
-			</div>
-			
+		<!-- 페이징바  -->
+		<div class="pagination" align="center">
+			${pageBar}
 		</div>
 		
 	</div>

@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt2" uri="http://java.sun.com/jstl/fmt_rt" %>
 <%
 	String ctxPath = request.getContextPath();
 %>
@@ -45,7 +46,6 @@
 	#container_gal_detail .specialArea .exhStatus {
 		font-size: 12pt;
 		border: none;
-		background-color: #ff6666;
 		padding: 4px 9px;
 		color: white;
 		border-radius: 5px;
@@ -80,7 +80,7 @@
 	
 	#container_gal_detail .info_aboutGal tr td {
 		display: inline-table;
-    	line-height: 2.5;
+    	line-height: 2;
 	}
 	
 	#container_gal_detail .info_aboutGal tr td:first-child { 
@@ -171,7 +171,11 @@
 	
 	#container_gal_detail .comExh {
 		float: right;
-		width: 50%;
+		width: 50%; 
+	}
+	
+	#container_gal_detail .spanArea {
+		display: table-cell;
 	}
 	
 	#container_gal_detail .ExhList {
@@ -210,7 +214,8 @@
 	#container_gal_detail #map {
 		width: 100%;
 		height: 500px;
-		margin: 40px 0 70px 0;
+		margin: 40px 0 150px 0;
+		border-radius: 5px;
 	}
 	
 	<%-- accordian start --%> 
@@ -323,6 +328,7 @@
 
 	$(document).ready(function(){
 		
+		goCheckLikeGal('${galDetailMap.GALLERYNO}'); // 갤러리 좋아요 체크
 		goGetIngExhs('${galDetailMap.GALLERYNO}'); // 진행중 전시회 
 		goGetComExhs('${galDetailMap.GALLERYNO}'); // 예정 전시회
 		goGetEndExhs('${galDetailMap.GALLERYNO}'); // 지난 전시회
@@ -420,22 +426,82 @@
 		<%-- http://apis.map.kakao.com/web/guide/ 카카오 지도 스크립트 --%>
 
 		<%-- accordian start --%>
-		var acc = document.getElementsByClassName("accordion");
+		var acc = $(".accordion");
 		var i;
 
 		for (i = 0; i < acc.length; i++) {
-		  acc[i].addEventListener("click", function() {
-		    this.classList.toggle("active");
-		    var panel = this.nextElementSibling;
-		    if (panel.style.maxHeight) {
-		      panel.style.maxHeight = null;
-		    } else {
-		      panel.style.maxHeight = panel.scrollHeight + "px";
-		    } 
-		  });
+		  $(document).on("click", acc[i], function(event){
+
+			  $(event.target).toggleClass("active");
+			    var panel = $(event.target).next();
+			    var scHeight = panel.prop('scrollHeight')+"px"; // 640
+			    
+			    if (panel.css("max-height") != "0px") {
+			    	panel.css("max-height", "0px");
+				      
+			    } else {
+			    	panel.css("max-height", scHeight);
+			    } 
+			    
+		  }); 
+
 		}
 		<%-- accordian end --%>
 	});
+	
+	///////////////////////// 갤러리 좋아요 체크 유무 확인 //////////////////////
+	function goCheckLikeGal(gno){
+		
+		$.ajax({
+			
+			url: "<%=ctxPath%>/checkGalLike.at",
+			data: {"gno":gno},
+			dataType: "JSON",
+			success: function(json){
+				
+				var html = "";
+				
+				if(json.ckGalLike == 1){
+					html += '<img class="ico1" src="<%= ctxPath%>/resources/images/exhibition/ico/selected.png">';
+				}
+				else {
+					html += '<img class="ico1" src="<%= ctxPath%>/resources/images/exhibition/ico/select.png">';
+				}
+				
+				$(".A_select").html(html);
+			},
+			error: function(request, status, error){
+				alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+			}
+		});
+	}
+	
+	//////////////////////////갤러리 좋아요 지정 및 해제 ////////////////////////
+	function galLike(gno){
+		
+		if(${sessionScope.loginuser == null}){
+			alert("먼저 로그인을 진행해주세요 !");
+			location.href="javascript:layer_open('layer')";
+			return;
+		}
+		else {
+			$.ajax({
+				
+				url: "<%=ctxPath%>/GalLike.at",
+				type: 'POST',
+				data: {"gno":gno},
+				dataType: "JSON",
+				success: function(json){
+					if(json.CkGcnt == 1){
+						goCheckLikeGal(gno);
+					}
+				},
+				error: function(request, status, error){
+					alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+				}
+			});
+		}
+	}
 	
 	///////////// 진행중 전시회 불러오기 
 	function goGetIngExhs(gno){
@@ -450,27 +516,47 @@
 				var html = "";
 				
 				if(json.length == 0){
-					// 각 영역에 준비중 띄우기
+					
+					html += "<span style='margin-top:18%; padding-left:28%; display:block;'>진행중인 전시회가 없습니다.</span>";
+					
+					$(".curExh > .intro_content").html(html);
+					$(".exhStatus").text("전시 준비중").css("background-color","#808080");
 				}
 				else {
+					
+					$(".exhStatus").text("현재 전시중").css("background-color","#ff6666");
 					
 					$.each(json, function(index, item){
 						
 						if((index+1)%3 != 0){
 							html += '<div class="ExhList">'
-								 + '<a href="<%=ctxPath%>/exhDetail.at?eno='+item.EXHIBITIONNO+'">'
-								 + '<img src="'+item.MAINPOSTER+'">'
-								 + '<span class="ExhTitle">'+item.EXHIBITIONNAME+'</span>'
-								 + '<span class="ExhDate">'+item.SCHEDULE+'</span>'
+								 + '<a href="<%=ctxPath%>/exhDetail.at?eno='+item.EXHIBITIONNO+'">';
+								
+							if(item.MAINPOSTER.substr(0, 4) != 'http'){
+								html += "<img src='<%= ctxPath%>/resources/files/"+item.MAINPOSTER+"'/>";
+							}
+							else {
+								html += "<img src='"+item.MAINPOSTER+"'/>";
+							}													 
+										 
+							html += '<div class="spanArea"><span class="ExhTitle">'+item.EXHIBITIONNAME+'</span>'
+								 + '<span class="ExhDate">'+item.SCHEDULE+'</span></div>'
 								 + '</a></div>';
 						}
 						else {
 							html += '<div class="ExhList">'
-								 + '<a href="<%=ctxPath%>/exhDetail.at?eno='+item.EXHIBITIONNO+'">'
-								 + '<img src="'+item.MAINPOSTER+'">'
-								 + '<span class="ExhTitle">'+item.EXHIBITIONNAME+'</span>'
-								 + '<span class="ExhDate">'+item.SCHEDULE+'</span>'
-								 + '</a></div><br/>';
+								 + '<a href="<%=ctxPath%>/exhDetail.at?eno='+item.EXHIBITIONNO+'">';
+
+							if(item.MAINPOSTER.substr(0, 4) != 'http'){
+								html += "<img src='<%= ctxPath%>/resources/files/"+item.MAINPOSTER+"'/>";
+							}
+							else {
+								html += "<img src='"+item.MAINPOSTER+"'/>";
+							}	
+										 
+							html += '<div class="spanArea"><span class="ExhTitle">'+item.EXHIBITIONNAME+'</span>'
+							 + '<span class="ExhDate">'+item.SCHEDULE+'</span></div>'
+							 + '</a></div><br/>';
 						}
 					
 					});
@@ -499,8 +585,11 @@
 				
 				var html = "";
 				
-				if(json.length == 0){
-					// 각 영역에 준비중 띄우기
+				if(json.length == 0){		
+					
+					html += "<span style='margin-top:18%; padding-left:28%; display:block;'>예정중인 전시회가 없습니다.</span>";
+					
+					$(".comExh > .intro_content").html(html);
 				}
 				else {
 					
@@ -508,18 +597,32 @@
 						
 						if((index+1)%3 != 0){
 							html += '<div class="ExhList">'
-								 + '<a href="<%=ctxPath%>/exhDetail.at?eno='+item.EXHIBITIONNO+'">'
-								 + '<img src="'+item.MAINPOSTER+'">'
-								 + '<span class="ExhTitle">'+item.EXHIBITIONNAME+'</span>'
-								 + '<span class="ExhDate">'+item.SCHEDULE+'</span>'
+								 + '<a href="<%=ctxPath%>/exhDetail.at?eno='+item.EXHIBITIONNO+'">';
+
+							if(item.MAINPOSTER.substr(0, 4) != 'http'){
+								html += "<img src='<%= ctxPath%>/resources/files/"+item.MAINPOSTER+"'/>";
+							}
+							else {
+								html += "<img src='"+item.MAINPOSTER+"'/>";
+							}	
+										 
+							html += '<div class="spanArea"><span class="ExhTitle">'+item.EXHIBITIONNAME+'</span>'
+								 + '<span class="ExhDate">'+item.SCHEDULE+'</span></div>'
 								 + '</a></div>';
 						}
 						else {
 							html += '<div class="ExhList">'
-								 + '<a href="<%=ctxPath%>/exhDetail.at?eno='+item.EXHIBITIONNO+'">'
-								 + '<img src="'+item.MAINPOSTER+'">'
-								 + '<span class="ExhTitle">'+item.EXHIBITIONNAME+'</span>'
-								 + '<span class="ExhDate">'+item.SCHEDULE+'</span>'
+								 + '<a href="<%=ctxPath%>/exhDetail.at?eno='+item.EXHIBITIONNO+'">';
+
+							if(item.MAINPOSTER.substr(0, 4) != 'http'){
+								html += "<img src='<%= ctxPath%>/resources/files/"+item.MAINPOSTER+"'/>";
+							}
+							else {
+								html += "<img src='"+item.MAINPOSTER+"'/>";
+							}	
+										 
+							html += '<div class="spanArea"><span class="ExhTitle">'+item.EXHIBITIONNAME+'</span>'
+								 + '<span class="ExhDate">'+item.SCHEDULE+'</span></div>'
 								 + '</a></div><br/>';
 						}
 						
@@ -548,7 +651,7 @@
 			success:function(json){
 				
 				if(json.length == 0){
-					// 각 영역에 준비중 띄우기
+					$(".lastExh").hide();
 				}
 				else {
 					
@@ -564,66 +667,127 @@
 						if(year == '2020'){ ttCnt++;
 							
 							if(ttCnt%4 != 0){
-								tthtml += '<a class="exh_one" href="<%=ctxPath%>/exhDetail.at?eno='+item.EXHIBITIONNO+'">'
-									 	+ '<img class="exh_poster" src="'+item.MAINPOSTER+'"/>'
-										+ '<span class="art_mainTitle">'+item.EXHIBITIONNAME+'</span></a>';
+								tthtml += '<a class="exh_one" href="<%=ctxPath%>/exhDetail.at?eno='+item.EXHIBITIONNO+'">';
+									 	
+							 	if(item.MAINPOSTER.substr(0, 4) != 'http'){
+							 		tthtml += "<img class='exh_poster' src='<%= ctxPath%>/resources/files/"+item.MAINPOSTER+"'/>";
+								}
+								else {
+									tthtml += "<img class='exh_poster' src='"+item.MAINPOSTER+"'/>";
+								}	
+									 	
+								tthtml += '<span class="art_mainTitle">'+item.EXHIBITIONNAME+'</span></a>';
 							}
 							else {
-								tthtml += '<a class="exh_one" href="<%=ctxPath%>/exhDetail.at?eno='+item.EXHIBITIONNO+'" style="margin-right: 0;">'
-										+ '<img class="exh_poster" src="'+item.MAINPOSTER+'"/>'
-										+ '<span class="art_mainTitle">'+item.EXHIBITIONNAME+'</span></a><br/>';
+								tthtml += '<a class="exh_one" href="<%=ctxPath%>/exhDetail.at?eno='+item.EXHIBITIONNO+'" style="margin-right: 0;">';
+
+							 	if(item.MAINPOSTER.substr(0, 4) != 'http'){
+							 		tthtml += "<img class='exh_poster' src='<%= ctxPath%>/resources/files/"+item.MAINPOSTER+"'/>";
+								}
+								else {
+									tthtml += "<img class='exh_poster' src='"+item.MAINPOSTER+"'/>";
+								}
+								
+								tthtml += '<span class="art_mainTitle">'+item.EXHIBITIONNAME+'</span></a><br/>';
 							}
-							
+						
 						}
 						else if(year == '2019'){ ntCnt++;
-
+	
 							if(ntCnt%4 != 0){
-								nthtml += '<a class="exh_one" href="<%=ctxPath%>/exhDetail.at?eno='+item.EXHIBITIONNO+'">'
-									 	+ '<img class="exh_poster" src="'+item.MAINPOSTER+'"/>'
-									 	+ '<span class="art_mainTitle">'+item.EXHIBITIONNAME+'</span></a>';
+								nthtml += '<a class="exh_one" href="<%=ctxPath%>/exhDetail.at?eno='+item.EXHIBITIONNO+'">';
+							 	
+							 	if(item.MAINPOSTER.substr(0, 4) != 'http'){
+							 		nthtml += "<img class='exh_poster' src='<%= ctxPath%>/resources/files/"+item.MAINPOSTER+"'/>";
+								}
+								else {
+									nthtml += "<img class='exh_poster' src='"+item.MAINPOSTER+"'/>";
+								}	
+									 	
+							 	nthtml += '<span class="art_mainTitle">'+item.EXHIBITIONNAME+'</span></a>';
 							}
 							else {
-								nthtml += '<a class="exh_one" href="<%=ctxPath%>/exhDetail.at?eno='+item.EXHIBITIONNO+'" style="margin-right: 0;">'
-								 		+ '<img class="exh_poster" src="'+item.MAINPOSTER+'"/>'
-								 		+ '<span class="art_mainTitle">'+item.EXHIBITIONNAME+'</span></a><br/>';
+								nthtml += '<a class="exh_one" href="<%=ctxPath%>/exhDetail.at?eno='+item.EXHIBITIONNO+'" style="margin-right: 0;">';
+
+							 	if(item.MAINPOSTER.substr(0, 4) != 'http'){
+							 		nthtml += "<img class='exh_poster' src='<%= ctxPath%>/resources/files/"+item.MAINPOSTER+"'/>";
+								}
+								else {
+									nthtml += "<img class='exh_poster' src='"+item.MAINPOSTER+"'/>";
+								}
+								
+							 	nthtml += '<span class="art_mainTitle">'+item.EXHIBITIONNAME+'</span></a><br/>';
 							}
-							
+						
 						}
 						else if(year == '2018'){ etCnt++;
-							
+						
 							if(etCnt%4 != 0){
-								ethtml += '<a class="exh_one" href="<%=ctxPath%>/exhDetail.at?eno='+item.EXHIBITIONNO+'">'
-									 	+ '<img class="exh_poster" src="'+item.MAINPOSTER+'"/>'
-									 	+ '<span class="art_mainTitle">'+item.EXHIBITIONNAME+'</span></a>';
+								ethtml += '<a class="exh_one" href="<%=ctxPath%>/exhDetail.at?eno='+item.EXHIBITIONNO+'">';
+							 	
+							 	if(item.MAINPOSTER.substr(0, 4) != 'http'){
+							 		ethtml += "<img class='exh_poster' src='<%= ctxPath%>/resources/files/"+item.MAINPOSTER+"'/>";
+								}
+								else {
+									ethtml += "<img class='exh_poster' src='"+item.MAINPOSTER+"'/>";
+								}	
+									 	
+							 	ethtml += '<span class="art_mainTitle">'+item.EXHIBITIONNAME+'</span></a>';
 							}
 							else {
-								ethtml += '<a class="exh_one" href="<%=ctxPath%>/exhDetail.at?eno='+item.EXHIBITIONNO+'" style="margin-right: 0;">'
-							 		    + '<img class="exh_poster" src="'+item.MAINPOSTER+'"/>'
-							 		    + '<span class="art_mainTitle">'+item.EXHIBITIONNAME+'</span></a><br/>';
+								ethtml += '<a class="exh_one" href="<%=ctxPath%>/exhDetail.at?eno='+item.EXHIBITIONNO+'" style="margin-right: 0;">';
+
+							 	if(item.MAINPOSTER.substr(0, 4) != 'http'){
+							 		ethtml += "<img class='exh_poster' src='<%= ctxPath%>/resources/files/"+item.MAINPOSTER+"'/>";
+								}
+								else {
+									ethtml += "<img class='exh_poster' src='"+item.MAINPOSTER+"'/>";
+								}
+								
+							 	ethtml += '<span class="art_mainTitle">'+item.EXHIBITIONNAME+'</span></a><br/>';
 							}
 							
 						}
 						else if(year == '2017'){ stCnt++;
-							
+						
 							if(stCnt%4 != 0){
-								sthtml += '<a class="exh_one" href="<%=ctxPath%>/exhDetail.at?eno='+item.EXHIBITIONNO+'">'
-									 	+ '<img class="exh_poster" src="'+item.MAINPOSTER+'"/>'
-									 	+ '<span class="art_mainTitle">'+item.EXHIBITIONNAME+'</span></a>';
+								sthtml += '<a class="exh_one" href="<%=ctxPath%>/exhDetail.at?eno='+item.EXHIBITIONNO+'">';
+							 	
+							 	if(item.MAINPOSTER.substr(0, 4) != 'http'){
+							 		sthtml += "<img class='exh_poster' src='<%= ctxPath%>/resources/files/"+item.MAINPOSTER+"'/>";
+								}
+								else {
+									sthtml += "<img class='exh_poster' src='"+item.MAINPOSTER+"'/>";
+								}	
+									 	
+							 	sthtml += '<span class="art_mainTitle">'+item.EXHIBITIONNAME+'</span></a>';
 							}
 							else {
-								sthtml += '<a class="exh_one" href="<%=ctxPath%>/exhDetail.at?eno='+item.EXHIBITIONNO+'" style="margin-right: 0;">'
-										+ '<img class="exh_poster" src="'+item.MAINPOSTER+'"/>'
-								 		+ '<span class="art_mainTitle">'+item.EXHIBITIONNAME+'</span></a><br/>';
+								sthtml += '<a class="exh_one" href="<%=ctxPath%>/exhDetail.at?eno='+item.EXHIBITIONNO+'" style="margin-right: 0;">';
+
+							 	if(item.MAINPOSTER.substr(0, 4) != 'http'){
+							 		sthtml += "<img class='exh_poster' src='<%= ctxPath%>/resources/files/"+item.MAINPOSTER+"'/>";
+								}
+								else {
+									sthtml += "<img class='exh_poster' src='"+item.MAINPOSTER+"'/>";
+								}
+								
+							 	sthtml += '<span class="art_mainTitle">'+item.EXHIBITIONNAME+'</span></a><br/>';
 							}
 							
 						} // end of 2020 ~ 2017 if else -------------
 						
 					});
 					
-					$(".2020").append(tthtml);
+				 	$(".2020").append(tthtml);
 					$(".2019").append(nthtml);
 					$(".2018").append(ethtml);
 					$(".2017").append(sthtml);
+					
+					if(tthtml == ""){ $(".h2020").hide(); }
+					if(nthtml == ""){ $(".h2019").hide(); }
+					if(ethtml == ""){ $(".h2018").hide(); }
+					if(sthtml == ""){ $(".h2017").hide(); }
 					
 				} // end of json if ~ else ------------------
 			},
@@ -649,11 +813,8 @@
 		<div class="info_top">
 			<span class="info_title">${galDetailMap.GALLERYNAME} | ${galDetailMap.LOCATION}</span>
 			<div class="specialArea">
-				<c:if test="${galDetailMap.STATUS == 1}"><span class="exhStatus">전시중</span></c:if>
-				<c:if test="${galDetailMap.STATUS == 0}"><span class="exhStatus">전시완료</span></c:if>
-				<a href="" data-toggle="tooltip" title="갤러리 관심 지정 !" data-placement="right"  style="margin-right: 10px;">
-					<img class="ico1"src="<%= ctxPath%>/resources/images/exhibition/ico/select.png">
-				</a>
+				<span class="exhStatus"></span>
+				<a href="javascript:void(0)" onclick="galLike('${galDetailMap.GALLERYNO}')" class="A_select" data-toggle="tooltip" title="갤러리 관심 지정 !" data-placement="right"  style="margin-right: 10px;"></a>
 			</div>
 			<table class="info_aboutGal">
 				<tr>
@@ -670,33 +831,39 @@
 				</tr>
 				<tr>
 					<td>연락처</td>
-					<td>${galDetailMap.TEL}</td>
+					<td>
+						<c:if test="${not empty galDetailMap.TEL}">${galDetailMap.TEL}</c:if>
+						<c:if test="${empty galDetailMap.TEL}">-</c:if>
+					</td>
 				</tr>
 				<tr>
 					<td>홈페이지</td>
 					<td>
-						<c:if test="${galDetailMap.WEBSITE != null}">
+						<c:if test="${not empty galDetailMap.WEBSITE}">
 							<a class="noDecoA" href="${galDetailMap.WEBSITE}">${galDetailMap.WEBSITE}&nbsp;
 							<img class="ico2" src="<%=ctxPath%>/resources/images/exhibition/ico/input.png">
 							</a>
 						</c:if>
+						<c:if test="${empty galDetailMap.WEBSITE}">-</c:if>
 					</td>
 				</tr>
 			</table>
 		</div>	
 	</div>
 	
-	<div class="divComCss">
-		<div class="">
-			<span class="spanTitle">갤러리소개</span>
+	<c:if test="${not empty galDetailMap.INTRODUCTION}">
+		<div class="divComCss">
+			<div class="">
+				<span class="spanTitle">갤러리소개</span>
+			</div>
+			<div class="">
+				<span class="intro_content">
+					${galDetailMap.INTRODUCTION}
+				</span>
+			</div>
 		</div>
-		<div class="">
-			<span class="intro_content">
-				${galDetailMap.INTRODUCTION}
-			</span>
-		</div>
-	</div>
-
+	</c:if>
+	
 	<div class="info_exhs divComCss">
 		<div class="curExh">
 			<span class="spanTitle">진행중 전시회</span>
@@ -705,7 +872,7 @@
 		</div>
 		<div class="comExh">
 			<span class="spanTitle">예정중 전시회</span>
-			<div class="intro_content comExh">
+			<div class="intro_content">
 			</div>
 		</div>
 	</div>
@@ -713,34 +880,34 @@
 		<span class="spanTitle">지난 전시회</span>
 		<div class="intro_content">
 			<div class="forLastExhAcc">
-				<button class="accordion" style="padding-top: 0;">
+				<button class="accordion h2020" style="padding-top: 0;">
 					2020
 				</button>
-				<div class="panel" style="width: 100%;">
+				<div class="panel h2020" style="width: 100%;">
 					<div class="ExhList_Area 2020">
 					</div>
 				</div>
-	
-				<button class="accordion">
+				
+				<button class="accordion h2019">
 					2019
 				</button>
-				<div class="panel" style="width: 100%;">
+				<div class="panel h2019" style="width: 100%;">
 					<div class="ExhList_Area 2019">
 					</div>
 				</div>
 				
-				<button class="accordion">
+				<button class="accordion h2018">
 					2018
 				</button>
-				<div class="panel" style="width: 100%;">
+				<div class="panel h2018" style="width: 100%;">
 					<div class="ExhList_Area 2018">
 					</div>
 				</div>
 				
-				<button class="accordion">
+				<button class="accordion h2017">
 					2017
 				</button>
-				<div class="panel" style="width: 100%;">
+				<div class="panel h2017" style="width: 100%;">
 					<div class="ExhList_Area 2017">
 					</div>
 				</div>
@@ -751,4 +918,6 @@
 	<%-- -------------------------------------지도 영역 --%>
 	<div id="map"></div>
 	</c:if>
+	
+	<fmt2:formatDate value="${today}" pattern="yyyy" var="today"/>
 </div>
