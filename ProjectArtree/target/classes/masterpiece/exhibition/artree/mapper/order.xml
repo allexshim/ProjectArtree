@@ -213,6 +213,30 @@
 	
 	<delete id="delReser">
 		delete from reser where reserno = #{reserNo}
-	</delete>
+	</delete>	
+	
+	<resultMap type="HashMap" id="reserEmailListMap">		
+		<result property="NAME" column="NAME" javaType="String"></result>
+		<result property="EXNAME" column="EXNAME" javaType="String"></result>
+		<result property="FK_RESERNO" column="FK_RESERNO" javaType="String"></result>
+		<result property="RESERDATE" column="RESERDATE" javaType="String"></result>
+		<result property="RESERSTAT" column="RESERSTAT" javaType="String"></result>
+		<result property="RESERSUBTOTAL" column="RESERSUBTOTAL" javaType="String"></result>
+		<result property="RESERDISCOUNT" column="RESERDISCOUNT" javaType="String"></result>
+		<result property="RESERTOTAL" column="RESERTOTAL" javaType="String"></result>
+		<result property="PAYMENTOP" column="PAYMENTOP" javaType="String"></result>
+		<result property="MAINIMG" column="MAINIMG" javaType="String"></result>
+		<result property="DDAY" column="DDAY" javaType="String"></result>
+		<result property="RESERDETAILNO" column="RESERDETAILNO" javaType="String"></result>
+		<result property="EMAIL" column="EMAIL" javaType="String"></result>									
+	</resultMap>
+	
+	<select id="reserEmailList" resultMap="reserEmailListMap">			
+		select * from reserDetail a inner join reser b on b.reserno = a.fk_reserno 
+		inner join member c on b.fk_idx = c.idx 
+		where dday like #{strDate} and 
+		b.status = 1 
+		order by a.reserdetailno desc
+	</select>
 	
 </mapper>

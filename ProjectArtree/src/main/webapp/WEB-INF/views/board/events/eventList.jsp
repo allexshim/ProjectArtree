@@ -14,6 +14,14 @@
 <style type="text/css">
 @import url(//fonts.googleapis.com/earlyaccess/notosanskr.css);
 
+	.modal {
+		top:80px;
+	}
+
+	.M1 {
+		-webkit-transform:translate(-10px,0);
+	}
+
 	body {
 		font-family: 'Noto Sans Kr', sans-serif;
 	}
@@ -136,13 +144,44 @@
 <script src="<%= ctxPath%>/resources/js/jquery-3.3.1.min.js"></script>
 <script type="text/javascript">
 	$(document).ready(function(){ 
-		console.log("하빈");
+		
+		// 수정 & 삭제
+		$("#modifyBtn").click(function(){			
+			var frm = document.eventNo;
+			frm.method = "POST";
+			frm.action = "modifyEvent.at";
+			frm.submit();					
+		});
+		
+		$("#deleteBtn").click(function(){
+			$.ajax({
+				url:"<%=request.getContextPath()%>/delEvent.at",				
+				type:"POST",					
+				data:{"eventNo":$("#eventNo2").val()},				
+				error:function(request,status,error) {
+					alert("code = "+ request.status + " message = " + request.responseText + " error = " + error);
+				}	
+			});				
+			location.href="<%=ctxPath%>/event.at";
+		});
+		
+		// 관리자 로그인시 버튼 보이기
+		$("#myBtns").hide();
+		$("div#goWrite").hide();
+		
+		var admin ="${sessionScope.loginuser.status}";
+		if(admin == 2){
+			$("#myBtns").show();
+			$("div#goWrite").show();
+		}
+		
 		// 리스트 클릭하면 상세페이지 모달 갱신
 		$(document).on("click",".contentBin",function(){
+			var eventNo = $(this).find("input[name=eventNo]").val();
 			$.ajax({
 				url:"<%=request.getContextPath()%>/eventDetail.at",				
 				type:"POST",					
-				data:{"eventNo":$(this).find("input[name=eventNo]").val()},				
+				data:{"eventNo":eventNo},				
 				dataType:"JSON",
 				success:function(json){ 						
 					var html = "";						
@@ -160,11 +199,11 @@
 					html += "<th><div>내용</div></th>";
 					html += "<td><div>"+json.CONTENT+"</div></td>";
 					html += "</tr>";
-					html += "</table>";
+					html += "</table>";					
 					html += "</div>";															
-					html += "";
-					
-					$(".modal-body").html(html);					
+					html += "";									
+					$(".modal-body").html(html);
+					$("#eventNo2").val(eventNo);
 				}, 
 				error:function(request,status,error) {
 					alert("code = "+ request.status + " message = " + request.responseText + " error = " + error);
@@ -189,6 +228,9 @@
 </script>
 </head>
 <body>
+	<form name="eventNo">
+		<input id="eventNo2" name="eventNo2" hidden="hidden" value="">
+	</form>	
 	<div id="communityContainer">
 		<div id="imgcontainer">	
 	  		<img id="boardtop" src="<%= ctxPath %>/resources/images/board/boardImage2.jpg" />
@@ -199,7 +241,7 @@
 			<h1 style="margin:0;">Event</h1>
 		</div>					
 		
-		<div style="overflow: hidden; margin: 0 auto; width: 90%;" id="contentContainer">
+		<div style="overflow: hidden; margin: 0 auto; width: 90%; margin-left:7%;" id="contentContainer">
 			${content}
 		</div>
 
@@ -226,7 +268,10 @@
 	        <div style="overflow: hidden;" class="modal-body">	         
 	        </div>
 	        <div class="modal-footer">
-	          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+	            <div id="myBtns">
+					<img id="modifyBtn" src="<%= ctxPath %>/resources/images/board/modifyBtn.JPG" />
+					<img id="deleteBtn" src="<%= ctxPath %>/resources/images/board/deleteBtn.JPG" />
+				</div>
 	        </div>
 	      </div>
 	      

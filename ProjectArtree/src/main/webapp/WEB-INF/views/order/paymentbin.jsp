@@ -41,6 +41,9 @@
   margin: 0 auto;
 }
 	
+.modal {
+	top:50px;
+}
 </style>
 
 <script>		
@@ -259,15 +262,19 @@
 			}				
 		});	
 	}
+	
+	function prev() {
+		location.href="<%= ctxPath %>/ticketsbin.at"
+	}
 		
 </script>
 <body>
 	<form name="order">		
-	<div style="padding-right:60px; width: 100%; margin: 0 auto;" align="center">
+	<div style="width: 90%; margin: 0 auto;" align="center">
 	<div style="padding: 3%;">
 		
 		<div style="padding-bottom:2%; padding-top: 1%; font-size: 25px;">
-			PAYMENT
+			
 		</div>			
 		<div style="overflow:hidden; text-align: right;">
 			<div id="submit" style="color:black; background:white; cursor:pointer; float: right; border: solid 2px #EDEBEB; text-align:center; padding:6px 12px; border-radius: 4px; width: 10%; font-size: 15px;">Submit</div>
@@ -305,7 +312,7 @@
 			
 		</div>					
 		<div style="overflow: hidden;">
-			<div onclick="location.href='<%= ctxPath %>/ticketsbin.at'" style="color:black; background:white; cursor:pointer; float: left; border: solid 1px black; border-radius: 4px; width: 5%; margin-top: 1%; padding: 0.3%;">이전</div>
+			<div onclick="prev()" style="color:black; background:white; cursor:pointer; float: left; border: solid 1px black; border-radius: 4px; width: 5%; margin-top: 1%; padding: 0.3%;">이전</div>
 			<div id="order" data-target="#myModal" data-bmdSrc="<%=ctxPath%>/paymentGatebin.at" data-toggle="modal" class="bmd-modalButton" style="color:black; background:white; cursor:pointer; float: right; border: solid 1px black; border-radius: 4px; width: 5%; margin-top: 1%; padding: 0.3%;">결제하기</div>			 			
 		</div>	
 	</div>
