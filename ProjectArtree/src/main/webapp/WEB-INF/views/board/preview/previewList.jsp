@@ -58,7 +58,7 @@
 		font-size : 12pt;
 	} 
 	
-	div#searchContainer #searchCondition {
+	div#searchContainer #searchType {
 		font-size : 12pt;
 		height : 30px;
 		margin-right : 10px;
@@ -131,36 +131,34 @@
 	}
 	
 	/* == 페이징 바 == */
-	.pageNumber {
-		font-size:16px; 
-		font-weight:bold;
+	#previewContainer .board_paginate {
+		margin-top: 50px;
+		text-align: center;
 	}
 	
-	.pagination {
-	  display: block;
+	#previewContainer .board_paginate ul {
+		display: inline-block;
+	  	margin: 0 17px 0 17px;
+	    padding: 0;
 	}
 	
-	.pagination a {
-	  color: black;
-	  padding: 3px 10px;
-	  text-decoration: none;
-	  cursor : pointer;
-	  margin : 0 10px;
+	#previewContainer .board_paginate li {
+		display: inline-block;
 	}
-		
-	.pagination span.active {
-	 	border : solid 2px black;
-	 	color: black;
-		padding: 3px 10px;
-		text-decoration: none;
-		cursor : pointer;
-		margin : 0 10px;
-		font-size: 16px; 
-		font-weight: bold;  
+
+	#previewContainer .board_paginate li span, #previewContainer .board_paginate li a {
+		display: block;
+	    width: 31px;
+	    padding: 7px 0 6px;
+	    box-sizing: border-box;
+	    font-size: 16px;
+	    color: #000;
+	    font-weight: bold;
+	    line-height: 14px;
 	}
-		
-	.pagination a:hover, .pagination span:hover {
-	   text-decoration: underline;
+
+	#previewContainer .board_paginate .this {
+		border: 2px solid #000000;
 	}
 	
 	div#goWrite {
@@ -173,16 +171,30 @@
 
 <script src="<%= ctxPath%>/resources/js/jquery-3.3.1.min.js"></script>
 <script type="text/javascript">
-	$(document).ready(function(){ 
+	$(document).ready(function(){
+
+		if(${paraMap != null}){
+			$("#searchType").val("${paraMap.searchType}");
+			$("#searchWord").val("${paraMap.searchWord}");
+		}
 		
+		$("#searchWord").keydown(function(event){
+			if(event.keyCode == 13){
+				goSearch();
+			}
+		});
+	
 		// 검색하기 버튼 클릭
 		$("#searchicon").click(function(){
-			
+			goSearch();
+		}); // end of $("#searchicon").click()
+		
+		function goSearch(){
 			// 유효성 검사
-			var searchCondition = $("#searchCondition").val().trim();
+			var searchType = $("#searchType").val().trim();
 			var searchWord = $("#searchWord").val().trim();
 			
-			if( searchCondition == "" ){
+			if( searchType == "" ){
 				alert("검색 조건을 선택하세요.");
 				return;
 			}
@@ -193,9 +205,8 @@
 				return;
 			}
 			
-			window.location.href="**.at?searchCondition="+searchCondition+"&searchWord="+searchWord;
-
-		}); // end of $("#searchicon").click()
+			window.location.href="<%=ctxPath%>/previewList.at?searchType="+searchType+"&searchWord="+searchWord;
+		}
 		
 		
 		// 리스트의 전시회 이름을 클릭하면 전시회 상세페이지로 이동한다.
@@ -215,7 +226,16 @@
 		
 		// 글쓰기 페이지로 가기
 		$("div#goWrite").click(function(){
-			window.location.href="/artree/addPreview.at";	
+			
+			if(${sessionScope.loginuser == null}){
+				alert("먼저 로그인을 진행해주세요 !");
+				location.href="javascript:layer_open('layer')";
+				return;
+			}
+			else{
+				window.location.href="/artree/addPreview.at";	
+			}
+				
 		});
 		
 	});
@@ -230,15 +250,14 @@
 
 		<div id="topText">
 			<span style="text-align:center">Membership</span>
-			<h1 style="margin:0;">Preview</h1>
+			<h1 style="margin:0; cursor: pointer;" onclick="location.href='<%= ctxPath %>/previewList.at'">Preview</h1>
 		</div>
 		
 		<div id="searchContainer">	
-			<select id="searchCondition">
+			<select id="searchType">
 				<option value="">검색조건</option>
 				<option value="name">전시회 이름</option>
-				<option value="titleContents">제목+글내용</option>
-				<option value="writer">작성자</option>
+				<option value="title">제목</option>
 			</select>
 			<input id="searchWord" type="text" placeholder="검색어를 입력하세요." />
 		
@@ -258,84 +277,28 @@
 				</thead>
 				
 				<tbody>
-					<tr>
-						<td>1</td>
-						<td>국립현대미술관 50주년 기념전 《광장: 미술과 사회 1900-2019》개최</td>
-						<td>리뷰제목리뷰제목리뷰제목리목</td>
-						<td>2020-01-10 22:10</td>
-						<td>5</td>
-					</tr>
-					<tr>
-						<td>2</td>
-						<td>국립현대미술관 50주년 기념전</td>
-						<td>리뷰제목리뷰제목리뷰제목</td>
-						<td>2020-01-10 22:10</td>
-						<td>5</td>
-					</tr>
-					<tr>
-						<td>3</td>
-						<td>가나아트 컬렉션 상설전 시대유감 時代遺憾 </td>
-						<td>리뷰제목리뷰제목리뷰제목제목리뷰제</td>
-						<td>2020-01-10 22:10</td>
-						<td>5</td>
-					</tr>
-					<tr>
-						<td>4</td>
-						<td>국립현대미술관 50주년 기념전</td>
-						<td>리뷰제목리뷰제목리뷰제목</td>
-						<td>2020-01-10 22:10</td>
-						<td>5</td>
-					</tr>
-					<tr>
-						<td>5</td>
-						<td>국립현대미술관 50주년 기념전</td>
-						<td>리뷰제목리뷰제목리뷰제목</td>
-						<td>2020-01-10 22:10</td>
-						<td>5</td>
-					</tr>
-					<tr>
-						<td>6</td>
-						<td>국립현대미술관 50주년 기념전</td>
-						<td>리뷰제목리뷰제목리뷰제목</td>
-						<td>2020-01-10 22:10</td>
-						<td>5</td>
-					</tr>
-					<tr>
-						<td>7</td>
-						<td>국립현대미술관 50주년 기념전</td>
-						<td>리뷰제목리뷰제목리뷰제목</td>
-						<td>2020-01-10 22:10</td>
-						<td>5</td>
-					</tr>
-					<tr>
-						<td>8</td>
-						<td>국립현대미술관 50주년 기념전</td>
-						<td>리뷰제목리뷰제목리뷰제목</td>
-						<td>2020-01-10 22:10</td>
-						<td>5</td>
-					</tr>
-					<tr>
-						<td>9</td>
-						<td>국립현대미술관 50주년 기념전</td>
-						<td>리뷰제목리뷰제목리뷰제목</td>
-						<td>2020-01-10 22:10</td>
-						<td>5</td>
-					</tr>
-					<tr>
-						<td>10</td>
-						<td>국립현대미술관 50주년 기념전</td>
-						<td>리뷰제목리뷰제목리뷰제목</td>
-						<td>2020-01-10 22:10</td>
-						<td>5</td>
-					</tr>
+					<c:if test="${not empty previewListMap}">
+						<c:forEach var="previewMap" items="${previewListMap}" varStatus="status">
+							<tr>
+								<td>${startIdx-status.index}</td>
+								<td>${previewMap.NAME}</td>
+								<td>${previewMap.TITLE}</td>
+								<td>${previewMap.REGDATE}</td>
+								<td>${previewMap.READCOUNT}</td>
+							</tr>
+						</c:forEach>
+					</c:if>
+					<c:if test="${empty previewListMap}">
+						<tr>
+							<td colspan="5">게시글이 없습니다.</td>
+						</tr>
+					</c:if>
 				</tbody>
 			</table>
 		</div>
 
-		<!-- 페이징바 들어올 자리 -->
-		<!-- 페이지 바 여유되면 넣겠습니다........ㅠㅠㅠㅠㅠㅠㅠㅠㅠ-->
-		<div class="pagination" align="center">
-		<%-- 	${pageBar} --%>
+		<div class="board_paginate" align="center">
+		 	${pageBar} 
 		</div>
 		
 		<div id="goWrite">

@@ -199,37 +199,39 @@
 
 <script src="<%= ctxPath%>/resources/js/jquery-3.3.1.min.js"></script>
 <script type="text/javascript">
-	$(document).ready(function(){ 
+	$(document).ready(function(){
+		
+		$("#allMember").addClass("currentStatus");
 		
 		// 검색하기 버튼 클릭
 		$("#searchicon").click(function(){
 			
-			// 유효성 검사
-			var searchCondition = $("#searchCondition").val().trim();
-			var searchWord = $("#searchWord").val().trim();
-			
-			if( searchCondition == "" ){
-				alert("검색 조건을 선택하세요.");
-				return;
-			}
-			
-			else if( searchWord == "" ){
-				alert("검색어를 입력하세요.");
-				$("#searchWord").focus();
-				return;
-			}
-			
-			window.location.href="**.at?searchCondition="+searchCondition+"&searchWord="+searchWord;
+			goSearch();
 
 		}); // end of $("#searchicon").click()
 		
-		// 각 글제목을 클릭하면 상세 페이지로 이동
-		$("div#contentContainer table tbody td:nth-child(2)").click(function(){
-			var no = $(this).prev().text(); // 클릭한 글번호를 받아온다.
-
+		$(document).on("click", "#memberContents tbody tr", function(){
+			
+			var no = $(this).find("td:nth-child(1)").text(); // 클릭한 글번호를 받아온다.
+			
+		//	console.log(no);
+			
 			window.location.href="/artree/memberInfo.at?no="+no;
 			
-		}); // end of $("div#contentContainer table tbody td:nth-child(2)").click
+		});
+	
+		$("#searchWord").keydown(function(event){
+			if(event.keyCode == 13) {
+				// 엔터를 했을 경우
+				goSearch();
+			}
+		});
+		
+		// 검색시 검색조건 및 검색어 값 유지시키기 
+		if(${paraMap != null}) {
+			$("#searchCondition").val("${paraMap.searchCondition}");
+			$("#searchWord").val("${paraMap.searchWord}");
+		}
 		
 		let html = "";
 		html += "<thead><tr>";
@@ -241,11 +243,9 @@
 			
 		html += "<tbody>";
 		
-		console.log("${ memberList.size }");
+		if (${ memberList != null }) {
 			
-	/* 	if (${ memberList != null }) {
-			
-			for(var i = 0; i < ${ memberList.size }; i++) {
+			<c:forEach var="member" items="${ memberList }">
 				
 				html += "<tr>";
 				html += "<td>${ member.idx }</td>";
@@ -258,16 +258,70 @@
 				html += "<td>가입회원</td>";
 				if(${ member.status == '2' })
 				html += "<td>관리자</td>";
+				html += "</tr>";
+			</c:forEach>
 			
-			}
+			html += "</tbody>";
 			
+		} else {
+			
+			html += "<tr>";
+			html += "<td colspan='4'>검색 결과가 없습니다.</td>";
+			html += "</tr>";
 			html += "</tbody>";
 			
 		}
 		
-		$("#reviewContents").html(html);
-		 */
+		$("#memberContents").html(html);
+		
+		// -------------------------------------------- //
+		
+		let link = document.location.href
+		
+		if(link.includes("http://localhost:9090/artree/memberList.at")) {
+			$("a.memberStatus").removeClass("currentStatus");
+			$("#allMember").addClass("currentStatus");
+		}
+		
+		if(link.includes("http://localhost:9090/artree/activatedMemberList.at")) {
+			$("a.memberStatus").removeClass("currentStatus");
+			$("#activatedMember").addClass("currentStatus");
+		}
+		
+		if(link.includes("http://localhost:9090/artree/deactivatedMemberList.at")) {
+			$("a.memberStatus").removeClass("currentStatus");
+			$("#deactivatedMember").addClass("currentStatus");
+		}
+		
+		if(link.includes("http://localhost:9090/artree/adminList.at")) {
+			$("a.memberStatus").removeClass("currentStatus");
+			$("#adminMember").addClass("currentStatus");
+		}
+		
 	});
+	
+	function goSearch() {
+		
+		// 유효성 검사
+		var searchCondition = $("#searchCondition").val().trim();
+		var searchWord = $("#searchWord").val().trim();
+		
+		if( searchCondition == "" ){
+			alert("검색 조건을 선택하세요.");
+			return;
+		}
+		
+		else if( searchWord == "" ){
+			alert("검색어를 입력하세요.");
+			$("#searchWord").focus();
+			return;
+		}
+		
+		var frm = document.searchFrm;
+		frm.method = "GET";
+		frm.action = "<%= request.getContextPath()%>/memberList.at?searchCondition="+searchCondition+"&searchWord="+searchWord;
+		frm.submit();
+	}
 
 </script>
 </head>
@@ -284,21 +338,25 @@
 			<h1 style="margin:0; font-weight: bold;">Member List</h1>
 		</div>
 		<div id="eachStatus">
-			<a class="memberStatus currentStatus" id="activatedMember" href="<%= ctxPath %>/memberList.at">가입회원</a>
+			<a class="memberStatus" id="allMember" href="<%= ctxPath %>/memberList.at">모든회원</a>
+			<a class="memberStatus" id="activatedMember" href="<%= ctxPath %>/activatedMemberList.at">가입회원</a>
 			<a class="memberStatus" id="deactivatedMember" href="<%= ctxPath %>/deactivatedMemberList.at">탈퇴회원</a>
-			<a class="memberStatus" id="admin" href="<%= ctxPath %>/adminList.at">관리자</a>
+			<a class="memberStatus" id="adminMember" href="<%= ctxPath %>/adminList.at">관리자</a>
 		</div>
 		
 		<div id="searchContainer">	
-			<select id="searchCondition" name="searchCondition">
-				<option value="">검색조건</option>
-				<option value="name">회원명</option>
-				<option value="no">회원번호</option>
-				<option value="email">이메일</option>
-			</select>
-			<input type="text" id="searchWord" name="searchWord" placeholder="검색어를 입력하세요" />
-		
-			<a style="vertical-align: middle;"><img id="searchicon" src="<%= ctxPath %>/resources/images/board/searchicon.PNG" /></a>
+			<form name="searchFrm">
+				<select id="searchCondition" name="searchCondition">
+					<option value="">검색조건</option>
+					<option value="name">회원명</option>
+					<option value="idx">회원번호</option>
+					<option value="email">이메일</option>
+				</select>
+				<input type="text" id="searchWord" name="searchWord" placeholder="검색어를 입력하세요" />
+				<input type="hidden" value="" />
+			
+				<a style="vertical-align: middle;"><img id="searchicon" src="<%= ctxPath %>/resources/images/board/searchicon.PNG" /></a>
+			</form>
 		</div>
 		
 		<div id="contentContainer">
@@ -308,7 +366,7 @@
 		</div>
 
 		<%-- 페이지바 --%>
-		<div align="center" style="margin-top: 8vh">
+		<div align="center" style="margin-top: 8vh;">
 			${ pageBar }
 		</div>
 

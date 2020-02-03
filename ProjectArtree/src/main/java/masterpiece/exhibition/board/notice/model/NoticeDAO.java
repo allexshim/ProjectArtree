@@ -20,6 +20,15 @@ public class NoticeDAO implements InterNoticeDAO {
 		return n;
 	}
 	
+	// 공지 글 개수
+	@Override
+	public int getCountNotice() {
+
+		int n = sqlsession.selectOne("notice.getCountNotice");
+		
+		return n;
+	}
+	
 	// 공지 목록 보여주기
 	@Override
 	public List<HashMap<String, String>> getNotice(HashMap<String, String> noticeMap) {
@@ -37,14 +46,11 @@ public class NoticeDAO implements InterNoticeDAO {
 		
 		return n;
 	}
-
-	@Override
-	public int getCount() {
-
-		int n = sqlsession.selectOne("notice.getCount");
-		
-		return n;
-	}
+	
+	
+	
+	
+	
 
 	
 	

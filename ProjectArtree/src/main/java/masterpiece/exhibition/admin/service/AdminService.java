@@ -1,5 +1,7 @@
 package masterpiece.exhibition.admin.service;
 
+import java.io.UnsupportedEncodingException;
+import java.security.GeneralSecurityException;
 import java.util.HashMap;
 import java.util.List;
 
@@ -20,6 +22,9 @@ public class AdminService implements InterAdminService {
 	@Autowired
 	private InterAdminDAO dao;
 	
+	@Autowired 
+	private AES256 aes;
+	
 	// 전시회등록
 	@Override
 	public int applyExhibition(HashMap<String, String> newExhibitMap) {
@@ -39,10 +44,6 @@ public class AdminService implements InterAdminService {
 	public HashMap<String, List<String>> getTags() {
 
 		HashMap<String, List<String>> alltags = dao.getAllTags();
-		
-		
-	//	System.out.println("========================== " + alltags.get("색상별"));
-			
 		
 		return alltags;
 	}
@@ -193,6 +194,109 @@ public class AdminService implements InterAdminService {
 	public List<MemberVO> deactivatedMemberList(HashMap<String, String> paraMap) {
 		List<MemberVO> memberList = dao.deactivatedMemberList(paraMap);
 		return memberList;
+	}
+
+	// 가입회원목록
+	@Override
+	public List<MemberVO> activatedMemberList(HashMap<String, String> paraMap) {
+		List<MemberVO> memberList = dao.activatedMemberList(paraMap);
+		return memberList;
+	}
+
+	// 관리자목록
+	@Override
+	public List<MemberVO> adminList(HashMap<String, String> paraMap) {
+		List<MemberVO> memberList = dao.adminList(paraMap);
+		return memberList;
+	}
+
+	// 검색조건이 없을시 탈퇴한 회원목록의 총 게시물건수
+	@Override
+	public int getTotalCountWithoutSearchDeactivated() {
+		int n = dao.getTotalCountWithoutSearchDeactivated();
+		return n;
+	}
+
+	// 검색조건이 있을시 탈퇴한 회원목록의 총 게시물건수
+	@Override
+	public int getTotalCountWithSearchDeactivated(HashMap<String, String> paraMap) {
+		int n = dao.getTotalCountWithSearchDeactivated(paraMap);
+		return n;
+	}
+
+	// 검색조건이 없을시 가입회원목록의 총 게시물건수
+	@Override
+	public int getTotalCountWithoutSearchActivated() {
+		int n = dao.getTotalCountWithoutSearchActivated();
+		return n;
+	}
+
+	// 검색조건이 있을시 가입회원목록의 총 게시물건수
+	@Override
+	public int getTotalCountWithSearchActivated(HashMap<String, String> paraMap) {
+		int n = dao.getTotalCountWithSearchActivated(paraMap);
+		return n;
+	}
+
+	// 검색조건이 없을시 관리자목록의 총 게시물건수
+	@Override
+	public int getTotalCountWithoutSearchAdmin() {
+		int n = dao.getTotalCountWithoutSearchAdmin();
+		return n;
+	}
+
+	// 검색조건이 있을시 관리자목록의 총 게시물건수
+	@Override
+	public int getTotalCountWithSearchAdmin(HashMap<String, String> paraMap) {
+		int n = dao.getTotalCountWithSearchAdmin(paraMap);
+		return n;
+	}
+
+	// 회원상세정보출력
+	@Override
+	public MemberVO getMemberInfo(String no) throws NoSuchMethodException {
+		MemberVO member = dao.getMemberInfo(no);
+		
+		try {
+			member.setHp(aes.decrypt(member.getHp()));
+		} catch (UnsupportedEncodingException | GeneralSecurityException e) {
+			e.printStackTrace();
+		}
+		
+		String status = member.getStatus();
+		
+		if("0".equals(status)) {
+			member.setStatus("탈퇴회원");
+		} else if("1".equals(status)) {
+			member.setStatus("가입회원");
+		} else {
+			member.setStatus("관리자");
+		}
+		
+		String gender = member.getGender();
+		
+		if("2".equals(gender)) {
+			member.setGender("여자");
+		} else {
+			member.setGender("남자");
+		}
+		
+		return member;
+	}
+
+	// 주문목록출력
+	@Override
+	public List<HashMap<String, String>> getOrderList(String no) {
+		List<HashMap<String, String>> orderList = dao.getOrderList(no);
+		
+		return orderList;
+	}
+
+	// 주문정보출력
+	@Override
+	public List<HashMap<String, String>> getOrderInfo(String reserno) {
+		List<HashMap<String, String>> orderInfo = dao.getOrderInfo(reserno);
+		return orderInfo;
 	}
 
 

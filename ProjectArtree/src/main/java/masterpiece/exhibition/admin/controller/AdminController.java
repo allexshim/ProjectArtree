@@ -45,32 +45,23 @@ public class AdminController {
 	private ThumbnailManager thumbnailManager;
 	
 	@RequestMapping(value="/admin.at")
-	public String isAdmin__admin(HttpServletRequest request, HttpServletResponse response) {
+	public String isAdmin_admin(HttpServletRequest request, HttpServletResponse response) {
 		
 		
 		return "admin/admin-main.tiles";
 	}
 	
-	@RequestMapping(value="/memberInfo.at")
-	public String isAdmin__memberInfo(HttpServletRequest request, HttpServletResponse response) {
-		
-		
-		String no = request.getParameter("no");
-		
-		return "admin/members/memberInfo.tiles";
-	}
-	
 	// ------------------ 각종 통계페이지 -------------------- //
 	
 	@RequestMapping(value="/bySales.at")
-	public String isAdmin__bySales(HttpServletRequest request, HttpServletResponse response) {
+	public String isAdmin_bySales(HttpServletRequest request, HttpServletResponse response) {
 		
 		
 		return "admin/statistics/bySales.tiles";
 	}
 	
 	@RequestMapping(value="/byGender.at")
-	public String isAdmin__byGender(HttpServletRequest request, HttpServletResponse response) {
+	public String isAdmin_byGender(HttpServletRequest request, HttpServletResponse response) {
 		
 		
 		return "admin/statistics/byGender.tiles";
@@ -351,7 +342,7 @@ public class AdminController {
 		String msg = "";
 		String loc = "";
 		
-		if(n + m != 2) {
+		if(n + m + l != 3) {
 			
 			msg = "처리중 오류가 발생하였습니다. 다시 시도하여주세요.";
 			loc = "javascript:history.back();";
@@ -617,9 +608,9 @@ public class AdminController {
 		return jsonArr.toString(); 
 	}
 	
-	//////////////////////////////////// 가입되어있는 회원목록 //////////////////////////////////// 
+	//////////////////////////////////// 모든 회원목록 //////////////////////////////////// 
 	@RequestMapping(value="/memberList.at")
-	public ModelAndView memberList(HttpServletRequest request, HttpServletResponse response, ModelAndView mav) {
+	public ModelAndView isAdmin_memberList(HttpServletRequest request, HttpServletResponse response, ModelAndView mav) {
 		
 		List<MemberVO> memberList = null;
 		
@@ -707,11 +698,11 @@ public class AdminController {
 		while( !(loop>blockSize || pageNo>totalPage) ) {
 			
 			if(pageNo == currentShowPageNo) {
-				pageBar += "<li style='display:inline-block; width:20px; padding:2px 6px; font-weight:bold; box-shadow:3px 3px 3px grey; border-radius:4px;'>"+pageNo+"</li>";
+				pageBar += "<li style='display:inline-block; width:20px; padding:2px 6px; font-weight:bold; font-size:14pt;'>"+pageNo+"</li>";
 			}
 			else {
 				pageBar += "<li style='display:inline-block; width:20px;'>"
-						+ "<a style='color: black; margin: 0 4px;' href='"+url+"currentShowPageNo="+pageNo+"&sizePerPage="+sizePerPage+"&searchCondition="+searchCondition+"&searchWord="+searchWord+"'>"
+						+ "<a style='color: black; margin: 0 4px; font-size:12pt;' href='"+url+"currentShowPageNo="+pageNo+"&sizePerPage="+sizePerPage+"&searchCondition="+searchCondition+"&searchWord="+searchWord+"'>"
 						+pageNo+"</a></li>"; 
 			}
 			
@@ -739,7 +730,7 @@ public class AdminController {
 	
 	//////////////////////////////////// 탈퇴한 회원목록 //////////////////////////////////// 
 	@RequestMapping(value="/deactivatedMemberList.at")
-	public ModelAndView deactivatedMemberList(HttpServletRequest request, HttpServletResponse response, ModelAndView mav) {
+	public ModelAndView isAdmin_deactivatedMemberList(HttpServletRequest request, HttpServletResponse response, ModelAndView mav) {
 		
 		List<MemberVO> memberList = null;
 		
@@ -766,12 +757,12 @@ public class AdminController {
 		
 	    // 검색조건이 없을 경우의 총 게시물 건수(totalCount)
 		if("".equals(searchWord)) {
-			totalCount = service.getTotalCountWithoutSearch();
+			totalCount = service.getTotalCountWithoutSearchDeactivated();
 		}
 		
 		// 검색조건이 있을 경우의 총 게시물 건수(totalCount)
 		else {
-			totalCount = service.getTotalCountWithSearch(paraMap);
+			totalCount = service.getTotalCountWithSearchDeactivated(paraMap);
 		}
 		
 		totalPage = (int) Math.ceil( (double)totalCount/sizePerPage );  
@@ -813,7 +804,7 @@ public class AdminController {
 		
 		int pageNo = ((currentShowPageNo - 1)/blockSize) * blockSize + 1;
 		
-	    String url = "memberList.at";
+	    String url = "deactivatedMemberList.at";
 	    
 		String lastStr = url.substring(url.length()-1);
 		if(!"?".equals(lastStr)) 
@@ -827,11 +818,11 @@ public class AdminController {
 		while( !(loop>blockSize || pageNo>totalPage) ) {
 			
 			if(pageNo == currentShowPageNo) {
-				pageBar += "<li style='display:inline-block; width:20px; padding:2px 6px; font-weight:bold; box-shadow:3px 3px 3px grey; border-radius:4px;'>"+pageNo+"</li>";
+				pageBar += "<li style='display:inline-block; width:20px; padding:2px 6px; font-weight:bold; font-size:14pt;'>"+pageNo+"</li>";
 			}
 			else {
 				pageBar += "<li style='display:inline-block; width:20px;'>"
-						+ "<a style='color: black; margin: 0 4px;' href='"+url+"currentShowPageNo="+pageNo+"&sizePerPage="+sizePerPage+"&searchCondition="+searchCondition+"&searchWord="+searchWord+"'>"
+						+ "<a style='color: black; margin: 0 4px; font-size:12pt;' href='"+url+"currentShowPageNo="+pageNo+"&sizePerPage="+sizePerPage+"&searchCondition="+searchCondition+"&searchWord="+searchWord+"'>"
 						+pageNo+"</a></li>"; 
 			}
 			
@@ -855,7 +846,309 @@ public class AdminController {
 		mav.setViewName("admin/members/memberList.tiles");
 		
 		return mav;
-	}	
+	}
+	
+	//////////////////////////////////// 가입회원목록 //////////////////////////////////// 
+	@RequestMapping(value="/activatedMemberList.at")
+	public ModelAndView isAdmin_activatedMemberList(HttpServletRequest request, HttpServletResponse response, ModelAndView mav) {
+		
+		List<MemberVO> memberList = null;
+		
+		String str_currentShowPageNo = request.getParameter("currentShowPageNo"); 
+		
+		int totalCount = 0;         // 총게시물 건수
+		int sizePerPage = 10;       // 한 페이지당 보여줄 게시물 수 
+		int currentShowPageNo = 0;  // 현재 보여주는 페이지번호로서, 초기치로는 1페이지로 설정함.
+		int totalPage = 0;          // 총 페이지수(웹브라우저상에 보여줄 총 페이지 갯수, 페이지바) 
+		
+		int startRno = 0;           // 시작 행번호
+		int endRno = 0;             // 끝 행번호
+		
+		String searchCondition = request.getParameter("searchCondition"); 
+		String searchWord = request.getParameter("searchWord"); 
+		
+		if(searchWord == null || searchWord.trim().isEmpty() ) {
+			searchWord = "";
+		}
+		
+		HashMap<String,String> paraMap = new HashMap<String,String>(); 
+		paraMap.put("searchCondition", searchCondition);
+		paraMap.put("searchWord", searchWord);
+		
+	    // 검색조건이 없을 경우의 총 게시물 건수(totalCount)
+		if("".equals(searchWord)) {
+			totalCount = service.getTotalCountWithoutSearchActivated();
+		}
+		
+		// 검색조건이 있을 경우의 총 게시물 건수(totalCount)
+		else {
+			totalCount = service.getTotalCountWithSearchActivated(paraMap);
+		}
+		
+		totalPage = (int) Math.ceil( (double)totalCount/sizePerPage );  
+		
+		if(str_currentShowPageNo == null) {
+			// 게시판에 보여지는 초기화면
+			currentShowPageNo = 1;
+		}
+		else {
+			
+			try {
+				  currentShowPageNo = Integer.parseInt(str_currentShowPageNo);
+				
+				  if(currentShowPageNo < 1 || currentShowPageNo > totalPage) {
+					  currentShowPageNo = 1;
+				  }
+			} catch (NumberFormatException e) {
+				  currentShowPageNo = 1;
+			}
+		}
+	
+		startRno = ((currentShowPageNo - 1) * sizePerPage) + 1;
+		endRno = startRno + sizePerPage - 1;
+		
+		paraMap.put("startRno", String.valueOf(startRno));
+		paraMap.put("endRno", String.valueOf(endRno));
+	
+		memberList = service.activatedMemberList(paraMap);
+	
+		if(!"".equals(searchWord)) {
+			mav.addObject("paraMap", paraMap);
+		}
+		
+		String pageBar = "<ul style='list-style: none;'>";
+		
+		int blockSize = 10;
+		
+		int loop = 1;
+		
+		int pageNo = ((currentShowPageNo - 1)/blockSize) * blockSize + 1;
+		
+	    String url = "activatedMemberList.at";
+	    
+		String lastStr = url.substring(url.length()-1);
+		if(!"?".equals(lastStr)) 
+			url += "?"; 
+		
+		// *** [이전] 만들기 *** //    
+		if(pageNo != 1) {
+			pageBar += "<li style='display:inline-block; width:20px;'><a href='"+url+"currentShowPageNo="+(pageNo-1)+"&sizePerPage="+sizePerPage+"&searchCondition="+searchCondition+"&searchWord="+searchWord+"'>[이전]</a></li>";
+		}
+		
+		while( !(loop>blockSize || pageNo>totalPage) ) {
+			
+			if(pageNo == currentShowPageNo) {
+				pageBar += "<li style='display:inline-block; width:20px; padding:2px 6px; font-weight:bold; font-size:14pt;'>"+pageNo+"</li>";
+			}
+			else {
+				pageBar += "<li style='display:inline-block; width:20px;'>"
+						+ "<a style='color: black; margin: 0 4px; font-size:12pt;' href='"+url+"currentShowPageNo="+pageNo+"&sizePerPage="+sizePerPage+"&searchCondition="+searchCondition+"&searchWord="+searchWord+"'>"
+						+pageNo+"</a></li>"; 
+			}
+			
+			loop++;
+			pageNo++;
+		}// end of while---------------------------------
+		
+		// *** [다음] 만들기 *** //
+		if( !(pageNo>totalPage) ) {
+			pageBar += "<li style='display:inline-block; width:20px;'><a href='"+url+"currentShowPageNo="+pageNo+"&sizePerPage="+sizePerPage+"&searchCondition="+searchCondition+"&searchWord="+searchWord+"'>[다음]</a></li>"; 
+		}
+		
+		pageBar += "</ul>";
+		
+		mav.addObject("pageBar", pageBar);
+		
+		String gobackURL = MyUtil.getCurrentURL(request);
+		mav.addObject("gobackURL", gobackURL);
+		
+		mav.addObject("memberList", memberList);
+		mav.setViewName("admin/members/memberList.tiles");
+		
+		return mav;
+	}
+	
+	//////////////////////////////////// 관리자목록 //////////////////////////////////// 
+	@RequestMapping(value="/adminList.at")
+	public ModelAndView isAdmin_adminList(HttpServletRequest request, HttpServletResponse response, ModelAndView mav) {
+		
+		List<MemberVO> memberList = null;
+		
+		String str_currentShowPageNo = request.getParameter("currentShowPageNo"); 
+		
+		int totalCount = 0;         // 총게시물 건수
+		int sizePerPage = 10;       // 한 페이지당 보여줄 게시물 수 
+		int currentShowPageNo = 0;  // 현재 보여주는 페이지번호로서, 초기치로는 1페이지로 설정함.
+		int totalPage = 0;          // 총 페이지수(웹브라우저상에 보여줄 총 페이지 갯수, 페이지바) 
+		
+		int startRno = 0;           // 시작 행번호
+		int endRno = 0;             // 끝 행번호
+		
+		String searchCondition = request.getParameter("searchCondition"); 
+		String searchWord = request.getParameter("searchWord"); 
+		
+		if(searchWord == null || searchWord.trim().isEmpty() ) {
+			searchWord = "";
+		}
+		
+		HashMap<String,String> paraMap = new HashMap<String,String>(); 
+		paraMap.put("searchCondition", searchCondition);
+		paraMap.put("searchWord", searchWord);
+		
+	    // 검색조건이 없을 경우의 총 게시물 건수(totalCount)
+		if("".equals(searchWord)) {
+			totalCount = service.getTotalCountWithoutSearchAdmin();
+		}
+		
+		// 검색조건이 있을 경우의 총 게시물 건수(totalCount)
+		else {
+			totalCount = service.getTotalCountWithSearchAdmin(paraMap);
+		}
+		
+		totalPage = (int) Math.ceil( (double)totalCount/sizePerPage );  
+		
+		if(str_currentShowPageNo == null) {
+			// 게시판에 보여지는 초기화면
+			currentShowPageNo = 1;
+		}
+		else {
+			
+			try {
+				  currentShowPageNo = Integer.parseInt(str_currentShowPageNo);
+				
+				  if(currentShowPageNo < 1 || currentShowPageNo > totalPage) {
+					  currentShowPageNo = 1;
+				  }
+			} catch (NumberFormatException e) {
+				  currentShowPageNo = 1;
+			}
+		}
+	
+		startRno = ((currentShowPageNo - 1) * sizePerPage) + 1;
+		endRno = startRno + sizePerPage - 1;
+		
+		paraMap.put("startRno", String.valueOf(startRno));
+		paraMap.put("endRno", String.valueOf(endRno));
+	
+		memberList = service.adminList(paraMap);
+	
+		if(!"".equals(searchWord)) {
+			mav.addObject("paraMap", paraMap);
+		}
+		
+		String pageBar = "<ul style='list-style: none;'>";
+		
+		int blockSize = 10;
+		
+		int loop = 1;
+		
+		int pageNo = ((currentShowPageNo - 1)/blockSize) * blockSize + 1;
+		
+	    String url = "adminList.at";
+	    
+		String lastStr = url.substring(url.length()-1);
+		if(!"?".equals(lastStr)) 
+			url += "?"; 
+		
+		// *** [이전] 만들기 *** //    
+		if(pageNo != 1) {
+			pageBar += "<li style='display:inline-block; width:20px;'><a href='"+url+"currentShowPageNo="+(pageNo-1)+"&sizePerPage="+sizePerPage+"&searchCondition="+searchCondition+"&searchWord="+searchWord+"'>[이전]</a></li>";
+		}
+		
+		while( !(loop>blockSize || pageNo>totalPage) ) {
+			
+			if(pageNo == currentShowPageNo) {
+				pageBar += "<li style='display:inline-block; width:20px; padding:2px 6px; font-weight:bold; font-size:14pt;'>"+pageNo+"</li>";
+			}
+			else {
+				pageBar += "<li style='display:inline-block; width:20px;'>"
+						+ "<a style='color: black; margin: 0 4px; font-size:12pt;' href='"+url+"currentShowPageNo="+pageNo+"&sizePerPage="+sizePerPage+"&searchCondition="+searchCondition+"&searchWord="+searchWord+"'>"
+						+pageNo+"</a></li>"; 
+			}
+			
+			loop++;
+			pageNo++;
+		}// end of while---------------------------------
+		
+		// *** [다음] 만들기 *** //
+		if( !(pageNo>totalPage) ) {
+			pageBar += "<li style='display:inline-block; width:20px;'><a href='"+url+"currentShowPageNo="+pageNo+"&sizePerPage="+sizePerPage+"&searchCondition="+searchCondition+"&searchWord="+searchWord+"'>[다음]</a></li>"; 
+		}
+		
+		pageBar += "</ul>";
+		
+		mav.addObject("pageBar", pageBar);
+		
+		String gobackURL = MyUtil.getCurrentURL(request);
+		mav.addObject("gobackURL", gobackURL);
+		
+		mav.addObject("memberList", memberList);
+		mav.setViewName("admin/members/memberList.tiles");
+		
+		return mav;
+	}
+	
+	///////////////////////////// 회원상세정보 //////////////////////////////
+	@RequestMapping(value="/memberInfo.at")
+	public ModelAndView memberInfo(HttpServletRequest request, HttpServletResponse response, ModelAndView mav) {
+		
+		String no = request.getParameter("no");
+		
+		//// 회원정보 ////
+		MemberVO memberInfo = null;
+		
+		try {
+			memberInfo = service.getMemberInfo(no);
+		} catch (NoSuchMethodException e) {
+			e.printStackTrace();
+		}
+		
+		mav.addObject("memberInfo", memberInfo);
+		
+		//// 주문목록 ////
+		List<HashMap<String, String>> orderList = service.getOrderList(no);
+		
+		mav.addObject("orderList", orderList);
+		
+		mav.setViewName("admin/members/memberInfo.tiles");
+		
+		return mav;
+		
+	}
+	
+	@ResponseBody
+	@RequestMapping(value="/orderInfo.at", produces="text/plain;charset=UTF-8")
+	public String orderInfo(HttpServletRequest request, HttpServletResponse response) {
+		
+		String reserno = request.getParameter("reserno");
+	//	System.out.println("============================ reserno : " + reserno);
+		
+		List<HashMap<String, String>> orderInfoList = service.getOrderInfo(reserno);
+		
+		JSONArray jsonArr = new JSONArray();
+		
+		if(orderInfoList != null) {
+			for(HashMap<String, String> info : orderInfoList) {
+				JSONObject jsonObj = new JSONObject();
+				jsonObj.put("reserno", info.get("reserno"));
+				jsonObj.put("reserdate", info.get("reserdate"));
+				jsonObj.put("resertotal", info.get("resertotal"));
+				jsonObj.put("name", info.get("name"));
+				jsonObj.put("hp", info.get("hp"));
+				jsonObj.put("reserstat", info.get("reserstat"));
+				jsonObj.put("dday", info.get("dday"));
+				jsonObj.put("purtype", info.get("purtype"));
+				jsonObj.put("qt", info.get("qt"));
+				jsonObj.put("price", info.get("price"));
+				jsonObj.put("exname", info.get("exname"));
+				
+				jsonArr.put(jsonObj);
+			}
+		}
+		
+		return jsonArr.toString(); 
+	}
+	
 	
 	
 }

@@ -44,6 +44,16 @@ public interface InterMemberService {
 
 	int withdrawal(HashMap<String, String> paraMap); // 회원탈퇴
 
+	
+	// 관리자 통계
+	List<String> getAreaFavorGenre(String string); // 지역마다 선호한 장르 다 가져온다.
+
+	List<HashMap<String, String>> getGenreCnt(String genre); // 선호 장르 가져가서 카운트
+
+	int getTotalCnt(String genre); // 지역별 선호장르 카운트 총 합
+
+
+
 
 
 	

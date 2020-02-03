@@ -196,6 +196,85 @@ public class AdminDAO implements InterAdminDAO {
 		return memberList;
 	}
 
+	// 가입회원목록
+	@Override
+	public List<MemberVO> activatedMemberList(HashMap<String, String> paraMap) {
+		List<MemberVO> memberList = sqlsession.selectList("admin.activatedMemberList", paraMap);
+		return memberList;
+	}
+
+	// 관리자목록
+	@Override
+	public List<MemberVO> adminList(HashMap<String, String> paraMap) {
+		List<MemberVO> memberList = sqlsession.selectList("admin.adminList", paraMap);
+		return memberList;
+	}
+
+	// 검색조건이 없을시 탈퇴한 회원목록의 총 게시물건수
+	@Override
+	public int getTotalCountWithoutSearchDeactivated() {
+		int n = sqlsession.selectOne("admin.getTotalCountWithoutSearchDeactivated");
+		return n;
+	}
+
+	// 검색조건이 있을시 탈퇴한 회원목록의 총 게시물건수
+	@Override
+	public int getTotalCountWithSearchDeactivated(HashMap<String, String> paraMap) {
+		int n = sqlsession.selectOne("admin.getTotalCountWithSearchDeactivated", paraMap);
+		return n;
+	}
+
+	// 검색조건이 없을시 가입회원목록의 총 게시물건수
+	@Override
+	public int getTotalCountWithoutSearchActivated() {
+		int n = sqlsession.selectOne("admin.getTotalCountWithoutSearchActivated");
+		return n;
+	}
+
+	// 검색조건이 있을시 가입회원목록의 총 게시물건수
+	@Override
+	public int getTotalCountWithSearchActivated(HashMap<String, String> paraMap) {
+		int n = sqlsession.selectOne("admin.getTotalCountWithSearchActivated", paraMap);
+		return n;
+	}
+
+	// 검색조건이 없을시 관리자목록의 총 게시물건수
+	@Override
+	public int getTotalCountWithoutSearchAdmin() {
+		int n = sqlsession.selectOne("admin.getTotalCountWithoutSearchAdmin");
+		return n;
+	}
+	
+	// 검색조건이 있을시 관리자목록의 총 게시물건수
+	@Override
+	public int getTotalCountWithSearchAdmin(HashMap<String, String> paraMap) {
+		int n = sqlsession.selectOne("admin.getTotalCountWithSearchAdmin", paraMap);
+		return n;
+	}
+
+	// 회원상세정보출력
+	@Override
+	public MemberVO getMemberInfo(String no) {
+		MemberVO member = sqlsession.selectOne("admin.getMemberInfo", no);
+		return member;
+	}
+
+	// 주문목록출력
+	@Override
+	public List<HashMap<String, String>> getOrderList(String no) {
+		List<HashMap<String, String>> orderList = sqlsession.selectList("admin.getOrderList", no);
+		
+		return orderList;
+	}
+
+	// 주문정보출력
+	@Override
+	public List<HashMap<String, String>> getOrderInfo(String reserno) {
+		List<HashMap<String, String>> orderInfo = sqlsession.selectList("admin.getOrderInfo", reserno);
+		
+		return orderInfo;
+	}
+
 
 	
 }

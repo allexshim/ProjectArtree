@@ -242,7 +242,6 @@
 							
 								if(item.MAINPOSTER.substr(0, 4) != 'http'){
 									html += "<img class='exh_poster' src='<%= ctxPath%>/resources/files/"+item.MAINPOSTER+"'/>";
-									alert(item.MAINPOSTER.substr(0, 4));
 								}
 								else {
 									html += "<img class='exh_poster' src='"+item.MAINPOSTER+"'/>";
@@ -259,7 +258,7 @@
 									html += "<span class='forMoving InfoWhereWhen'>"+item.SCHEDULE+" | BOOK</span>";
 								}
 							
-							html += "</div></a>";
+							html += "</div></a>";    
 							
 						}
 						else {

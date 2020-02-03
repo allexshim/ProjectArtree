@@ -267,4 +267,36 @@
 		update member set status=0 where idx=#{idx}
 	</update>
 	
+	<!-- ************** 관리자 페이지 ************** -->
+   <!-- 지역마다 선호한 장르 다 가져온다. -->
+   <select id="getAreaFavorGenre" parameterType="String" resultType="String">
+	    select favorgenre
+		from (select idx, area
+		      from member) M join wishlist W
+		on M.idx = W.fk_idx
+		where area = #{area}
+   </select>
+   
+   <!-- 지역별 선호장르 카운트 총 합 -->
+   <select id="getTotalCnt" parameterType="String" resultType="int">
+   		select sum(cnt)
+	   		from
+	   		(
+	   		select genre, cnt from
+		    (select genre, cnt, rownum as RNO
+		    from
+		    (select genre, cnt
+		    from (select genre, count(*) as cnt
+		    from ( WITH TT AS
+		         ( SELECT #{genre} genre FROM DUAL )
+		         SELECT TRIM(REGEXP_SUBSTR(genre, '[^,]+', 1, LEVEL)) AS genre
+		         FROM TT CONNECT BY INSTR(genre, ',', 1, LEVEL - 1) <![CDATA[>]]> 0
+		    ) V
+		    group by genre) X
+		    order by cnt desc ) Y
+		    ) Z
+		    )
+   </select>
+   
+
 </mapper>

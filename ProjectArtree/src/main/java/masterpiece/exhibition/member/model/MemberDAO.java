@@ -176,6 +176,39 @@ public class MemberDAO implements InterMemberDAO {
 		return m;
 	}
 
+	
+	// ************** 관리자 페이지 **************
+
+	// 지역마다 선호한 장르 다 가져온다.
+	@Override
+	public List<String> getAreaFavorGenre(String area) {
+		List<String> areaFavorGenre = sqlsession.selectList("member.getAreaFavorGenre", area);
+		return areaFavorGenre;
+	}
+
+	// 선호 장르 가져가서 카운트
+	@Override
+	public List<HashMap<String, String>> getGenreCnt(String genre) {
+		List<HashMap<String, String>> genreCnt = sqlsession.selectList("member.myGenreData", genre);
+		return genreCnt;
+	}
+
+	// 지역별 선호장르 카운트 총 합
+	@Override
+	public int getTotalCnt(String genre) {
+		int totalCnt = sqlsession.selectOne("member.getTotalCnt", genre);
+		return totalCnt;
+	}
+	
+	
+
+	
+	
+
+	
+
+
+
 
 
 	

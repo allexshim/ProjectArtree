@@ -661,4 +661,51 @@ public class MemberController {
 		return mav;
 	}
 	
+	// 관리자 페이지
+	// 지역별 선호장르 차트
+	@ResponseBody
+	@RequestMapping(value="/getAllGenreData.at", produces="text/plain;charset=UTF-8") 
+	public String getAllGenreData(HttpServletRequest request) {
+
+		JSONArray jsarr = new JSONArray();
+		
+		// 지역 가져온다.
+		String[] areaArr = {"서울", "부산", "대구", "인천", "광주", "대전", "울산", "세종", "강원", "경기", "경남", "경북", "전남", "전북", "제주", "충남", "충북"};
+		
+		
+		for(int i=0; i<areaArr.length; i++) {
+			// 지역마다 선호한 장르 다 가져온다.
+			List<String>areaFavorGenre = service.getAreaFavorGenre(areaArr[i]);
+			
+			if(areaFavorGenre != null) {
+				String genre = String.valueOf(areaFavorGenre).substring(1, String.valueOf(areaFavorGenre).length()-1);
+			
+			// 선호 장르 가져가서 카운트
+			List<HashMap<String, String>> genreCnt = service.getGenreCnt(genre);
+			
+			// 지역별 선호장르 카운트 총 합
+			int totalCnt = service.getTotalCnt(genre);
+			
+				if (genreCnt != null) {
+					JSONObject jsobj = new JSONObject();
+					for (HashMap<String, String> map : genreCnt) {
+						for (int j = 0; j < map.size(); j++) {
+							String singleGenre = map.get("genre");
+							String singleCnt = map.get("cnt");
+							
+							jsobj.put(singleGenre, singleCnt);
+							jsobj.put("totalCnt", totalCnt);
+						}
+					}
+
+					jsobj.put("지역", areaArr[i]);
+					jsarr.put(jsobj);
+				}
+			}
+		}
+		
+		return jsarr.toString();
+	
+	}
+	
 }
