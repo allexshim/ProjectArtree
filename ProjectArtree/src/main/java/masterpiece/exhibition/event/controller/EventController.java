@@ -27,13 +27,13 @@ import masterpiece.exhibition.event.service.InterEventService;
 import masterpiece.exhibition.member.model.MemberVO;
 
 @Controller
-public class EventController {
-	
-	@Autowired
-	InterCommunityService service;
-	
+public class EventController {	
+
 	@Autowired
 	InterEventService eventService;
+		
+	@Autowired
+	InterCommunityService service;
 	
 	@RequestMapping(value="/aboutbin.at")
 	public String aboutbin(HttpServletRequest request) {		
