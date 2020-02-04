@@ -302,14 +302,64 @@ commit;
 
 select idx, email, name, status from member order by idx ;
 
+select * from reser;
+select * from reserdetail;
 
 
+select * from exhibition;
 
 
+select R.reserno, R.reserdate, R.resertotal, M.name, M.hp, D.reserstat, D.dday, E.purtype, E.qt, E.price, D.exname, D.fk_exhibitionno
+		from reser R 
+		JOIN member M on R.fk_idx = M.idx
+		JOIN reserdetail D on D.fk_reserno = R.reserno
+		JOIN reserex E on E.fk_reserdetailno = D.reserdetailno
+		order by R.reserno desc;
 
+select D.exname AS name
+			, count(*) AS cnt
+			, round ( count(*) / ( select count(*) from reserdetail ) * 100 , 2 ) AS pct
+		from reser R LEFT JOIN reserdetail D
+		on R.reserno = D.fk_reserno
+		group by D.exname
+		order by cnt desc;
 
+select count(D.fk_exhibitionno) / count(*)
+		from reser R 
+		JOIN member M on R.fk_idx = M.idx
+		JOIN reserdetail D on D.fk_reserno = R.reserno
+		JOIN reserex E on E.fk_reserdetailno = D.reserdetailno
+        where D.fk_exhibitionno = 5170
+        
+		order by R.reserno desc;
 
+select D.fk_exhibitionno AS no, D.exname
+		from reserdetail D JOIN reser R
+        on R.reserno = D.fk_reserno
+		order by R.reserno desc;
 
+select * from reserdetail;
+
+select distinct exname AS name from reserdetail;
+
+select nvl ( D.department_name , '인턴' ) AS DEPARTMENT_NAME
+		    , count(*) AS CNT
+		    , round ( count(*) / ( select count(*) from hr.employees ) * 100 , 2 ) AS PERCENTAGE
+		from hr.employees E left join hr.departments D
+		on E.department_id = D.department_id
+		group by nvl ( D.department_name , '인턴' )
+		order by DEPARTMENT_NAME;
+
+select D.exname AS name
+		    , count(*) AS cnt
+		   , round ( count(*) / ( select count(*) from reserdetail ) * 100 , 2 ) AS pct
+
+		from reser R LEFT JOIN reserdetail D
+		on R.reserno = D.fk_reserno
+		group by D.exname
+		order by D.exname ;
+
+select round ( count(*) / ( select count(*) from reserdetail ) * 100 , 2 ) AS pct from reserdetail;
 
 
 
