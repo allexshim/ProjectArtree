@@ -85,48 +85,18 @@
 	
 	.table th {
 		text-align: cneter;
+		background-color: rgb(247, 181, 184);
 	}
 	
-	/* 
-	div#contentContainer table thead td:first-child, div#contentContainer table tbody td:first-child {
-		width : 10%;
-		text-align: center;
-	}
-	
-	div#contentContainer table thead td:nth-child(2), div#contentContainer table tbody td:nth-child(2) {
-		width : 50%;
-		text-align: center;
-	}
-	
-	div#contentContainer table thead td:nth-child(3), div#contentContainer table tbody td:nth-child(3) {
-		width : 15%;
-		text-align: center;
-	}
-	
-	div#contentContainer table thead td:nth-child(4), div#contentContainer table tbody td:nth-child(4) {
-		width : 20%;
-		text-align: center;
-	}
-
-	div#contentContainer table tbody td:nth-child(2) {
-		cursor : pointer;
-	}
-
-	div#contentContainer table thead td {
-		padding-top : 10px;
-		padding-bottom : 10px; 
-	}
-	 */
 	/* == 통계 영역 == */
 	#statistics-area {
 		height: 90vh;
-		/* border: 2px solid red; */
 		width: 100%;
 	}
 	
 	#table-area {
-		border: 2px solid navy;
-		height: 90vh;
+		height: 60vh;
+		margin-top: 50px;
 	}
 	
 
@@ -142,6 +112,7 @@
 <script type="text/javascript">
 	$(document).ready(function(){ 
 		genreChart();
+		
 	});
 	
 	function genreChart() {
@@ -160,7 +131,7 @@
 				var label = chart.createChild(am4core.Label);
 		
 				chart.data = json;
-				
+			
 				chart.radius = am4core.percent(95);
 				chart.startAngle = 270 - 180;
 				chart.endAngle = 270 + 180;
@@ -251,6 +222,63 @@
 				  valueAxis.renderer.axisAngle = chart.startAngle;
 				  
 				});
+				
+				var genreArr = ["회화", "조각", "디자인", "미디어", "공예", "설치미술", "디자인"];
+				
+				
+				var html = "";
+				
+				html += "<tr>";
+				html += "<th></th>";
+				html += "<th>회화</th>";
+				html += "<th>조각</th>";
+				html += "<th>디자인</th>";
+				html += "<th>미디어</th>";
+				html += "<th>공예</th>";
+				html += "<th>설치미술</th>";
+				html += "<th>사진</th> ";
+				html += "</tr>";
+				
+				
+				for(var i=0; i<json.length; i++) {
+					// console.log(json[i].totalCnt);
+					
+					if(json[i].회화 == null) {
+						json[i].회화 = 0;
+					} 
+					if(json[i].조각 == null) {
+						json[i].조각 = 0;
+					}
+					if(json[i].디자인 == null) {
+						json[i].디자인 = 0;
+					}
+					if(json[i].미디어 == null) {
+						json[i].미디어 = 0;
+					}
+					if(json[i].공예 == null) {
+						json[i].공예 = 0;
+					}
+					if(json[i].설치미술 == null) {
+						json[i].설치미술 = 0;
+					}
+					if(json[i].사진 == null) {
+						json[i].사진 = 0;
+					}
+					
+					html += "<tr>";
+					html += "<td>"+json[i].지역+"</td>";
+					html += "<td>"+((json[i].회화/json[i].totalCnt)*100).toFixed(1)+"</td>";
+					html += "<td>"+((json[i].조각/json[i].totalCnt)*100).toFixed(1)+"</td>";
+					html += "<td>"+((json[i].디자인/json[i].totalCnt)*100).toFixed(1)+"</td>";
+					html += "<td>"+((json[i].미디어/json[i].totalCnt)*100).toFixed(1)+"</td>";
+					html += "<td>"+((json[i].공예/json[i].totalCnt)*100).toFixed(1)+"</td>";
+					html += "<td>"+((json[i].설치미술/json[i].totalCnt)*100).toFixed(1)+"</td>";
+					html += "<td>"+((json[i].사진/json[i].totalCnt)*100).toFixed(1)+"</td> ";
+					html += "</tr>";
+				}
+				
+				$("#chartTbl").html(html);
+				
 			},
 			  
 		    error: function(request, status, error){
@@ -288,8 +316,8 @@
 			
 			<div id="table-area">
 				<%-- 차트에 대한 데이터 테이블은 이곳에 넣으세요 !! --%>
-				
-				<table class="table">
+				<span style="float: right;">(단위:%)</span>
+				<table class="table" id="chartTbl">
 				<colgroup>
 					<col style="width: 12.5%">
 					<col style="width: 12.5%">
@@ -300,190 +328,9 @@
 					<col style="width: 12.5%">
 					<col style="width: 12.5%">
 				</colgroup>
-						<tr>
-							<th></th>
-							<th>회화</th>
-							<th>조각</th>
-							<th>디자인</th>
-							<th>미디어</th>
-							<th>공예</th>
-							<th>설치미술</th>
-							<th>사진</th> 
-						</tr>
-						<tr>
-							<td>서울</td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-						</tr>
-						<tr>
-							<td>부산</td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-						</tr>
-						<tr>
-							<td>대구</td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-						</tr>
-						<tr>
-							<td>인천</td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-						</tr>
-						<tr>
-							<td>광주</td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-						</tr>
-						<tr>
-							<td>대전</td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-						</tr>
-						<tr>
-							<td>울산</td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-						</tr>
-						<tr>
-							<td>세종</td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-						</tr>
-						<tr>
-							<td>강원</td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-						</tr>
-						<tr>
-							<td>경기</td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-						</tr>
-						<tr>
-							<td>경남</td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-						</tr>
-						<tr>
-							<td>경북</td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-						</tr>
-						<tr>
-							<td>전남</td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-						</tr>
-						<tr>
-							<td>전북</td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-						</tr>
-						<tr>
-							<td>제주</td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-						</tr>
-						<tr>
-							<td>충남</td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-						</tr>
-						<tr>
-							<td>충북</td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-						</tr>
 				</table>
-				
 			</div>
-			
+			 
 		</div>
 			
 	</div>

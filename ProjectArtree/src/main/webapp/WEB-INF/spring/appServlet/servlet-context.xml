@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
- <beans:beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<beans:beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns:aop="http://www.springframework.org/schema/aop"
 	xmlns:beans="http://www.springframework.org/schema/beans"
 	xmlns:mvc="http://www.springframework.org/schema/mvc"
 	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:task="http://www.springframework.org/schema/task"
 	xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
+		http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-4.3.xsd
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
 		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
@@ -13,7 +15,10 @@
 	
 	<!-- Enables the Spring MVC @Controller programming model -->
 	<mvc:annotation-driven />
- 
+	
+ 	<!-- === 어노테이션을 사용하여 스프링스케줄러를 구현하도록 한다. === -->  
+	<task:annotation-driven/> 
+	
 	<!-- Handles HTTP GET requests for /resources/** by efficiently serving up static resources in the ${webappRoot}/resources directory -->
 	<mvc:resources mapping="/resources/**" location="/resources/" />
 
@@ -24,18 +29,20 @@
     	</beans:constructor-arg> 
     </beans:bean>
 
+	<!-- === #19. 엑셀파일다운로드를 위해  BeanNameViewResolver 추가하기 === -->
+    <!-- 스프링 프레임워크(Spring Framework)에서 JSP가 아닌 컨트롤러를 호출하여 파일을 다운로드 하려면 다음과 같은 단계를 거쳐야 한다. 
+        BeanNameViewResolver 뷰 리졸버를 추가한 후 파일 다운로드를 처리해줄 빈을 등록한다.
+            쉽게 생각해서 파일 다운로드 처리를 해주는 view 페이지 라고 생각하면 된다. -->
+    <beans:bean id="excelDownloadView" class="masterpiece.exhibition.excel.ExcelDownloadView"/>
+    <beans:bean id="beanNameViewResolver" class="org.springframework.web.servlet.view.BeanNameViewResolver">
+        <beans:property name="order" value="0"/>
+    </beans:bean> 
  <!-- <context:component-scan base-package="masterpiece.exhibition.*" name-generator="masterpiece.exhibition.common.FullBeanNameGenerator" /> -->
     <!--  다른 패키지에 있는 같은 이름의 클래스가 bean으로 등록될때, 충돌이 일어나지 않도록  패키지 이름 전체를 넣는다.
     
         spring annotation-driven 시 bean name 중복(충돌,conflicts)을 해결하기 위해서 사용하는 커스트마이징된 BeanNameGenerator 이다. 
    --> 
 
-	<!-- === 파일다운로드 === bean을 아래처럼 등록해주세요. -->
-	<!-- <beans:bean id="excelDownloadView" class="masterpiece.exhibition.??"/> -->
-	<beans:bean id="beanNameViewResolver" class="org.springframework.web.servlet.view.BeanNameViewResolver">
-        <beans:property name="order" value="0"/> 
-        <!--  order = 0이면 최우선 순위를 가진다!! 아래에 있는  InternalResourceViewResolver 보다 먼저 작동한다.-->
-    </beans:bean>
 
 	<!-- ======= 실행시 모든 페이지에 기본틀이 되어지는 틀을 배치하기 위한 템플릿 프레임워크인 TilesViewResolver 를 사용하기 위해 빈으로 등록한다. ======= -->
 	<beans:bean id="tilesConfigurer" class="org.springframework.web.servlet.view.tiles3.TilesConfigurer">

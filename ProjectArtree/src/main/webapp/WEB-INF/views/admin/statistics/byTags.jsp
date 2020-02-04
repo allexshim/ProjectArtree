@@ -26,7 +26,7 @@
 	
 	img#boardtop {
 		position : absolute;
-		width : 96vw;
+		width : 100vw;
 		height : 540px;
 	}
 	
@@ -123,7 +123,7 @@
 		height: 100%;
 		width: 70%;
 		padding-left : 180px;
-		padding-top : 30px;
+		padding-top : 100px;
 	}
 	
 	#statistics-area:after {
@@ -141,6 +141,16 @@
 	  margin : 0 auto;
 	  height: 600px;
 	}
+	
+/* 프린트 버튼 */
+	#myBtns {
+		height: 100%;
+		width: 70%;
+		padding-left : 180px;
+		padding-top : 30px;
+		cursor : pointer;
+	}	
+	
 </style>
 
 
@@ -164,7 +174,7 @@
 	$(document).ready(function(){ 
 		
 		$.ajax({ // 아래 url은 임시로 service controller에 저장합니다.
-			url:"<%=request.getContextPath()%>/getChartDataByTags.at",
+			  url:"<%=request.getContextPath()%>/getChartDataByTags.at",
 	          type:"GET",
 	          dataType:"JSON",
 	          success: function(json) {
@@ -221,6 +231,15 @@
 	               alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
 	            } 
 	         }); // end of ajax-------------
+	         
+	   
+	   /////////////////////////////////////////////////////////////////
+	   // 엑셀로 프린트 하기
+	   $("#printBtn").click(function(){
+       	   let totalcnt = ${totalcnt};
+		   window.location.href="/artree/printTagbyExcel.at?totalcnt="+totalcnt;	   
+	   }); // end of printBtn --------------------------------------------
+	   //////////////////////////////////////////////////////////////////	         
 	         
 	}); // end of document.ready ----------------------------------------------     
 
@@ -397,6 +416,10 @@
 			</div>
 			
 			<div id="table-area"></div>
+			
+			<div id="myBtns" align="center" style="padding-top: 20px;">
+				<img id="printBtn" src="<%= ctxPath %>/resources/images/board/printBtn.JPG" />
+			</div>
 			
 		</div>
 			

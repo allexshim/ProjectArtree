@@ -267,6 +267,14 @@ public class AdminDAO implements InterAdminDAO {
 		return orderList;
 	}
 
+	// 주문정보출력
+	@Override
+	public List<HashMap<String, String>> getOrderInfo(String reserno) {
+		List<HashMap<String, String>> orderInfo = sqlsession.selectList("admin.getOrderInfo", reserno);
+		
+		return orderInfo;
+	}
+
 
 	
 }

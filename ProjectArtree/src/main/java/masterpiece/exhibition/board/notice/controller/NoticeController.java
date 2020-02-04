@@ -31,8 +31,7 @@ public class NoticeController {
 		String goBackURL = MyUtil.getCurrentURL(request);	
 		session.setAttribute("goBackURL", goBackURL);
 		
-		// 새로고침할때 조회수 증가 막기
-		session.setAttribute("readCountPermission", "yes");
+		////////////////// 공지목록 ////////////////////////////////////
 		
 		// 페이징 처리 ----------------------------------------------------
 	 String str_currentShowPageNo = request.getParameter("currentShowPageNo");
@@ -44,10 +43,10 @@ public class NoticeController {
      int startRno = 0; // 시작 행번호
      int endRno = 0; // 끝 행번호
       
-    	
+    
 	//--------------------------------------------------------
 	// 모든 게시글의 수 (count용)
-    totalCount = service.getCount();
+    totalCount = service.getCountNotice();
 	totalPage = (int)Math.ceil( (double)totalCount/sizePerPage );
 	
 	// 초기화면의 페이지수 == 1
@@ -127,7 +126,9 @@ public class NoticeController {
 		request.setAttribute("pageBar", pageBar);
 
 		request.setAttribute("noticeList", noticeList);
-			
+		
+		////////////////// 공지목록 끝 ////////////////////////////////
+		
 		return "board/notice/notice.tiles";
 	}
 	
@@ -139,17 +140,19 @@ public class NoticeController {
 		String notContent = request.getParameter("notContent");
 		String notNo = request.getParameter("notNo");
 		String notWriteday = request.getParameter("notWrieday");
+		String notCategory = request.getParameter("notCategory");
 		
 		// 크로스 사이트 공격 방지
 		notTitle = MyUtil.replaceParameter(notTitle);
 		notContent = MyUtil.replaceParameter(notContent);
-		
+		notContent = notContent.replace("\r\n", "<br/>");
 		HashMap<String,String> addNotice = new HashMap<String,String>();
 		
 		addNotice.put("notTitle", notTitle);
 		addNotice.put("notContent",notContent);
 		addNotice.put("notNo",notNo);
 		addNotice.put("notWriteday",notWriteday);
+		addNotice.put("notCategory", notCategory);
 		
 		// 새 글 추가하기
 		int n = service.addNotice(addNotice);

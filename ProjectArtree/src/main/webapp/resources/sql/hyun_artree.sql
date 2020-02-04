@@ -5,8 +5,8 @@ create table notice
 ( notNo         number        not null
  ,notTitle      varchar2(300)  not null
  ,notContent    varchar2(1000) not null
- ,notWriteday   varchar2(30)  not null
- ,notReadcount  number        not null
+ ,notWriteday   date default sysdate  not null
+ ,notCategory   varchar2(10)       not null
  ,constraint PK_notice_notNo primary key(notNo)
  );
  
@@ -25,7 +25,7 @@ create table notice
  nocycle
  nocache;
  
- select *
+ select notNo ,notTitle, notContent,  notWriteday, notCategory
  from notice;
  
  insert into notice(notNo ,notTitle, notContent,  notWriteday, notReadcount)
@@ -43,4 +43,45 @@ order by gender;
 
  select *
  from event;
-        
+ 
+ 
+  select notNo ,notTitle, notContent,  notWriteday, notCategory
+       from 
+       (
+	       select rownum AS rno
+	            , notNo ,notTitle, notContent,  notWriteday, notCategory
+	       from   
+	       (  
+	         select notNo ,notTitle, notContent,  notWriteday, notCategory
+			 from notice
+             where notNo = 1
+             order by notNo desc
+		   ) V  
+	   ) T 	   
+	   where rno between 1 and 10;
+ 
+ select count(*)
+ from notice
+ where notCategory = 1;
+ 
+ 
+ select notNo ,notTitle, notContent,  notWriteday, notCategory
+       from 
+       (
+	       select rownum AS rno
+	            , notNo ,notTitle, notContent,  notWriteday, notCategory
+	       from   
+	       (  
+	         select notNo ,notTitle, notContent,  notWriteday, notCategory
+			 from notice
+			 order by notNo desc
+		   ) V  
+	   ) T  	   
+	   where notCategory = 2 and rno between 1 and 10 
+<<<<<<< HEAD
+    
+    
+    commit;
+=======
+    
+>>>>>>> branch 'master' of https://github.com/allexshim/ProjectArtree.git
