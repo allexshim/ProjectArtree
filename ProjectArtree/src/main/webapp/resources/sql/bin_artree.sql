@@ -234,3 +234,5 @@ select * from user_sequences
 select * from event a inner join exhibitionDetail b
 		on a.fk_exhibitionno = b.fk_exhibitionno
 		where no = 1
+        
+select * from reserdetail order by dday desc;

@@ -19,14 +19,14 @@
 	}
 	
 	#statisticsContainer {
-		margin: 0 0 20vh 0;
-		width: 100%;
+		margin: 0 auto;
+		width: 80%;
 		padding: 0;
 	}
 	
 	img#boardtop {
 		position : absolute;
-		width : 96vw;
+		width : 100vw;
 		height : 540px;
 	}
 	
@@ -74,7 +74,7 @@
 	/* == 내용물 부분 == */
 	#contentContainer {
 		padding-top : 100px;
-		width : 60%;
+		width : 80%;
 		margin : 0 auto;
 	}
 	
@@ -110,22 +110,240 @@
 	/* == 통계 영역 == */
 	#statistics-area {
 		height: 60vh;
-		border: 2px solid red;
+		margin: 50px auto 0 auto;
 	}
 	
 	#table-area {
-		border: 2px solid navy;
-		height: 50vh;
+/* 		border: 2px solid navy; */
+		min-height: 500px;
+		width: 100%;
+		margin: 0 auto 50px auto;
 	}
+	
+	#chartdiv {
+		width: 100%;
+		min-height: 500px;
+	}
+	
+	#datatable {
+		text-align: center;
+		width: 100%;
+	}
+	
+	#datatable th {
+		text-align: center;
+	}
+	
+	.exname {
+		width: 60%;
+	}
+	
+	.amount {
+		width: 20% !important;
+	}
+	
+	.rate {
+		width: 20% !important;
+	}
+	
+	thead, tfoot {
+		font-size: 12pt;
+	}
+	
+	tbody {
+		font-size: 11pt;
+	}
+	
+	tfoot {
+		width: 100%;
+		font-weight: bold;
+		border-top: solid 1px lightgrey;
+		text-align: right;
+	}
+	
+	tfoot td {
+		padding-right: 30px !important;
+	}
+	
+	#btnExcel {
+		background-color: white;
+		font-weight: bold;
+		height: 50px;
+		border: 1px solid lightgrey;
+		box-shadow: 2px 2px 2px 2px grey;
+		border-radius: 5px;
+	}
+	
 	
 </style>
 
-<script src="<%= ctxPath%>/resources/js/jquery-3.3.1.min.js"></script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+<script src="https://www.amcharts.com/lib/4/core.js"></script>
+<script src="https://www.amcharts.com/lib/4/charts.js"></script>
+<script src="https://www.amcharts.com/lib/4/themes/animated.js"></script>
+
 <script type="text/javascript">
+
 	$(document).ready(function(){ 
 	
+		chart();
 		
 	});
+	
+	function chart() {
+	
+		let resultArr = [];
+	
+		$.ajax({
+			
+				url: "<%= ctxPath %>/getChartByTicketingRate.at",
+				type:"GET",
+				dataType:"JSON",
+				success: function(json) {
+				
+					let html = "";
+					html += "<thead>";
+					html += "<tr>";
+					html += "<th class='exname'>전시회명</th>";
+					html += "<th class='rate'>예매율( % )</th>";
+					html += "<th class='amount'>예매량</th>";
+					html += "</tr>";
+					html += "</thead>";
+					html += "<tbody>";
+					
+					$.each(json, function(index, item){
+						
+						html += "<tr>";
+						html += "<td>" + item.name + "</td>";
+						html += "<td style='width: 20% !important'>" + item.pct + "</td>";
+						html += "<td style='width: 20% !important'>" + item.cnt + "</td>";
+						html += "</tr>";
+						
+					});
+					
+					html += "</tbody>";
+					html += "<tfoot><td colspan='3'>총 예매 수 : " + ${ totalCount } + "</td></tfoot>";
+					
+					$("#datatable").html(html);
+					
+					$("#btnExcel").click(function(){
+						
+					//	let resultArrStr = resultArr.join();
+						
+					//	let frm = document.searchFrm;
+					//	frm.resultArrStr.value = resultArrStr;
+						
+						window.location.href = "downloadExcelFile.at";
+						
+					});
+					
+					am4core.ready(function() {
+			
+						// Themes begin
+						am4core.useTheme(am4themes_animated);
+						// Themes end
+				
+						// Create chart instance
+						var chart = am4core.create("chartdiv", am4charts.XYChart3D);
+				
+						for(let i = 0; i < json.length; i++) {
+							
+							let obj = {name: json[i].name, cnt: Number(json[i].cnt)};
+							
+							resultArr.push(obj);
+							
+						//	console.log(json[i].name + ", " + json[i].cnt)
+						}
+					
+				//	console.log("resultArr.size : " + resultArr.size);
+					
+						// Add data
+						chart.data = resultArr;
+						
+					//	console.log(resultArr);
+				
+						// Create axes
+						let categoryAxis = chart.xAxes.push(new am4charts.CategoryAxis());
+						categoryAxis.dataFields.category = "name";
+						categoryAxis.renderer.labels.template.rotation = 270;
+						categoryAxis.renderer.labels.template.hideOversized = false;
+						categoryAxis.renderer.minGridDistance = 20;
+						categoryAxis.renderer.labels.template.horizontalCenter = "right";
+						categoryAxis.renderer.labels.template.verticalCenter = "middle";
+						categoryAxis.tooltip.label.rotation = 270;
+						categoryAxis.tooltip.label.horizontalCenter = "right";
+						categoryAxis.tooltip.label.verticalCenter = "middle";
+				
+						let valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
+						valueAxis.title.text = "TICKETING RATES";
+						valueAxis.title.fontWeight = "bold";
+				
+						// Create series
+						var series = chart.series.push(new am4charts.ColumnSeries3D());
+						series.dataFields.valueY = "cnt";
+						series.dataFields.categoryX = "name";
+						series.name = "Ticketing Rate";
+						series.tooltipText = "{categoryX}: [bold]{valueY}[/]";
+						series.columns.template.fillOpacity = .8;
+				
+						var columnTemplate = series.columns.template;
+						columnTemplate.strokeWidth = 2;
+						columnTemplate.strokeOpacity = 1;
+						columnTemplate.stroke = am4core.color("#FFFFFF");
+				
+						columnTemplate.adapter.add("fill", function(fill, target) {
+						  return chart.colors.getIndex(target.dataItem.index);
+						})
+				
+						columnTemplate.adapter.add("stroke", function(stroke, target) {
+						  return chart.colors.getIndex(target.dataItem.index);
+						})
+				
+						chart.cursor = new am4charts.XYCursor();
+						chart.cursor.lineX.strokeOpacity = 0;
+						chart.cursor.lineY.strokeOpacity = 0;
+						
+					});
+		
+				},
+				error: function(request, status, error){
+			             alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+				}
+				
+		}); // end am4core.ready()
+		
+	}
+	
+	function goPrint(title){
+	     var sw=screen.width;
+	     var sh=screen.height;
+	     var popw=800; //팝업창 가로길이
+	     var poph=600; //세로길이
+	     var xpos=(sw-popw)/2; //화면중앙에띄우도록한다 
+	     var ypos=(sh-poph)/2; //화면중앙에띄우도록한다 
+	 
+	     var popHeader="<html><head><title>"+title+"</title></head><body>";
+	     
+	     var popContent=document.getElementById("printarea").innerHTML + "<br/>";
+	     //innerHTML을 이용하여 Div로 묶어준 부분을 가져온다.
+	     
+	     var popFooter="</body></html>";
+	     
+	     popContent=popHeader + popContent + popFooter; 
+	      
+	     var popWin=window.open("","print","width=" + popw +",height="+ poph +",top=" + ypos + ",left="+ xpos +",status=yes,scrollbars=yes"); 
+	     // 일단 내용이 없는 팝업윈도창을 만든다.
+	    
+	     popWin.document.open(); // 팝업윈도창에 내용을 넣을 수 있도록 오픈한다.
+	     popWin.document.write(popContent); // 새롭게 만든 html소스를 팝업윈도창에 문서에 쓴다.
+	     popWin.document.close(); // 팝업윈도창 문서를 클로즈
+	     popWin.print(); // 팝업윈도창에 대한 인쇄 창 띄우고
+	     popWin.close(); // 인쇄를 하던가 또는 취소를 누르면 팝업윈도창을 닫는다.
+	}
 
 </script>
 </head>
@@ -154,22 +372,24 @@
 			
 			<div id="statistics-area">
 				<%-- 통계차트 여기다 넣으시면 됩니다 --%>
+				<div id="chartdiv">
+					
+				</div>
+				
 			</div>
 			
-			<div id="table-area">
+<!-- 			<hr style="border-top: 2px solid lightgrey; width: 100%;"> -->
+			
+			<div id="table-area" class="container">
 				
 				<%-- 차트에 대한 데이터 테이블은 이곳에 넣으세요 !! --%>
 				
-				<table class="table">
-					<thead>
-					
-					</thead>
-					
-					<tbody>
-					
-					</tbody>
+				<table class="table" id="datatable">
 				</table>
 				
+				<div align="right" style="margin-top: 50px;">
+					<button type="button" id="btnExcel">FILE DOWNLOAD</button>
+				</div>
 			</div>
 			
 		</div>
