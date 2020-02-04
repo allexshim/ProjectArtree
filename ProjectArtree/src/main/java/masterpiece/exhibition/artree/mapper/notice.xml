@@ -37,7 +37,7 @@
 			 order by notNo desc
 		   ) V  
 	   ) T  	   
-	   where notCategory = '1' and rno between #{startRno} and #{endRno} 
+	   where rno between #{startRno} and #{endRno} 
 	</select>
 	
 	<delete id="delNotice" parameterType="String" >

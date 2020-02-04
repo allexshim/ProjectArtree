@@ -42,8 +42,7 @@ public class OrderController {
 		
 		HashMap<String, String> map = new HashMap<String, String>();		
 		
-		String exno = (String) session.getAttribute("eno");
-		System.out.println("exno"+exno);
+		String exno = (String) session.getAttribute("eno");		
 		map.put("no", exno);
 		
 		List<HashMap<String, String>> exList = service.getEx(map);
@@ -179,15 +178,19 @@ public class OrderController {
 	public String orderEnd(HttpServletRequest request, HashMap<String, String> map) {
 		DecimalFormat dec = new DecimalFormat("#,###");		
 		String html = "";
-		HttpSession session = request.getSession();		
-		MemberVO mvo = (MemberVO)session.getAttribute("loginuser");		
+		HttpSession session = request.getSession();
+		
+		MemberVO mvo = (MemberVO)session.getAttribute("loginuser");
+		if ( mvo != null ) {
+		
 		String idx = mvo.getIdx();
 		map.put("idx", idx);
 		
 		String Subtotal = request.getParameter("Subtotal");
 		String Discount = request.getParameter("Discount");
 		String orderpri = request.getParameter("orderpri");
-					
+		String reserNo = "";
+		
 		if(Subtotal != null) {
 		map.put("Subtotal", Subtotal);
 		map.put("Discount", Discount);
@@ -195,12 +198,15 @@ public class OrderController {
 		
 		service.order(map); // 예매 입력, 카트 삭제
 		
-		String reserNo = service.selectReserNo(map);
+		reserNo = service.selectReserNo(map);
+		map.put("reserNo", reserNo);		
+		}
+		
+		if (request.getParameter("reserNo") != null) {
+		reserNo = request.getParameter("reserNo");
 		map.put("reserNo", reserNo);
 		}
 		
-		String reserNo = request.getParameter("reserNo");
-		map.put("reserNo", reserNo);
 		request.setAttribute("reserNo", reserNo);
 		
 		List<HashMap<String,String>> reserList = service.selectReser(map);
@@ -229,10 +235,10 @@ public class OrderController {
 				}	
 				
 				html += "<div class=\"mySlides\">";				
-				html += "<div style=\"display:inline-block; margin-bottom: 1%; font-size: 22px; padding-top: 5%;\">주문 상품 정보</div>";
+				html += "<div style=\"font-weight:bold; display:inline-block; margin-bottom: 1%; font-size: 22px; padding-top: 5%;\">주문 상품 정보</div>";
 				html += "<div class=\"numbertext\">"+start+"/"+end+"</div>";
 				html += "<table class=\"table table-hover\">";				
-				html += "<tr><th>이미지</th><td><img style=\"width: 90%; height: 400px;\" src=\""+reserDetailList.get(b).get("MAINIMG")+"\"></td></tr>";
+				html += "<tr><th>이미지</th><td><img style=\"border-radius: 15px; width: 50%; height: 400px;\" src=\""+reserDetailList.get(b).get("MAINIMG")+"\"></td></tr>";
 				html += "<tr><th>상품정보</th><td>"+reserDetailList.get(b).get("EXNAME")+"</td></tr>";
 				html += "<tr><th>관람일자</th><td>"+reserDetailList.get(b).get("DDAY")+"</td></tr>";
 				html += "<tr><th>수량</th><td></td></tr>";
@@ -257,16 +263,21 @@ public class OrderController {
 			html += "</div>";
 			html += "";
 			
-		}
-		
+		}		
 		request.setAttribute("html", html);
 		
-		return "order/orderEnd.tiles";
-	}
-
-	@RequestMapping(value = "/refundBin.at")
-	public String refundBin(HttpServletRequest request) {
-		return "order/orderEnd.tiles";
+		return "order/orderEnd.tiles";		
+		
+		}		
+		else { 
+			String msg = "세션이 만료되었습니다.";
+			String loc = request.getContextPath() + "/mainartree.at";
+			
+			request.setAttribute("msg", msg);
+			request.setAttribute("loc", loc);		
+			
+			return "msg";
+		}			
 	}
 	
 	@ResponseBody
@@ -405,8 +416,7 @@ public class OrderController {
 	public void delReser(HttpServletRequest request) {
 		HashMap<String,String> map = new HashMap<String,String>();
 		String reserNo = request.getParameter("reserNo");
-		map.put("reserNo", reserNo);
-		System.out.println(reserNo);
+		map.put("reserNo", reserNo);		
 		List<HashMap<String,String>> reserDetailNo = service.reserDetailNo(map);
 		
 		for (int a=0; a<reserDetailNo.size(); a++) {

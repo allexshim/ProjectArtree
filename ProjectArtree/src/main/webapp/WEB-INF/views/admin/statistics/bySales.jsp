@@ -181,8 +181,8 @@
 		$('[data-toggle="checktip"]').tooltip('show');
 		drilldown();			
 		MonthGraph();
-		$(document).on("click",".month",function(event){
-			var reserdate = $(this).find("input[name=reserdate]").val();
+		$(document).on("click",".month",function(event){			
+			var reserdate = $(this).find("input[name=reserdate]").val();			
 			DayGraph(reserdate);
 		});		
 	});
@@ -216,9 +216,9 @@
 			success:function(json) {
 				html = "";	
 				
-				html += "<table class=\"month table table-hover\">";																	
-				$.each(json,function(index,item){
-					html += "<tr>";
+				html += "<table class=\"table table-hover\">";																	
+				$.each(json,function(index,item){					
+					html += "<tr class=\"month\">";
 					html += "<th>"+item.reserdate+"월</th>";
 					html += "<td>"+item.monthlySales+"만원</td>";
 					html += "<td style=\"padding: 0px !important; width: 0% !important;\"><input type=\"text\" hidden=\"hidden\" value=\""+item.reserdate+"\" name=\"reserdate\"></td>";					

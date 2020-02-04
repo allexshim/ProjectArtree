@@ -699,7 +699,7 @@ function exhDetail(eno){
 		</div>
 		
 		<div id="div4" class="new-title" style="float: right; -webkit-transform:translate(-58px, 550px);">
-			<h2>종료임박 전시회</h2>
+			<h2>종료예정 전시회</h2>
 		</div>
 		<hr color="black;" style="width:90%; transform:translate(64px,600px);" />
 		<div class="end-exh" style="transform:translate(0, 270px);">
