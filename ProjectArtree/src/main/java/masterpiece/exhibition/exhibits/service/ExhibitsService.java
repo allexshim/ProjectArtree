@@ -153,6 +153,34 @@ public class ExhibitsService implements InterExhibitsService {
 		return AgeChart;
 	}
 
+	///////////////////////// 페이징 처리를 위한 미니 리뷰 게시판 게시물 총 갯수 ////////////////////////////
+	@Override
+	public int getMiniReviewTotalCount(HashMap<String, String> paraMap) {
+		int result = dao.getMiniReviewTotalCount(paraMap);
+		return result;
+	}
+
+	/////////////////////////// 미니 리뷰 게시판 목록 ////////////////////////////
+	@Override
+	public List<HashMap<String, String>> getMiniReivewList(HashMap<String, String> paraMap) {
+		List<HashMap<String, String>> MiniReviewList = dao.getMiniReivewList(paraMap);
+		return MiniReviewList;
+	}
+
+	/////////////////////////// 페이징 처리를 위한 미니 기대 게시판 게시물 총 갯수 ////////////////////////////
+	@Override
+	public int getMiniPreviewTotalCount(HashMap<String, String> paraMap) {
+		int result = dao.getMiniPreviewTotalCount(paraMap);
+		return result;
+	}
+
+	/////////////////////////// 미니 기대평 게시판 목록  ////////////////////////////
+	@Override
+	public List<HashMap<String, String>> getMiniPreivewList(HashMap<String, String> paraMap) {
+		List<HashMap<String, String>> MiniPreivewList = dao.getMiniPreivewList(paraMap);
+		return MiniPreivewList;
+	}
+
 
 
 }

@@ -124,12 +124,16 @@ public class NoticeController {
 		
 		request.setAttribute("sizePerPage", sizePerPage);
 		request.setAttribute("pageBar", pageBar);
-
 		request.setAttribute("noticeList", noticeList);
 		
 		////////////////// 공지목록 끝 ////////////////////////////////
 		
+		/////////////// faq 목록 ////////////////////
+		List<HashMap<String,String>> faqList = service.getFAQ();
+		request.setAttribute("faqList", faqList);
+		
 		return "board/notice/notice.tiles";
+		/////////////// faq 목록 ////////////////////
 	}
 	
 	// 새 글 입력하기
@@ -153,7 +157,7 @@ public class NoticeController {
 		addNotice.put("notNo",notNo);
 		addNotice.put("notWriteday",notWriteday);
 		addNotice.put("notCategory", notCategory);
-		
+	
 		// 새 글 추가하기
 		int n = service.addNotice(addNotice);
 		

@@ -275,6 +275,21 @@ public class AdminDAO implements InterAdminDAO {
 		return orderInfo;
 	}
 
+	// 예매율차트
+	@Override
+	public List<HashMap<String, String>> getChartByTicketingRate(int totalCount) {
+		List<HashMap<String, String>> exList = sqlsession.selectList("admin.getChartByTicketingRate", totalCount);
+		
+		return exList;
+	}
+
+	// 총 예매 수
+	@Override
+	public int getTotalCount() {
+		int n = sqlsession.selectOne("admin.getTotalCount");
+		return n;
+	}
+
 
 	
 }

@@ -65,7 +65,7 @@ order by gender;
  where notCategory = 1;
  
  
- select notNo ,notTitle, notContent,  notWriteday, notCategory
+ select notNo ,notTitle, notContent,  to_char(notWriteday, 'yyyy-mm-dd'), notCategory
        from 
        (
 	       select rownum AS rno
@@ -77,11 +77,12 @@ order by gender;
 			 order by notNo desc
 		   ) V  
 	   ) T  	   
-	   where notCategory = 2 and rno between 1 and 10 
-<<<<<<< HEAD
+	   where notCategory = 1 and rno between 1 and 10 
+
     
     
     commit;
-=======
-    
->>>>>>> branch 'master' of https://github.com/allexshim/ProjectArtree.git
+
+
+select to_char(notWriteday, 'yyyy-mm-dd')
+from notice;

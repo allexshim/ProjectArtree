@@ -25,7 +25,7 @@
 	</select>
 
 	<select id="getNotice" parameterType="HashMap" resultMap="noticeMap">
-	   select notNo ,notTitle, notContent,  notWriteday, notCategory
+	   select notNo ,notTitle, notContent,  to_char(notWriteday, 'yyyy-mm-dd'), notCategory
        from 
        (
 	       select rownum AS rno
@@ -37,7 +37,23 @@
 			 order by notNo desc
 		   ) V  
 	   ) T  	   
-	   where rno between #{startRno} and #{endRno} 
+	   where notCategory = '1' and rno between #{startRno} and #{endRno} 
+	</select>
+	
+	<select id="getFAQ" resultMap="noticeMap">
+	   select notNo ,notTitle, notContent,  to_char(notWriteday, 'yyyy-mm-dd'), notCategory
+       from 
+       (
+	       select rownum AS rno
+	            , notNo ,notTitle, notContent,  notWriteday, notCategory
+	       from   
+	       (  
+	         select notNo ,notTitle, notContent,  notWriteday, notCategory
+			 from notice
+			 order by notNo desc
+		   ) V  
+	   ) T  	   
+	   where notCategory = '2'
 	</select>
 	
 	<delete id="delNotice" parameterType="String" >

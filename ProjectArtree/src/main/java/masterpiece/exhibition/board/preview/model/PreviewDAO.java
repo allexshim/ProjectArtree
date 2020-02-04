@@ -41,4 +41,89 @@ public class PreviewDAO implements InterPreviewDAO {
 		return TotalCount;
 	}
 
+	///////////////////// 기대평 상세페이지 //////////////////////
+	@Override
+	public HashMap<String, String> getPreviewDetail(String bno) {
+		HashMap<String, String> PreviewDetail = sql.selectOne("preview.getPreviewDetail", bno);
+		return PreviewDetail;
+	}
+
+	//////////////////// 기대평 게시물 수정 /////////////////////
+	@Override
+	public int editEnd(HashMap<String, String> paraMap) {
+		int result = sql.update("preview.editEnd", paraMap);
+		return result + 1;
+	}
+
+	/////////////////// 기대평 게시물 삭제하기 ////////////////////
+	@Override
+	public int goDeletePreview(String bno) {
+		int result = sql.delete("preview.goDeletePreview", bno);
+		return result;
+	}
+
+	/////////////////// 기대평 - 특정 게시물의 댓글 목록 ////////////////////
+	@Override
+	public List<HashMap<String, String>> getCommentList(String bno) {
+		List<HashMap<String, String>> CommentList = sql.selectList("preview.getCommentList", bno);
+		return CommentList;
+	}
+
+	/////////////////// 기대평 - 특정 게시물의 댓글 등록 ////////////////////
+	@Override
+		public int addComment(HashMap<String, String> paraMap) {
+		int result = sql.insert("preview.addComment", paraMap);
+		return result;
+	}
+
+	//////////////////기대평 - 특정 게시물의 댓글 삭제 /////////////////////
+	@Override
+	public int delComment(HashMap<String, String> paraMap) {
+		int result = sql.delete("preview.delComment", paraMap);
+		return result;
+	}
+	
+	////////////////// 기대평 - 특정 게시물의 댓글 수정 /////////////////////
+	@Override
+	public int editComment(HashMap<String, String> paraMap) {
+		int result = sql.update("preview.editComment", paraMap);
+		return result;
+	}
+
+	/////////////////// 글 조회수 증가 ///////////////////
+	@Override
+	public void addReadcount(String bno) {
+		sql.update("preview.addReadcount", bno);
+	}
+
+	//////////////////// 댓글 등록 시 원 게시물의 댓글 갯수 증가 /////////////////
+	@Override
+	public int addCommentCnt(HashMap<String, String> paraMap) {
+		int result = sql.update("preview.addCommentCnt", paraMap);
+		return result;
+	}
+
+	//////////////////// 댓글 삭제 시 원 게시물의 댓글 갯수 감소 /////////////////
+	@Override
+	public int delCommentCnt(HashMap<String, String> paraMap) {
+		int result = sql.update("preview.delCommentCnt", paraMap);
+		return result;
+	}
+
+	////////////////////////// 전시회 목록에서 기대평 작성 시 해당 전시회 정보 불러오기 /////////////////////////
+	@Override
+	public HashMap<String, String> getPreviewWriteHelper(String eno) {
+		HashMap<String, String> PreviewWriteHelper = sql.selectOne("preview.getPreviewWriteHelper", eno);
+		return PreviewWriteHelper;
+	}
+
+	//////////////////////////// 마지막 비번 변경 시점 6개월 체크  ////////////////////////
+	@Override
+	public String getPwdCheck(String idx) {
+		String bool = sql.selectOne("preview.getPwdCheck", idx);
+		return bool;
+	}
+	
+	
+
 }

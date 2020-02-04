@@ -17,4 +17,7 @@ public interface InterNoticeService {
 	// 공지 삭제
 	int delNotice(String notNo);
 	
+	// faq 목록
+	List<HashMap<String, String>> getFAQ();
+	
 }

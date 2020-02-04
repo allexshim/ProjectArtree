@@ -26,7 +26,7 @@
 	
 	img#boardtop {
 		position : absolute;
-		width : 96vw;
+		width : 100vw;
 		height : 540px;
 	}
 	
