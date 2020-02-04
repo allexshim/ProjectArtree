@@ -48,5 +48,11 @@ public interface InterOrderService {
 
 	void ddayAlarmEmail() throws Exception; // 하루전 이메일
 
+	void upReserEx(String detailNo); // 예매전시 삭제 업데이트
+
+	void upReserDetail(String reserNo); // 예매상세 삭제 업데이트
+
+	void upReser(String reserNo); // 예매 삭제 업데이트
+
 
 }

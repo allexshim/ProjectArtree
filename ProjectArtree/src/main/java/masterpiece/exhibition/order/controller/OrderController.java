@@ -455,10 +455,13 @@ public class OrderController {
 		
 		for (int a=0; a<reserDetailNo.size(); a++) {
 			String detailNo = reserDetailNo.get(a).get("RESERDETAILNO");
-			service.delReserEx(detailNo);				
+			//service.delReserEx(detailNo);
+			service.upReserEx(detailNo);
 		}
-		service.delReserDetail(reserNo);
-		service.delReser(reserNo);		
+		//service.delReserDetail(reserNo);
+		//service.delReser(reserNo);	
+		service.upReserDetail(reserNo);
+		service.upReser(reserNo);	
 	}
 	
 }

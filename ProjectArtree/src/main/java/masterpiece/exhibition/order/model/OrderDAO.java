@@ -150,8 +150,8 @@ public class OrderDAO implements InterOrderDAO {
 	}
 
 	@Override
-	public void delReserEx(String reserExNoList) {
-		sqlsession.delete("order.delReserEx",reserExNoList);		
+	public void delReserEx(String detailNo) {
+		sqlsession.delete("order.delReserEx",detailNo);		
 	}
 
 	@Override
@@ -169,6 +169,22 @@ public class OrderDAO implements InterOrderDAO {
 	public List<HashMap<String, String>> reserEmailList(String strDate) {
 		List<HashMap<String, String>> reserEmailList = sqlsession.selectList("order.reserEmailList",strDate);
 		return reserEmailList;
+	}
+
+	// 예매 삭제 업데이트
+	@Override
+	public void upReserEx(String detailNo) {
+		sqlsession.update("order.upReserEx",detailNo);		
+	}
+
+	@Override
+	public void upReserDetail(String reserNo) {
+		sqlsession.update("order.upReserDetail",reserNo);		
+	}
+
+	@Override
+	public void upReser(String reserNo) {
+		sqlsession.update("order.upReser",reserNo);		
 	}
 	
 }
