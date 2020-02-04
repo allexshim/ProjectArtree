@@ -357,4 +357,55 @@
 		group by agegroup
 		order by agegroup asc
 	</select>
+	
+	<!--///////////////////////// 페이징 처리를 위한 미니 리뷰 게시판 게시물 총 갯수 ////////////////////////////-->
+	<select id="getMiniReviewTotalCount" parameterType="HashMap" resultType="int">
+		select count(*) AS totalcount
+		from review
+		where fk_exhibitionno = #{eno}
+	</select>
+	
+	<!--///////////////////////// 페이징 처리를 위한 미니 기대평 게시판 게시물 총 갯수 ////////////////////////////-->
+	<select id="getMiniPreviewTotalCount" parameterType="HashMap" resultType="int">
+		select count(*) AS totalcount
+		from preview
+		where fk_exhibitionno = #{eno}
+	</select>
+	
+	<!--/////////////////////////// 미니 리뷰 게시판 목록 ////////////////////////////-->
+	<resultMap type="HashMap" id="MiniReviewMap">
+		<result property="REVNO" column="revno" javaType="int"/>
+		<result property="FK_NAME" column="fk_name" javaType="String"/>
+		<result property="REVTITLE" column="revtitle" javaType="String"/>
+	</resultMap>
+	
+	<select id="getMiniReivewList" parameterType="HashMap" resultMap="MiniReviewMap">
+		select*
+		from
+		(
+		select row_number() over(order by revno desc) as RNO, revno, fk_name, revtitle
+		from review
+		where fk_exhibitionno = #{eno}
+		)
+		where RNO between #{start} and #{end}
+	</select>
+	
+	<!--/////////////////////////// 미니 기대평 게시판 목록 ////////////////////////////-->
+	<resultMap type="HashMap" id="MiniPreviewMap">
+		<result property="SEQ" column="seq" javaType="int"/>
+		<result property="NAME" column="name" javaType="String"/>
+		<result property="TITLE" column="title" javaType="String"/>
+	</resultMap>
+	
+	<select id="getMiniPreivewList" parameterType="HashMap" resultMap="MiniPreviewMap">
+		select*
+		from
+		(
+		select row_number() over(order by seq desc) as RNO, seq, B.name, title
+		from preview A left join member B
+		on A.fk_idx = B.idx
+		where fk_exhibitionno = #{eno}
+		)
+		where RNO between #{start} and #{end}
+	</select>
 </mapper>

@@ -163,5 +163,12 @@ public class OrderDAO implements InterOrderDAO {
 	public void delReser(String reserNo) {
 		sqlsession.delete("order.delReser",reserNo);			
 	}
+
+	// 예약 이메일 리스트 
+	@Override
+	public List<HashMap<String, String>> reserEmailList(String strDate) {
+		List<HashMap<String, String>> reserEmailList = sqlsession.selectList("order.reserEmailList",strDate);
+		return reserEmailList;
+	}
 	
 }

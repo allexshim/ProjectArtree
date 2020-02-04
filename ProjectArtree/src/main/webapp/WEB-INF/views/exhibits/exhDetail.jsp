@@ -209,7 +209,7 @@
 	    transform: translate(-50%,-50%);
 	    width: auto;
 	    height: auto;
-	    max-width: 748px;
+	    max-width: 748px; 
 	    max-height: 60vh;
 	}
 
@@ -217,21 +217,21 @@
 
 	<%-- review board start --%>
 	#container_exh_detail .paginate {
-		margin: 20px 0 50px 0;
+		margin-top: 40px;
 		text-align: center;
 	}
 	
 	#container_exh_detail .paginate ul {
 		display: inline-block;
 	  	margin: 0 17px 0 17px;
-	    padding: 0;
+	    padding: 0; 
 	}
 	
 	#container_exh_detail .paginate li {
 		display: inline-block;
 	}
 	
-	#container_exh_detail .paginate li span {
+	#container_exh_detail .paginate li span , #container_exh_detail .paginate li a  {
 		display: block;
 	    width: 31px;
 	    padding: 7px 0 6px;
@@ -240,6 +240,8 @@
 	    color: #000;
 	    font-weight: bold;
 	    line-height: 14px;
+	    text-decoration: none;
+	    cursor: pointer;
 	}
 	
 	#container_exh_detail .paginate .this {
@@ -315,6 +317,9 @@
 	
 	#container_exh_detail .active, #container_exh_detail .accordion:hover {
 		background-color: white;
+	}
+	
+	#container_exh_detail .accordion:active {
 	}
 	
 	#container_exh_detail .panel {
@@ -544,6 +549,27 @@
 		font-weight: bold;
 		color: #000;
 	}
+	
+	#container_exh_detail .empty { 
+		font-size: 11pt;
+		text-align: center;
+		margin: 50px 20px auto;
+		border: solid 1px #e6e6e6;
+		padding: 100px 30px;
+		
+	}
+	
+	#container_exh_detail .bkBtns {
+		background-color: #000;
+		color: white;
+		padding: 5px 8px;
+		margin-right: 15px;
+		font-size: 11pt;
+	}
+	
+	#container_exh_detail .board_btn_area a:hover {
+		text-decoration: none;
+	}
 </style>  
 
 
@@ -567,8 +593,9 @@
 		goCheckLikeGal('${exhDetailMap.FK_GALLERYNO}');
 		getGenderChart('${exhDetailMap.EXHIBITIONNO}');
 		getAgeChart('${exhDetailMap.EXHIBITIONNO}');
-		getReview('${exhDetailMap.EXHIBITIONNO}');
-		getPreview('${exhDetailMap.EXHIBITIONNO}');
+		
+		getReview('${exhDetailMap.EXHIBITIONNO}', '1');
+		getPreview('${exhDetailMap.EXHIBITIONNO}', '1');
 		
 		$(".forIco").hover(function(){
 			$(this).children(".forMoving").stop().animate({left:'5px'}, 'fast');
@@ -668,6 +695,49 @@
 
 			
 		<%-- http://apis.map.kakao.com/web/guide/ 카카오 지도 스크립트 --%>
+		
+	 	$(document).on("click", ".preview_paginate li", function(event){
+			
+			$(".preview_paginate").find(".this").removeClass("this").addClass("other");
+			$(event.target).removeClass("other").addClass("this");
+			
+			var page = $(event.target).text();
+			
+			getPreview('${exhDetailMap.EXHIBITIONNO}', page);
+			
+		});
+		
+		$(document).on("click", ".review_paginate li", function(event){
+			
+			$(".review_paginate").find("this").removeClass("this").addClass("other");
+			$(event.target).removeClass("other").addClass("this");
+			
+			var page = $(event.target).text();
+			
+			getReview('${exhDetailMap.EXHIBITIONNO}', page);
+			
+		}); 
+		
+		$(document).on("click", ".prevReview", function(){
+			var page = $(".review_paginate").find(".this").text();
+			getReview('${exhDetailMap.EXHIBITIONNO}', parseInt(page)-1); 
+		}); 
+		
+		$(document).on("click", ".nextReview", function(){
+			var page = $(".review_paginate ul li:first-child").text();
+			getReview('${exhDetailMap.EXHIBITIONNO}', parseInt(page)+5); 
+		}); 
+		
+		$(document).on("click", ".prevPreview", function(){
+			var page = $(".preview_paginate ul li:first-child").text();
+			getPreview('${exhDetailMap.EXHIBITIONNO}', parseInt(page)-5);
+		}); 
+		
+		$(document).on("click", ".nextPreview", function(){
+			var page = $(".preview_paginate ul li:first-child").text();
+			getPreview('${exhDetailMap.EXHIBITIONNO}', parseInt(page)+5); 
+		}); 
+		
 		
 	}); // end of document ready ---------------------------------
 	
@@ -827,12 +897,14 @@
 			success: function(json){
 				
 				var resultArr = [];
+				var html = "";
 				
 				if(json.length == 0){
-					var obj = { name: " 성별 ",
-						    	value: 0 };
 					
-					resultArr.push(obj);
+					html += "<div class='empty' style='font-size:15pt; font-weight: bold;'> 데이터가 존재하지 않습니다. </div><br/><br/>";
+					$(".chart_area").html(html);
+					
+
 				}
 				else {
 					for(var i=0; i<json.length; i++) {
@@ -840,40 +912,40 @@
 								   value: json[i].CNT};
 						resultArr.push(obj); // 배열속에 객체를 넣기
 					}
+				
+				
+					<%-- 차트 영역 --%>
+					// 성별 차트
+					am4core.ready(function() {
+	
+						// Themes begin
+						am4core.useTheme(am4themes_kelly);
+						am4core.useTheme(am4themes_animated);
+						// Themes end
+		
+						var iconPath = "M53.5,476c0,14,6.833,21,20.5,21s20.5-7,20.5-21V287h21v189c0,14,6.834,21,20.5,21 c13.667,0,20.5-7,20.5-21V154h10v116c0,7.334,2.5,12.667,7.5,16s10.167,3.333,15.5,0s8-8.667,8-16V145c0-13.334-4.5-23.667-13.5-31 s-21.5-11-37.5-11h-82c-15.333,0-27.833,3.333-37.5,10s-14.5,17-14.5,31v133c0,6,2.667,10.333,8,13s10.5,2.667,15.5,0s7.5-7,7.5-13 V154h10V476 M61.5,42.5c0,11.667,4.167,21.667,12.5,30S92.333,85,104,85s21.667-4.167,30-12.5S146.5,54,146.5,42 c0-11.335-4.167-21.168-12.5-29.5C125.667,4.167,115.667,0,104,0S82.333,4.167,74,12.5S61.5,30.833,61.5,42.5z"
+		
+						var chart = am4core.create("genderChart", am4charts.SlicedChart);
+						chart.hiddenState.properties.opacity = 0; // this makes initial fade in effect
+					
+						chart.data = resultArr;
+		
+						var series = chart.series.push(new am4charts.PictorialStackedSeries());
+						series.dataFields.value = "value";
+						series.dataFields.category = "name";
+						series.alignLabels = true;
+		
+						series.maskSprite.path = iconPath;
+						series.ticks.template.locationX = 1;
+						series.ticks.template.locationY = 0.5;
+		
+						series.labelsContainer.width = 200;
+		
+						chart.legend = new am4charts.Legend();
+						chart.legend.position = "left";
+						chart.legend.valign = "bottom";
+					});
 				}
-				
-				<%-- 차트 영역 --%>
-				// 성별 차트
-				am4core.ready(function() {
-
-					// Themes begin
-					am4core.useTheme(am4themes_kelly);
-					am4core.useTheme(am4themes_animated);
-					// Themes end
-	
-					var iconPath = "M53.5,476c0,14,6.833,21,20.5,21s20.5-7,20.5-21V287h21v189c0,14,6.834,21,20.5,21 c13.667,0,20.5-7,20.5-21V154h10v116c0,7.334,2.5,12.667,7.5,16s10.167,3.333,15.5,0s8-8.667,8-16V145c0-13.334-4.5-23.667-13.5-31 s-21.5-11-37.5-11h-82c-15.333,0-27.833,3.333-37.5,10s-14.5,17-14.5,31v133c0,6,2.667,10.333,8,13s10.5,2.667,15.5,0s7.5-7,7.5-13 V154h10V476 M61.5,42.5c0,11.667,4.167,21.667,12.5,30S92.333,85,104,85s21.667-4.167,30-12.5S146.5,54,146.5,42 c0-11.335-4.167-21.168-12.5-29.5C125.667,4.167,115.667,0,104,0S82.333,4.167,74,12.5S61.5,30.833,61.5,42.5z"
-	
-					var chart = am4core.create("genderChart", am4charts.SlicedChart);
-					chart.hiddenState.properties.opacity = 0; // this makes initial fade in effect
-				
-					chart.data = resultArr;
-	
-					var series = chart.series.push(new am4charts.PictorialStackedSeries());
-					series.dataFields.value = "value";
-					series.dataFields.category = "name";
-					series.alignLabels = true;
-	
-					series.maskSprite.path = iconPath;
-					series.ticks.template.locationX = 1;
-					series.ticks.template.locationY = 0.5;
-	
-					series.labelsContainer.width = 200;
-	
-					chart.legend = new am4charts.Legend();
-					chart.legend.position = "left";
-					chart.legend.valign = "bottom";
-
-				});
 				
 			},
 			error: function(request, status, error){
@@ -895,12 +967,12 @@
 			success: function(json){
 				
 				var resultArr = [];
+				var html = "";
 				
 				if(json.length == 0){
-					var obj = { age: " 연령대 ",
-						    	value: 0 };
+					html += "<div class='empty' style='font-size:15pt; font-weight: bold;'> 데이터가 존재하지 않습니다. </div><br/><br/>";
+					$(".chart_area").html(html);
 					
-					resultArr.push(obj);
 				}
 				else {
 					for(var i=0; i<json.length; i++){
@@ -908,7 +980,7 @@
 								    value: json[i].CNT };
 						resultArr.push(obj);
 					}
-				}
+				
 				
 				// 연령대 차트
 				am4core.ready(function() {
@@ -944,6 +1016,7 @@
 					chart.legend = new am4charts.Legend();
 
 					}); // end am4core.ready()
+				}
 				
 			},
 			error: function(request, status, error){
@@ -955,48 +1028,183 @@
 	}
 	
 	////////////////////////////////// 리뷰 게시판 불러오기
-	function getReview(eno){
-		
+	function getReview(eno, page){
+	 	
 		$.ajax({
-			url:"<%=ctxPath%>/reviewList.at",
-			data: {"eno":eno},
+			url:"<%=ctxPath%>/miniReviewList.at",
+			data: {"eno":eno, "page":page},
 			dataType: "JSON",
 			success:function(json){
 				
-				$.each(json, function(index, item){
+				$(".reviewArea").html("");
+
+				var html = "";
+				var pageBar = "";
+				var prevArrow = "";
+				var nextArrow = "";
+				var total = 0;
+				var blockSize = 5;
+				var pageNo = ( Math.floor((page - 1)/blockSize) )*blockSize + 1;   
+
+				if(json.length == 0){
+					html += "<td colspan=3 class='empty' style='border: none; padding: 40px 30px;'> 등록된 게시물이 없습니다. </td>";
+					$(".reviewArea").html(html);
+				}
+				else {
+
+					$.each(json, function(index, item){
+
+						html += "<tr>"
+							 + "<td>"+(item.startIdx-index)+"</td>"
+							 + "<td><a href='javascript:void(0);' onclick='<%=ctxPath%>/reviewDetail.at?revno="+item.REVNO+"'>"+item.REVTITLE+"</a></td>"
+							 + "<td>"+item.FK_NAME+"</td>"
+							 + "<td style='display: none;'></td>"
+							 + "</tr>";
+							 
+						total = item.totalPage;
+						
+					});
+
+					// ***** [이전] 만들기 *****
+					if( pageNo != 1 ) {
+						prevArrow += "<a href='javascript:void(0)' class='prevReview'><img src='<%=ctxPath%>/resources/images/exhibition/ico/left_arrow.png'></a>";
+					}
 					
+					pageBar += "<ul>";
+					var loop = 1;
+
+					while(!(loop > blockSize || pageNo > total)) {
+
+						if(pageNo == page) {
+							pageBar +="<li><span class='this'>"+pageNo+"</span></li>";
+						} 
+						else {	
+							pageBar +="<li><a style='display: inline-block;' class='other'>"+pageNo+"</a><li>";
+						}
+						
+							pageNo++; // 1 2 3 4 5 6 7 8 9 10
+							loop++;	  // 1 2 3 4 5 6 7 8 9 10
+							
+					}// end of while --------------------
 					
+					pageBar += "</ul>";
 					
-				});
-				
+					// *** [다음] 만들기 *** //
+					if( total > blockSize ) {
+						nextArrow += "<a style='display: inline-block;' href='javascript:void(0)' class='nextReview'><img src='<%=ctxPath%>/resources/images/exhibition/ico/right_arrow.png'></a>"; 
+					}
+ 
+					$(".reviewArea").append(html);
+					$(".review_paginate").html(pageBar);
+					$(".review_paginate").prepend(prevArrow);
+					$(".review_paginate").append(nextArrow);
+
+				}
 			},
 			error: function(request, status, error){
 				alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
 			}
-		}) // end of ajax ----
+		}) // end of ajax ---- 
 	}
 	
 	///////////////////////////////// 기대평 게시판 불러오기 
-	function getPreview(eno){
-		
+	function getPreview(eno, page){
+						
 		$.ajax({
-			url:"<%=ctxPath%>/previewList.at",
-			data: {"eno":eno},
+			url:"<%=ctxPath%>/miniPreviewList.at",
+			data: {"eno":eno, "page":page},
 			dataType: "JSON",
 			success:function(json){
 				
-				$.each(json, function(index, item){
+				$(".previewArea").html("");
+				
+				var html = "";
+				var pageBar = "";
+				var prevArrow = "";
+				var nextArrow = "";
+				var total = 0;
+				var blockSize = 5;
+				var pageNo = ( Math.floor((page - 1)/blockSize) )*blockSize + 1;   
+
+				
+				if(json.length == 0){
+					html += "<td colspan=3 class='empty' style='border: none; padding: 40px 30px;'> 등록된 게시물이 없습니다. </td>";
+					$(".previewArea").html(html);
+				}
+				else {
 					
+					$.each(json, function(index, item){
+						
+						html += "<tr>"
+							 + "<td>"+(item.startIdx-index)+"</td>"
+							 + "<td><a href='javascript:void(0);' onclick='<%=ctxPath%>/previewDetail.at?bno="+item.SEQ+"'>"+item.TITLE+"</a></td>"
+							 + "<td>"+item.NAME+"</td>"
+							 + "<td style='display: none;'></td>"
+							 + "</tr>";
+		
+						total = item.totalPage;
+						
+					});
 					
+					// ***** [이전] 만들기 *****
+					if( pageNo != 1 ) {
+						prevArrow += "<a href='javascript:void(0)' class='prevPreview'><img src='<%=ctxPath%>/resources/images/exhibition/ico/left_arrow.png'></a>";
+					}
 					
-				});
+					pageBar += "<ul>";
+					var loop = 1;
+
+					while(!(loop > blockSize || pageNo > total)) {
+
+						if(pageNo == page) {
+							pageBar +="<li><span class='this'>"+pageNo+"</span></li>";
+						} 
+						else {	
+							pageBar +="<li><a style='display: inline-block;' class='other'>"+pageNo+"</a><li>";
+						}
+						
+							pageNo++; // 1 2 3 4 5 6 7 8 9 10
+							loop++;	  // 1 2 3 4 5 6 7 8 9 10
+							
+					}// end of while --------------------
+					
+					pageBar += "</ul>";
+					
+					// *** [다음] 만들기 *** //
+					if( !(pageNo > total) ) {
+						nextArrow += "<a style='display: inline-block;' href='javascript:void(0)' class='nextPreview'><img src='<%=ctxPath%>/resources/images/exhibition/ico/right_arrow.png'></a>"; 
+					}
+					
+					$(".previewArea").append(html);
+					$(".preview_paginate").html(pageBar);
+					$(".preview_paginate").prepend(prevArrow);
+					$(".preview_paginate").append(nextArrow);
+					
+				}
 				
 			},
 			error: function(request, status, error){
 				alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
 			}
-		}) // end of ajax ----
+		}) // end of ajax ---- 
 		
+	}
+	
+	function warnLogin(key){
+		
+		var loginuser = '${sessionScope.loginuser}'
+		
+		if(loginuser == null){
+			alert("먼저 로그인을 진행해주세요 !");
+			location.href="javascript:layer_open('layer')";
+			return;
+		}
+		else if(loginuser != null && key == 'r'){
+			window.location.href="/artree/addReview.at";	
+		}
+		else if(loginuser != null && key == 'p'){
+			window.location.href="/artree/addPreview.at?eno="+${exhDetailMap.EXHIBITIONNO};	
+		}
 	}
 </script>
 <%-- EXHIBITION LIST SCRIPT END --%>
@@ -1157,105 +1365,57 @@
 			<caption class="tableTitle">REVIEW</caption>
 				<thead>
 					<tr>
-						<th style="width: 65px;">NO</th>
+						<th style="width: 20%;">NO</th>
 						<th>TITLE</th>
-						<th style="width: 180px;">NAME</th>
+						<th style="width: 20%;">NAME</th>
 					</tr>
 				</thead>
-				<tbody style="font-weight: bold;">
-					<tr>
-						<td>3</td>
-						<td>
-							<a href="javascript:void(0);" onclick="">딸이 아주 좋아합니다 ^^</a>
-						</td>
-						<td>서영학</td>
-						<td style="display: none;"></td>
-					</tr>
-					<tr>
-						<td>2</td>
-						<td>
-							<a href="javascript:void(0);" onclick="">정말 유익했던 시간...</a>
-						</td>
-						<td>김현지</td>
-						<td style="display: none;"></td>
-					</tr>
-					<tr>
-						<td>1</td>
-						<td>
-							<a href="javascript:void(0);" onclick="">어제 보고 왔어요 !</a>
-						</td>
-						<td>장하빈</td>
-						<td style="display: none;"></td>
-					</tr>
+				<tbody class="reviewArea" style="font-weight: bold;">
 				</tbody>
 			</table>
 		</div>
 		<div class="review_bottom" style="margin-top: 30px; width: 100%; text-align: right;">
-			<span class="board_btn_area"> 
-			<a href="javascript:void(0);" onclick="">
-				<img src="" alt="작성하기">
+			<div class="board_btn_area"> 
+			<a href="javascript:void(0);" onclick="warnLogin('r')">
+				<span class="bkBtns">작성하기</span>
 			</a> 
-			<a href="">
-				<img src="" alt="모두보기">
+			<a href="<%=ctxPath%>/reviewList.at">
+				<span class="bkBtns">모두보기</span>
 			</a>
-			</span>
+			</div>
 		</div>
-		<div class="paginate">
-			페이지바영역
-		</div>
+		<div class="rev_prev"></div>
+		<div class="review_paginate paginate"></div>
+		<div class="rev_next"></div>
 		
 		<%-- ------------------------------------------기대평 영역 --%>
-		<div class="comment_area">
+		<div class="preview_area" style="margin-top: 100px;">
 			<table class="basic_table">
 			<caption class="tableTitle">PREVIEW</caption>
 				<thead>
-					<tr>
-						<th style="width: 65px;">NO</th>
+					<tr >
+						<th style="width: 20%;">NO</th>
 						<th>TITLE</th>
-						<th style="width: 180px;">NAME</th>
+						<th style="width: 20%;">NAME</th>
 					</tr>
 				</thead>
-				<tbody style="font-weight: bold;">
-					<tr>
-						<td>3</td>
-						<td>
-							<a href="javascript:void(0);" onclick="">저번엔 시간이 없어서 못봤는데 이번엔 꼭 볼겁니다 !</a>
-						</td>
-						<td>심예은</td>
-						<td style="display: none;"></td>
-					</tr>
-					<tr>
-						<td>2</td>
-						<td>
-							<a href="javascript:void(0);" onclick="">너무 기대돼요 !</a>
-						</td>
-						<td>김민하</td>
-						<td style="display: none;"></td>
-					</tr>
-					<tr>
-						<td>1</td>
-						<td>
-							<a href="javascript:void(0);" onclick="">필기구들고갑니다 ~</a>
-						</td>
-						<td>박수연</td>
-						<td style="display: none;"></td>
-					</tr>
+				<tbody class="previewArea" style="font-weight: bold;">
 				</tbody>
 			</table>
 		</div>
 		<div class="review_bottom" style="margin-top: 30px; width: 100%; text-align: right;">
-			<span class="board_btn_area"> 
-			<a href="javascript:void(0);" onclick="">
-				<img src="" alt="작성하기">
+			<div class="board_btn_area"> 
+			<a href="javascript:void(0);" onclick="warnLogin('p')">
+				<span class="bkBtns">작성하기</span>
 			</a> 
-			<a href="">
-				<img src="" alt="모두보기">
+			<a href="<%=ctxPath%>/previewList.at">
+				<span class="bkBtns">모두보기</span>
 			</a>
-			</span>
+			</div>
 		</div>
-		<div class="paginate">
-			페이지바영역
-		</div>
+		<div class="prev_prev" style="display: inline-block;"></div>
+		<div class="preview_paginate paginate"></div>
+		<div class="prev_next" style="display: inline-block;"></div>
 		
 		
 		<%-- -------------------------------------------아코디언 영역 --%>

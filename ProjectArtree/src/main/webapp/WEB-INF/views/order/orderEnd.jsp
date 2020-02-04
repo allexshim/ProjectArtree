@@ -96,6 +96,13 @@
 <script>
 	$(function(){		
 		$("#accordion").accordion();
+		
+		$("#cancelB").click(function(){
+			if(${cancelB==1}){
+				alert("헐븬");
+				//cancelPay();
+			}
+		});
 	})
 		
 	function goRefund() {
@@ -114,7 +121,7 @@
 	<div style="width: 60%; margin: 0 auto;">
 		
 		<div>
-			<div style="padding-top:20%; margin-bottom: 1%; font-weight: bold; font-size: 22px;">주문정보</div>
+			<div style="padding-top:15%; margin-bottom: 1%; font-weight: bold; font-size: 22px;">주문정보</div>
 			<table class="table table-hover">
 				<tr>
 					<th>예매번호</th>
@@ -126,7 +133,7 @@
 				</tr>
 				<tr>
 					<th>주문자</th>
-					<td>정핫빈</td>
+					<td>${loginuser.name }</td>
 				</tr>
 				<tr>
 					<th>예매상태</th>
@@ -134,7 +141,7 @@
 				</tr>
 				<tr>
 					<th>예매취소</th>
-					<td><div onclick="cancelPay()" style="text-align:center; color:black; background:white; cursor:pointer; border: solid 1px black; border-radius: 4px; width: 5%;">취소</div></td>
+					<td><div id="cancelB" style="text-align:center; color:black; background:white; cursor:pointer; border: solid 1px black; border-radius: 4px; width: 5%;">취소</div></td>
 				</tr>	
 			</table>
 		</div>
@@ -170,12 +177,12 @@
 				<div>
 					<div style="font-size: 14px; font-weight: bold;">유의사항<br><br></div>
 					<div style="line-height:1.8; font-size: 14px;">
-						예매티켓의 취소 및 변경은 전시 마감전일 18시가지 가능합니다.<br>
+						예매티켓의 취소는 관람일 전일까지 가능합니다.<br>
 						취소마감시간 이후에는 티켓의 취소가 불가합니다.<br>
 						고객 귀책 사유로 티켓 분실이나 파손이 될 경우에는 티켓은 재발행 되지 않으며, 취소도 불가합니다.<br>
 						티켓 예매시 선택한 결제수단으로만 환불이 가능합니다.<br>
 						Artree 이외의 외부 예매처에서 예매한 티켓은 직접 예매한 곳으로 환불 절차를 문의해주시기 바랍니다.<br>
-						초대권으로 명시된 티켓은 화불이 불가합니다.<br><br>			
+						초대권으로 명시된 티켓은 환불이 불가합니다.<br><br>			
 					</div>
 				</div>
 				<div>

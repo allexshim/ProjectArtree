@@ -21,13 +21,14 @@
 	<!-- ////////////////////////// 기대평 글쓰기 /////////////////////////// -->
 	<insert id="addEnd" parameterType="HashMap">
 		insert into preview (boardno, seq, fk_idx, fk_exhibitionno, name, title, content, readcount, regdate, commentcnt)
-		values(3, seq_precomment.nextval, #{fk_idx}, #{eno}, #{name}, #{title}, #{contents}, default, default, default)
+		values(3, seq_preview.nextval, #{fk_idx}, #{eno}, #{name}, #{title}, #{contents}, default, default, default)
 	</insert>
 	
 	<!-- //////////////////////////// 기대평 글 목록 가져오기 //////////////////////////// -->
  	<resultMap type="HashMap" id="previewMap">
  		<result property="FK_IDX" column="fk_idx" javaType="int"/>
  		<result property="FK_EXHIBITIONNO" column="fk_exhibitionno" javaType="int"/>
+ 		<result property="SEQ" column="seq" javaType="int"/>
  		<result property="NAME" column="name" javaType="String"/>
  		<result property="TITLE" column="title" javaType="String"/>
  		<result property="READCOUNT" column="readcount" javaType="int"/>
@@ -39,7 +40,7 @@
 		select *
 		from
 		(
-		select row_number() over(order by seq desc) AS RNO, fk_idx, fk_exhibitionno
+		select row_number() over(order by seq desc) AS RNO, fk_idx, fk_exhibitionno, seq
              , name, title, readcount, to_char(regdate, 'yyyy-mm-dd hh24:mi') AS regdate, commentcnt
 		from preview
 		<if test="searchType != ''">
@@ -57,5 +58,123 @@
 			where ${searchType} like '%'|| #{searchWord} ||'%'
 		</if>
 	</select>
+	
+	<!-- /////////////////////////////// 기대평 상세페이지 ////////////////////////////////// -->
+	<resultMap type="HashMap" id="previewDetailMap">
+		<result property="PREVSEQ" column="prevseq" javaType="int"/>
+		<result property="PREVTITLE" column="prevtitle" javaType="String"/>
+		<result property="SEQ" column="seq" javaType="int"/>
+		<result property="FK_IDX" column="fk_idx" javaType="int"/>
+		<result property="FK_ENO" column="fk_eno" javaType="int"/>
+		<result property="NAME" column="name" javaType="String"/>
+		<result property="EXHNAME" column="exhname" javaType="String"/>
+		<result property="TITLE" column="title" javaType="String"/>
+		<result property="CONTENT" column="content" javaType="String"/>
+		<result property="REGDATE" column="regdate" javaType="String"/>
+		<result property="NEXTSEQ" column="nextseq" javaType="int"/>
+		<result property="NEXTTITLE" column="nexttitle" javaType="String"/>
+		<result property="READCOUNT" column="readcount" javaType="int"/>
+		<result property="MAINPOSTER" column="mainposter" javaType="String"/>
+	</resultMap>
+	
+	<select id="getPreviewDetail" parameterType="String" resultMap="previewDetailMap">
+		select prevseq, prevtitle, seq, fk_idx, fk_eno, name, exhname, title, content, readcount, regdate, nextseq, nexttitle, mainposter
+		from 
+		(
+		    select lag(seq, 1) over(order by seq desc) as prevseq
+		         , lag(title, 1) over(order by seq desc) as prevtitle
+		         , seq, fk_idx, A.fk_exhibitionno AS fk_eno, B.name, A.name AS exhname, title, content, C.mainposter
+		         , readCount, to_char(regDate, 'yyyy-mm-dd hh24:mi') as regDate
+		         , lead(seq, 1) over(order by seq desc) as nextseq
+		         , lead(title, 1) over(order by seq desc) as nexttitle
+		    from preview A left join member B
+		    on A.fk_idx = B.idx
+		    left join exhibitiondetail C
+		    on A.fk_exhibitionno = C.fk_exhibitionno
+		) V
+		where V.seq = #{bno}
+	</select>
+	
+	<!-- //////////////////////// 기대평 글 수정하기 ///////////////////////// -->
+	<update id="editEnd" parameterType="HashMap">
+		update preview set fk_exhibitionno = #{eno}
+                 , name = #{name}
+                 , title = #{title}
+                 , content = #{contents}
+		where seq = #{bno}
+	</update>
+	
+	<!-- /////////////////////// 기대평 글 삭제하기 ////////////////////////// -->
+	<delete id="goDeletePreview" parameterType="String">
+		delete from preview where seq = #{bno}
+	</delete>
 
+	<!-- //////////////////// 기대평 - 특정 게시물의 댓글 목록 //////////////////// -->
+	<resultMap type="HashMap" id="commentMap">
+		<result property="SEQ" column="seq" javaType="int"/>
+		<result property="FK_IDX" column="fk_idx" javaType="int"/>
+		<result property="NAME" column="name" javaType="String"/>
+		<result property="CONTENT" column="content" javaType="String"/>
+		<result property="REGDATE" column="regdate" javaType="String"/>
+	</resultMap>
+	
+	<select id="getCommentList" parameterType="String" resultMap="commentMap">
+		select seq, fk_idx, name, content, to_char(regdate, 'yyyy-mm-dd hh24:mi:ss') AS regdate
+		from precomment
+		where fk_seq = #{bno}
+		order by seq desc
+	</select>
+	
+	<!-- //////////////////////// 기대평 - 특정 게시물의 댓글 등록 ///////////////////////// -->
+	<insert id="addComment" parameterType="HashMap">
+		insert into precomment(seq, fk_idx, fk_seq, name, content, regdate)
+		values (seq_precomment.nextval, #{fk_idx}, #{fk_seq}, #{writer}, #{content}, default)
+	</insert>
+	
+	<!-- //////////////////////////// 기대평 - 댓글 수정 ////////////////////////// -->
+	<update id="editComment" parameterType="HashMap">
+		update precomment set content = #{content} where seq = #{cno}
+	</update>
+	
+	<!-- //////////////////////////// 기대평 - 댓글 삭제 ////////////////////////// -->
+	<delete id="delComment" parameterType="HashMap">
+		delete from precomment where seq = #{cno}
+	</delete>
+	
+	<!-- //////////////////// 조회수 증가 //////////////////////// -->
+	<update id="addReadcount" parameterType="String">
+		update preview set readcount = readcount + 1 where seq = #{bno}
+	</update>
+	
+	<!-- ////////////////// 댓글 등록 시 원 게시물의 댓글 갯수 증가 /////////////// -->
+	<update id="addCommentCnt" parameterType="HashMap">
+		update preview set commentcnt = commentcnt + 1 where seq = #{fk_seq}
+	</update>
+	
+	<!-- ////////////////// 댓글 삭제 시 원 게시물의 댓글 갯수 감소 /////////////// -->
+	<update id="delCommentCnt" parameterType="HashMap">
+		update preview set commentcnt = commentcnt - 1 where seq = #{bno}
+	</update>
+	
+	<!-- ////////////////// 전시회 목록에서 기대평 작성 시 해당 전시회 정보 불러오기 /////////////// -->
+	<resultMap type="HashMap" id="writeHelper">
+		<result property="EXHIBITIONNO" column="exhibitionno" javaType="int"/>
+		<result property="EXHIBITIONNAME" column="exhibitionname" javaType="String"/>
+		<result property="MAINPOSTER" column="mainposter" javaType="String"/>
+	</resultMap>
+	
+	<select id="getPreviewWriteHelper" parameterType="String" resultMap="writeHelper">
+		select exhibitionno, exhibitionname, B.mainposter
+        from exhibition A left join exhibitiondetail B
+        on A.exhibitionno = B.fk_exhibitionno
+        where exhibitionno = #{eno}
+	</select>
+	
+	<select id="getPwdCheck" resultType="String" parameterType="String">
+		<![CDATA[
+		select case when(lastpassworddate < add_months(sysdate, -6)) then 'true' else 'false' end AS WARN
+        from member
+        where idx = #{idx}
+        ]]>
+	</select>
 </mapper>

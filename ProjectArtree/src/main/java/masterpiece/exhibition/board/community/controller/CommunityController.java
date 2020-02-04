@@ -155,7 +155,7 @@ public class CommunityController {
 		
 		HashMap<String,String> communityDetail = new HashMap<String,String>();
 		
-		// 조회수 올릴때 자기가 쓴 글은 안올라가게 하기...
+		// 조회수 올릴때 자기가 쓴 글은 안올라가게 하기
 		HttpSession session = request.getSession();
 		MemberVO loginuser = (MemberVO)session.getAttribute("loginuser");
 		
@@ -172,8 +172,7 @@ public class CommunityController {
 	        session.removeAttribute("readCountPermission");
 	        // 중요함 !! session에 저장된 readCountPermission을 삭제한다.
 	    }
-	    else {
-	    	// 새로고침
+	    else { // 새로고침
 	    	communityDetail = service.getCommunityDetailNoCount(no);
 	    }    
 		

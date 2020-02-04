@@ -475,5 +475,97 @@ public class ExhibitsController {
 		return jobj.toString();
 
 	}
+	
+	/////////////////////// 전시회 상세페이지 내 미니 리뷰 게시판 ////////////////////////
+	@ResponseBody
+	@RequestMapping(value="/miniReviewList.at", produces = "text/plain;charset=UTF-8")
+	public String reviewList(HttpServletRequest request) {
+		
+		String eno = request.getParameter("eno"); 
+		String page = request.getParameter("page");
+		
+		int totalCount = 0;// 총 게시물 건수
+		int size = 5;// 한 페이지당 보여줄 게시물 수
+		int totalPage = 0;// 총 페이지수(웹브라우저 상에 보여줄 총 페이지 갯수, 페이지바)
 
+		HashMap<String, String> paraMap = new HashMap<String, String>();
+		paraMap.put("eno", eno);
+		
+		totalCount = service.getMiniReviewTotalCount(paraMap);
+		totalPage = (int)Math.ceil((double)totalCount/size);
+		int startIdx = totalCount-size*(Integer.parseInt(page)-1);
+		int start = (( Integer.parseInt(page) - 1 ) * size ) + 1;
+		int end = start + size - 1;
+		
+		paraMap.put("start", Integer.toString(start));
+		paraMap.put("end", Integer.toString(end));
+
+		List<HashMap<String, String>> miniReviewListMap = service.getMiniReivewList(paraMap);
+
+		JSONArray jsonArr = new JSONArray();
+
+		for (HashMap<String, String> mini : miniReviewListMap) {
+			JSONObject jobj = new JSONObject();
+
+			jobj.put("REVNO", mini.get("REVNO"));
+			jobj.put("FK_NAME", mini.get("FK_NAME"));
+			jobj.put("REVTITLE", mini.get("REVTITLE"));
+			jobj.put("startIdx", startIdx);
+			jobj.put("totalPage", totalPage);
+
+			jsonArr.put(jobj);
+		}
+
+		return jsonArr.toString();
+		
+	}
+
+	/////////////////////// 전시회 상세페이지 내 미니 기대평 게시판 ///////////////////////
+	@ResponseBody
+	@RequestMapping(value="/miniPreviewList.at", produces = "text/plain;charset=UTF-8")
+	public String previewList(HttpServletRequest request) {
+		
+		String eno = request.getParameter("eno");
+		String page = request.getParameter("page");
+		
+		int totalCount = 0;// 총 게시물 건수
+		int size = 5;// 한 페이지당 보여줄 게시물 수
+		int totalPage = 0;// 총 페이지수(웹브라우저 상에 보여줄 총 페이지 갯수, 페이지바)
+		
+		HashMap<String, String> paraMap = new HashMap<String, String>();
+		paraMap.put("eno", eno);
+		
+		totalCount = service.getMiniPreviewTotalCount(paraMap);
+		
+		totalPage = (int)Math.ceil((double)totalCount/size);
+		
+		int startIdx = totalCount-size*(Integer.parseInt(page)-1);
+		
+		int start = (( Integer.parseInt(page) - 1 ) * size ) + 1;
+		int end = start + size - 1;
+
+		paraMap.put("start", Integer.toString(start));
+		paraMap.put("end", Integer.toString(end));
+
+		List<HashMap<String, String>> miniPreviewListMap = service.getMiniPreivewList(paraMap);
+
+		JSONArray jsonArr = new JSONArray();
+
+		for (HashMap<String, String> mini : miniPreviewListMap) {
+			JSONObject jobj = new JSONObject();
+
+			jobj.put("SEQ", mini.get("SEQ"));
+			jobj.put("NAME", mini.get("NAME"));
+			jobj.put("TITLE", mini.get("TITLE"));
+			jobj.put("startIdx", startIdx);
+			jobj.put("totalPage", totalPage);
+
+			jsonArr.put(jobj);
+		}
+
+		return jsonArr.toString();
+		
+	}
+	
+	
 }

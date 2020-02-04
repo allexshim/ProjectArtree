@@ -209,20 +209,6 @@
 		}
 		
 		
-		// 리스트의 전시회 이름을 클릭하면 전시회 상세페이지로 이동한다.
-		$("div#contentContainer table tbody td:nth-child(2)").click(function(){
-			
-			var exhibitionCode = "${exhibitionCode}";
-			// 페이지로 들어올 때 전시회 코드도 같이 받아와서, 클릭한 전시회 코드를 넘겨줍니다.
-			window.location.href="/artree/*.at?exhibitionCode="+exhibitionCode;	
-		});
-		
-		// 리스트의 리뷰 제목을 클릭하면 리뷰 상세페이지로 이동한다.
-		$("div#contentContainer table tbody td:nth-child(3)").click(function(){
-			// 글번호를 넘긴다.
-			var no = $(this).prev().prev().text();
-			window.location.href="/artree/previewDetail.at?no="+no;	
-		});
 		
 		// 글쓰기 페이지로 가기
 		$("div#goWrite").click(function(){
@@ -281,8 +267,12 @@
 						<c:forEach var="previewMap" items="${previewListMap}" varStatus="status">
 							<tr>
 								<td>${startIdx-status.index}</td>
-								<td>${previewMap.NAME}</td>
-								<td>${previewMap.TITLE}</td>
+								<td onclick="location.href='<%=ctxPath%>/exhDetail.at?eno=${previewMap.FK_EXHIBITIONNO}'">${previewMap.NAME}</td>
+								<td onclick="location.href='<%=ctxPath%>/previewDetail.at?bno=${previewMap.SEQ}&fk=${previewMap.FK_IDX}'">${previewMap.TITLE}
+									<c:if test="${previewMap.COMMENTCNT ne 0}">
+										&nbsp;[<span style="font-size:12pt; font-weight: bold;">${previewMap.COMMENTCNT}</span>]
+									</c:if>
+								</td>
 								<td>${previewMap.REGDATE}</td>
 								<td>${previewMap.READCOUNT}</td>
 							</tr>
