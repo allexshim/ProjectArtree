@@ -380,7 +380,7 @@
 							 + "<td class='comWriter' style='width:50px;'>"+item.NAME+"</td>"
 							 + "<td class='commentWriteDate'>"+item.REGDATE;
 						 
-						 if(item.FK_IDX == ${loginuser.idx}){
+						 if(item.FK_IDX == '${loginuser.idx}'){
 							 html += "<span class='commentModifyBtn' style='padding-left:10px; padding-bottom:1px; font-weight: bold;'>수정</span>&nbsp;|&nbsp;"
 							 	  + "<span class='commentDeleteBtn' style='padding-bottom:1px; font-weight: bold;'>삭제</span>"
 							 	  + "<span class='commentNo' style='display:none'>"+item.SEQ+"</span>";
