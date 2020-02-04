@@ -39,6 +39,15 @@ public interface InterExhibitsService {
 
 	List<HashMap<String, String>> getAgeChart(String eno); // 연령대별 차트
 
+	int getMiniReviewTotalCount(HashMap<String, String> paraMap); // 페이징 처리를 위한 미니 리뷰 게시판 게시물 총 갯수 
+
+	List<HashMap<String, String>> getMiniReivewList(HashMap<String, String> paraMap); // 미니 리뷰 게시판 목록 
+
+	int getMiniPreviewTotalCount(HashMap<String, String> paraMap); // 페이징 처리를 위한 미니 기대평 게시판 게시물 총 갯수 
+
+	List<HashMap<String, String>> getMiniPreivewList(HashMap<String, String> paraMap); // 미니 기대평 게시판 목록
+	
+
  
 
 }

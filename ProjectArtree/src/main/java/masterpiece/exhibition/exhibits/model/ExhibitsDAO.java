@@ -146,7 +146,33 @@ public class ExhibitsDAO implements InterExhibitsDAO {
 		return AgeChart;
 	}
 	
-
+	///////////////////////// 페이징 처리를 위한 미니 리뷰 게시판 게시물 총 갯수 ////////////////////////////
+	@Override
+	public int getMiniReviewTotalCount(HashMap<String, String> paraMap) {
+		int result = sql.selectOne("exhibits.getMiniReviewTotalCount", paraMap);
+		return result;
+	}
+	
+	/////////////////////////// 미니 리뷰 게시판 목록 ////////////////////////////
+	@Override
+	public List<HashMap<String, String>> getMiniReivewList(HashMap<String, String> paraMap) {
+		List<HashMap<String, String>> MiniReviewList = sql.selectList("exhibits.getMiniReivewList", paraMap);
+		return MiniReviewList;
+	}
+	
+	/////////////////////////// 페이징 처리를 위한 미니 기대 게시판 게시물 총 갯수 ////////////////////////////
+	@Override
+	public int getMiniPreviewTotalCount(HashMap<String, String> paraMap) {
+		int result = sql.selectOne("exhibits.getMiniPreviewTotalCount", paraMap);
+		return result;
+	}
+	
+	/////////////////////////// 미니 기대평 게시판 목록  ////////////////////////////
+	@Override
+	public List<HashMap<String, String>> getMiniPreivewList(HashMap<String, String> paraMap) {
+		List<HashMap<String, String>> MiniPreivewList = sql.selectList("exhibits.getMiniPreivewList", paraMap);
+		return MiniPreivewList;
+	}
 
 
 }
