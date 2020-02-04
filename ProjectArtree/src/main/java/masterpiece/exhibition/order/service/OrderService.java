@@ -202,8 +202,8 @@ public class OrderService implements InterOrderService {
 	}
 
 	@Override
-	public void delReserEx(String reserExNoList) {
-		dao.delReserEx(reserExNoList);		
+	public void delReserEx(String detailNo) {
+		dao.delReserEx(detailNo);		
 	}
 
 	@Override
@@ -353,5 +353,21 @@ public class OrderService implements InterOrderService {
 		   	    mail.sendmail(EMAIL, emailContents, NAME, EXNAME);		   	    	
 		   	}		   	
 		}
+	}
+	
+	// 예매, 상세, 전시 삭제 업데이트
+	@Override
+	public void upReserEx(String detailNo) {
+		dao.upReserEx(detailNo);		
+	}
+
+	@Override
+	public void upReserDetail(String reserNo) {
+		dao.upReserDetail(reserNo);		
+	}
+
+	@Override
+	public void upReser(String reserNo) {
+		dao.upReser(reserNo);		
 	}
 }

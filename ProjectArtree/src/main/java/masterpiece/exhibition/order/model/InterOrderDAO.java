@@ -54,4 +54,10 @@ public interface InterOrderDAO {
 
 	List<HashMap<String, String>> reserEmailList(String strDate); // 예약 이메일 리스트 
 
+	void upReserEx(String detailNo); // 예매 삭제 업데이트
+
+	void upReserDetail(String reserNo); // 
+
+	void upReser(String reserNo); // 
+
 }

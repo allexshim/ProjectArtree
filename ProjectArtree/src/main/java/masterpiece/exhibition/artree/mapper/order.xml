@@ -180,8 +180,7 @@
 		,exname ,reserstat ,mainimg
 		from reser a inner join reserdetail b
 		on a.reserno = b.fk_reserno
-		where a.status = 1 and 
-		fk_idx = #{idx}
+		where fk_idx = #{idx}
 		order by reserno desc
 	</select>
 	
@@ -204,7 +203,7 @@
 	</select>
 	
 	<delete id="delReserEx">
-		delete from reserEx where fk_reserdetailno = #{reserExNoList}
+		delete from reserEx where fk_reserdetailno = #{detailNo}
 	</delete>
 	
 	<delete id="delReserDetail">
@@ -238,5 +237,17 @@
 		b.status = 1 
 		order by a.reserdetailno desc
 	</select>
+	
+	<update id="upReserEx">
+		update reserEx set status = 0 where fk_reserdetailno = #{detailNo}			
+	</update>
+	
+	<update id="upReserDetail">
+		update reserDetail set status = 0, reserstat = '환불처리' where fk_reserno = #{reserNo}			
+	</update>
+	
+	<update id="upReser">
+		update reser set status = 0 where reserno = #{reserNo}		
+	</update>
 	
 </mapper>

@@ -98,26 +98,20 @@
 		$("#accordion").accordion();
 		
 		$("#cancelB").click(function(){
-			if(${cancelB==1}){
-				alert("헐븬");
-				//cancelPay();
+			if(${cancelB==1}){				
+				cancelPay();
+			}
+			else {
+				alert("관람일자가 지난표가 포함되어 있어 취소가 불가합니다.");
 			}
 		});
-	})
-		
-	function goRefund() {
-		var frm = document.refundBin;	
-		frm.method="POST";
-		frm.action="<%=ctxPath %>/refundBin.at";		
-		frm.submit();
-	}
+	})		
 		
 </script>
 <body>
 
 	<input id="cancle" type="text" hidden="hidden" value="${reserNo}" name="cancle">
-	
-	<form name="refundBin">
+		
 	<div style="width: 60%; margin: 0 auto;">
 		
 		<div>
@@ -206,8 +200,7 @@
 		<div style="overflow: hidden; margin-bottom: 5%;">
 			<div onclick="goList()" style="text-align:center; color:black; background:white; cursor:pointer; float: right; border: solid 1px black; border-radius: 4px; width: 8%; margin-top: 1%; padding: 0.3%;">주문목록</div>					
 		</div>				
-	</div>
-	</form>		
+	</div>	
 	
 <script>
 	
