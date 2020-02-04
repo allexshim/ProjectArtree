@@ -250,4 +250,8 @@
 		update reser set status = 0 where reserno = #{reserNo}		
 	</update>
 	
+	<select id="reserStat" resultType="String">
+		select status from reser where reserno = #{reserNo}
+	</select>	
+	
 </mapper>

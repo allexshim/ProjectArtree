@@ -186,5 +186,11 @@ public class OrderDAO implements InterOrderDAO {
 	public void upReser(String reserNo) {
 		sqlsession.update("order.upReser",reserNo);		
 	}
+
+	@Override
+	public String reserStat(String reserNo) {
+		String n = sqlsession.selectOne("order.reserStat",reserNo);
+		return n;
+	}
 	
 }

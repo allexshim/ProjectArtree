@@ -54,5 +54,7 @@ public interface InterOrderService {
 
 	void upReser(String reserNo); // 예매 삭제 업데이트
 
+	String reserStat(String reserNo); // 예매 삭제 확인
+
 
 }

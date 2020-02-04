@@ -370,4 +370,10 @@ public class OrderService implements InterOrderService {
 	public void upReser(String reserNo) {
 		dao.upReser(reserNo);		
 	}
+
+	@Override
+	public String reserStat(String reserNo) {
+		String n = dao.reserStat(reserNo);
+		return n;
+	}
 }

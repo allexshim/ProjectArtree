@@ -28,7 +28,7 @@ $(document).ready(function() {
        pay_method : 'card',	// 결제 수단
        merchant_uid : 'merchant_' + new Date().getTime(), // 가맹점에서 생성/관리하는 고유 주문번호
        name : '${exhibitionname}',	 // 코인충전 또는 order 테이블에 들어갈 주문명 혹은 주문 번호. (선택항목)원활한 결제정보 확인을 위해 입력 권장(PG사 마다 차이가 있지만) 16자 이내로 작성하기를 권장
-       amount : 100 ,	  // sessionStorage.getItem("order") 결제 금액 number 타입 
+       amount : sessionStorage.getItem("order") ,	  //  결제 금액 number 타입 
        buyer_email : '1',  // 구매자 email 여기랑
        buyer_name : '2',	  // 구매자 이름 여기만
        buyer_tel : '3',    // 구매자 전화번호 (필수항목)
@@ -48,13 +48,13 @@ $(document).ready(function() {
 	   
        // 결제시 
 	   if ( rsp.success ) {
-		   parent.document.location.href="orderEnd.at";		   
+		   parent.orderEnd();
+		   //parent.document.location.href="orderEnd.at";		   
 		   //1 imp_101725519638 2merchant_1579246724245 353164033
 	   }        
 	   // 실패시
-	   else {		   
-		   parent.orderEnd();
-		   //parent.document.location.reload();		  
+	   else {		   		   
+		   parent.document.location.reload();		  
 	   }   		       
    }); // end of IMP.request_pay()----------------------------
 	   

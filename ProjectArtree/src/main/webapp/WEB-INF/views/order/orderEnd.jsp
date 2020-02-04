@@ -96,15 +96,21 @@
 <script>
 	$(function(){		
 		$("#accordion").accordion();
-		
+				
 		$("#cancelB").click(function(){
-			if(${cancelB==1}){				
-				cancelPay();
-			}
+			if (${cancelC==1}) {
+				if(${cancelB==1}){				
+					cancelPay();
+				}
+				else {
+					alert("관람일자가 지난표가 포함되어 있어 취소가 불가합니다.");
+				}
+			}	
 			else {
-				alert("관람일자가 지난표가 포함되어 있어 취소가 불가합니다.");
+				alert("이미 취소된 상품입니다.");
 			}
-		});
+		});			
+		
 	})		
 		
 </script>

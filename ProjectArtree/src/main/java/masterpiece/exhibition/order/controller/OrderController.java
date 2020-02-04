@@ -217,6 +217,10 @@ public class OrderController {
 		
 		request.setAttribute("reserNo", reserNo);
 		
+		int cancelC = 1;
+		cancelC = Integer.parseInt(service.reserStat(reserNo));
+		request.setAttribute("cancelC", cancelC);
+		
 		List<HashMap<String,String>> reserList = service.selectReser(map);
 		for(int a=0; a<reserList.size(); a++) {
 			Set key = reserList.get(a).keySet();
@@ -299,6 +303,7 @@ public class OrderController {
 		}		
 		request.setAttribute("html", html);
 		request.setAttribute("cancelB", cancelB);
+		
 		
 		return "order/orderEnd.tiles";		
 		

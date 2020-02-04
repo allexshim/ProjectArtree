@@ -60,4 +60,6 @@ public interface InterOrderDAO {
 
 	void upReser(String reserNo); // 
 
+	String reserStat(String reserNo); // 예매 삭제 확인
+
 }
