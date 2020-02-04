@@ -116,7 +116,7 @@
 	#table-area {
 /* 		border: 2px solid navy; */
 		min-height: 500px;
-		width: 80%;
+		width: 100%;
 		margin: 0 auto 50px auto;
 	}
 	
@@ -232,14 +232,12 @@
 					
 					$("#btnExcel").click(function(){
 						
-						let resultArrStr = resultArr.join();
+					//	let resultArrStr = resultArr.join();
 						
-						let frm = document.searchFrm;
-						frm.resultArrStr.value = resultArrStr;
+					//	let frm = document.searchFrm;
+					//	frm.resultArrStr.value = resultArrStr;
 						
-						frm.method = "POST";
-						frm.action = "downloadExcelFile.at";
-						frm.submit();
+						window.location.href = "downloadExcelFile.at";
 						
 					});
 					
@@ -386,14 +384,12 @@
 				
 				<%-- 차트에 대한 데이터 테이블은 이곳에 넣으세요 !! --%>
 				
-				<div align="right" style="margin: 30px 0 50px 0;">
-					<button type="button" id="btnExcel">FILE DOWNLOAD</button>
-				</div>
-				
 				<table class="table" id="datatable">
 				</table>
 				
-				
+				<div align="right" style="margin-top: 50px;">
+					<button type="button" id="btnExcel">FILE DOWNLOAD</button>
+				</div>
 			</div>
 			
 		</div>

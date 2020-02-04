@@ -1172,18 +1172,8 @@ public class AdminController {
 		return jsonArr.toString();
 	}
 	
-	@RequestMapping(value="/downloadExcelFile.at", method = {RequestMethod.POST})
+	@RequestMapping(value="/downloadExcelFile.at")
 	public String downloadExcelFile(HttpServletRequest request, Model model) {
-		
-		String resultArrStr = request.getParameter("resultArrStr");
-		
-		HashMap<String, Object> paramap = null;
-		
-	//	String[] resultArr = null;
-		
-/*		if(resultArrStr != null && !"".equals(resultArrStr)) {
-			resultArr = resultArrStr.split(",");
-		}*/
 		
 		List<HashMap<String, String>> exList = service.getChartByTicketingRate(0);
 		
@@ -1193,17 +1183,12 @@ public class AdminController {
 		SXSSFWorkbook workbook = new SXSSFWorkbook();
 		
 		// 시트생성
-		SXSSFSheet sheet = workbook.createSheet("HR사원정보");
+		SXSSFSheet sheet = workbook.createSheet("ARTREE 예매율 데이터 테이블");
 		
 		// 시트 열 너비 설정
-		sheet.setColumnWidth(0, 2000);
+		sheet.setColumnWidth(0, 10000);
 		sheet.setColumnWidth(1, 4000);
 		sheet.setColumnWidth(2, 2000);
-		sheet.setColumnWidth(3, 4000);
-		sheet.setColumnWidth(4, 3000);
-		sheet.setColumnWidth(5, 2000);
-		sheet.setColumnWidth(6, 1500);
-		sheet.setColumnWidth(7, 1500);
 		
 		// 행의 위치를 나타내는 변수
 		int rowLocation = 0;
@@ -1266,11 +1251,11 @@ public class AdminController {
 		for(int i=0; i<8; i++) {
 		Cell cell = mergeRow.createCell(i);
 		cell.setCellStyle(mergeRowStyle);
-		cell.setCellValue("우리회사 사원정보");
+		cell.setCellValue("ATREE 예매율");
 		}
 		
 		// 셀 병합하기 
-		sheet.addMergedRegion(new CellRangeAddress(rowLocation, rowLocation, 0, 7)); // 시작 행, 끝 행, 시작 열, 끝 열 
+	//	sheet.addMergedRegion(new CellRangeAddress(rowLocation, rowLocation, 0, 7)); // 시작 행, 끝 행, 시작 열, 끝 열 
 		
 		// CellStyle 천단위 쉼표, 금액
 		CellStyle moneyStyle = workbook.createCellStyle();
