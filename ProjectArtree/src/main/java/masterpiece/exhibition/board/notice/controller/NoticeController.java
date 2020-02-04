@@ -37,7 +37,7 @@ public class NoticeController {
 	 String str_currentShowPageNo = request.getParameter("currentShowPageNo");
       
      int totalCount = 0; // 총게시물 건수
-     int sizePerPage = 5; // 한 페이지당 보여줄 게시물 수
+     int sizePerPage = 10; // 한 페이지당 보여줄 게시물 수
      int currentShowPageNo = 0;
      int totalPage = 0; // 총 페이지 수
      int startRno = 0; // 시작 행번호
@@ -145,7 +145,7 @@ public class NoticeController {
 		// 크로스 사이트 공격 방지
 		notTitle = MyUtil.replaceParameter(notTitle);
 		notContent = MyUtil.replaceParameter(notContent);
-		
+		notContent = notContent.replace("\r\n", "<br/>");
 		HashMap<String,String> addNotice = new HashMap<String,String>();
 		
 		addNotice.put("notTitle", notTitle);

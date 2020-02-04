@@ -110,6 +110,9 @@ public interface InterAdminDAO {
 	// 주문목록출력
 	List<HashMap<String, String>> getOrderList(String no);
 
+	// 주문정보출력
+	List<HashMap<String, String>> getOrderInfo(String reserno);
+
 	
 
 }

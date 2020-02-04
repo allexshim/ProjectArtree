@@ -119,16 +119,107 @@
 		border: none;
 		margin-top: 5vh;
 	}
-		
+	
+	#myModal {
+		margin-top: 200px;
+	}
+	
+	#orderInfoTable td:nth-child(2) {
+		width: 150px;
+		overflow: visible;
+	}
 	
 </style>
 
-<script src="<%= ctxPath%>/resources/js/jquery-3.3.1.min.js"></script>
+<meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 <script type="text/javascript">
 
 	$(document).ready(function(){ 
 		
-		
+		$("#orderContents tbody tr").click(function(){
+			
+			let reserno = $(this).find(".reserno").text();
+			
+			$("#myModal").modal('show');
+			
+			$.ajax({
+				
+				url: "<%= request.getContextPath() %>/orderInfo.at",
+				type: "GET",
+				data: {"reserno" : reserno},
+				dataType: "JSON",
+				success: function(json) {
+					
+					$("#orderInfoTable").empty();
+					
+					let html = "";
+					let modalheader = "";
+					let total = "";
+					
+					html += "<thead style='font-weight: bold'>";
+					html += "<tr>";
+					html += "<td>no</td>";
+					html += "<td>전시회명</td>";
+					html += "<td>관람일자</td>";
+					html += "<td>티켓종류</td>";
+					html += "<td>수량</td>";
+					html += "<td>사용여부</td>";
+					html += "<td>가격</td>";
+					html += "</tr>";
+					html += "</thead>";
+				
+					html += "<tbody>";
+
+					if(json.length == 0) {
+						html += "<tr class='' style='cursor: pointer;'>";
+						html += "<td colspan='4'>";
+						html += "조회된 주문의 정보가 없습니다.";
+						html += "</td>";
+						html += "</tr>";
+					} else {
+						
+						$.each(json, function(index, item) {
+							
+							if(index == 1) {
+								modalheader += "<button type='button' class='close' data-dismiss='modal'>&times;</button>";
+								modalheader += "<p class='modal-title'>예매번호 : " + item.reserno + " </p>";
+								modalheader += "<p class='modal-title'>주문일자 : " + item.reserdate + " </p>";
+								modalheader += "<p class='modal-title'>주문자명 : " + item.name + " </p>";
+								
+								total += "<p>총 금액 : " + item.resertotal + "</p>";
+							}
+							
+							html += "<tr>";
+							html += "<td>" + item.reserno + "</td>";
+							html += "<td>" + item.exname + "</td>";
+							html += "<td>" + item.dday + "</td>";
+							html += "<td>" + item.purtype + "</td>";
+							html += "<td>" + item.qt + "</td>";
+							html += "<td>" + item.price + "</td>";
+							html += "<td>" + item.reserstat + "</td>";
+							html += "</tr>";
+						
+						});
+						
+					}
+					
+					html += "</tbody>";
+					
+					$("#modalheader").html(modalheader);
+					$("#orderInfoTable").html(html);
+					$("#totalprice").html(total);
+				},
+				error: function(request, status, error){
+					alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+				}
+				
+			});
+			
+		});
 		
 	});
 
@@ -185,11 +276,11 @@
 					<c:if test="${ not empty orderList }">
 					<c:forEach var="order" items="${ orderList }">
 					<tr>
-						<td>${ order.reserno }</td>
+						<td class="reserno">${ order.reserno }</td>
 						<td>${ order.reserdate }</td>
 						<td>${ order.resertotal }</td>
 						<td>${ order.name }</td>
-						<td>${ order.hp }</td>
+						<td>${ memberInfo.hp }</td>
 					</tr>
 					</c:forEach>
 					</c:if>
@@ -201,9 +292,40 @@
 				</tbody>
 			</table>
 			<div style="margin: 0 auto" align="center">
-				<button type="button" id="morebtn">MORE</button>
+				<!-- <button type="button" id="morebtn">MORE</button> --><!-- 차트하고 시간나면 하자 -->
 			</div>
 		</div>
+		
+		<div class="container" id="modalContainer">
+				<!-- Modal -->
+				<div class="modal fade" id="myModal" role="dialog">
+					<div class="modal-dialog">
+					    
+						<!-- Modal content-->
+						<div class="modal-content" id="orderModal" style="width: 150%">
+							<div class="modal-header" id="modalheader" style="font-size: 11pt; line-height: 150%;">
+								
+							</div>
+							<div class="modal-body">
+							
+								<div id="listArea" style="margin-top: 5vh">
+									<table id="orderInfoTable" class="table">
+										
+									</table>
+								</div>
+							</div>
+							<div class="modal-footer">
+								<div id="totalprice" style="height:50px; border-bottom: 1px solid lightgrey; font-weight: bold; font-size: 14pt; text-align: right;">
+									
+								</div>
+							
+								<button type="button" class="btn btn-default" data-dismiss="modal" style="margin-top: 30px">Close</button>
+							</div>
+						</div>
+					      
+					</div>
+				</div>
+			</div>
 		
 	</div>
 

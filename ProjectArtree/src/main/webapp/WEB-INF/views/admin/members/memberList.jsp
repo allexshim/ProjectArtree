@@ -210,24 +210,11 @@
 
 		}); // end of $("#searchicon").click()
 		
-		// 각 글제목을 클릭하면 상세 페이지로 이동
-	//	$("#memberContents tbody tr").click(function(){
-		//	var no = $(this).text(); // 클릭한 글번호를 받아온다.
-
-		//	console.log(no);
-		
-	//		alert("선택");
-			
-		//	window.location.href="/artree/memberInfo.at?no="+no;
-			
-	//	}); // end of $("#memberContents tbody tr").click
-		
 		$(document).on("click", "#memberContents tbody tr", function(){
-		//	alert("선택");
 			
 			var no = $(this).find("td:nth-child(1)").text(); // 클릭한 글번호를 받아온다.
 			
-			console.log(no);
+		//	console.log(no);
 			
 			window.location.href="/artree/memberInfo.at?no="+no;
 			

@@ -44,12 +44,13 @@
 
 <script type="text/javascript">
 	$(document).ready(function(){
-		
+		console.log("하빈");
 		$("#testDatepicker").datepicker({			
 			dayNamesMin : ['월','화','수','목','금','토','일'],			
 			monthNames: ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'],
 			altField: '#calendar-date',
-			dateFormat: 'yy-mm-dd'
+			dateFormat: 'yy-mm-dd',
+			minDate:0
 		});					
 				
 		$("#nextBin").click(function(){
@@ -178,10 +179,12 @@
 	
 	
 	<form name="reposiBin">
-	<div style="padding-right:60px; width: 100%; margin: 0 auto;" align="center">
+	<div style="padding-top:5%; width: 90%; margin: 0 auto;" align="center">
 	<div style="padding: 3%;">	
-		<div style="padding-top: 1%; font-size: 25px;">
-			TICKETS	<div id="kakao-talk-channel-chat-button" data-channel-public-id="_DxkEZxb" data-title="question" data-size="small" data-color="mono" data-shape="pc" data-support-multiple-densities="true"></div>
+		
+		<div style="overflow:hidden; padding-top: 1%; font-size: 25px;">
+			<div style="float:left; ">TICKETS</div>		
+			<div style="float:right;" id="kakao-talk-channel-chat-button" data-channel-public-id="_DxkEZxb" data-title="question" data-size="small" data-color="mono" data-shape="pc" data-support-multiple-densities="true"></div>		
 		</div>	
 		
 		<hr>
@@ -264,7 +267,7 @@
 			<input class="totalBin" hidden="hidden" value="" name="totalBin">		
 		</div>
 		
-		<div style="overflow: hidden;">						
+		<div style="overflow: hidden;">		
 			<div id="nextBin" style="color:black; background:white; cursor:pointer; float: right; border: solid 1px black; border-radius: 4px; width: 5%; margin-top: 1%; padding: 0.3%;">다음</div>
 		</div>
 	</div>	
