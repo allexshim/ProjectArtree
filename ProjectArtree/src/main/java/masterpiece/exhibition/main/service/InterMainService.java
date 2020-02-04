@@ -19,5 +19,8 @@ public interface InterMainService {
 
 	// ajax로 호출, 이벤트 등록 빠른순으로 3개 가져오기
 	List<HashMap<String, String>> getNewEvent();
+	
+	// 성별차트
+	List<HashMap<String, Object>> getGenderChart();
 
 }

@@ -51,8 +51,7 @@
 	
 	/* 공지 추가, 삭제 버튼 */	
 	div#btns {
-		margin-top: 30px;
-		padding-right : 200px;
+		text-align: center;
 		margin-bottom: 40px;
 	}
 	
@@ -297,10 +296,18 @@
 			$(this).css('opacity','1.0');
 		});
 		
-		$(".noticeTitle").click(function(){
-			$(this).next().slideToggle(500); // 클릭하면 보이고, 보이지 않게 한다.
-			$(this).find("i").toggleClass("fa-chevron-down");
-			$(this).find("i").toggleClass("fa-chevron-up");
+		// 슬라이드 토글 이렇게 햇단말이죵
+		var $noticeTitle = $(".noticeTitle");
+		$noticeTitle.click(function(){
+			var $this = $(this);
+			
+			$noticeTitle.each(function() {
+				$(this).not($this).next().slideUp(500);
+			}).promise().then(function() {
+				$this.next().slideToggle(500); // 클릭하면 보이고, 보이지 않게 한다.
+			});
+			$this.find("i").toggleClass("fa-chevron-down");
+			$this.find("i").toggleClass("fa-chevron-up");
 		});
 		
 		 

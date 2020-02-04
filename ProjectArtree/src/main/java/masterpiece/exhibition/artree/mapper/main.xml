@@ -139,4 +139,17 @@
 		order by E.no desc ) V order by rno asc ) Z where rno <![CDATA[<=]]> 4
 	</select>
 	
+	<resultMap type="HashMap" id="genderMap">
+		<result property="GENDER" column="gender" javaType="String"/>
+		<result property="CNT" column="cnt" javaType="int"/>
+	</resultMap>
+	
+	<!-- 성별차트 -->
+	<select id="getGenderChart" resultMap="genderMap">
+		select gender, count(*) AS cnt
+		from member
+		group by gender
+		order by gender desc
+	</select>
+	
 </mapper>

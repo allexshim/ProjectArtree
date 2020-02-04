@@ -175,8 +175,8 @@
 	}
 	
 	.event_poster {
-		width: 250px;
-		height: 350px;
+		width: 280px;
+		height: 280px;
 	}
 	
 	
@@ -699,7 +699,7 @@ function exhDetail(eno){
 		</div>
 		
 		<div id="div4" class="new-title" style="float: right; -webkit-transform:translate(-58px, 550px);">
-			<h2>서두르세요! 얼마남지 않았습니다.</h2>
+			<h2>서두르세요! 얼마 남지 않았습니다.</h2>
 		</div>
 		<hr color="black;" style="width:90%; transform:translate(64px,600px);" />
 		<div class="end-exh" style="transform:translate(0, 270px);">

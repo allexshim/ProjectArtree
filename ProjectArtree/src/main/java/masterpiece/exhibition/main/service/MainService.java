@@ -57,6 +57,13 @@ public class MainService implements InterMainService {
 		return eventList;
 	}
 	
+	// 성별차트
+	@Override
+	public List<HashMap<String, Object>> getGenderChart() {
+		List<HashMap<String, Object>> getGenderChart = dao.getGenderChart();
+		return getGenderChart;
+	}
+	
 	
 	
 }

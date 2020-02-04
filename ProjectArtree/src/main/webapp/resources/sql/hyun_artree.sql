@@ -65,7 +65,7 @@ order by gender;
  where notCategory = 1;
  
  
- select notNo ,notTitle, notContent,  to_char(notWriteday, 'yyyy-mm-dd'), notCategory
+ select notNo ,notTitle, notContent,  to_char(notWriteday, 'yyyy-mm-dd') as notWriteday, notCategory
        from 
        (
 	       select rownum AS rno
@@ -77,7 +77,7 @@ order by gender;
 			 order by notNo desc
 		   ) V  
 	   ) T  	   
-	   where notCategory = 1 and rno between 1 and 10 
+	   where notCategory = 1 and rno between 1 and 10;
 
     
     
