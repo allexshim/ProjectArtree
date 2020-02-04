@@ -1,9 +1,14 @@
 package masterpiece.exhibition.order.controller;
 
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
@@ -176,9 +181,12 @@ public class OrderController {
 
 	@RequestMapping(value = "/orderEnd.at") // 여기서 트랜잭션
 	public String orderEnd(HttpServletRequest request, HashMap<String, String> map) {
-		DecimalFormat dec = new DecimalFormat("#,###");		
+		DecimalFormat dec = new DecimalFormat("#,###");
+				
 		String html = "";
 		HttpSession session = request.getSession();
+		int cancelA = 0;
+		int cancelB = 1;
 		
 		MemberVO mvo = (MemberVO)session.getAttribute("loginuser");
 		if ( mvo != null ) {
@@ -244,6 +252,31 @@ public class OrderController {
 				html += "<tr><th>수량</th><td></td></tr>";
 				html += "";
 				
+				// 관람일자 전일까지만 취소가 가능 
+				Calendar cal = new GregorianCalendar(Locale.KOREA);
+				cal.setTime(new Date());
+				cal.add(Calendar.DAY_OF_YEAR, 0); // 하루를 더한다. 					
+				SimpleDateFormat fm = new SimpleDateFormat("yyyy/MM/dd");
+				String currentDate = fm.format(cal.getTime());				
+				currentDate = currentDate.replace("/", "");
+				int icurrentDate = Integer.parseInt(currentDate);
+				
+				String dday = reserDetailList.get(b).get("DDAY");
+				dday = dday.replace("-", "");							
+				int idday = Integer.parseInt(dday);										
+									
+				int cancel = idday - icurrentDate;
+				if (cancel > 2) {
+					cancelA = 1;
+				}
+				else {
+					cancelA = 0;
+				}
+				cancelB *= cancelA;
+				
+				// 200204 (관람일) - 200203 (현재일) = 음수, 0 or 1 취소 불가  2이상일때 취소가능 
+				 
+				
 				List<HashMap<String,String>> reserExList = service.selectReserEx(map);
 				for(int c=0; c<reserExList.size(); c++) {
 					String purtype = reserExList.get(c).get("PURTYPE");
@@ -265,6 +298,7 @@ public class OrderController {
 			
 		}		
 		request.setAttribute("html", html);
+		request.setAttribute("cancelB", cancelB);
 		
 		return "order/orderEnd.tiles";		
 		

@@ -96,6 +96,13 @@
 <script>
 	$(function(){		
 		$("#accordion").accordion();
+		
+		$("#cancelB").click(function(){
+			if(${cancelB==1}){
+				alert("헐븬");
+				//cancelPay();
+			}
+		});
 	})
 		
 	function goRefund() {
@@ -134,7 +141,7 @@
 				</tr>
 				<tr>
 					<th>예매취소</th>
-					<td><div onclick="cancelPay()" style="text-align:center; color:black; background:white; cursor:pointer; border: solid 1px black; border-radius: 4px; width: 5%;">취소</div></td>
+					<td><div id="cancelB" style="text-align:center; color:black; background:white; cursor:pointer; border: solid 1px black; border-radius: 4px; width: 5%;">취소</div></td>
 				</tr>	
 			</table>
 		</div>
