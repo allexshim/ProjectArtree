@@ -158,7 +158,7 @@
 	</resultMap>
 	
 	<select id="dailySalesList" resultMap="dailySalesMap">		
-		select to_char(reserdate,'dd') as reserdate, substr(sum(resertotal),1,length(sum(resertotal))-4) as dailySales from reser
+		select to_char(reserdate,'dd') as reserdate, nvl(substr(sum(resertotal),1,length(sum(resertotal))-4),0) as dailySales from reser
 		where status = 1 and
 		reserdate like '20/' || #{reserdate} || '/%'
 		group by to_char(reserdate,'dd')
