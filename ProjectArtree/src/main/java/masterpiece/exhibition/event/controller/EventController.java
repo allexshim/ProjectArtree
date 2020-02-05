@@ -208,7 +208,6 @@ public class EventController {
 			   	
 				// 메일 보내기 //
 		//		if(memberList.size() > 0) {
-					System.out.println("memberList.size() : "+memberList.size()); 
 					
 				   	
 				//	for(int i=0; i<memberList.size(); i++) {
@@ -224,7 +223,7 @@ public class EventController {
 				//	   	List<HashMap<String, String>> emailAddress = memberList;
 					   	
 						mail.sendmail_NewEvent(emailAddress, emailContents);
-						System.out.println("memberList : "+memberList);
+	
 						System.out.println("확인용 : 메일완료" );
 				//   	}
 					
@@ -232,7 +231,7 @@ public class EventController {
 				
 				
 				
-			 // ======= ***** 제품입고가 완료되었다라는 email 보내기 끝 ***** ======= //
+			 // ======= ***** email 보내기 끝 ***** ======= //
 			
 			}
 			else { msg = "에러가 발생했습니다."; 
