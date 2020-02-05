@@ -30,7 +30,7 @@
 	}
 	
 	div#topText {
-		margin-bottom: 100px;
+		
 		padding-top : 50px;
 		width : 500px;
 		text-align: left;
@@ -51,7 +51,8 @@
 	
 	/* 공지 추가, 삭제 버튼 */	
 	div#btns {
-		text-align: center;
+		margin-top: 50px;
+		text-align: right;
 		margin-bottom: 40px;
 	}
 	
@@ -64,7 +65,7 @@
 		margin-bottom: 100px;
 		border-top: solid 2px black;
 		border-bottom: solid 2px black;
-		padding-left : 200px;
+		padding-left : 0;
 		padding-top : 20px;
 	}
 	
@@ -368,6 +369,34 @@
 						<a class="tabTitle" href="#tabContent02" >자주 묻는 질문</a>
 					</li>
 				</ul>
+				
+				<c:if test="${sessionScope.loginuser.status == 2}">
+				<div id="btns" align="right">
+					<img id="addNotice" src="<%= ctxPath %>/resources/images/board/addNoticeBtn.JPG" />
+					<img id="removeNotice" src="<%= ctxPath %>/resources/images/board/deleteNoticeBtn.JPG" />
+					<img id="backNotice" src="<%= ctxPath %>/resources/images/board/backNoticeBtn.JPG" />
+				</div>
+			</c:if>
+			<!--  add 버튼을 누르면 나타나는 공지 추가하기  -->
+			<div id="addNoticeContainer">
+				<form id="newNotice" name="newNotice">
+					<span>
+						<i class="fas fa-plus"></i>
+						<input type="text" name="notTitle" id="notTitle" placeholder="제목을 입력하세요." /><br/>
+						<textarea name="notContent" id="notContent" placeholder="내용을 입력하세요."></textarea>
+					</span>
+					<div class="category">
+						<input type="radio" name="notCategory" value="1" /> 공지
+						<input type="radio" name="notCategory" value="2" /> FAQ
+					</div>
+					<div align="left" style="margin-top: 50px; margin-bottom: 50px;">
+						<img onclick="" id="addBtn" src="<%= ctxPath %>/resources/images/board/addBtn.JPG" />
+						<img onclick="" id="backBtn" src="<%= ctxPath %>/resources/images/board/backNoticeBtn.JPG" />
+					</div>
+					
+				</form>
+			</div>
+				
 				<div class="tab_Content_Wrap">
 					<div id="tabContent01" class="tabPage">
 						<c:forEach var="item" items="${noticeList}">
@@ -417,32 +446,7 @@
 				</div>
 			</div>
 		</div>
-			<c:if test="${sessionScope.loginuser.status == 2}">
-				<div id="btns" align="right">
-					<img id="addNotice" src="<%= ctxPath %>/resources/images/board/addNoticeBtn.JPG" />
-					<img id="removeNotice" src="<%= ctxPath %>/resources/images/board/deleteNoticeBtn.JPG" />
-					<img id="backNotice" src="<%= ctxPath %>/resources/images/board/backNoticeBtn.JPG" />
-				</div>
-			</c:if>
-			<!--  add 버튼을 누르면 나타나는 공지 추가하기  -->
-			<div id="addNoticeContainer">
-				<form id="newNotice" name="newNotice">
-					<span>
-						<i class="fas fa-plus"></i>
-						<input type="text" name="notTitle" id="notTitle" placeholder="제목을 입력하세요." /><br/>
-						<textarea name="notContent" id="notContent" placeholder="내용을 입력하세요."></textarea>
-					</span>
-					<div class="category">
-						<input type="radio" name="notCategory" value="1" /> 공지
-						<input type="radio" name="notCategory" value="2" /> FAQ
-					</div>
-					<div align="left" style="margin-top: 50px; margin-bottom: 50px;">
-						<img onclick="" id="addBtn" src="<%= ctxPath %>/resources/images/board/addBtn.JPG" />
-						<img onclick="" id="backBtn" src="<%= ctxPath %>/resources/images/board/backNoticeBtn.JPG" />
-					</div>
-					
-				</form>
-			</div>
+			
 	</div>
 </body>
 </html>
