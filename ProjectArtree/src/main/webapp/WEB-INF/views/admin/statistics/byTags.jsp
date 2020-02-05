@@ -151,6 +151,16 @@
 		cursor : pointer;
 	}	
 	
+	#btnExcel {
+		background-color: white;
+		font-weight: bold;
+		height: 50px;
+		border: 1px solid lightgrey;
+		box-shadow: 2px 2px 2px 2px grey;
+		border-radius: 5px;
+	}
+	
+	
 </style>
 
 
@@ -235,7 +245,7 @@
 	   
 	   /////////////////////////////////////////////////////////////////
 	   // 엑셀로 프린트 하기
-	   $("#printBtn").click(function(){
+	   $("#btnExcel").click(function(){
        	   let totalcnt = ${totalcnt};
 		   window.location.href="/artree/printTagbyExcel.at?totalcnt="+totalcnt;	   
 	   }); // end of printBtn --------------------------------------------
@@ -418,7 +428,7 @@
 			<div id="table-area"></div>
 			
 			<div id="myBtns" align="center" style="padding-top: 20px;">
-				<img id="printBtn" src="<%= ctxPath %>/resources/images/board/printBtn.JPG" />
+				<button type="button" id="btnExcel">FILE DOWNLOAD</button>
 			</div>
 			
 		</div>
