@@ -196,6 +196,7 @@ public class MainController {
 	@RequestMapping(value = "/getGenderChart.at", produces = "text/plain;charset=UTF-8")
 	public String getGenderChart(HttpServletRequest request) {
 	
+	int totalMember = service.getTotalMember();
 	List<HashMap<String, Object>> getGenderChart = service.getGenderChart(); // 성별 차트
 	
 	JSONArray jsonArr = new JSONArray();
@@ -206,11 +207,14 @@ public class MainController {
 	
 	jobj.put("GENDER", chart.get("GENDER"));
 	jobj.put("CNT", chart.get("CNT"));
+	jobj.put("PCT", chart.get("PCT"));
+	jobj.put("TOTAL", chart.get("TOTAL"));
 	
 	jsonArr.put(jobj);
 	
 	}
-	
+	request.setAttribute("totalMember", totalMember);
+	System.out.println("totalMember : " +totalMember);
 	return jsonArr.toString();
 	}
 	

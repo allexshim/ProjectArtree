@@ -443,12 +443,26 @@ $(function () {
 						 +					"<img class='forMoving' style='position:relative;' src='<%=ctxPath%>/resources/images/exhibition/ico/right_arrow.png'>"
 						 +			"</button>"
 						 +		"</div>"
-						 +		"<a class='flash' onclick='exhDetail("+item.exhibitionno+")'><img class='hot-img2' src='"+item.mainposter+"'></a>"
+						 +		"<a class='flash' onclick='exhDetail("+item.exhibitionno+")'>"
+			 if(item.mainposter.substr(0, 4) != 'http'){
+					html += "<img class='hot-img2' src='<%=ctxPath%>/resources/files/"+item.mainposter+"'/>"; 
+				}
+			 else {
+					html += "<img class='hot-img2' src='"+item.mainposter+"'/>";
+			 }
+					html +=	"</a>"
 						 +	"</div>"
 				}
 				else {
 					html += "<div class='hot-exh-L'>"
-						 +		"<a class='flash' onclick='exhDetail("+item.exhibitionno+")'><img class='hot-img1' src='"+item.mainposter+"'></a>"
+						 +		"<a class='flash' onclick='exhDetail("+item.exhibitionno+")'>"
+						 if(item.mainposter.substr(0, 4) != 'http'){
+								html += "<img class='hot-img1' src='<%=ctxPath%>/resources/files/"+item.mainposter+"'/>"; 
+							}
+						 else {
+								html += "<img class='hot-img1' src='"+item.mainposter+"'/>";
+						 }
+					html += 	"</a>"
 						 +		"<div class='hot-info1'>"
 						 +			"<span class='hot-title'>"+item.exhibitionname+"</span>"
 						 +			"<span class='hot-content'>"+item.author+"</span>"
@@ -484,9 +498,14 @@ $(function () {
 			$.each(json, function(index, item){
 				
 				html += "<div class='swiper-slide'>" 
-					 + "<a class='recom-a flash hover-top' onclick='exhDetail("+item.exhibitionno+")'>"	
-					 + "<img class='slide-img' src='"+item.mainposter+"'>"
-					 + "<br/>"
+					 + "<a class='recom-a flash hover-top' onclick='exhDetail("+item.exhibitionno+")'>"
+				 if(item.mainposter.substr(0, 4) != 'http'){
+						html += "<img class='slide-img' src='<%=ctxPath%>/resources/files/"+item.mainposter+"'/>"; 
+					}
+				 else {
+					html += "<img class='slide-img' src='"+item.mainposter+"'/>";
+				 }
+				html += "<br/>"
 					 + "<span class='recom-title'>"+item.exhibitionname+"</span>"
 					 + "<span class='recom-content'>"+item.author+"</span>"
 					 + "<span class='recom-content'>"+item.location+" / "+item.galleryname+"</span>"
@@ -518,8 +537,14 @@ $(function () {
 			$.each(json, function(index, item){
 				
 				html += "<a onclick='exhDetail("+item.exhibitionno+")' class='new-one flash hover-top'>"
-					 +	"<img class='new_poster' src='"+item.mainposter+"' >"
-					 +		"<span class='new-exp new-exp-title'>"+item.exhibitionname+"</span>"
+				if(item.mainposter.substr(0, 4) != 'http'){
+					html += "<img class='end_poster' src='<%=ctxPath%>/resources/files/"+item.mainposter+"'/>"; 
+				}
+				else {
+					html += "<img class='end_poster' src='"+item.mainposter+"'/>";
+				}
+				
+				html +=		"<span class='new-exp new-exp-title'>"+item.exhibitionname+"</span>"
 					 +		"<span class='new-exp'>"+item.author+"</span>"
 					 + 		"<span class='new-exp'>"+item.location+" / "+item.galleryname+"</span>"
 					 +		"<span class='new-exp forMoving'>"+item.startdate+"~"+item.enddate+"</span>"
@@ -545,8 +570,13 @@ $(function () {
 			$.each(json, function(index, item){
 				
 				html += "<a onclick='exhDetail("+item.exhibitionno+")' class='end-one flash hover-top'>"
-					 +	"<img class='end_poster' src='"+item.mainposter+"' >"
-					 +		"<span class='end-exp end-exp-title'>"+item.exhibitionname+"</span>"
+				if(item.mainposter.substr(0, 4) != 'http'){
+					html += "<img class='end_poster' src='<%=ctxPath%>/resources/files/"+item.mainposter+"'/>"; 
+				}
+				else {
+					html += "<img class='end_poster' src='"+item.mainposter+"'/>";
+				}
+				html +=		"<span class='end-exp end-exp-title'>"+item.exhibitionname+"</span>"
 					 +		"<span class='end-exp'>"+item.author+"</span>"
 					 + 		"<span class='end-exp'>"+item.location+" / "+item.galleryname+"</span>"
 					 +		"<span class='end-exp forMoving'>"+item.startdate+"~"+item.enddate+"</span>"
@@ -691,7 +721,7 @@ function exhDetail(eno){
 	
 	<div class="newNend">
 		<div id="div3" class="new-title" style="float: left; -webkit-transform:translate(58px, 180px);">
-			<h2>새로운 전시를 확인하세요!</h2>
+			<h2>신규 전시회</h2>
 		</div>
 		<hr color="black;" style="width:90%; transform:translate(62px,245px);" />
 		<div class="new-exh">
@@ -699,7 +729,7 @@ function exhDetail(eno){
 		</div>
 		
 		<div id="div4" class="new-title" style="float: right; -webkit-transform:translate(-58px, 550px);">
-			<h2>서두르세요! 얼마 남지 않았습니다.</h2>
+			<h2>종료예정 전시회</h2>
 		</div>
 		<hr color="black;" style="width:90%; transform:translate(64px,600px);" />
 		<div class="end-exh" style="transform:translate(0, 270px);">
@@ -711,7 +741,7 @@ function exhDetail(eno){
 	
 	
 	<div id="div5" class="event-title" style=" float: left; transform:translate(35px, 460px);">
-		<h2>다양한 이벤트가 준비되어 있습니다.</h2>
+		<h2>EVENT</h2>
 	</div>
 	<div class="event-more" style="float: right; transform:translate(-35px, 700px);">
 		<a class="event-morebtn " href="<%= ctxPath%>/eventList.at">모두보기 +</a>

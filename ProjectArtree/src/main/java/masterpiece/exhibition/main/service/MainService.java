@@ -64,6 +64,13 @@ public class MainService implements InterMainService {
 		return getGenderChart;
 	}
 	
+	// 총 회원수
+	@Override
+	public int getTotalMember() {
+		int n = dao.getTotalMember();
+		return n;
+	}
+	
 	
 	
 }

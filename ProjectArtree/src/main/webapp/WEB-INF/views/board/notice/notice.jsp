@@ -61,7 +61,9 @@
 	
 	/* 공지 추가, 삭제하기 */
 	#addNoticeContainer {
+		margin-bottom: 100px;
 		border-top: solid 2px black;
+		border-bottom: solid 2px black;
 		padding-left : 200px;
 		padding-top : 20px;
 	}
@@ -434,7 +436,7 @@
 						<input type="radio" name="notCategory" value="1" /> 공지
 						<input type="radio" name="notCategory" value="2" /> FAQ
 					</div>
-					<div align="left" style="margin-top: 50px;">
+					<div align="left" style="margin-top: 50px; margin-bottom: 50px;">
 						<img onclick="" id="addBtn" src="<%= ctxPath %>/resources/images/board/addBtn.JPG" />
 						<img onclick="" id="backBtn" src="<%= ctxPath %>/resources/images/board/backNoticeBtn.JPG" />
 					</div>

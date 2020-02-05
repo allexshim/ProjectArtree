@@ -78,6 +78,19 @@
 		margin : 0 auto;
 	}
 	
+	div#contentContainer table thead th:first-child, div#contentContainer table tbody th:first-child {
+		width : 10%;
+		text-align: center;
+	}
+	div#contentContainer table thead th:nth-child(2), div#contentContainer table tbody th:nth-child(2) {
+		width : 50%;
+		text-align: center;
+	}
+	div#contentContainer table thead th:nth-child(3), div#contentContainer table tbody th:nth-child(3) {
+		width : 15%;
+		text-align: center;
+	}
+	
 	div#contentContainer table thead td:first-child, div#contentContainer table tbody td:first-child {
 		width : 10%;
 		text-align: center;
@@ -113,7 +126,7 @@
 	}
 	
 	#table-area {
-		border: 2px solid navy;
+		padding-top: 100px;
 		height: 50vh;
 	}
 	
@@ -149,21 +162,49 @@
 					
 					html += "<div class='empty' style='font-size:15pt; font-weight: bold;'> 데이터가 존재하지 않습니다. </div><br/><br/>";
 					$(".chart_area").html(html);
-					
 
 				}
 				else {
-					for(var i=0; i<json.length; i++) {
-						var obj = {
-							name: json[i].GENDER === "1" ? "남자" : "여자",
-						    value: json[i].CNT
-					    };
-						resultArr.push(obj); // 배열속에 객체를 넣기
-					} 
+					
+						html += "<thead>"
+						html +=		"<tr>"
+						html +=			"<th>성별</th>"
+						html +=			"<th>회원수</th>"
+						html +=			"<th>성비(%)</th>"
+						html +=		"</tr>"
+						html +=	"</thead>"
+								
+						html +=	"<tbody>"
+						$.each(json, function(index, item){
+							var gender = item.GENDER
+							html +=		"<tr>"
+							html +=			"<td>"+item.GENDER+"</td>"
+ 							html +=			"<td>"+item.CNT+"</td>"
+							html +=			"<td>"+item.PCT+"</td>"
+							html +=		"</tr>"
+									
+						});				
+						html +=		"<tr>"
+						html +=			"<td>전체</td>"
+						html +=			"<td>" + ${ requestScope.totalMember }+ "</td>"
+						html +=			"<td>100</td>"
+						html +=		"</tr>"	
+						html +=	"</tbody>"
+						
+						$(".table").html(html);
 					<%-- 차트 영역 --%>
 					// 성별 차트
 					am4core.ready(function() {
-	
+						
+						for(var i=0; i<json.length; i++) {
+							var obj = {
+								name: json[i].GENDER === "1" ? "남성" : "여성",
+							    value: json[i].CNT
+						    };
+							resultArr.push(obj); // 배열속에 객체를 넣기
+						}
+						
+						
 						// Themes begin
 						am4core.useTheme(am4themes_kelly);
 						am4core.useTheme(am4themes_animated);
@@ -217,18 +258,11 @@
 				if(json.length == 0){
 					
 					html += "<div class='empty' style='font-size:15pt; font-weight: bold;'> 데이터가 존재하지 않습니다. </div><br/><br/>";
-					$(".table-area").html(html);
+					$(".table").html(html);
 					
 
 				}
 				else {
-					for(var i=0; i<json.length; i++) {
-						var obj = {
-							name: json[i].GENDER === "1" ? "남자" : "여자",
-						    value: json[i].CNT
-					    };
-						resultArr.push(obj); // 배열속에 객체를 넣기
-					}
 					
 					
 				}
@@ -277,12 +311,7 @@
 				<%-- 차트에 대한 데이터 테이블은 이곳에 넣으세요 !! --%>
 				
 				<table class="table">
-					<thead>
-					asd
-					</thead>
-					<tbody>
-					asd
-					</tbody>
+					
 				</table>
 				
 			</div>

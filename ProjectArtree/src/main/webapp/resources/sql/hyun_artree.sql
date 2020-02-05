@@ -86,3 +86,18 @@ order by gender;
 
 select to_char(notWriteday, 'yyyy-mm-dd')
 from notice;
+
+select *
+from member;
+
+select count(*) as cnt
+from member
+GROUP BY gender;
+
+select gender, count(*) AS cnt
+from member
+group by gender 
+order by gender desc
+
+sql은 문제가없는대 왜저러가요   order by 빼고 재시작하면 되나요..?
+될걸요 아마 xml파일이 개 좃같더라고요ㄷ ㅆㅃ안되네요 ?
