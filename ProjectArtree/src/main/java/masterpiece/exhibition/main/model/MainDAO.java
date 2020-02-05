@@ -75,14 +75,6 @@ public class MainDAO implements InterMainDAO {
 		return getGenderChart;
 	}
 
-	@Override
-	public int getTotalMember() {
-		int n = sqlsession.selectOne("main.getTotalMember");
-		return n;
-	}
-	
-	
-	
 	
 	
 }

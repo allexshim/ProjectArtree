@@ -154,7 +154,7 @@
 		order by gender desc
 	</select>
 	
-	<select id="getTotalMember" resultType="int">
+	<select id="getTotalMember" resultType="String">
 		select count(*)
 		from member
 	</select>

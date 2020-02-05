@@ -23,6 +23,4 @@ public interface InterMainService {
 	// 성별차트
 	List<HashMap<String, Object>> getGenderChart();
 
-	int getTotalMember();
-
 }

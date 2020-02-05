@@ -94,10 +94,14 @@ select count(*) as cnt
 from member
 GROUP BY gender;
 
-select gender, count(*) AS cnt
+select gender, count(*) AS cnt,round ( count(*) / ( select count(*) from member ) * 100 , 2 ) AS pct, ( select count(*) from member ) as total
 from member
 group by gender 
 order by gender desc
 
-sql은 문제가없는대 왜저러가요   order by 빼고 재시작하면 되나요..?
-될걸요 아마 xml파일이 개 좃같더라고요ㄷ ㅆㅃ안되네요 ?
+select count(*)
+from member
+
+
+
+

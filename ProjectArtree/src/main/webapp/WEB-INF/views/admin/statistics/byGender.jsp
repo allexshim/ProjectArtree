@@ -171,6 +171,7 @@
 						html +=			"<th>성별</th>"
 						html +=			"<th>회원수</th>"
 						html +=			"<th>성비(%)</th>"
+						
 						html +=		"</tr>"
 						html +=	"</thead>"
 								
@@ -178,15 +179,15 @@
 						$.each(json, function(index, item){
 							var gender = item.GENDER
 							html +=		"<tr>"
-							html +=			"<td>"+item.GENDER+"</td>"
+							html +=			"<td>"+(item.GENDER === "1" ? "남성" : "여성")+"</td>" /* 흠*/
  							html +=			"<td>"+item.CNT+"</td>"
 							html +=			"<td>"+item.PCT+"</td>"
 							html +=		"</tr>"
 									
-						});				
+						});	
 						html +=		"<tr>"
 						html +=			"<td>전체</td>"
-						html +=			"<td>" + ${ requestScope.totalMember }+ "</td>"
+						html +=			"<td>" + ${totalCount} + "</td>"
 						html +=			"<td>100</td>"
 						html +=		"</tr>"	
 						html +=	"</tbody>"

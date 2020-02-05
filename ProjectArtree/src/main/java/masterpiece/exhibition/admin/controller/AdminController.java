@@ -82,7 +82,8 @@ public class AdminController {
 	@RequestMapping(value="/byGender.at")
 	public String isAdmin_byGender(HttpServletRequest request, HttpServletResponse response) {
 		
-		
+		int totalCount = service.getTotalCountWithoutSearch();
+		request.setAttribute("totalCount", totalCount);
 		return "admin/statistics/byGender.tiles";
 	}
 	
