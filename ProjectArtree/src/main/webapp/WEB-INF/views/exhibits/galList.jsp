@@ -270,7 +270,7 @@
 		var page = 1;
 		getGalList(page);
 		
-	    /////////////// 이번주 추천 공간
+	    /////////////// 실시간 추천 공간
 	    getGalRecomList();
 
 		$(document).on("mouseover", ".gal_one", function(){
@@ -313,7 +313,7 @@
 	    
 	}); // end of document ready ---------------
 	
-	/////////////////// 이번주 추천 공간 불러오기 //////////////////
+	/////////////////// 실시간 추천 공간 불러오기 //////////////////
 	function getGalRecomList(){
 		
 		$.ajax({
@@ -630,7 +630,7 @@
 		<span class="lt">GALLERY</span>
 	</div>
 
-	<span class="main_title">이번주 추천 공간</span>
+	<span class="main_title">실시간 추천 공간</span>
 
 	
 	<div class="main_top">

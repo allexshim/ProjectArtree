@@ -386,7 +386,7 @@
 							 	  + "<span class='commentNo' style='display:none'>"+item.SEQ+"</span>";
 						 }
 						 else if(${loginuser.status == 2}){
-							 html += "<span class='commentDeleteBtn' style='padding-left:10px; padding-bottom:1px; font-weight: bold;'>삭제</span>"
+							 html += "<span class='commentDeleteBtn' style='padding-left:10px; padding-bottom:1px; font-weight: bold; color:red;'>삭제</span>"
 							 	  + "<span class='commentNo' style='display:none'>"+item.SEQ+"</span>";
 						 }
 							 
