@@ -123,7 +123,13 @@ public class PreviewDAO implements InterPreviewDAO {
 		String bool = sql.selectOne("preview.getPwdCheck", idx);
 		return bool;
 	}
-	
+
+	///////////////// 마지막 비번 변경 시점 6개월 지난 회원 목록 (이메일 전송용 ) ///////////////
+	@Override
+	public List<HashMap<String, String>> getMemberNeedChangePwd() {
+		List<HashMap<String, String>> MemberNeedChangePwd = sql.selectList("preview.getMemberNeedChangePwd");
+		return MemberNeedChangePwd;
+	}
 	
 
 }

@@ -21,12 +21,13 @@ public class PwdChangeCheck {
 	@Autowired
 	private InterPreviewService service;
 
+
 	@Pointcut("execution(public * masterpiece.exhibition..*Controller.loginEnd(..)) ")
 	public void PwdCheck() {}
     // 해당 패키지의 Core클래스의 m1() 이라는 메소드를 Pointcut 으로 지정한다.
 	
 	@After("PwdCheck()")
-	public ModelAndView After(JoinPoint joinPoint) {
+	public ModelAndView After(JoinPoint joinPoint) throws Throwable {
 		
 		HttpServletRequest request = (HttpServletRequest)joinPoint.getArgs()[0];
 		ModelAndView mav = (ModelAndView)joinPoint.getArgs()[1];
@@ -45,15 +46,14 @@ public class PwdChangeCheck {
 			mav.addObject("confirm", confirm);
 			mav.addObject("loc", loc);
 			
-			// 로그인 한 후 로그인 하기 전 페이지로 돌아가는 작업 : goBackURL
-			// === 현재 페이지의 주소(URL) 알아내기 ===
-			// String url = MyUtil.getCurrentURL(request);
-			// session.setAttribute("gobackURL", url); // 세션에 url 정보를 저장시킨다.
-			
 			mav.setViewName("msg");
 
 		}
 
 		return mav;
 	}
+
+	
+	
+	
 }

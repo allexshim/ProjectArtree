@@ -51,8 +51,7 @@
 	
 	/* 공지 추가, 삭제 버튼 */	
 	div#btns {
-		margin-top: 30px;
-		padding-right : 200px;
+		text-align: center;
 		margin-bottom: 40px;
 	}
 	
@@ -62,7 +61,9 @@
 	
 	/* 공지 추가, 삭제하기 */
 	#addNoticeContainer {
+		margin-bottom: 100px;
 		border-top: solid 2px black;
+		border-bottom: solid 2px black;
 		padding-left : 200px;
 		padding-top : 20px;
 	}
@@ -297,10 +298,18 @@
 			$(this).css('opacity','1.0');
 		});
 		
-		$(".noticeTitle").click(function(){
-			$(this).next().slideToggle(500); // 클릭하면 보이고, 보이지 않게 한다.
-			$(this).find("i").toggleClass("fa-chevron-down");
-			$(this).find("i").toggleClass("fa-chevron-up");
+		// 슬라이드 토글 이렇게 햇단말이죵
+		var $noticeTitle = $(".noticeTitle");
+		$noticeTitle.click(function(){
+			var $this = $(this);
+			
+			$noticeTitle.each(function() {
+				$(this).not($this).next().slideUp(500);
+			}).promise().then(function() {
+				$this.next().slideToggle(500); // 클릭하면 보이고, 보이지 않게 한다.
+			});
+			$this.find("i").toggleClass("fa-chevron-down");
+			$this.find("i").toggleClass("fa-chevron-up");
 		});
 		
 		 
@@ -427,7 +436,7 @@
 						<input type="radio" name="notCategory" value="1" /> 공지
 						<input type="radio" name="notCategory" value="2" /> FAQ
 					</div>
-					<div align="left" style="margin-top: 50px;">
+					<div align="left" style="margin-top: 50px; margin-bottom: 50px;">
 						<img onclick="" id="addBtn" src="<%= ctxPath %>/resources/images/board/addBtn.JPG" />
 						<img onclick="" id="backBtn" src="<%= ctxPath %>/resources/images/board/backNoticeBtn.JPG" />
 					</div>

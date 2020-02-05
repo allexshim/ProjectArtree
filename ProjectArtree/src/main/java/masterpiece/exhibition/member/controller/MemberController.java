@@ -479,7 +479,7 @@ public class MemberController {
 
 		HttpSession session = request.getSession();
 		MemberVO loginuser = (MemberVO)session.getAttribute("loginuser");
-		
+
 		String idx = loginuser.getIdx();
 		
 		// 개인 선호 장르 select

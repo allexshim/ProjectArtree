@@ -139,4 +139,24 @@
 		order by E.no desc ) V order by rno asc ) Z where rno <![CDATA[<=]]> 4
 	</select>
 	
+	<resultMap type="HashMap" id="genderMap">
+		<result property="GENDER" column="gender" javaType="String"/>
+		<result property="CNT" column="cnt" javaType="int"/>
+		<result property="PCT" column="pct" javaType="String"/>
+		<result property="TOTAL" column="total" javaType="String"/>
+	</resultMap>
+	
+	<!-- 성별차트 -->
+	<select id="getGenderChart" resultMap="genderMap">
+		select gender, count(*) AS cnt,round ( count(*) / ( select count(*) from member ) * 100 , 2 ) AS pct, ( select count(*) from member ) as total
+		from member
+		group by gender 
+		order by gender desc
+	</select>
+	
+	<select id="getTotalMember" resultType="String">
+		select count(*)
+		from member
+	</select>
+	
 </mapper>

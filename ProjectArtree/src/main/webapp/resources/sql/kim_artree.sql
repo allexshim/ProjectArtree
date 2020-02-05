@@ -452,9 +452,45 @@ nocache;
         
         commit
         
+        delete from preview
+        
 insert into preview (boardno, seq, fk_idx, fk_exhibitionno, name, title, content, readcount, regdate, commentcnt)
 values(3, seq_preview.nextval, 18, 5160, '[The Prize] 노벨상 : 세상을 바꾼 석학들의 유산 전시회', 50, 1, default, default, default)        
         select exhibitionno, exhibitionname, B.mainposter
         from exhibition A left join exhibitiondetail B
         on A.exhibitionno = B.fk_exhibitionno
         where exhibitionno = 5117
+        
+        
+        (
+        select idx, case when(lastpassworddate < add_months(sysdate, -6)) then 'true' else 'false' end AS needChangePwd
+        from member
+        )
+        where needChangePwd = 'true'
+        
+desc member        
+        
+create or replace function func_changePwd(p_lastpassworddate IN date)
+return varchar2
+is
+    v_lastpassworddate varchar2(100);
+begin
+   if( to_char(p_lastpassworddate, 'yy/MM/dd') = to_char(add_months(sysdate, -6), 'yy/MM/dd') ) then v_lastpassworddate := 'need';
+   else v_lastpassworddate := 'noneed';
+   end if;
+
+   return v_lastpassworddate;
+end func_changePwd;
+
+commit
+select name, email 
+from member
+where func_changePwd(lastpassworddate) = 'need'
+
+desc member
+select *
+from member
+
+update member set lastpassworddate = to_char(lastpassworddate+1, 'YY/MM/DD') where idx = 18
+commit
+update member set lastpassworddate = add_months(sysdate, -1) where idx = 1
