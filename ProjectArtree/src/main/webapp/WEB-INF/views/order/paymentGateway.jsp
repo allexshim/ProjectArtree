@@ -53,8 +53,9 @@ $(document).ready(function() {
 		   //1 imp_101725519638 2merchant_1579246724245 353164033
 	   }        
 	   // 실패시
-	   else {		   		   
-		   parent.document.location.reload();		  
+	   else {		  
+		   parent.orderEnd();
+		   //parent.document.location.reload();		  
 	   }   		       
    }); // end of IMP.request_pay()----------------------------
 	   
