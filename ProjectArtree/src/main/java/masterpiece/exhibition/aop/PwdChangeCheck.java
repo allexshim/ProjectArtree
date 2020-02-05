@@ -35,21 +35,25 @@ public class PwdChangeCheck {
 		
 		MemberVO loginuser = (MemberVO)session.getAttribute("loginuser");
 		
-		String idx = loginuser.getIdx();
+		if(loginuser != null) {
+			
+			String idx = loginuser.getIdx();
+			
+			String bool = service.getPwdCheck(idx);
+
+			if("true".equals(bool)) {
+				String confirm = "비밀번호를 변경하신지 6개월이 지났습니다. 지금 변경하시겠습니까?"; 
+				String loc = "/artree";
+				
+				mav.addObject("confirm", confirm);
+				mav.addObject("loc", loc);
+				
+				mav.setViewName("msg");
+
+			}
+			
+		}// end of if --------------------
 		
-		String bool = service.getPwdCheck(idx);
-
-		if("true".equals(bool)) {
-			String confirm = "비밀번호를 변경하신지 6개월이 지났습니다. 지금 변경하시겠습니까?"; 
-			String loc = "/artree";
-			
-			mav.addObject("confirm", confirm);
-			mav.addObject("loc", loc);
-			
-			mav.setViewName("msg");
-
-		}
-
 		return mav;
 	}
 
