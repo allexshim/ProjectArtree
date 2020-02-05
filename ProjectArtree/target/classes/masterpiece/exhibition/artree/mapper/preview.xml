@@ -170,11 +170,23 @@
         where exhibitionno = #{eno}
 	</select>
 	
+	<!-- ////////////////// 6개월 주기로 비밀번호 변경 AOP /////////////// -->
 	<select id="getPwdCheck" resultType="String" parameterType="String">
 		<![CDATA[
 		select case when(lastpassworddate < add_months(sysdate, -6)) then 'true' else 'false' end AS WARN
         from member
         where idx = #{idx}
         ]]>
+	</select>
+	
+	<!-- ////////////////// 6개월 주기로 비밀번호 변경 이메일 전송 /////////////// -->
+	<resultMap type="HashMap" id="getMemberList">
+		<result property="NAME" column="name" javaType="String"/>
+		<result property="EMAIL" column="email" javaType="String"/>
+	</resultMap>
+	<select id="getMemberNeedChangePwd" resultMap="getMemberList">
+		select name, email 
+		from member
+		where func_changePwd(lastpassworddate) = 'need'
 	</select>
 </mapper>

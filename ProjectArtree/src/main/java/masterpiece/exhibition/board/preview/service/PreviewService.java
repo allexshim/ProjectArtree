@@ -4,15 +4,20 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import masterpiece.exhibition.board.preview.model.InterPreviewDAO;
+import masterpiece.exhibition.mail.GoogleMail;
 
 @Service
 public class PreviewService implements InterPreviewService {
 
 	@Autowired
 	private InterPreviewDAO dao;
+
+	@Autowired
+	private GoogleMail mail;
 	
 	////////////////////////// 전시회명 검색 - 모달에 띄울 전시회 리스트 ////////////////////////////
 	@Override
@@ -120,5 +125,36 @@ public class PreviewService implements InterPreviewService {
 		String bool = dao.getPwdCheck(idx);
 		return bool;
 	}
+
+	///////////////////// 마지막 비번 변경 시점 6개월 지난 회원 이메일 목록 ( 이메일 전송용 ) //////////////////
+	@Scheduled(cron="0 0 12 * * ?")
+	@Override	
+	public void sendEmailForChangePwd() throws Exception {
+		
+		List<HashMap<String, String>> memberList = dao.getMemberNeedChangePwd();
+
+		// 메일 보내기 //
+		if(memberList.size() > 0) {
+			System.out.println("memberList.size() : "+memberList.size()); // memberList.size() : 1
+			System.out.println("memberList : "+memberList); // memberList : [{EMAIL=forkhclass@gmail.com, NAME=김현지}]
+		   	
+			for(int i=0; i<memberList.size(); i++) {
+ 		
+		   		String emailContents = "<div style='border: solid 1px #e6e6e6; display:block; padding: 50px 20px; color:#000'>"
+		   							 + "<span style='font-size:50pt; font-weight: bold;'>THANK YOU</span>"
+		   							 + "<br/><br/><br/>"
+		   							 + "<span style='font-size:13pt; margin-bottom:10px; display:block;'>마지막으로 비밀번호를 변경하신지 6개월이 지났습니다.</span>"
+		   							 + "<span>변경을 원하시면 아래의 <strong>버튼</strong>을 클릭해주세요.</span>"
+		   							 + "<br/><br/><br/>"
+		   							 + "<a href='http://localhost:9090/artree/mypage_set.at' style='color:#000; background-color:#e6e6e6; text-decoration: none; padding: 10px; border-radius:5px;'><span style='font-weight:bold;'>아트맵 페이지로 이동하기</span></a>"
+		   							 + "</div>";
+		   		
+		   		String name = memberList.get(i).get("NAME");
+		   		
+		   		mail.sendmail_changePwd(memberList.get(i).get("EMAIL"), emailContents, name);
+		   	}
+			
+		}// end of if -------------------
+	} // end of public void sendEmailForChangePwd() -----------------
 
 }
