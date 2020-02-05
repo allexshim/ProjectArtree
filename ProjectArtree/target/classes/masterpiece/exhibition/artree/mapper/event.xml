@@ -83,5 +83,14 @@
 		CONTENT = #{content}, STARTDATE = #{period}, ENDDATE = #{periodEnd}
 		where NO = #{no}
 	</update>
+	
+	<resultMap type="HashMap" id="getMemberEmail">
+		<result property="EMAIL" column="email" javaType="String"/>
+	</resultMap>
+	
+	<select id="getMemberEmail" resultMap="getMemberEmail">
+		select email
+		from member
+	</select>
 		
 </mapper>

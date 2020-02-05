@@ -25,5 +25,8 @@ public interface InterEventService {
 
 	// 이벤트 수정
 	int modifyEvent(HashMap<String, String> map);
+	
+	// 메일 보낼 회원 이메일 구하기
+	List<HashMap<String, String>> getMemberEmail();
 
 }

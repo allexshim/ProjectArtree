@@ -59,5 +59,12 @@ public class EventDAO implements InterEventDAO {
 		int n = sqlsession.update("event.modifyEvent",map);
 		return n;
 	}
+	
+	// 메일보낼 전체 회원 이메일 구하기
+	@Override
+	public List<HashMap<String, String>> getMemberEmail() {
+		List<HashMap<String, String>> memberList = sqlsession.selectList("event.getMemberEmail");
+		return memberList;
+	}
 
 }
