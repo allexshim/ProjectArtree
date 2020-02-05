@@ -62,7 +62,7 @@
 	
 	/* 공지 추가, 삭제하기 */
 	#addNoticeContainer {
-		margin-bottom: 100px;
+		margin-bottom: 50px;
 		border-top: solid 2px black;
 		border-bottom: solid 2px black;
 		padding-left : 0;

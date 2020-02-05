@@ -61,5 +61,12 @@ public class EventService implements InterEventService {
 		int n = dao.modifyEvent(map);
 		return n;
 	}
+	
+	// 메일 보낼 회원 이메일
+	@Override
+	public List<HashMap<String, String>> getMemberEmail() {
+		List<HashMap<String, String>> memberList = dao.getMemberEmail();
+		return memberList;
+	}
 
 }
