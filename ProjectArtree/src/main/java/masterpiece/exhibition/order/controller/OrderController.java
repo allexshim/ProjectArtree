@@ -1,5 +1,7 @@
 package masterpiece.exhibition.order.controller;
 
+import java.io.UnsupportedEncodingException;
+import java.security.GeneralSecurityException;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -23,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import masterpiece.exhibition.common.AES256;
 import masterpiece.exhibition.common.MyUtil;
 import masterpiece.exhibition.member.model.MemberVO;
 import masterpiece.exhibition.order.service.InterOrderService;
@@ -32,7 +35,9 @@ public class OrderController {
 
 	@Autowired
 	private InterOrderService service;
-
+	
+	private AES256 aes;
+	
 	@RequestMapping(value = "/ticketsbin.at")
 	public String ticketsbin(HttpServletRequest request, HttpServletResponse response) {
 		
@@ -160,7 +165,13 @@ public class OrderController {
 	@RequestMapping(value = "/paymentGatebin.at")
 	public String paymentGatebin(HttpServletRequest request, HashMap<String,String> map) {
 		HttpSession session = request.getSession();		
-		MemberVO mvo = (MemberVO)session.getAttribute("loginuser");		
+		MemberVO mvo = (MemberVO)session.getAttribute("loginuser");
+		
+		String email = mvo.getEmail();
+		String name = mvo.getName();
+		request.setAttribute("email", email);
+		request.setAttribute("name", name);		
+		
 		String idx = mvo.getIdx();	
 		map.put("idx", idx);
 		List<HashMap<String,String>> mapList = service.selectCartNoList(map);
