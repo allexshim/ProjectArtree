@@ -227,7 +227,6 @@ public class MemberController {
 		
 		// 로그인 확인
 		MemberVO loginuser = service.getLoginMember(paraMap);
-		
 		HttpSession session = request.getSession();
 		
 		if(loginuser == null) {
