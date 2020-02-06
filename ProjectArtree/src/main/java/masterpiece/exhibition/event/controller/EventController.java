@@ -203,9 +203,6 @@ public class EventController {
 			if(n==1) { 
 				msg = "글쓰기 완료!"; 
 				
-				// ======= #190. *** 제품 입고가 완료되었다라는 email 보내기 시작 *** ======= //
-			   	// 위에서 선언된 mail 이라는 의존객체를 사용할 것임.
-				
 			/*	// 메일 보내기 (모든 회원에게) //
 			   	
 				if(memberList != null && memberList.size() > 0) {
