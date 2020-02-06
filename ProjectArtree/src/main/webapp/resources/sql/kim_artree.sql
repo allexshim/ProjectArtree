@@ -490,7 +490,11 @@ where func_changePwd(lastpassworddate) = 'need'
 desc member
 select *
 from member
+commit
+update member set status = 2 where name = '김현경'
 
 update member set lastpassworddate = to_char(lastpassworddate+1, 'YY/MM/DD') where idx = 18
 commit
 update member set lastpassworddate = add_months(sysdate, -1) where idx = 1
+
+
