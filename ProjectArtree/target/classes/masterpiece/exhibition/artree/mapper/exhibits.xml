@@ -408,4 +408,12 @@
 		)
 		where RNO between #{start} and #{end}
 	</select>
+	
+	<update id="updateExhibitsStatus">
+		<![CDATA[
+		update exhibition set status = case when enddate < sysdate then '전시종료'
+                                    	    when startdate > sysdate then '전시예정'
+                                    		when startdate < sysdate and enddate > sysdate then '전시중' else '-' end
+    	]]>
+	</update>
 </mapper>
