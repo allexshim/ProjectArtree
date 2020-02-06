@@ -1056,7 +1056,7 @@
 
 						html += "<tr>"
 							 + "<td>"+(item.startIdx-index)+"</td>"
-							 + "<td><a href='javascript:void(0);' onclick='<%=ctxPath%>/reviewDetail.at?revno="+item.REVNO+"'>"+item.REVTITLE+"</a></td>"
+							 + "<td><a href='<%=ctxPath%>/reviewDetail.at?revno="+item.REVNO+"'>"+item.REVTITLE+"</a></td>"
 							 + "<td>"+item.FK_NAME+"</td>"
 							 + "<td style='display: none;'></td>"
 							 + "</tr>";
@@ -1137,7 +1137,7 @@
 						
 						html += "<tr>"
 							 + "<td>"+(item.startIdx-index)+"</td>"
-							 + "<td><a href='javascript:void(0);' onclick='<%=ctxPath%>/previewDetail.at?bno="+item.SEQ+"'>"+item.TITLE+"</a></td>"
+							 + "<td><a href='<%=ctxPath%>/previewDetail.at?bno="+item.SEQ+"'>"+item.TITLE+"</a></td>"
 							 + "<td>"+item.NAME+"</td>"
 							 + "<td style='display: none;'></td>"
 							 + "</tr>";
