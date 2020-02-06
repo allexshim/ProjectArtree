@@ -403,10 +403,11 @@
 	</resultMap>
 	<select id="getChartByTicketingRate" parameterType="int" resultMap="getChartByTicketingRateMap">
 		select D.exname AS name
-			, count(*) AS cnt
+			, sum( E.qt ) AS cnt
 			, round ( count(*) / ( select count(*) from reserdetail ) * 100 , 2 ) AS pct
 		from reser R LEFT JOIN reserdetail D
 		on R.reserno = D.fk_reserno
+        JOIN reserex E on D.reserdetailno = E.fk_reserdetailno
 		group by D.exname
 		order by cnt desc
 	</select>

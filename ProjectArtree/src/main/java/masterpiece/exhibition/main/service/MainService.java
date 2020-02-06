@@ -64,6 +64,4 @@ public class MainService implements InterMainService {
 		return getGenderChart;
 	}
 	
-	
-	
 }

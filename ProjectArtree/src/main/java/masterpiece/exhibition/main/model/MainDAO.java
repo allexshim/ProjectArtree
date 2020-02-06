@@ -74,9 +74,7 @@ public class MainDAO implements InterMainDAO {
 		List<HashMap<String, Object>> getGenderChart = sqlsession.selectList("main.getGenderChart");
 		return getGenderChart;
 	}
-	
-	
-	
+
 	
 	
 }

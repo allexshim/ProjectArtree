@@ -29,12 +29,12 @@
         from (
         select readCount, rownum as rno, exhibitionno, fk_galleryno, exhibitionname, author, startdate, enddate, mainposter, galleryname, galleryno, location
         from ( select * from  ( select *
-		from exhibition V join exhibitionDetail D
+		from (select * from exhibition where to_date(endDate) <![CDATA[>=]]> sysdate) V join exhibitionDetail D
 		on V.exhibitionno = D.fk_exhibitionno
         ) E join gallery G
         on E.fk_galleryno = G.galleryno
         order by E.readCount desc
-        ) F ) Z where rno <![CDATA[<=]]> 3
+        ) F ) Z where rno<![CDATA[<=]]> 3
 	</select>
 
 	<!-- 가장 최신에 등록된 전시회 3개를 가져온다. -->
@@ -43,7 +43,7 @@
         from (
         select readCount, rownum as rno, exhibitionno, fk_galleryno, exhibitionname, author, startdate, enddate, mainposter, galleryname, galleryno, location
         from ( select * from  ( select *
-		from exhibition V join exhibitionDetail D
+		from (select * from exhibition where to_date(endDate) <![CDATA[>=]]> sysdate) V join exhibitionDetail D
 		on V.exhibitionno = D.fk_exhibitionno
         ) E join gallery G
         on E.fk_galleryno = G.galleryno
@@ -107,7 +107,8 @@
         from
         (select * from 
         (select * from exhibition
-        where tag like '%' || #{ favorTag,jdbcType=INTEGER } || '%' ) V 
+        where tag like '%' || #{ favorTag,jdbcType=INTEGER } || '%'
+        and to_date(endDate) <![CDATA[>=]]> sysdate ) V 
         join exhibitionDetail D
         on V.exhibitionno = D.fk_exhibitionno) 
         E join gallery G
@@ -142,14 +143,21 @@
 	<resultMap type="HashMap" id="genderMap">
 		<result property="GENDER" column="gender" javaType="String"/>
 		<result property="CNT" column="cnt" javaType="int"/>
+		<result property="PCT" column="pct" javaType="String"/>
+		<result property="TOTAL" column="total" javaType="String"/>
 	</resultMap>
 	
 	<!-- 성별차트 -->
 	<select id="getGenderChart" resultMap="genderMap">
-		select gender, count(*) AS cnt
+		select gender, count(*) AS cnt,round ( count(*) / ( select count(*) from member ) * 100 , 2 ) AS pct, ( select count(*) from member ) as total
 		from member
-		group by gender
+		group by gender 
 		order by gender desc
+	</select>
+	
+	<select id="getTotalMember" resultType="String">
+		select count(*)
+		from member
 	</select>
 	
 </mapper>

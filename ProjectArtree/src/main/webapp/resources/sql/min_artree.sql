@@ -362,9 +362,29 @@ select D.exname AS name
 select round ( count(*) / ( select count(*) from reserdetail ) * 100 , 2 ) AS pct from reserdetail;
 
 
+select * from appliedexhibits;
+  
+desc appliedexhibits;
+
+select * from applieddetail;
+
+desc applieddetail;
 
 
+		select D.exname AS name
+			, sum( E.qt ) AS cnt
+			, round ( count(*) / ( select count(*) from reserdetail ) * 100 , 2 ) AS pct
+		from reser R LEFT JOIN reserdetail D
+		on R.reserno = D.fk_reserno
+        JOIN reserex E on D.reserdetailno = E.fk_reserdetailno
+		group by D.exname
+		order by cnt desc ;
+        
+select * from reser;
 
+select * from reserdetail;
+
+select * from reserex;
 
 
 

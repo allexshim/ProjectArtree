@@ -82,7 +82,8 @@ public class AdminController {
 	@RequestMapping(value="/byGender.at")
 	public String isAdmin_byGender(HttpServletRequest request, HttpServletResponse response) {
 		
-		
+		int totalCount = service.getTotalCountWithoutSearch();
+		request.setAttribute("totalCount", totalCount);
 		return "admin/statistics/byGender.tiles";
 	}
 	
@@ -93,7 +94,7 @@ public class AdminController {
 	}
 	
 	@RequestMapping(value="/byTicketingRate.at")
-	public String byTicketingRate(HttpServletRequest request, HttpServletResponse response) {
+	public String isAdmin_byTicketingRate(HttpServletRequest request, HttpServletResponse response) {
 		
 		int totalCount = service.getTotalCount();
 		request.setAttribute("totalCount", totalCount);
@@ -118,8 +119,6 @@ public class AdminController {
 	public String isAdmin_exhibitionDetail(HttpServletRequest request, HttpServletResponse response) {
 		
 		String no = request.getParameter("no"); // 목록에서 넘겨준 글번호를 받아옵니다.
-		
-	//	System.out.println("====================== " + no);
 		
 		HashMap<String, String> exhibitionInfo = service.getExhibitionDetail(no);
 		
@@ -1089,7 +1088,7 @@ public class AdminController {
 	
 	///////////////////////////// 회원상세정보 //////////////////////////////
 	@RequestMapping(value="/memberInfo.at")
-	public ModelAndView memberInfo(HttpServletRequest request, HttpServletResponse response, ModelAndView mav) {
+	public ModelAndView isAdmin_memberInfo(HttpServletRequest request, HttpServletResponse response, ModelAndView mav) {
 		
 		String no = request.getParameter("no");
 		
@@ -1117,7 +1116,7 @@ public class AdminController {
 	
 	@ResponseBody
 	@RequestMapping(value="/orderInfo.at", produces="text/plain;charset=UTF-8")
-	public String orderInfo(HttpServletRequest request, HttpServletResponse response) {
+	public String isAdmin_orderInfo(HttpServletRequest request, HttpServletResponse response) {
 		
 		String reserno = request.getParameter("reserno");
 	//	System.out.println("============================ reserno : " + reserno);
@@ -1151,7 +1150,7 @@ public class AdminController {
 	/////////////////// 예매율 통계 ///////////////////
 	@ResponseBody
 	@RequestMapping(value="/getChartByTicketingRate.at", produces="text/plain;charset=UTF-8")
-	public String getChartByTicketingRate(HttpServletRequest request, HttpServletResponse response) {
+	public String isAdmin_getChartByTicketingRate(HttpServletRequest request, HttpServletResponse response) {
 		
 		int totalCount = service.getTotalCount();
 		List<HashMap<String, String>> exList = service.getChartByTicketingRate(totalCount);
@@ -1173,7 +1172,7 @@ public class AdminController {
 	}
 	
 	@RequestMapping(value="/downloadExcelFile.at")
-	public String downloadExcelFile(HttpServletRequest request, Model model) {
+	public String isAdmin_downloadExcelFile(HttpServletRequest request, Model model) {
 		
 		List<HashMap<String, String>> exList = service.getChartByTicketingRate(0);
 		
@@ -1245,14 +1244,14 @@ public class AdminController {
 		CellRangeAddress 생성자의 인자로(시작 행, 끝 행, 시작 열, 끝 열) 순서대로 넣어서 병합시킬 범위를 정한다. 배열처럼 시작은 0부터이다.  
 		*/
 		// 병합할 행 만들기
-		Row mergeRow = sheet.createRow(rowLocation);  // 엑셀에서 행의 시작은 0 부터 시작한다.
+	//	Row mergeRow = sheet.createRow(rowLocation);  // 엑셀에서 행의 시작은 0 부터 시작한다.
 		
 		// 병합할 행에 우리회사 사원정보로 셀을 만들어 셀에 스타일을 주기 
-		for(int i=0; i<8; i++) {
-		Cell cell = mergeRow.createCell(i);
-		cell.setCellStyle(mergeRowStyle);
-		cell.setCellValue("ATREE 예매율");
-		}
+//		for(int i=0; i<8; i++) {
+//		Cell cell = mergeRow.createCell(i);
+//		cell.setCellStyle(mergeRowStyle);
+//		cell.setCellValue("ATREE 예매율");
+//		}
 		
 		// 셀 병합하기 
 	//	sheet.addMergedRegion(new CellRangeAddress(rowLocation, rowLocation, 0, 7)); // 시작 행, 끝 행, 시작 열, 끝 열 

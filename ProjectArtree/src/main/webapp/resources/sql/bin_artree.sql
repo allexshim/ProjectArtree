@@ -239,3 +239,4 @@ select * from event a inner join exhibitionDetail b
 select * from reser order by reserno desc
 select * from reserdetail order by reserdetailno desc
 select * from reserex order by reserexno desc
+commit;

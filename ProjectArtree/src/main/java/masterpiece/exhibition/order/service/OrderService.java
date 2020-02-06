@@ -217,7 +217,7 @@ public class OrderService implements InterOrderService {
 	}
 	
 	// 전시 하루전에 메일 보내기 
-	@Scheduled(cron="0 0 0 * * *")
+	@Scheduled(cron="0 0 13 * * *")
 	@Override  
 	public void ddayAlarmEmail() throws Exception {
 		// <<주의>> 스케줄러로 사용되어지는 메소드는 반드시 파라미터가 없어야 한다.!!!!		

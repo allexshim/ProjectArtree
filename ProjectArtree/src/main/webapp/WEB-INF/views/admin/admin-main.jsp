@@ -15,8 +15,10 @@ body, html {
 }
 
 #container-admin {
-	margin: 20vh auto;
+	padding: 30vh;
+	margin: 0 auto;
 	width: 90%;
+	height: 100vh;
 }
 
 .categories {

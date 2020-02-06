@@ -28,5 +28,5 @@ public interface InterMainDAO {
 	
 	// 성별 차트
 	List<HashMap<String, Object>> getGenderChart();
-
+	
 }

@@ -41,7 +41,9 @@ select detailAddress, exhibitionName, galleryName, startDate, endDate, mainPoste
 select * from gallery order by to_number(galleryno) desc;
 
 select * from exhibition;
-select * from exhibitionDetail;
+select * from member;
+
+select exhibitionno from exhibition where price != 0;
 
 select *
 from exhibition E join exhibitionDetail D

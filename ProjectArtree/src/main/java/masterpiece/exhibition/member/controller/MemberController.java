@@ -228,7 +228,6 @@ public class MemberController {
 		
 		// 로그인 확인
 		MemberVO loginuser = service.getLoginMember(paraMap);
-		
 		HttpSession session = request.getSession();
 		
 		if(loginuser == null) {
@@ -480,7 +479,7 @@ public class MemberController {
 
 		HttpSession session = request.getSession();
 		MemberVO loginuser = (MemberVO)session.getAttribute("loginuser");
-		
+
 		String idx = loginuser.getIdx();
 		
 		// 개인 선호 장르 select

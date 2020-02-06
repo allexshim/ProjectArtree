@@ -206,6 +206,8 @@ public class MainController {
 	
 	jobj.put("GENDER", chart.get("GENDER"));
 	jobj.put("CNT", chart.get("CNT"));
+	jobj.put("PCT", chart.get("PCT"));
+	jobj.put("TOTAL", chart.get("TOTAL"));
 	
 	jsonArr.put(jobj);
 	

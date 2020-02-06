@@ -36,5 +36,7 @@ public interface InterPreviewDAO {
 	HashMap<String, String> getPreviewWriteHelper(String eno); // 전시회 목록에서 기대평 작성 시 해당 전시회 정보 불러오기
 
 	String getPwdCheck(String idx); // 마지막 비번 변경 시점 6개월 체크 
+
+	List<HashMap<String, String>> getMemberNeedChangePwd(); // 마지막 비번 변경 시점 6개월 지난 회원 이메일 목록 ( 이메일 전송용 )
 	
 }
