@@ -600,7 +600,7 @@ $(function () {
 			
 			$.each(json, function(index, item){
 				
-				html += "<a href='#' class='event_one flash hover-top'>"
+				html += "<a href='<%= ctxPath%>/event.at' class='event_one flash hover-top'>"
 					 +	"<img class='event_poster' src='"+item.mainPoster+"' >"
 					 +		"<span class='end-exp'>"+item.eventName+"</span>"
 					 +		"<span class='end-exp forMoving'>"+item.startDate+"~"+item.endDate+"</span>"
@@ -744,7 +744,7 @@ function exhDetail(eno){
 		<h2>EVENT</h2>
 	</div>
 	<div class="event-more" style="float: right; transform:translate(-35px, 700px);">
-		<a class="event-morebtn " href="<%= ctxPath%>/eventList.at">모두보기 +</a>
+		<a class="event-morebtn " href="<%= ctxPath%>/event.at">모두보기 +</a>
 	</div>
 	<hr color="black;" style="width:94%; transform:translate(38px,725px);" />
        	<div class="event-div" style="transform:translate(0, 480px);">
