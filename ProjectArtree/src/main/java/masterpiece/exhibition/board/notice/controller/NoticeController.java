@@ -37,7 +37,7 @@ public class NoticeController {
 	 String str_currentShowPageNo = request.getParameter("currentShowPageNo");
       
      int totalCount = 0; // 총게시물 건수
-     int sizePerPage = 5; // 한 페이지당 보여줄 게시물 수
+     int sizePerPage = 10; // 한 페이지당 보여줄 게시물 수
      int currentShowPageNo = 0;
      int totalPage = 0; // 총 페이지 수
      int startRno = 0; // 시작 행번호
@@ -124,12 +124,16 @@ public class NoticeController {
 		
 		request.setAttribute("sizePerPage", sizePerPage);
 		request.setAttribute("pageBar", pageBar);
-
 		request.setAttribute("noticeList", noticeList);
 		
 		////////////////// 공지목록 끝 ////////////////////////////////
 		
+		/////////////// faq 목록 ////////////////////
+		List<HashMap<String,String>> faqList = service.getFAQ();
+		request.setAttribute("faqList", faqList);
+		
 		return "board/notice/notice.tiles";
+		/////////////// faq 목록 ////////////////////
 	}
 	
 	// 새 글 입력하기
@@ -145,7 +149,7 @@ public class NoticeController {
 		// 크로스 사이트 공격 방지
 		notTitle = MyUtil.replaceParameter(notTitle);
 		notContent = MyUtil.replaceParameter(notContent);
-		
+		notContent = notContent.replace("\r\n", "<br/>");
 		HashMap<String,String> addNotice = new HashMap<String,String>();
 		
 		addNotice.put("notTitle", notTitle);
@@ -153,7 +157,7 @@ public class NoticeController {
 		addNotice.put("notNo",notNo);
 		addNotice.put("notWriteday",notWriteday);
 		addNotice.put("notCategory", notCategory);
-		
+	
 		// 새 글 추가하기
 		int n = service.addNotice(addNotice);
 		

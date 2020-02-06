@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.json.JSONArray;
@@ -12,6 +13,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 
 import masterpiece.exhibition.main.service.InterMainService;
 import masterpiece.exhibition.member.model.MemberVO;
@@ -187,5 +191,29 @@ public class MainController {
 	} // end of getNewEvent ---------------------------------------
 	
 	
+	// 성별 차트
+	@ResponseBody
+	@RequestMapping(value = "/getGenderChart.at", produces = "text/plain;charset=UTF-8")
+	public String getGenderChart(HttpServletRequest request) {
+	
+	List<HashMap<String, Object>> getGenderChart = service.getGenderChart(); // 성별 차트
+	
+	JSONArray jsonArr = new JSONArray();
+	
+	for (HashMap<String, Object> chart : getGenderChart) {
+	
+	JSONObject jobj = new JSONObject();
+	
+	jobj.put("GENDER", chart.get("GENDER"));
+	jobj.put("CNT", chart.get("CNT"));
+	jobj.put("PCT", chart.get("PCT"));
+	jobj.put("TOTAL", chart.get("TOTAL"));
+	
+	jsonArr.put(jobj);
+	
+	}
+	
+	return jsonArr.toString();
+	}
 	
 }

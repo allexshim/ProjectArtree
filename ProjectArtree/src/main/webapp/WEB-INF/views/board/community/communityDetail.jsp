@@ -413,7 +413,7 @@
 					<img id="deleteBtn" src="<%= ctxPath %>/resources/images/board/deleteBtn.JPG" />
 				</div>
 			</c:if>
-			<c:if test="${ loginuser.status == 2 }">
+			<c:if test="${ item.fk_idx != loginuser.idx && loginuser.status == 2 }">
 				<div id="myBtns">
 					<img id="deleteBtn" src="<%= ctxPath %>/resources/images/board/deleteBtn.JPG" />
 				</div>

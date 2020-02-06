@@ -22,12 +22,6 @@
 		-webkit-transform:translate(-10px,0);
 	}
 	
-	#noticeContainer {
-		
-		padding-bottom: 300px;
-	}
-	
-	
 	
 	img#boardtop {
 		/* position : absolute; */
@@ -36,7 +30,7 @@
 	}
 	
 	div#topText {
-		margin-bottom: 100px;
+		
 		padding-top : 50px;
 		width : 500px;
 		text-align: left;
@@ -51,22 +45,14 @@
 		font-size: 50px;
 	}
 	
-	div#topText > h4 {
-		display : inline-block;
-		margin-right : 30px;
-		padding-top : 20px;
-		font-weight : bold;
-		color : gray;
-		cursor : pointer;
+	.tabtitle {
+		
 	} 
-	
-	div#topText .current {
-		color : black;
-	}
 	
 	/* 공지 추가, 삭제 버튼 */	
 	div#btns {
-		padding-right : 200px;
+		margin-top: 50px;
+		text-align: right;
 		margin-bottom: 40px;
 	}
 	
@@ -76,8 +62,10 @@
 	
 	/* 공지 추가, 삭제하기 */
 	#addNoticeContainer {
-		
-		padding-left : 200px;
+		margin-bottom: 50px;
+		border-top: solid 2px black;
+		border-bottom: solid 2px black;
+		padding-left : 0;
 		padding-top : 20px;
 	}
 	
@@ -111,10 +99,8 @@
 	}
 
 	/* 공지 내용 */
-	div#noticeList {
-		padding-top : 10px;
-		padding-left : 200px;
-		padding-bottom : 0;
+	div.noticeList {
+		padding-top : 10px; 
 	}
 	
 	.noticeTitle {
@@ -178,6 +164,19 @@
 	   text-decoration: underline;
 	}
 	
+	.tabWrap { width: 1200px; min-height: 700px; margin-top: 30px;}
+	.tab_Menu { border-bottom: solid 2px #f3f3f3; margin: 0px; padding: 0px; list-style: none; }
+	.tab_Menu::after {content: '';display:table;clear:both;overflow:hidden;visibility:hidden;}
+	.tabMenu { width: 150px; margin: 0px; text-align: left; cursor: pointer;
+			   padding-top: 10px; padding-bottom: 10px; float: left; }
+		.tabMenu a { font-size: 15pt;
+					 font-weight : bold;
+					 color: black;
+					 text-decoration: none;
+					 cursor : pointer; }
+	.tab_Content_Wrap::after {content: '';display:table;clear:both;overflow:hidden;visibility:hidden;}
+	.tabPage { width: 1200px; float: left; padding-top: 30px; }
+	
 </style>
 
 <script src="<%= ctxPath%>/resources/js/jquery-3.3.1.min.js"></script>
@@ -187,19 +186,7 @@
 		$(".noticeContent").hide();
 		$("#addNoticeContainer").hide();
 		$("#backNotice").hide();
-		
-		// 공지사항/자주묻는 질문 버튼 hover 효과
-		$("div#topText > h4").hover(function(){
-			$(this).css('opacity','0.8');
-		}, function(){
-			$(this).css('opacity','1.0');
-		});
-		
-		// 공지사항/자주묻는 질문 버튼 선택 
-		$("div#topText > h4").click(function(){
-			$("div#topText > h4").removeClass("current");
-			$(this).addClass("current");
-		});
+		$(".faqList").hide();
 		
 		// 공지 추가/삭제 버튼 hover 효과
 		$("div#btns img").hover(function(){
@@ -207,6 +194,11 @@
 		}, function(){
 			$(this).css('opacity','1.0');
 		});
+		
+		$(".tabMenu").click(function(){
+	         $(".tabMenu").css('opacity','0.3');
+	         $(this).css('opacity','1.0');
+	      });
 		
 		// 공지 추가하기 -------------------------------------------
 		$("#addNotice").click(function(){
@@ -307,18 +299,56 @@
 			$(this).css('opacity','1.0');
 		});
 		
-		$(".noticeTitle").click(function(){
-			$(this).next().toggle(); // 클릭하면 보이고, 보이지 않게 한다.
-			$(this).find("i").toggleClass("fa-chevron-down");
-			$(this).find("i").toggleClass("fa-chevron-up");
+		// 슬라이드 토글 이렇게 햇단말이죵
+		var $noticeTitle = $(".noticeTitle");
+		$noticeTitle.click(function(){
+			var $this = $(this);
+			
+			$noticeTitle.each(function() {
+				$(this).not($this).next().slideUp(500);
+			}).promise().then(function() {
+				$this.next().slideToggle(500); // 클릭하면 보이고, 보이지 않게 한다.
+			});
+			$this.find("i").toggleClass("fa-chevron-down");
+			$this.find("i").toggleClass("fa-chevron-up");
 		});
-		
 		
 		 
 	}); // end of document.ready ---------------------------------------
 
 	
-	
+	function tabSetting() {
+		// 탭 컨텐츠 hide 후 현재 탭메뉴 페이지만 show
+		$('.tabPage').hide();
+		$($('.current').find('a').attr('href')).show();
+
+		// Tab 메뉴 클릭 이벤트 생성
+		$('li').click(function (event) {
+			var tagName = event.target.tagName; // 현재 선택된 태그네임
+			var selectedLiTag = (tagName.toString() == 'A') ? $(event.target).parent('li') : $(event.target); // A태그일 경우 상위 Li태그 선택, Li태그일 경우 그대로 태그 객체
+			var currentLiTag = $('li[class~=current]'); // 현재 current 클래스를 가진 탭
+			var isCurrent = false;  
+			
+			// 현재 클릭된 탭이 current를 가졌는지 확인
+			isCurrent = $(selectedLiTag).hasClass('current');
+			
+			// current를 가지지 않았을 경우만 실행
+			if (!isCurrent) {
+				$($(currentLiTag).find('a').attr('href')).hide();
+				$(currentLiTag).removeClass('current');
+
+				$(selectedLiTag).addClass('current');
+				$($(selectedLiTag).find('a').attr('href')).show();
+			}
+
+			return false;
+		});
+	}
+
+	$(function () {
+		// 탭 초기화 및 설정
+		tabSetting();
+	});
 </script>
 </head>
 <body>
@@ -330,60 +360,93 @@
 		<div id="topText">
 			<span style="text-align:center">Membership</span>
 			<h1 style="margin:0;">Notice</h1>
-			<h4 class="current">공지사항</h4>
-			<h4 >자주 묻는 질문</h4>
-		</div>
-		<c:if test="${sessionScope.loginuser.status == 2}">
-			<div id="btns" align="right">
-				<img id="addNotice" src="<%= ctxPath %>/resources/images/board/addNoticeBtn.JPG" />
-				<img id="removeNotice" src="<%= ctxPath %>/resources/images/board/deleteNoticeBtn.JPG" />
-				<img id="backNotice" src="<%= ctxPath %>/resources/images/board/backNoticeBtn.JPG" />
-			</div>
-		</c:if>
-		<!--  add 버튼을 누르면 나타나는 공지 추가하기  -->
-		<div id="addNoticeContainer">
-			<form id="newNotice" name="newNotice">
-				<span>
-					<i class="fas fa-plus"></i>
-					<input type="text" name="notTitle" id="notTitle" placeholder="제목을 입력하세요." /><br/>
-					<textarea name="notContent" id="notContent" placeholder="내용을 입력하세요."></textarea>
-				</span>
-				<div class="category">
-					<input type="radio" name="notCategory" value="1" /> 공지
-					<input type="radio" name="notCategory" value="2" /> FAQ
-				</div>
-				<div align="center">
-					<img onclick="" id="addBtn" src="<%= ctxPath %>/resources/images/board/addBtn.JPG" />
-					<img onclick="" id="backBtn" src="<%= ctxPath %>/resources/images/board/backNoticeBtn.JPG" />
-				</div>
+			<div class="tabWrap">
+				<ul class="tab_Menu">
+					<li class="tabMenu current" style="opacity: 1.0;">
+						<a class="tabTitle" href="#tabContent01" >공지 사항</a>
+					</li>
+					<li class="tabMenu" style="opacity: 0.3;">
+						<a class="tabTitle" href="#tabContent02" >자주 묻는 질문</a>
+					</li>
+				</ul>
 				
-			</form>
-		</div>
-	
-		<c:forEach var="item" items="${noticeList}">
-			<c:if test="${item.notCategory == '1'}">
-				<div id="noticeList">
-					<div class="singleNotice">
-						<span class="noticeTitle"> ${item.notTitle}
-						 <i class="arrow fas fa-chevron-down"></i>
-						 <span class="noticeNo" style="display:none;">${item.notNo}</span>
-						 </span>
-						<div class="noticeContent" style="width:60%;">
-							${item.notContent}
-							
-							<br/><br/><br/><br/><br/>
-							<p>작성일 : ${item.NOTWRITEDAY}</p>
-						</div>	
-					</div>
+				<c:if test="${sessionScope.loginuser.status == 2}">
+				<div id="btns" align="right">
+					<img id="addNotice" src="<%= ctxPath %>/resources/images/board/addNoticeBtn.JPG" />
+					<img id="removeNotice" src="<%= ctxPath %>/resources/images/board/deleteNoticeBtn.JPG" />
+					<img id="backNotice" src="<%= ctxPath %>/resources/images/board/backNoticeBtn.JPG" />
 				</div>
 			</c:if>
-		</c:forEach>
-		
-		<!-- 페이징바  -->
-		<div class="pagination" align="center">
-			${pageBar}
+			<!--  add 버튼을 누르면 나타나는 공지 추가하기  -->
+			<div id="addNoticeContainer">
+				<form id="newNotice" name="newNotice">
+					<span>
+						<i class="fas fa-plus"></i>
+						<input type="text" name="notTitle" id="notTitle" placeholder="제목을 입력하세요." /><br/>
+						<textarea name="notContent" id="notContent" placeholder="내용을 입력하세요."></textarea>
+					</span>
+					<div class="category">
+						<input type="radio" name="notCategory" value="1" /> 공지
+						<input type="radio" name="notCategory" value="2" /> FAQ
+					</div>
+					<div align="left" style="margin-top: 50px; margin-bottom: 50px;">
+						<img onclick="" id="addBtn" src="<%= ctxPath %>/resources/images/board/addBtn.JPG" />
+						<img onclick="" id="backBtn" src="<%= ctxPath %>/resources/images/board/backNoticeBtn.JPG" />
+					</div>
+					
+				</form>
+			</div>
+				
+				<div class="tab_Content_Wrap">
+					<div id="tabContent01" class="tabPage">
+						<c:forEach var="item" items="${noticeList}">
+							<c:if test="${item.notCategory == '1'}">
+								<div class="noticeList">
+									<div class="singleNotice">
+										<span class="noticeTitle"> ${item.notTitle}
+										 <i class="arrow fas fa-chevron-down"></i>
+										 <span class="noticeNo" style="display:none;">${item.notNo}</span>
+										 </span>
+										<div class="noticeContent" style="width:60%; margin-top: 30px; border-bottom: solid 1px black;">
+											${item.notContent}
+											
+											<br/><br/>
+											작성일시 : ${item.notWriteday}
+											<br/><br/>
+										</div>	
+									</div>
+								</div>
+							</c:if>
+						</c:forEach>
+			
+			<!-- 페이징바  -->
+			<div class="pagination" align="center">
+				${pageBar}
+			</div>
+					</div>
+					<div id="tabContent02" class="tabPage">
+						<c:forEach var="item" items="${faqList}">
+							<c:if test="${item.notCategory == '2'}">
+								<div class="noticeList">
+									<div class="singleNotice">
+										<span class="noticeTitle"> ${item.notTitle}
+										 <i class="arrow fas fa-chevron-down"></i>
+										 <span class="noticeNo" style="display:none;">${item.notNo}</span>
+										 </span>
+										<div class="noticeContent" style="width:60%; margin-top: 30px; border-bottom: solid 1px black;">
+											${item.notContent}
+											
+											<br/><br/>
+										</div>	
+									</div>
+								</div>
+							</c:if>
+						</c:forEach>
+					</div>
+				</div>
+			</div>
 		</div>
-		
+			
 	</div>
 </body>
 </html>

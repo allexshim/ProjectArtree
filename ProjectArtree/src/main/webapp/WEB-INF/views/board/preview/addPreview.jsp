@@ -202,19 +202,32 @@
 
 <script type="text/javascript">
 	$(document).ready(function(){ 
-		
-		// 이전글 클릭시 이벤트
-		$(".prev").click(function(){
-			
-		}) // 이전글 클릭시 이벤트 -------------
-		
-		
-		// 다음글 클릭시 이벤트
-		$(".next").click(function(){
-			
-			
-		}) // 다음글 클릭시 이벤트 --------------
-		
+
+		if(${WriteHelper.EXHIBITIONNO != null}){ $("input[id=eno]").val( '${WriteHelper.EXHIBITIONNO}' ); }
+		if(${WriteHelper.EXHIBITIONNAME != null}){ $("input[id=name]").val( '${WriteHelper.EXHIBITIONNAME}' ); }
+
+		if(${previewEditMap.MAINPOSTER != null}){
+			if('${previewEditMap.MAINPOSTER}'.substr(0, 4) != 'http'){
+				
+				$("#myPoster").html("<img src='<%= ctxPath%>/resources/files/"+'${previewEditMap.MAINPOSTER}'+"'>");
+				
+			}
+			else {
+				$("#myPoster").html("<img src='"+'${previewEditMap.MAINPOSTER}'+"'>");
+			}
+		}
+		if(${WriteHelper.MAINPOSTER != null}){
+			if('${WriteHelper.MAINPOSTER}'.substr(0, 4) != 'http'){
+				
+				$("#myPoster").html("<img src='<%= ctxPath%>/resources/files/"+'${WriteHelper.MAINPOSTER}'+"'>");
+				
+			}
+			else {
+				$("#myPoster").html("<img src='"+'${WriteHelper.MAINPOSTER}'+"'>");
+			}
+		}
+
+
 		// 글목록으로 돌아가기
 		$("#toListBtn").click(function(){
 			window.location.href="/artree/previewList.at";
@@ -352,14 +365,15 @@
 				<tr>
 					<td>전시회명</td>
 					<td>
-						<input id="name" name="name" type="text" placeholder="전시회명을 입력해주세요." readonly="readonly" data-toggle="modal" data-target="#myModal"/>
-						<input type="hidden" id="eno" name="eno" value="">
+						<input id="name" name="name" type="text" placeholder="전시회명을 입력해주세요." value="${previewEditMap.EXHNAME}" readonly="readonly" data-toggle="modal" data-target="#myModal"/>
+						<input type="hidden" id="eno" name="eno" value="${previewEditMap.FK_ENO}">
+						<input type="hidden" id="bno" name="bno" value="${previewEditMap.SEQ}">
 					</td>
 				<tr>
 				
 				<tr>
 					<td>제목</td>
-					<td><input id="title" name="title" type="text" placeholder="제목을 입력해주세요." autocomplete="off"/></td>
+					<td><input id="title" name="title" type="text" placeholder="제목을 입력해주세요." value="${previewEditMap.TITLE}" autocomplete="off"/></td>
 				<tr>
 				<tr>
 					<td>작성자</td>
@@ -377,7 +391,8 @@
 				<tr>
 				<tr>
 					<td colspan="2">
-						<textarea id="contents" name="contents" style="resize:none; border:solid 1px lightgray" rows="10" cols="120">
+						<textarea id="contents" name="contents" style="resize:none; border:solid 1px lightgray; width:100%;" rows="10" cols="120">
+						${previewEditMap.CONTENT}
 						</textarea>
 					</td>
 				<tr>
@@ -406,20 +421,6 @@
 			</div>
 		</div>
 		
-		<!-- <div id="preNext">
-			<table>
-				<tr>
-					<td class="prev"><i class='fa fa-angle-up' style='font-size:32px'></i></td>
-					<td class="prev">이전글</td>
-					<td class="prev">이전글제목이전글제목이전글제목이전글제목이전글제목이전글제목</td>
-				</tr>
-				<tr>
-					<td class="next"><i class='fa fa-angle-down' style='font-size:32px'></i></td>
-					<td class="next">다음글</td>
-					<td class="next">다음글제목다음글제목다음글제목다음글제목다음글제목다음글제목</td>
-				</tr>
-			</table>
-		</div> -->
 		<div id="toListBtn" align="center">
 			<img id="toListBtn" src="<%= ctxPath %>/resources/images/board/toListBtn.JPG" />
 		</div>

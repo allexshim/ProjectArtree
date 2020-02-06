@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>ADMIN HOME</title>
 
 <style type="text/css">
 @import url(//fonts.googleapis.com/earlyaccess/notosanskr.css);
@@ -15,8 +15,10 @@ body, html {
 }
 
 #container-admin {
-	margin: 20vh auto;
+	padding: 30vh;
+	margin: 0 auto;
 	width: 90%;
+	height: 100vh;
 }
 
 .categories {

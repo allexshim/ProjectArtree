@@ -74,8 +74,8 @@ public class GoogleMail {
     	
     }// end of sendmail(String recipient, String certificationCode)-----------------
     
-    /*
-    public void sendmail_OrderFinish(String recipient, String emailContents)  
+
+    public void sendmail_changePwd(String recipient, String emailContents, String name)  
     		throws Exception{
         
     	// 1. 정보를 담기 위한 객체
@@ -113,7 +113,7 @@ public class GoogleMail {
     	MimeMessage msg = new MimeMessage(ses);
 
     	// 제목 설정
-    	String subject = "localhost:9090/MyMVC/mall.do 회원님의 주문이 성공했습니다. ";
+    	String subject = "[ARTREE] "+name+" 님, 비밀번호를 변경하신지 6개월이 지났습니다.";
     	msg.setSubject(subject);
     	        
     	// 보내는 사람의 메일주소
@@ -126,14 +126,14 @@ public class GoogleMail {
     	msg.addRecipient(Message.RecipientType.TO, toAddr);
     	        
     	// 메시지 본문의 내용과 형식, 캐릭터 셋 설정
-    	msg.setContent("<span style='font-size:14pt; color:red;'>"+emailContents+"</span>", "text/html;charset=UTF-8");
+    	msg.setContent("<div align='center'>"+emailContents+"</div>", "text/html;charset=UTF-8");
     	        
     	// 메일 발송하기
     	Transport.send(msg);
     	
     }// end of sendmail_OrderFinish(String recipient, String emailContents)-----------------------
     
-    
+    /*
     public void sendmail_IbgoFinish(String recipient, String emailContents)  
     		throws Exception{
         

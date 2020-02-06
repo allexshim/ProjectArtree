@@ -8,7 +8,7 @@ desc PREVIEW
 ALTER TABLE PREVIEW MODIFY(name NVARCHAR2(300));
 COMMIT
 
-select 
+select to_char(regdate, 'yyyy-mm-dd hh24:mi:ss')
 from preview;
 
 desc exhibition;
@@ -17,7 +17,7 @@ select*
 from exhibitiondetail;
 
 select*
-from gallery;
+from preview;
 
 select *
 from
@@ -343,9 +343,9 @@ create table preview
 );
 
 select*
-from member
+from precomment
 
-create sequence seq_preivew
+create sequence seq_preview
 start with 1
 increment by 1
 nomaxvalue 
@@ -365,6 +365,9 @@ create table precomment
 ,constraint FK_precomment_fk_idx foreign key(fk_idx) references member(idx)
 ,constraint FK_precomment_fk_Seq foreign key(fk_Seq) references preview(seq) on delete cascade
 );
+
+		insert into precomment(seq, fk_idx, fk_seq, name, content, regdate)
+		values (seq_precomment.nextval, #{fk_idx}, #{fk_seq}, #{writer}, #{content}, default)
 
 create sequence seq_precomment
 start with 1
@@ -397,5 +400,97 @@ nocache;
         )
         where RNO between 1 and 6
 
-select*
-from preview
+        select*
+        from
+        (
+		select row_number() over(order by seq desc) AS RNO, seq, fk_idx, fk_exhibitionno
+             , name, title, readcount, to_char(regdate, 'yyyy-mm-dd hh24:mi') AS regdate, commentcnt
+		from preview
+      --  where title like '%'|| '만' ||'%'
+        )
+        where RNO between 1 and 15
+        
+        
+        select exhibitionname, B.mainposter, exhibitionno
+		from exhibition A left join exhibitiondetail B
+		on A.exhibitionno = B.fk_exhibitionno
+		where exhibitionname like '%'|| '개인' ||'%'
+
+    select *
+		from preview
+		where fk_exhibitionno = 5184
+    
+    		select*
+		from
+		(
+		select row_number() over(order by revno desc) as RNO, revno, fk_name, revtitle
+		from review
+        where fk_exhibitionno = 5184
+		)
+		where RNO between 1 and 5
+        
+        select add_months(sysdate, -6)
+        from dual
+        
+        select case when(lastpassworddate <= add_months(sysdate, -6)) then 
+        from member
+        where idx = 18
+        
+       
+        commit
+        
+        update member set lastpassworddate = add_months(sysdate, -6) 
+        where idx = 18
+        
+        select case when(lastpassworddate < add_months(sysdate, -6)) then 'true' else 'false' end AS warn
+        from member
+        where idx = 18
+        
+        select count(*) AS totalcount
+		from preview
+		where fk_exhibitionno = 5160
+        
+        commit
+        
+        delete from preview
+        
+insert into preview (boardno, seq, fk_idx, fk_exhibitionno, name, title, content, readcount, regdate, commentcnt)
+values(3, seq_preview.nextval, 18, 5160, '[The Prize] 노벨상 : 세상을 바꾼 석학들의 유산 전시회', 50, 1, default, default, default)        
+        select exhibitionno, exhibitionname, B.mainposter
+        from exhibition A left join exhibitiondetail B
+        on A.exhibitionno = B.fk_exhibitionno
+        where exhibitionno = 5117
+        
+        
+        (
+        select idx, case when(lastpassworddate < add_months(sysdate, -6)) then 'true' else 'false' end AS needChangePwd
+        from member
+        )
+        where needChangePwd = 'true'
+        
+desc member        
+        
+create or replace function func_changePwd(p_lastpassworddate IN date)
+return varchar2
+is
+    v_lastpassworddate varchar2(100);
+begin
+   if( to_char(p_lastpassworddate, 'yy/MM/dd') = to_char(add_months(sysdate, -6), 'yy/MM/dd') ) then v_lastpassworddate := 'need';
+   else v_lastpassworddate := 'noneed';
+   end if;
+
+   return v_lastpassworddate;
+end func_changePwd;
+
+commit
+select name, email 
+from member
+where func_changePwd(lastpassworddate) = 'need'
+
+desc member
+select *
+from member
+
+update member set lastpassworddate = to_char(lastpassworddate+1, 'YY/MM/DD') where idx = 18
+commit
+update member set lastpassworddate = add_months(sysdate, -1) where idx = 1

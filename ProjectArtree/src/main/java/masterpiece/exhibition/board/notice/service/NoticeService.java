@@ -50,6 +50,14 @@ public class NoticeService implements InterNoticeService {
 		
 		return n;
 	}
+
+	@Override
+	public List<HashMap<String, String>> getFAQ() {
+		List<HashMap<String, String>> faqList = null;
+		faqList = dao.getFAQ();
+		
+		return faqList;
+	}
 	
 	
 	

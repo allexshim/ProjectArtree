@@ -166,8 +166,7 @@
 		</div>
 	</div>	
 	
-	<div style="text-align: center;">
-		<span>페이징 처리 부분</span>
+	<div style="text-align: center;">		
 	</div>
 	</div>
 </body>

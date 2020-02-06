@@ -18,6 +18,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import masterpiece.exhibition.board.preview.service.InterPreviewService;
 import masterpiece.exhibition.common.MyUtil;
+import masterpiece.exhibition.member.model.MemberVO;
 
 @Controller
 public class PreviewController {
@@ -89,13 +90,11 @@ public class PreviewController {
 		if(!"?".equals(lastStr)) 
 			url += "?"; 
 		
-		pageNo = ( (curPage - 1)/blockSize)*blockSize + 1; // !!!!! 공식 !!!!!
-		
 		String pageBar = "";
 		
 		// ***** [이전] 만들기 ***** // search_date="+search_date+"&search_key="+search_key+"&search="+search+"&
 		if( pageNo != 1 ) {
-			pageBar += "<a href='"+url+"&curPage="+(pageNo-1)+"&size="+size+"&searchType="+searchType+"&searchWord="+searchWord+"'><img src='/artree/images/board/btn_page_prev.png'></a>";
+			pageBar += "<a href='"+url+"&curPage="+(pageNo-1)+"&size="+size+"&searchType="+searchType+"&searchWord="+searchWord+"'><img style='padding-bottom:7px;' src='/artree/resources/images/exhibition/ico/left_arrow.png'></a>";
 		// loop가 10일때 while문을 빠져나와 해당 [다음]을 만든다. 여기서의 memberList.up은 해당 memberListAction.java를 읽어오고
 		// 맨 위 getParameter값에 1이 아닌 10이 들어오게 되면서 loop는 11부터 새로이 시작하며 반복한다.
 		}
@@ -120,7 +119,7 @@ public class PreviewController {
 		
 		// *** [다음] 만들기 *** //
 		if( !(pageNo>totalPage) ) {
-			pageBar += "<a style='display: inline-block;' href='"+url+"&curPage="+pageNo+"&size="+size+"&searchType="+searchType+"&searchWord="+searchWord+"'><img src='/artree/images/board/btn_page_next.png'></a>"; 
+			pageBar += "<a style='display: inline-block;' href='"+url+"&curPage="+pageNo+"&size="+size+"&searchType="+searchType+"&searchWord="+searchWord+"'><img style='padding-bottom:7px;' src='/artree/resources/images/exhibition/ico/right_arrow.png'></a>"; 
 		}
 
 		pageBar += "</ul>";
@@ -143,18 +142,62 @@ public class PreviewController {
 	@RequestMapping(value="/previewDetail.at")
 	public String previewDetail(HttpServletRequest request) {
 		
+		String bno = request.getParameter("bno");
+		String fk_idx = request.getParameter("fk");
+		
+		HttpSession session = request.getSession();
+		MemberVO loginuser = (MemberVO)session.getAttribute("loginuser");
+
+		String idx = "";
+		if(loginuser != null) {
+			idx = loginuser.getIdx();
+		}
+		if("yes".equals(session.getAttribute("readCountPermission")) && fk_idx != idx) {
+			// 글 목록보기를 클릭한 다음 특정글을 조회해온 경우이다.
+			service.addReadcount(bno);
+			// 글 조회수 증가
+			session.removeAttribute("readCountPermission");
+		}
+		
+		HashMap<String, String> previewDetailMap = service.getPreviewDetail(bno);
+
+		request.setAttribute("previewDetailMap", previewDetailMap);
 		return "board/preview/previewDetail.tiles";
 	} // end of previewDetail -------------------------------------------
 	
 	@RequestMapping(value="/addPreview.at")
 	public String requireLogin_addPreview(HttpServletRequest request, HttpServletResponse response) {
 		
-		return "board/preview/addPreview.tiles";
+		String bno = request.getParameter("bno");
+		String eno = request.getParameter("eno");
+		
+		if(bno != null) {
+			HashMap<String, String> previewEditMap = service.getPreviewDetail(bno);
+			
+			String CONTENT = previewEditMap.get("CONTENT");
+			CONTENT = CONTENT.replaceAll("<br/>", "\r\n");
+			previewEditMap.put("CONTENT", CONTENT);
+			
+			request.setAttribute("previewEditMap", previewEditMap);
+			return "board/preview/addPreview.tiles";	
+		}
+		else if(eno != null){
+			HashMap<String, String> WriteHelper = service.getPreviewWriteHelper(eno);
+			
+			request.setAttribute("WriteHelper", WriteHelper);
+			return "board/preview/addPreview.tiles";
+		}
+		else {
+			return "board/preview/addPreview.tiles";
+		}
+
 	} // end of addPreview --------------------------------------------
 	
+	///////////////////////// 기대평 글쓰기 및 수정하기 /////////////////////////////
 	@RequestMapping(value="/addEnd.at", method= {RequestMethod.POST})
 	public ModelAndView addEnd(HttpServletRequest request, ModelAndView mav) {
 		
+		String bno = request.getParameter("bno");
 		String fk_idx = request.getParameter("fk_idx");
 		String name = request.getParameter("name");
 		String eno = request.getParameter("eno");
@@ -168,26 +211,126 @@ public class PreviewController {
 		HashMap<String, String> paraMap = new HashMap<String, String>();
 		paraMap.put("name", name);
 		paraMap.put("eno", eno);
+		paraMap.put("bno", bno);
 		paraMap.put("title", title);
 		paraMap.put("contents", contents);
 		paraMap.put("fk_idx", fk_idx);
 
 		int result = service.addEnd(paraMap);
 		
-		if(result == 0) {
-			mav.addObject("msg", "등록에 실패하였습니다. 다시 시도해주세요.");
-			mav.addObject("loc", request.getContextPath()+"/previewList.at");
-			mav.setViewName("msg");
-		}
-		else {
-			mav.addObject("msg", "글이 정상적으로 등록되었습니다 !");
-			mav.addObject("loc", request.getContextPath()+"/previewList.at");
-			mav.setViewName("msg");
-		}
+		String msg = "";
+		
+		if(result == 1) { msg = "글이 정상적으로 등록되었습니다 !"; }
+		else if(result == 2) { msg = "글이 정상적으로 수정되었습니다 !"; }
+		else { msg = "등록에 실패하였습니다. 다시 시도해주세요."; }
+
+		mav.addObject("msg", msg);
+		mav.addObject("loc", request.getContextPath()+"/previewList.at");
+		mav.setViewName("msg");
 		
 		return mav;
 	}
 	
+	////////////////////////// 기대평 - 특정 게시물의 댓글 목록 ////////////////////////////
+	@ResponseBody
+	@RequestMapping(value="/getCommentList.at", produces="text/plain;charset=UTF-8")
+	public String getCommentList(HttpServletRequest request) {
+		
+		String bno = request.getParameter("bno");
+		
+		List<HashMap<String, String>> commentListMap = service.getCommentList(bno);
+		
+		JSONArray jsonArr = new JSONArray();
+		
+		for(HashMap<String,String> comList : commentListMap) {
+			
+			JSONObject jobj = new JSONObject();
+
+			jobj.put("SEQ", comList.get("SEQ"));
+			jobj.put("FK_IDX", comList.get("FK_IDX"));
+			jobj.put("NAME", comList.get("NAME"));
+			jobj.put("CONTENT", comList.get("CONTENT").replaceAll("<br/>", "\r\n"));
+			jobj.put("REGDATE", comList.get("REGDATE"));
+			
+			jsonArr.put(jobj);
+		}
+		
+		return jsonArr.toString();
+	}
+	
+	////////////////////////// 기대평 - 특정 게시물의 댓글 등록 ////////////////////////////
+	@ResponseBody
+	@RequestMapping(value="/addPrevComment.at", produces="text/plain;charset=UTF-8")
+	public String addComment(HttpServletRequest request) {
+	
+		 String writer = request.getParameter("comWriter");
+		 String content = request.getParameter("comContent");
+		 String fk_seq = request.getParameter("fk_seq");
+		 String fk_idx = request.getParameter("fk_idx");
+
+		 content = MyUtil.replaceParameter(content);
+		 content = content.replaceAll("\r\n", "<br/>");
+
+		 HashMap<String, String> paraMap = new HashMap<String, String>();
+		 paraMap.put("writer", writer);
+		 paraMap.put("content", content);
+		 paraMap.put("fk_seq", fk_seq);
+		 paraMap.put("fk_idx", fk_idx);
+		 
+		 int result = service.addComment(paraMap);
+		 
+		 JSONObject jobj = new JSONObject();
+
+		 jobj.put("result", result);
+		 
+		 return jobj.toString();
+		
+	}
+	
+	/////////////////////////////// 댓글 수정하기 /////////////////////////////////////
+	@ResponseBody
+	@RequestMapping(value="/editComment.at", produces="text/plain;charset=UTF-8")
+	public String editComment(HttpServletRequest request) {
+		
+		 String cno = request.getParameter("cno");
+		 String content = request.getParameter("content");
+
+		 content = MyUtil.replaceParameter(content);
+		 content = content.replaceAll("\r\n", "<br/>");
+		
+		 HashMap<String, String> paraMap = new HashMap<String, String>();
+		 paraMap.put("cno", cno);
+		 paraMap.put("content", content);
+		 
+		 int result = service.editComment(paraMap);
+		 
+		 JSONObject jobj = new JSONObject();
+		
+		 jobj.put("result", result);
+		 
+		 return jobj.toString();
+	}
+	
+	/////////////////////////////// 댓글 삭제하기 /////////////////////////////////////
+	@ResponseBody
+	@RequestMapping(value="/delComment.at", produces="text/plain;charset=UTF-8")
+	public String delComment(HttpServletRequest request) {
+		
+		 String cno = request.getParameter("cno");
+		 String bno = request.getParameter("bno");
+
+		 HashMap<String, String> paraMap = new HashMap<String, String>();
+		 paraMap.put("cno", cno);
+		 paraMap.put("bno", bno);
+		 
+		 int result = service.delComment(paraMap);
+		 
+		 JSONObject jobj = new JSONObject();
+		
+		 jobj.put("result", result);
+		 
+		 return jobj.toString();
+	}
 	
 	////////////////////////// 전시회명 검색 - 모달에 띄울 전시회 리스트 ////////////////////////////
 	@ResponseBody
@@ -214,5 +357,26 @@ public class PreviewController {
 		return jsonArr.toString();
 		
 	}
+	
+	/////////////////////// 기대평 게시물 삭제하기 //////////////////////////
+	@RequestMapping(value="/deletePreview.at")
+	public ModelAndView deletePreview(HttpServletRequest request, ModelAndView mav) {
+		
+		String bno = request.getParameter("bno");
+		
+		int result = service.goDeletePreview(bno);
+		
+		String msg = "";
+		
+		if(result == 1) { msg = "글이 삭제되었습니다 !"; }
+		else { msg = "오류가 발생하여 돌아갑니다."; }
+		
+		mav.addObject("msg", msg);
+		mav.addObject("loc", request.getContextPath()+"/previewList.at");
+		mav.setViewName("msg");
+		
+		return mav;
+	}
+	
 	
 }

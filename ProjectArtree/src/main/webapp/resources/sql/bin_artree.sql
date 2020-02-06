@@ -234,3 +234,9 @@ select * from user_sequences
 select * from event a inner join exhibitionDetail b
 		on a.fk_exhibitionno = b.fk_exhibitionno
 		where no = 1
+        
+-- 환불 절차 reser status 0, reserstat 환불처리 status 0, ex status 0 
+select * from reser order by reserno desc
+select * from reserdetail order by reserdetailno desc
+select * from reserex order by reserexno desc
+commit;

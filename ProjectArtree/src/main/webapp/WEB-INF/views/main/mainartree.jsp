@@ -175,8 +175,8 @@
 	}
 	
 	.event_poster {
-		width: 250px;
-		height: 350px;
+		width: 280px;
+		height: 280px;
 	}
 	
 	
@@ -443,12 +443,26 @@ $(function () {
 						 +					"<img class='forMoving' style='position:relative;' src='<%=ctxPath%>/resources/images/exhibition/ico/right_arrow.png'>"
 						 +			"</button>"
 						 +		"</div>"
-						 +		"<a class='flash' onclick='exhDetail("+item.exhibitionno+")'><img class='hot-img2' src='"+item.mainposter+"'></a>"
+						 +		"<a class='flash' onclick='exhDetail("+item.exhibitionno+")'>"
+			 if(item.mainposter.substr(0, 4) != 'http'){
+					html += "<img class='hot-img2' src='<%=ctxPath%>/resources/files/"+item.mainposter+"'/>"; 
+				}
+			 else {
+					html += "<img class='hot-img2' src='"+item.mainposter+"'/>";
+			 }
+					html +=	"</a>"
 						 +	"</div>"
 				}
 				else {
 					html += "<div class='hot-exh-L'>"
-						 +		"<a class='flash' onclick='exhDetail("+item.exhibitionno+")'><img class='hot-img1' src='"+item.mainposter+"'></a>"
+						 +		"<a class='flash' onclick='exhDetail("+item.exhibitionno+")'>"
+						 if(item.mainposter.substr(0, 4) != 'http'){
+								html += "<img class='hot-img1' src='<%=ctxPath%>/resources/files/"+item.mainposter+"'/>"; 
+							}
+						 else {
+								html += "<img class='hot-img1' src='"+item.mainposter+"'/>";
+						 }
+					html += 	"</a>"
 						 +		"<div class='hot-info1'>"
 						 +			"<span class='hot-title'>"+item.exhibitionname+"</span>"
 						 +			"<span class='hot-content'>"+item.author+"</span>"
@@ -484,9 +498,14 @@ $(function () {
 			$.each(json, function(index, item){
 				
 				html += "<div class='swiper-slide'>" 
-					 + "<a class='recom-a flash hover-top' onclick='exhDetail("+item.exhibitionno+")'>"	
-					 + "<img class='slide-img' src='"+item.mainposter+"'>"
-					 + "<br/>"
+					 + "<a class='recom-a flash hover-top' onclick='exhDetail("+item.exhibitionno+")'>"
+				 if(item.mainposter.substr(0, 4) != 'http'){
+						html += "<img class='slide-img' src='<%=ctxPath%>/resources/files/"+item.mainposter+"'/>"; 
+					}
+				 else {
+					html += "<img class='slide-img' src='"+item.mainposter+"'/>";
+				 }
+				html += "<br/>"
 					 + "<span class='recom-title'>"+item.exhibitionname+"</span>"
 					 + "<span class='recom-content'>"+item.author+"</span>"
 					 + "<span class='recom-content'>"+item.location+" / "+item.galleryname+"</span>"
@@ -518,8 +537,14 @@ $(function () {
 			$.each(json, function(index, item){
 				
 				html += "<a onclick='exhDetail("+item.exhibitionno+")' class='new-one flash hover-top'>"
-					 +	"<img class='new_poster' src='"+item.mainposter+"' >"
-					 +		"<span class='new-exp new-exp-title'>"+item.exhibitionname+"</span>"
+				if(item.mainposter.substr(0, 4) != 'http'){
+					html += "<img class='end_poster' src='<%=ctxPath%>/resources/files/"+item.mainposter+"'/>"; 
+				}
+				else {
+					html += "<img class='end_poster' src='"+item.mainposter+"'/>";
+				}
+				
+				html +=		"<span class='new-exp new-exp-title'>"+item.exhibitionname+"</span>"
 					 +		"<span class='new-exp'>"+item.author+"</span>"
 					 + 		"<span class='new-exp'>"+item.location+" / "+item.galleryname+"</span>"
 					 +		"<span class='new-exp forMoving'>"+item.startdate+"~"+item.enddate+"</span>"
@@ -545,8 +570,13 @@ $(function () {
 			$.each(json, function(index, item){
 				
 				html += "<a onclick='exhDetail("+item.exhibitionno+")' class='end-one flash hover-top'>"
-					 +	"<img class='end_poster' src='"+item.mainposter+"' >"
-					 +		"<span class='end-exp end-exp-title'>"+item.exhibitionname+"</span>"
+				if(item.mainposter.substr(0, 4) != 'http'){
+					html += "<img class='end_poster' src='<%=ctxPath%>/resources/files/"+item.mainposter+"'/>"; 
+				}
+				else {
+					html += "<img class='end_poster' src='"+item.mainposter+"'/>";
+				}
+				html +=		"<span class='end-exp end-exp-title'>"+item.exhibitionname+"</span>"
 					 +		"<span class='end-exp'>"+item.author+"</span>"
 					 + 		"<span class='end-exp'>"+item.location+" / "+item.galleryname+"</span>"
 					 +		"<span class='end-exp forMoving'>"+item.startdate+"~"+item.enddate+"</span>"
@@ -656,7 +686,7 @@ function exhDetail(eno){
 	<div id="overflow" class="main-container" style="margin-bottom: 700px;">
 		<div class="hot-exh">
 			<div id="div1" style="float:center; margin:0 auto; transform:translate(100px,20px);">
-				<h2>인기 전시회</h2>
+				<h2>지금 핫한 전시를 만나보세요!</h2>
 			</div>
 			<hr color="black;" style="width:85%; transform:translate(100px,20px);" />
 			
@@ -681,7 +711,7 @@ function exhDetail(eno){
 			
 			<div id="div2" class="recom-exh-title" style="float: center; transform:translate(0,-680px);">
 				<h2>추천 전시회</h2>
-				<span>ARTREE 추천전시회를 보여줍니다.</span>
+				<span>나만의 맞춤 전시를 만나보세요!</span>
 			</div>
 			<hr color="black;" style="width:100%; transform:translate(0,-680px);" />
 	</div>
@@ -699,7 +729,7 @@ function exhDetail(eno){
 		</div>
 		
 		<div id="div4" class="new-title" style="float: right; -webkit-transform:translate(-58px, 550px);">
-			<h2>종료임박 전시회</h2>
+			<h2>종료예정 전시회</h2>
 		</div>
 		<hr color="black;" style="width:90%; transform:translate(64px,600px);" />
 		<div class="end-exh" style="transform:translate(0, 270px);">
@@ -714,7 +744,7 @@ function exhDetail(eno){
 		<h2>EVENT</h2>
 	</div>
 	<div class="event-more" style="float: right; transform:translate(-35px, 700px);">
-		<a class="event-morebtn " href="<%= ctxPath%>/eventList.at">이벤트 모두보기 +</a>
+		<a class="event-morebtn " href="<%= ctxPath%>/eventList.at">모두보기 +</a>
 	</div>
 	<hr color="black;" style="width:94%; transform:translate(38px,725px);" />
        	<div class="event-div" style="transform:translate(0, 480px);">

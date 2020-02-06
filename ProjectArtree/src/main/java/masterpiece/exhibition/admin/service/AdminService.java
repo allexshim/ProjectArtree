@@ -299,6 +299,22 @@ public class AdminService implements InterAdminService {
 		return orderInfo;
 	}
 
+	// 예매율차트
+	@Override
+	public List<HashMap<String, String>> getChartByTicketingRate(int totalCount) {
+		List<HashMap<String, String>> exList = dao.getChartByTicketingRate(totalCount);
+		return exList;
+	}
+
+	// 총 예매 수
+	@Override
+	public int getTotalCount() {
+		int n = dao.getTotalCount();
+		return n;
+	}
+	
+	
+
 
 	
 }

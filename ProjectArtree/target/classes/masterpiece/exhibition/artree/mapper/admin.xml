@@ -383,4 +383,33 @@
 		order by R.reserno desc
 	</select>
 	
+	<!-- ========= 예매율 차트 ========= -->
+	
+	<!-- 총 예매 수 -->
+	<select id="getTotalCount" resultType="int">
+		select count(*)
+		from reser R 
+		JOIN member M on R.fk_idx = M.idx
+		JOIN reserdetail D on D.fk_reserno = R.reserno
+		JOIN reserex E on E.fk_reserdetailno = D.reserdetailno
+		order by R.reserno desc
+	</select>
+	
+		<!-- 예매율차트 -->
+	<resultMap type="HashMap" id="getChartByTicketingRateMap">
+		<result property="cnt" 		column="cnt" 	javaType="String" />
+		<result property="name" 	column="name" 	javaType="String" />
+		<result property="pct" 		column="pct" 	javaType="String" />
+	</resultMap>
+	<select id="getChartByTicketingRate" parameterType="int" resultMap="getChartByTicketingRateMap">
+		select D.exname AS name
+			, sum( E.qt ) AS cnt
+			, round ( count(*) / ( select count(*) from reserdetail ) * 100 , 2 ) AS pct
+		from reser R LEFT JOIN reserdetail D
+		on R.reserno = D.fk_reserno
+        JOIN reserex E on D.reserdetailno = E.fk_reserdetailno
+		group by D.exname
+		order by cnt desc
+	</select>
+	
 </mapper>

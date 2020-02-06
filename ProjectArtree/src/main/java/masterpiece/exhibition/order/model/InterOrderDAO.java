@@ -52,4 +52,14 @@ public interface InterOrderDAO {
 
 	void delReser(String reserNo); // 예매삭제
 
+	List<HashMap<String, String>> reserEmailList(String strDate); // 예약 이메일 리스트 
+
+	void upReserEx(String detailNo); // 예매 삭제 업데이트
+
+	void upReserDetail(String reserNo); // 
+
+	void upReser(String reserNo); // 
+
+	String reserStat(String reserNo); // 예매 삭제 확인
+
 }

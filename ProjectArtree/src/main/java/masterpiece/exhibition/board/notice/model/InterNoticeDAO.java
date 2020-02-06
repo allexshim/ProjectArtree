@@ -18,6 +18,9 @@ public interface InterNoticeDAO {
 	// 공지 삭제
 	int delNotice(String notNo);
 	
+	// faq목록
+	List<HashMap<String, String>> getFAQ();
+	
 	
 	
 	

@@ -55,13 +55,13 @@
 			<div style="margin-bottom:31px;">아트리 ARTREE | 대표 : 심예은</div>
 			<div style="float: left; margin-right: 31px;">
 				Head Office<br><br>
-				대구광역시 북구 호암로51,<br>
-				삼성벤처캠퍼스 벤처오피스 512호 아트맵<br>
+				서울특별시 중구 남대문로 120,<br>
+				대일빌딩 2F, 3F 아트리<br>				  
 			</div>
 			<div style="float: left; margin-right: 31px;">
 				Branch Office<br><br>
-				서울특별시 마포구 백범로31길 21<br>
-				Seoul startup Hub 2층 G 212호 ARTMAP KOREA<br>
+				서울 종로구 수표로 98<br>
+				Seoul isaac Hub 1층 T ARTREE AMERICA<br>
 			</div>
 			<div style="float: left;">
 				Contact<br><br>

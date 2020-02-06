@@ -52,7 +52,7 @@ public class MainDAO implements InterMainDAO {
 	public String getFavorTag(String preferTag) {
 		String FavorTag = sqlsession.selectOne("main.getFavorTag", preferTag);	
 		return FavorTag;
-	}
+	} 
 
 	// 가장 선호하는 태그와 일치하는 전시회 중, 조회수가 높은 순으로 3개 가져온다.
 	@Override
@@ -68,8 +68,13 @@ public class MainDAO implements InterMainDAO {
 		return eventList;
 	}
 	
-	
-	
+	// 성별차트
+	@Override
+	public List<HashMap<String, Object>> getGenderChart() {
+		List<HashMap<String, Object>> getGenderChart = sqlsession.selectList("main.getGenderChart");
+		return getGenderChart;
+	}
+
 	
 	
 }

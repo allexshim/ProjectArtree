@@ -26,7 +26,7 @@
 	
 	img#boardtop {
 		position : absolute;
-		width : 96vw;
+		width : 100vw;
 		height : 540px;
 	}
 	
@@ -123,7 +123,7 @@
 		height: 100%;
 		width: 70%;
 		padding-left : 180px;
-		padding-top : 30px;
+		padding-top : 100px;
 	}
 	
 	#statistics-area:after {
@@ -141,6 +141,26 @@
 	  margin : 0 auto;
 	  height: 600px;
 	}
+	
+/* 프린트 버튼 */
+	#myBtns {
+		height: 100%;
+		width: 70%;
+		padding-left : 180px;
+		padding-top : 30px;
+		cursor : pointer;
+	}	
+	
+	#btnExcel {
+		background-color: white;
+		font-weight: bold;
+		height: 50px;
+		border: 1px solid lightgrey;
+		box-shadow: 2px 2px 2px 2px grey;
+		border-radius: 5px;
+	}
+	
+	
 </style>
 
 
@@ -164,7 +184,7 @@
 	$(document).ready(function(){ 
 		
 		$.ajax({ // 아래 url은 임시로 service controller에 저장합니다.
-			url:"<%=request.getContextPath()%>/getChartDataByTags.at",
+			  url:"<%=request.getContextPath()%>/getChartDataByTags.at",
 	          type:"GET",
 	          dataType:"JSON",
 	          success: function(json) {
@@ -221,6 +241,15 @@
 	               alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
 	            } 
 	         }); // end of ajax-------------
+	         
+	   
+	   /////////////////////////////////////////////////////////////////
+	   // 엑셀로 프린트 하기
+	   $("#btnExcel").click(function(){
+       	   let totalcnt = ${totalcnt};
+		   window.location.href="/artree/printTagbyExcel.at?totalcnt="+totalcnt;	   
+	   }); // end of printBtn --------------------------------------------
+	   //////////////////////////////////////////////////////////////////	         
 	         
 	}); // end of document.ready ----------------------------------------------     
 
@@ -397,6 +426,10 @@
 			</div>
 			
 			<div id="table-area"></div>
+			
+			<div id="myBtns" align="center" style="padding-top: 20px;">
+				<button type="button" id="btnExcel">FILE DOWNLOAD</button>
+			</div>
 			
 		</div>
 			

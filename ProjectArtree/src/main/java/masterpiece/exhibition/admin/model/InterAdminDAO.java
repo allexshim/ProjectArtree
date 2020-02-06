@@ -113,6 +113,12 @@ public interface InterAdminDAO {
 	// 주문정보출력
 	List<HashMap<String, String>> getOrderInfo(String reserno);
 
+	// 예매율차트
+	List<HashMap<String, String>> getChartByTicketingRate(int totalCount);
+
+	// 총 예매 수
+	int getTotalCount();
+
 	
 
 }

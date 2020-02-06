@@ -78,6 +78,28 @@ on V.exhibitionno = D.fk_exhibitionno;
         on E.fk_galleryno = G.galleryno
         order by startdate;
         
+        select favortag, name from member M join wishlist W on M.idx = W.fk_idx;
+        
+        select TXT as tag, CNT from
+	    (select TXT, CNT, rownum as RNO
+	    from
+	    (select TXT, CNT
+	    from (select TXT, count(*) as CNT
+	    from ( WITH TT AS
+	        ( SELECT '초록,어두운,핑크,수직적,초록,핑크' TXT FROM DUAL )
+	        SELECT TRIM(REGEXP_SUBSTR(TXT, '[^,]+', 1, LEVEL)) AS TXT
+	        FROM TT CONNECT BY INSTR(TXT, ',', 1, LEVEL - 1) > 0
+	    ) V
+	    group by TXT) X
+	    order by CNT desc ) Y
+	    ) Z;
+        
+        select * from tabs;
+        
+        
+        
+        select count(*) as 전시관개수 from gallery;
+        
         select exhibitionno, fk_galleryno, exhibitionname, author, startdate, enddate, mainposter, galleryname, galleryno, location, tag
         from 
         (
@@ -499,6 +521,17 @@ comment.put("commentNo", commentNo);
 comment.put("comContent", comContent);
 */
 
+select agegroup, count(*) as agecnt
+		from member M join (select * from wishlist where favortag like '%' || '초록' || '%') W
+		on M.idx = W.fk_idx
+		group by agegroup
+		order by agegroup;
+
+select * from gallery;
+
+select idx,area from member;
+
+select favorgenre from wishlist where fk_idx = 3;
 select commentNo, fk_idx, comContent, comwriteDay, M.name
 		from 
 		(select commentNo, fk_idx, comContent, comwriteDay
@@ -507,7 +540,10 @@ select commentNo, fk_idx, comContent, comwriteDay, M.name
 		on C.fk_idx = M.idx
 		order by commentNo desc;
 
-
+select count(*) from member;
 select * from board_comment;
 rollback;
 update board_comment set comContent = 'ddd' where commentNo = '3';
+
+select count(*) from member M join (select * from wishlist where favortag like '%' || '초록' || '%' )W
+on M.idx = W.fk_idx;
