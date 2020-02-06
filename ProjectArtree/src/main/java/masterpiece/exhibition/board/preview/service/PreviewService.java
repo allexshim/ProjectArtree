@@ -127,7 +127,7 @@ public class PreviewService implements InterPreviewService {
 	}
 
 	///////////////////// 마지막 비번 변경 시점 6개월 지난 회원 이메일 목록 ( 이메일 전송용 ) //////////////////
-	@Scheduled(cron="0 0 12 * * ?")
+	@Scheduled(cron="0 30 12 * * *")
 	@Override	
 	public void sendEmailForChangePwd() throws Exception {
 		

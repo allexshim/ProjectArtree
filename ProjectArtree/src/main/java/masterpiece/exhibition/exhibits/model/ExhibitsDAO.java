@@ -174,5 +174,11 @@ public class ExhibitsDAO implements InterExhibitsDAO {
 		return MiniPreivewList;
 	}
 
+	/////////////////////////// 전시회 STATUS 업데이트하는 스케줄러 ///////////////////// 
+	@Override
+	public void updateExhibitsStatus() {
+		sql.update("exhibits.updateExhibitsStatus");
+	}
+
 
 }
