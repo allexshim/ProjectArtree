@@ -99,9 +99,16 @@ from member
 group by gender 
 order by gender desc
 
-select count(*)
+select email
 from member
 
+select case when(lastpassworddate < add_months(sysdate, -6)) then 'true' else 'false' end AS WARN
+        from member
+        where idx = 20
 
-
+select * from reserDetail a inner join reser b on b.reserno = a.fk_reserno 
+		inner join member c on b.fk_idx = c.idx 
+		where dday like 4 and 
+		b.status = 1 
+		order by a.reserdetailno desc
 

@@ -161,6 +161,7 @@ public class MainController {
 
 			jsarr.put(jsobj);
 		}
+		
 		return jsarr.toString();
 	} // end of getPreference ---------------------------------------
 	

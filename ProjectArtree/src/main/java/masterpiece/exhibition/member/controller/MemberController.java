@@ -11,6 +11,7 @@ import java.util.Random;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.json.JSONArray;
@@ -227,7 +228,6 @@ public class MemberController {
 		
 		// 로그인 확인
 		MemberVO loginuser = service.getLoginMember(paraMap);
-		
 		HttpSession session = request.getSession();
 		
 		if(loginuser == null) {
@@ -658,6 +658,8 @@ public class MemberController {
 			mav.setViewName("msg");
 		}
 				
+	    session.invalidate();
+		
 		return mav;
 	}
 	
@@ -707,5 +709,5 @@ public class MemberController {
 		return jsarr.toString();
 	
 	}
-	
+
 }

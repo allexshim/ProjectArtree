@@ -120,8 +120,6 @@ public class AdminController {
 		
 		String no = request.getParameter("no"); // 목록에서 넘겨준 글번호를 받아옵니다.
 		
-	//	System.out.println("====================== " + no);
-		
 		HashMap<String, String> exhibitionInfo = service.getExhibitionDetail(no);
 		
 		request.setAttribute("exhibitionInfo", exhibitionInfo);

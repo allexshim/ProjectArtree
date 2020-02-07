@@ -186,13 +186,8 @@
 		// 각 글제목을 클릭하면 상세 페이지로 이동
 		$("#contentContainer table tbody tr").click(function(){
 			
-		//	alert("선택");
-			
 			let no = $(this).find(".exhibitionno").text();
 			
-			
-		//	console.log(no);
-
 			window.location.href="/artree/exhibitionDetail.at?no=" + no;
 			
 		}); // end of $("#contentContainer table tbody tr").click

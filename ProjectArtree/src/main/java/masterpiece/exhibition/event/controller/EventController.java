@@ -203,36 +203,40 @@ public class EventController {
 			if(n==1) { 
 				msg = "글쓰기 완료!"; 
 				
-				// ======= #190. *** 제품 입고가 완료되었다라는 email 보내기 시작 *** ======= //
-			   	// 위에서 선언된 mail 이라는 의존객체를 사용할 것임.
+			/*	// 메일 보내기 (모든 회원에게) //
 			   	
-				// 메일 보내기 //
-		//		if(memberList.size() > 0) {
-					System.out.println("memberList.size() : "+memberList.size()); 
-					
-				   	
-				//	for(int i=0; i<memberList.size(); i++) {
-		 		
+				if(memberList != null && memberList.size() > 0) {
+					for(HashMap<String, String> map : memberList) {
+						
 						StringBuilder sb = new StringBuilder(); 
 						sb.append("<div style ='color : black'>새 이벤트가 등록 되었습니다! 지금 바로 확인하세요!</div>");
 						sb.append("<div style ='color : black'>http://localhost:9090/artree/event.at</div>");
 					   	
 					   	String emailContents = sb.toString();
-					   	
-					    // === #191. 입고에 관련된 최종관리자 이메일(hyunjun5284@gmail.com)을 DB에서 불러왔다고 가정한다. === 
-					   	String emailAddress = "artree0213@gmail.com"; // 자신의 이메일을 기재하세요!!
-				//	   	List<HashMap<String, String>> emailAddress = memberList;
-					   	
-						mail.sendmail_NewEvent(emailAddress, emailContents);
-						System.out.println("memberList : "+memberList);
-						System.out.println("확인용 : 메일완료" );
-				//   	}
-					
-		//		}// end of if -------------------
+						
+						mail.sendmail_NewEvent(map.get("EMAIL"), emailContents);
+					}
+				}
+				*/
+				
+				// 메일 보내기 (시연용 한명한테만) //
+
+				StringBuilder sb = new StringBuilder(); 
+				sb.append("<div style ='color : black'>새 이벤트가 등록 되었습니다! 지금 바로 확인하세요!</div>");
+				sb.append("<div style ='color : black'>http://localhost:9090/artree/event.at</div>");
+			   	
+			   	String emailContents = sb.toString();
+			   	
+			   	String emailAddress = "artree0213@gmail.com"; 
+		
+				mail.sendmail_NewEvent(emailAddress, emailContents);
+
+				System.out.println("확인용 : 메일완료" );
+				  
 				
 				
 				
-			 // ======= ***** 제품입고가 완료되었다라는 email 보내기 끝 ***** ======= //
+			 // ======= ***** email 보내기 끝 ***** ======= //
 			
 			}
 			else { msg = "에러가 발생했습니다."; 
