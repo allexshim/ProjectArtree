@@ -53,8 +53,8 @@
 		insert into appliedexhibits ( applyingno, fk_galleryno, exhibitionname, applier, author, startdate, enddate,
 			email, tel, genre, tag, authorinfo, exhibitioninfo, price, foodordrink, extrarestriction, photo, openclosetime )
 		values ( to_number( #{ applyingno } ), to_number( #{ fk_galleryno } ), #{ exhibitionname }, #{ applier }, #{ author }, #{ startdate },
-			#{ enddate }, #{ email }, #{ tel }, #{ genre }, #{ tag }, #{ authorinfo }, #{ exhibitioninfo }, to_number( #{ price } ), #{ foodordrink },
-			#{ extrarestriction }, #{ photo }, #{ openclosetime } )
+			#{ enddate }, #{ email }, #{ tel }, #{ genre }, #{ tag }, #{ authorinfo }, #{ exhibitioninfo }, to_number( #{ price } )
+			, #{ foodordrink }, #{ extrarestriction }, #{ photo }, #{ openclosetime } )
 	</insert>
 	
 	<insert id="addExhibitImage" parameterType="HashMap">
@@ -193,9 +193,9 @@
 		insert into exhibition ( exhibitionno, fk_galleryno, exhibitionname, applier, author, startdate, enddate
 			, email, tel, genre, tag, authorinfo, exhibitioninfo, price, foodordrink, extrarestriction, photo
 			, openclosetime, status, readcount )
-		values ( #{ exhibitionno }, #{ fk_galleryno }, #{ exhibitionname }, #{ applier }, #{ author }
-			, #{ startdate }, #{ enddate }, #{ email }, #{ tel }, #{ genre }, #{ tag }, #{ authorinfo }, #{ exhibitioninfo }, #{ price }
-   			, #{ foodordrink }, #{ extrarestriction }, #{ photo }, #{ openclosetime }, '전시예정', 0 )
+		values ( to_number( #{ exhibitionno } ), #{ fk_galleryno }, #{ exhibitionname }, #{ applier }, #{ author }
+			, #{ startdate }, #{ enddate }, #{ email }, #{ tel }, #{ genre }, #{ tag }, #{ authorinfo }, #{ exhibitioninfo }
+			, to_number( #{ price } ), #{ foodordrink }, #{ extrarestriction }, #{ photo }, #{ openclosetime }, '전시예정', 0 );
 	</insert>
 	
 	<!-- 전시회의 이미지 테이블에 insert -->

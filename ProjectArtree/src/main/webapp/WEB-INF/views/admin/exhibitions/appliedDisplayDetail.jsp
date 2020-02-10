@@ -10,7 +10,7 @@
 
 <html>
 <head>
-<script src="<%= ctxPath%>/resources/js/jquery-3.3.1.min.js"></script>
+<%-- <script src="<%= ctxPath%>/resources/js/jquery-3.3.1.min.js"></script> --%>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
@@ -216,7 +216,7 @@
 		$("#confirmBtn").click(function() {
 			
 			if(confirm("정말로 전시예정 상태로 바꾸시겠습니까?")) {
-				let exhibitionno = "${ no }"; // 상세 페이지로 넘어올때 해당 전시회의 전시회 코드를 함께 넘긴다.
+				let exhibitionno = "${ no }";
 				
 				let frm = document.detailFrm;
 				frm.method = "POST";

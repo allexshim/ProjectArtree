@@ -310,13 +310,6 @@ public class AdminController {
 			image3info = request.getParameter("image3info");
 		}
 		
-/*		System.out.println("===========mainposter============ " + mainposter);
-		System.out.println("===========image1============ " + image1);
-		System.out.println("===========image2============ " + image2);
-		System.out.println("===========image3============ " + image3);
-		System.out.println("===========image1info============ " + image1info);
-		System.out.println("===========image2info============ " + image2info);
-*/		
 		HashMap<String, String> newExhibitImgMap = new HashMap<String, String>();
 		newExhibitImgMap.put("fk_exhibitionno", exhibitionno);
 		newExhibitImgMap.put("mainposter", mainposter);
@@ -566,7 +559,7 @@ public class AdminController {
 		
 	}
 	
-	// 검색어 입력시 목록
+	// 갤러리 검색
 	@ResponseBody
 	@RequestMapping(value="/wordSearchShow.at", method= {RequestMethod.GET}, produces="text/plain;charset=UTF-8")
 	public String wordSearchShow(HttpServletRequest request) { 
