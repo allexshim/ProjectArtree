@@ -1148,8 +1148,6 @@ public class AdminController {
 		int totalCount = service.getTotalCount();
 		List<HashMap<String, String>> exList = service.getChartByTicketingRate(totalCount);
 		
-	//	System.out.println("==================== exList.size : " + exList.size());
-		
 		JsonArray jsonArr = new JsonArray(); 
 
 		for(HashMap<String, String> map : exList) {
@@ -1165,7 +1163,7 @@ public class AdminController {
 	}
 	
 	@RequestMapping(value="/downloadExcelFile.at")
-	public String isAdmin_downloadExcelFile(HttpServletRequest request, Model model) {
+	public String isAdmin_downloadExcelFile(HttpServletRequest request, HttpServletResponse response, Model model) {
 		
 		List<HashMap<String, String>> exList = service.getChartByTicketingRate(0);
 		
