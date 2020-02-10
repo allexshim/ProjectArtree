@@ -51,4 +51,6 @@ public interface InterExhibitsDAO {
 
 	List<HashMap<String, String>> getMiniPreivewList(HashMap<String, String> paraMap); // 미니 기대평 게시판 목록
 
+	void updateExhibitsStatus(); // 전시회 STATUS 업데이트하는 스케줄러 
+
 }

@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.scheduling.annotation.Schedules;
 import org.springframework.stereotype.Service;
 
 import masterpiece.exhibition.exhibits.model.InterExhibitsDAO;
@@ -179,6 +181,15 @@ public class ExhibitsService implements InterExhibitsService {
 	public List<HashMap<String, String>> getMiniPreivewList(HashMap<String, String> paraMap) {
 		List<HashMap<String, String>> MiniPreivewList = dao.getMiniPreivewList(paraMap);
 		return MiniPreivewList;
+	}
+
+	/////////////////////////// 전시회 STATUS 업데이트하는 스케줄러 ///////////////////////
+	@Scheduled(cron="0 0 0 * * *")
+	@Override
+	public void updateExhibitsStatus() throws Exception {
+
+		dao.updateExhibitsStatus();
+		
 	}
 
 
