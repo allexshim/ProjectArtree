@@ -457,3 +457,7 @@ select distinct genre
 from exhibition
 
 commit;
+
+select *
+from member
+where name='박수연';
