@@ -283,7 +283,7 @@
 						</tr>
 						<tr>
 							<td>입장료</td><td>
-								<input style="width:80px; text-align: right;" type="text" value="<fmt:formatNumber value='${ exhibitionInfo.price }' pattern='###,###' />" name="price"> 원
+								<input style="width:80px; text-align: right;" type="text" value="${ exhibitionInfo.price }" name="price"> 원
 							</td>
 						</tr>
 					</c:if>
