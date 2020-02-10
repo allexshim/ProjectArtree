@@ -15,8 +15,8 @@ body, html {
 }
 
 #container-admin {
-	padding: 30vh;
-	margin: 0 auto;
+	margin: 30vh auto;
+	margin-bottom: 0;
 	width: 90%;
 	height: 100vh;
 }
@@ -33,7 +33,7 @@ body, html {
 	font-size: 1.5em;
 	padding: 10px;
 	position: relative;
-	top: 100px;
+	top: 60px;
 }
 
 .card-back {

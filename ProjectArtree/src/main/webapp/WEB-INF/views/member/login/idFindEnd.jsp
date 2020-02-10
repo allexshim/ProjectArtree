@@ -71,7 +71,7 @@
 		<h2>이메일 찾기</h2>
 		<span>회원님의 이메일은 <b>${email}</b>입니다.</span>
 		
-		<button type="button" id="login_find_btn" class="login_btn" onClick="javascript:layer_open()">로그인</button>
+		<button type="button" id="login_find_btn" class="login_btn" onClick="javascript:layer_open('layer')">로그인</button>
 	</div>
 	
 </body>

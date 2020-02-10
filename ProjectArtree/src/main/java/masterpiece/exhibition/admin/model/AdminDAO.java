@@ -143,7 +143,9 @@ public class AdminDAO implements InterAdminDAO {
 	// 검토목록에 있던 전시회를 전시예정으로 변경
 	@Override
 	public int displayNewExhibition(HashMap<String, String> newExhibitMap) {
+		
 		int n = sqlsession.insert("admin.displayNewExhibition", newExhibitMap);
+		
 		return n;
 	}
 

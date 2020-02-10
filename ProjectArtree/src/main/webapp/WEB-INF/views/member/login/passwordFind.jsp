@@ -182,11 +182,13 @@
 			  
 			  layer_open('pw_layer');
 			  
+			  console.log(json.n);
+			  
 			  if(json.n == 1) {
 				  // 메일 전송과 임시 비밀번호로 업데이트 성공
 				  $("#updateMsg").html("해당 메일로 임시 비밀번호가 전송되었습니다.");
 			  }
-			  if(json.n == -1) {
+			  else if(json.n == -1) {
 				  $("#updateMsg").html("해당 메일로 임시 비밀번호 전송이 실패했습니다. 관리자에게 문의해 주세요.");
 			  }
 			  else {
@@ -249,7 +251,7 @@
 				<div class="pop-conts">
 					<span id="updateMsg"></span>
 					<div class="pop_btn">
-						<button type="button" class="chgPwd_btn" id="pw_layer_btn" onClick="$('.pw_layer').fadeOut();">확인</button>
+						<button type="button" class="chgPwd_btn" id="pw_layer_btn" onClick="javascript:location.href='/artree'">확인</button>
 					</div>
 				</div>
 			</div>

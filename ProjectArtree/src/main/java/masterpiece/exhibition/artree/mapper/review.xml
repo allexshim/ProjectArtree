@@ -153,6 +153,7 @@
 		from board_comment B join member M
 		on B.fk_idx = M.idx
 		where fk_no=#{revno} and boardno=1
+		order by 1
     </select>
     
     <!-- 댓글쓰기 -->
