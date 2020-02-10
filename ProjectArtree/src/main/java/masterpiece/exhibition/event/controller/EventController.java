@@ -222,8 +222,8 @@ public class EventController {
 				// 메일 보내기 (시연용 한명한테만) //
 
 				StringBuilder sb = new StringBuilder(); 
-				sb.append("<div style ='color : black'>새 이벤트가 등록 되었습니다! 지금 바로 확인하세요!</div>");
-				sb.append("<div style ='color : black'>http://localhost:9090/artree/event.at</div>");
+				sb.append("<div style ='margin:50px 0 50px 0; color : black'>새 이벤트가 등록 되었습니다! 지금 바로 확인하세요!</div>");
+				sb.append("<a href='http://localhost:9090/artree/event.at' style ='color : black'>ARTREE 이벤트 보러가기</a>");
 			   	
 			   	String emailContents = sb.toString();
 			   	

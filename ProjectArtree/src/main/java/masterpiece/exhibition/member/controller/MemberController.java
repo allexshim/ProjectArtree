@@ -425,6 +425,7 @@ public class MemberController {
 			// 입력한 정보에 맞는 사용자가 없을 때
 			n = -9999;
 		}
+		System.out.println(n);
 		
 		mav.addObject("n", n);
 		mav.setViewName("jsonView");
