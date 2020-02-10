@@ -60,11 +60,21 @@
 a:hover + p.arrow_box {
   display: block;
 }
+
 </style>
 
+<script src="<%= ctxPath%>/resources/js/jquery-3.3.1.min.js"></script>
+<script type="text/javascript">
+
+	function chatting () {
+		alert("준비중입니다.");
+	} 
+
+</script>
 
 
-	  <a href="#"  style="margin-top: 150%;">
+
+	  <a href="javascript:chatting()" style="margin-top: 150%;" id="chat">
 	  	<img alt="채팅" src="<%= ctxPath %>/resources/images/main/chat.png" style="width:50px; padding:5px; margin-left: 5px;" />
 	  </a>
 	  <p class="arrow_box" style="color: white; text-align: center;">채팅</p>
