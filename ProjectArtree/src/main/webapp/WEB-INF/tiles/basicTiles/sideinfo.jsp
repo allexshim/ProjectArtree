@@ -68,7 +68,7 @@ a:hover + p.arrow_box {
 
 	function chatting () {
 		alert("준비중입니다.");
-	}
+	} 
 
 </script>
 
