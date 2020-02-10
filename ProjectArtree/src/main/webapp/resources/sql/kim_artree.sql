@@ -488,8 +488,11 @@ from member
 where func_changePwd(lastpassworddate) = 'need'
 
 desc member
+
 select *
-from member
+from exhibition
+where status is null
+
 commit
 update member set status = 2 where name = '김현경'
 
@@ -497,4 +500,29 @@ update member set lastpassworddate = to_char(lastpassworddate+1, 'YY/MM/DD') whe
 commit
 update member set lastpassworddate = add_months(sysdate, -1) where idx = 1
 
+case substr(jubun, 7, 1)
+           when '1' then '남'
+           when '3' then '남'
+           else '여'
+           end 성별
 
+select startdate, enddate, status
+from exhibition
+where startdate > sysdate -- 전시예정
+
+select startdate, enddate, status
+from exhibition
+where startdate < sysdate and enddate > sysdate  -- 전시중
+
+select startdate, enddate, status
+from exhibition
+where enddate < sysdate -- 전시종료
+
+update exhibition set status = case when enddate < sysdate then '전시종료'
+                                    when startdate > sysdate then '전시예정'
+                                    when startdate < sysdate and enddate > sysdate then '전시중' else '-' end
+                                    
+where exhibitionname is not null
+
+update exhibition set status = '-'
+commit
