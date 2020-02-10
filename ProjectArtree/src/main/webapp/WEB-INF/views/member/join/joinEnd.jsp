@@ -551,7 +551,7 @@ function getGenreTag(text) {
 				</div>
 			</div>
 		
-		<button type="button" id="start_btn" onClick="javascript:location.href='<%= request.getContextPath()%>/search.at'">아트맵 시작하기</button>
+		<button type="button" id="start_btn" onClick="javascript:location.href='<%= request.getContextPath()%>/search.at'">Artree 시작하기</button>
 		</div>	
 	</div>	
 	<form name="joinFinalForm">

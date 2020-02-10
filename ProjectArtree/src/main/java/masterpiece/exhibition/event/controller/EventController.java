@@ -353,5 +353,4 @@ public class EventController {
 		} 
 	} // end of modifyCommunityEnd --------------------------------------
 	
-	
 }
