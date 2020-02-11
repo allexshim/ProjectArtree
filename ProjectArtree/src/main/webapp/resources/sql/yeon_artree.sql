@@ -461,3 +461,6 @@ commit;
 select *
 from member
 where name='박수연';
+
+select *
+from member;

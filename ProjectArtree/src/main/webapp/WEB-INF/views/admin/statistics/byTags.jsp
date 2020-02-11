@@ -19,8 +19,8 @@
 	}
 	
 	#statisticsContainer {
-		margin: 0 0 20vh 0;
-		width: 100%;
+		margin: 0 auto;
+		width: 80%;
 		padding: 0;
 	}
 	
@@ -401,10 +401,12 @@
 
 </head>
 <body>
+
+	<div id="imgcontainer">	
+  		<img id="boardtop" src="<%= ctxPath %>/resources/images/admin/statistics.jpg" />
+	</div>
+
 	<div id="statisticsContainer" class="container">
-		<div id="imgcontainer">	
-	  		<img id="boardtop" src="<%= ctxPath %>/resources/images/admin/statistics.jpg" />
-		</div>
 
 		<div id="topText">
 			<span>ADMIN ONLY</span>
@@ -427,7 +429,7 @@
 			
 			<div id="table-area"></div>
 			
-			<div id="myBtns" align="center" style="padding-top: 20px;">
+			<div id="myBtns" align="center" style="padding-top: 20px; margin-bottom: 70px;">
 				<button type="button" id="btnExcel">FILE DOWNLOAD</button>
 			</div>
 			

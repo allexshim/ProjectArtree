@@ -29,13 +29,10 @@ public class GoogleMailEvent {
    	    //    Google Gmail 과 연결할 경우 Gmail 의 email 주소를 지정 
     	prop.put("mail.smtp.user", "artree0213@gmail.com");
         	
-    	
     	// 3. SMTP 서버 정보 설정
     	//    Google Gmail 인 경우  smtp.gmail.com
     	prop.put("mail.smtp.host", "smtp.gmail.com");
-         	
-    	
-    	prop.put("mail.smtp.port", "465");
+        prop.put("mail.smtp.port", "465");
     	prop.put("mail.smtp.starttls.enable", "true");
     	prop.put("mail.smtp.auth", "true");
     	prop.put("mail.smtp.debug", "true");
@@ -50,9 +47,6 @@ public class GoogleMailEvent {
     	Authenticator smtpAuth = new MySMTPAuthenticator();
     	Session ses = Session.getInstance(prop, smtpAuth);
     		
-    	// 메일을 전송할 때 상세한 상황을 콘솔에 출력한다.
-    	ses.setDebug(true);
-    	        
     	// 메일의 내용을 담기 위한 객체생성
     	MimeMessage msg = new MimeMessage(ses);
 

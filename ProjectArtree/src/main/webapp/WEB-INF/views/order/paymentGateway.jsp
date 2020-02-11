@@ -54,8 +54,7 @@ $(document).ready(function() {
 	   }        
 	   // 실패시
 	   else {		  
-		   parent.orderEnd();
-		   //parent.document.location.reload();		  
+		   parent.document.location.reload();		  
 	   }   		       
    }); // end of IMP.request_pay()----------------------------
 	   
