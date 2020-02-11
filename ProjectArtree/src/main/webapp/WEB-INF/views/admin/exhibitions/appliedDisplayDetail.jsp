@@ -283,7 +283,7 @@
 						</tr>
 						<tr>
 							<td>입장료</td><td>
-								<input style="width:80px; text-align: right;" type="text" value="<fmt:formatNumber value='${ exhibitionInfo.price }' pattern='###,###' />" name="price"> 원
+								<input style="width:80px; text-align: right;" type="text" value="${ exhibitionInfo.price }" name="price"> 원
 							</td>
 						</tr>
 					</c:if>
@@ -322,7 +322,7 @@
 					<a class="left" style="display:inline-block;">
 						<i class='fa fa-angle-left arrow'></i>
 					</a>
-					<div class="carousel-inner" role="listbox" style="display:inline-block; width: 500px; overflow:hidden; vertical-align: middle;">
+					<div class="carousel-inner" role="listbox" style="display:inline-block; width: 500px; min-height: 505px; overflow:hidden; vertical-align: middle;">
 						<c:forEach var="img" items="${ getImageList }" varStatus="i">
 						<c:if test="${ img.imagefilename != '없음' }">
 							<c:if test="${ i.index == 0 }">

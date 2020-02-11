@@ -195,7 +195,7 @@
 			, openclosetime, status, readcount )
 		values ( to_number( #{ exhibitionno } ), #{ fk_galleryno }, #{ exhibitionname }, #{ applier }, #{ author }
 			, #{ startdate }, #{ enddate }, #{ email }, #{ tel }, #{ genre }, #{ tag }, #{ authorinfo }, #{ exhibitioninfo }
-			, to_number( #{ price } ), #{ foodordrink }, #{ extrarestriction }, #{ photo }, #{ openclosetime }, '전시예정', 0 );
+			, to_number( #{ price } ), #{ foodordrink }, #{ extrarestriction }, #{ photo }, #{ openclosetime }, '전시예정', 0 )
 	</insert>
 	
 	<!-- 전시회의 이미지 테이블에 insert -->

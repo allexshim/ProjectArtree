@@ -3,6 +3,10 @@ show user;
 select*
 from tab;
 
+select*
+from review
+order by fk_exhibitionno
+
 desc PREVIEW
 
 ALTER TABLE PREVIEW MODIFY(name NVARCHAR2(300));
