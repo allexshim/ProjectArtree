@@ -156,8 +156,9 @@ public class MainController {
 			jsobj.put("location",single.get("location"));
 
 			jsarr.put(jsobj);
+			
 		}
-		
+		System.out.println(jsarr);
 		return jsarr.toString();
 	} // end of getPreference ---------------------------------------
 	
