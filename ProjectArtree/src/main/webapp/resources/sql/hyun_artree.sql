@@ -10,6 +10,8 @@ create table notice
  ,constraint PK_notice_notNo primary key(notNo)
  );
  
+ alter table notice modify (notContent varchar2(3000));
+ 
  drop table notice purge;
  
  drop sequence seq_notice_notNO;
@@ -32,7 +34,7 @@ create table notice
 		values(seq_notice_notNo.nextval, '공지1', '공지 1 내용', sysdate, 0);
  
  select *
- from member;
+ from notice;
  
  select gender
      , count(*) AS CNT
@@ -132,6 +134,11 @@ select * from reserDetail a inner join reser b on b.reserno = a.fk_reserno
 select *
 from reserex
 
+select gender, count(*) AS cnt,round ( count(*) / ( select count(*) from member ) * 100 , 2 ) AS pct, ( select count(*) from member ) as total
+		from member
+		group by gender 
+		order by gender desc
+
 
 select readCount, rno, exhibitionno, fk_galleryno, exhibitionname, author, startdate, enddate, mainposter, galleryname, galleryno, location
         from (
@@ -157,6 +164,65 @@ select readCount, rno, exhibitionno, fk_galleryno, exhibitionname, author, start
 	    group by TXT) X
 	    order by CNT desc ) Y
 	    ) Z where RNO < 3
+        
+        
+        select count(*)
+ 		from notice
+ 		where notCategory = '1'
+        
+        
+        select notNo ,notTitle, notContent,  to_char(notWriteday, 'yyyy-mm-dd') as notWriteday, notCategory
+       from 
+       (
+	       select rownum AS rno
+	            , notNo ,notTitle, notContent,  notWriteday, notCategory
+	       from   
+	       (  
+	         select notNo ,notTitle, notContent,  notWriteday, notCategory
+			 from notice
+			 order by notNo desc
+		   ) V  where notCategory = '1'
+	   ) T  	   
+	   where rno between 1 and 10
+       
+       select rownum
+       from notice
+       where notCategory = '1'
+       
+       select *
+       from event
+       where fk_exhibitionno = '5129'
+       
+       select mainposter
+		from event a inner join exhibitionDetail b
+		on a.fk_exhibitionno = b.fk_exhibitionno
+		where b.fk_exhibitionno = 5129
+        
+        select mainposter from event a inner join exhibitionDetail b
+		on a.fk_exhibitionno = b.fk_exhibitionno
+        where a.fk_exhibitionno = 5129
+        
+        select mainposter, rownum as rno
+		from event a inner join exhibitionDetail b
+		on a.fk_exhibitionno = b.fk_exhibitionno
+		where a.fk_exhibitionno = 5129
+        
+        select mainposter
+        from
+        (
+        select rownum as rno, mainposter
+        from
+        (
+        select mainposter
+        from event a inner join exhibitionDetail b
+		on a.fk_exhibitionno = b.fk_exhibitionno
+        where a.fk_exhibitionno = 5129
+        )V
+        )T
+        where rno = 1
+        
+        
+        
         
         
         
