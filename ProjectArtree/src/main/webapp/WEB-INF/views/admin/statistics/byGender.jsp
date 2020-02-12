@@ -193,6 +193,8 @@
 						html +=	"</tbody>"
 						
 						$(".table").html(html);
+						
+						
 					<%-- 차트 영역 --%>
 					// 성별 차트
 					am4core.ready(function() {

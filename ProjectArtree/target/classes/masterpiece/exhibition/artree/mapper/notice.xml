@@ -35,9 +35,9 @@
 	         select notNo ,notTitle, notContent,  notWriteday, notCategory
 			 from notice
 			 order by notNo desc
-		   ) V  
+		   ) V where notCategory = '1'
 	   ) T  	   
-	   where notCategory = '1' and rno between #{startRno} and #{endRno} 
+	    where rno between #{startRno} and #{endRno} 
 	</select>
 	
 	<select id="getFAQ" resultMap="noticeMap">

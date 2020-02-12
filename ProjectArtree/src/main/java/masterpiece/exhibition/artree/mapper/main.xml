@@ -39,11 +39,14 @@
 
 	<!-- 가장 최신에 등록된 전시회 3개를 가져온다. -->
 	<select id="getNewest" resultMap="selectMap" >
-	 	select rno, exhibitionno, fk_galleryno, exhibitionname, author, startdate, enddate, mainposter, galleryname, galleryno, location
+	 	select rno, exhibitionno, fk_galleryno, exhibitionname, 
+	 	author, startdate, enddate, mainposter, galleryname, galleryno, location
         from (
-        select readCount, rownum as rno, exhibitionno, fk_galleryno, exhibitionname, author, startdate, enddate, mainposter, galleryname, galleryno, location
+        select readCount, rownum as rno, exhibitionno, fk_galleryno, 
+        exhibitionname, author, startdate, enddate, mainposter, galleryname, galleryno, location
         from ( select * from  ( select *
-		from (select * from exhibition where to_date(endDate) <![CDATA[>=]]> sysdate) V join exhibitionDetail D
+		from (select * from exhibition where to_date(endDate) 
+		<![CDATA[>=]]> sysdate) V join exhibitionDetail D
 		on V.exhibitionno = D.fk_exhibitionno
         ) E join gallery G
         on E.fk_galleryno = G.galleryno
@@ -53,11 +56,14 @@
 	
 	<!-- 종료 임박 전시회, 종료일이 빠른 순으로 3개 가져온다 -->
 	<select id="getEndSoon" resultMap="selectMap" >
-		select rno, exhibitionno, fk_galleryno, exhibitionname, author, startdate, enddate, mainposter, galleryname, galleryno, location
+		select rno, exhibitionno, fk_galleryno, exhibitionname, 
+		author, startdate, enddate, mainposter, galleryname, galleryno, location
         from (
-        select readCount, rownum as rno, exhibitionno, fk_galleryno, exhibitionname, author, startdate, enddate, mainposter, galleryname, galleryno, location
+        select readCount, rownum as rno, exhibitionno, fk_galleryno, 
+        exhibitionname, author, startdate, enddate, mainposter, galleryname, galleryno, location
         from ( select * from  ( select *
-		from (select * from exhibition where to_date(endDate) <![CDATA[>=]]> sysdate ) V join exhibitionDetail D
+		from (select * from exhibition where to_date(endDate) 
+		<![CDATA[>=]]> sysdate ) V join exhibitionDetail D
 		on V.exhibitionno = D.fk_exhibitionno
         ) E join gallery G
         on E.fk_galleryno = G.galleryno
@@ -99,11 +105,14 @@
 	
 	<!-- 개인 회원/ 전체 회원이 선호하는 태그에 해당하는 전시회중, 조회수 높은 순으로 3개 select -->
 	<select id="getFavorExhibition" parameterType="String" resultMap="selectMap" >
-		select rno, exhibitionno, fk_galleryno, exhibitionname, author, startdate, enddate, mainposter, galleryname, galleryno, location
+		select rno, exhibitionno, fk_galleryno, exhibitionname, author, 
+		startdate, enddate, mainposter, galleryname, galleryno, location
         from
-        (select rownum as rno, readcount, exhibitionno, fk_galleryno, exhibitionname, author, startdate, enddate, mainposter, galleryname, galleryno, location 
+        (select rownum as rno, readcount, exhibitionno, fk_galleryno, 
+        exhibitionname, author, startdate, enddate, mainposter, galleryname, galleryno, location 
         from
-        (select readCount, exhibitionno, fk_galleryno, exhibitionname, author, startdate, enddate, mainposter, galleryname, galleryno, location
+        (select readCount, exhibitionno, fk_galleryno, exhibitionname, 
+        author, startdate, enddate, mainposter, galleryname, galleryno, location
         from
         (select * from 
         (select * from exhibition

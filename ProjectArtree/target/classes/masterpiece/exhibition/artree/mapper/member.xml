@@ -150,7 +150,7 @@
 		    select E.exhibitionno, E.fk_galleryno, E.exhibitionname, E.startdate, E.enddate, E.status
 		    from wishlist W join exhibition E
 		    on W.fk_exhibitionno = E.exhibitionno
-		    where fk_idx=#{idx} and E.status='전시중'
+		    where fk_idx=#{idx} and (E.status='전시중' or E.status='전시예정')
 		    ) V inner join 
 		    exhibitiondetail D on V.exhibitionno = D.fk_exhibitionno left outer join 
 		    gallery G on V.fk_galleryno = G.galleryno
