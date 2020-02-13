@@ -19,8 +19,8 @@
 	}
 	
 	#statisticsContainer {
-		margin: 0 0 20vh 0;
-		width: 100%;
+		margin: 0 auto;
+		width: 80%;
 		padding: 0;
 	}
 	
@@ -193,6 +193,8 @@
 						html +=	"</tbody>"
 						
 						$(".table").html(html);
+						
+						
 					<%-- 차트 영역 --%>
 					// 성별 차트
 					am4core.ready(function() {
@@ -281,10 +283,12 @@
 </script>
 </head>
 <body>
+
+	<div id="imgcontainer">	
+  		<img id="boardtop" src="<%= ctxPath %>/resources/images/admin/statistics.jpg" />
+	</div>
+
 	<div id="statisticsContainer" class="container">
-		<div id="imgcontainer">	
-	  		<img id="boardtop" src="<%= ctxPath %>/resources/images/admin/statistics.jpg" />
-		</div>
 
 		<div id="topText">
 			<span>ADMIN ONLY</span>

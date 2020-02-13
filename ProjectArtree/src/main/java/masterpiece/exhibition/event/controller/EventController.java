@@ -203,14 +203,21 @@ public class EventController {
 			if(n==1) { 
 				msg = "글쓰기 완료!"; 
 				
-			/*	// 메일 보내기 (모든 회원에게) //
-			   	
+				// 이벤트 이미지 알아오기
+				String addEventImg = eventService.getEventImg(fk_exhibitionno);
+				/*
+				// 메일 보내기 (모든 회원에게) //
 				if(memberList != null && memberList.size() > 0) {
 					for(HashMap<String, String> map : memberList) {
 						
 						StringBuilder sb = new StringBuilder(); 
-						sb.append("<div style ='color : black'>새 이벤트가 등록 되었습니다! 지금 바로 확인하세요!</div>");
-						sb.append("<div style ='color : black'>http://localhost:9090/artree/event.at</div>");
+						sb.append("<div style='text-align: center; margin: 10px 0 50px 0; display: block;'>");
+						sb.append("<img style='width: 200px; height: 250px;' src='"+addEventImg+"'/><br/><br/>");
+						sb.append("<span style='font-size:12pt; color: black;'>"+addEvent.get("title")+"</span><br/>");
+						sb.append("<span style='font-size:10pt; color: black;'>"+addEvent.get("content")+"</span><br/><br/>");
+						sb.append("<span style='font-size:10pt; color: black;'>"+addEvent.get("period")+"~"+addEvent.get("periodEnd")+"</span>");
+						sb.append("<div><br/><br/>");
+						sb.append("<a href='http://localhost:9090/artree/event.at' style ='color : black'>ARTREE 이벤트 보러가기</a>");
 					   	
 					   	String emailContents = sb.toString();
 						
@@ -220,20 +227,27 @@ public class EventController {
 				*/
 				
 				// 메일 보내기 (시연용 한명한테만) //
-
+				
+				
 				StringBuilder sb = new StringBuilder(); 
-				sb.append("<div style ='color : black'>새 이벤트가 등록 되었습니다! 지금 바로 확인하세요!</div>");
-				sb.append("<div style ='color : black'>http://localhost:9090/artree/event.at</div>");
-			   	
-			   	String emailContents = sb.toString();
+				sb.append("<div style='text-align: center; margin: 10px 0 50px 0; display: block;'>");
+				sb.append("<img style='width: 200px; height: 250px;' src='"+addEventImg+"'/><br/><br/>");
+				sb.append("<span style='font-size:12pt; color: black;'>"+addEvent.get("title")+"</span><br/>");
+				sb.append("<span style='font-size:10pt; color: black;'>"+addEvent.get("content")+"</span><br/><br/>");
+				sb.append("<span style='font-size:10pt; color: black;'>"+addEvent.get("period")+"~"+addEvent.get("periodEnd")+"</span>");
+				sb.append("<div><br/><br/>");
+				sb.append("<a href='http://localhost:9090/artree/event.at' style ='color : black'>ARTREE 이벤트 보러가기</a>");
+			   
+				String emailContents = sb.toString();
 			   	
 			   	String emailAddress = "artree0213@gmail.com"; 
 		
 				mail.sendmail_NewEvent(emailAddress, emailContents);
 
 				System.out.println("확인용 : 메일완료" );
-				  
-				
+				System.out.println("fk_exhibitionno :" + fk_exhibitionno);
+				System.out.println("gg :" + addEvent.get("title"));
+				System.out.println("addEventImg  :" + addEventImg );
 				
 				
 			 // ======= ***** email 보내기 끝 ***** ======= //

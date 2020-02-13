@@ -515,7 +515,7 @@ $(function () {
 			});
 			
 			$(".swiper-wrapper").append(html);
-			
+			console.log(html);
 		},
 		error: function(request, status, error){
 			alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
@@ -686,7 +686,7 @@ function exhDetail(eno){
 	<div id="overflow" class="main-container" style="margin-bottom: 700px;">
 		<div class="hot-exh">
 			<div id="div1" style="float:center; margin:0 auto; transform:translate(100px,20px);">
-				<h2>지금 핫한 전시를 만나보세요!</h2>
+				<h2 style="font-weight:bold;">지금 핫한 전시를 만나보세요!</h2>
 			</div>
 			<hr color="black;" style="width:85%; transform:translate(100px,20px);" />
 			
@@ -710,7 +710,7 @@ function exhDetail(eno){
 		  </div>
 			
 			<div id="div2" class="recom-exh-title" style="float: center; transform:translate(0,-680px);">
-				<h2>추천 전시회</h2>
+				<h2 style="font-weight:bold;">추천 전시회</h2>
 				<span>나만의 맞춤 전시를 만나보세요!</span>
 			</div>
 			<hr color="black;" style="width:100%; transform:translate(0,-680px);" />
@@ -721,7 +721,7 @@ function exhDetail(eno){
 	
 	<div class="newNend">
 		<div id="div3" class="new-title" style="float: left; -webkit-transform:translate(58px, 180px);">
-			<h2>신규 전시회</h2>
+			<h2 style="font-weight:bold;">신규 전시회</h2>
 		</div>
 		<hr color="black;" style="width:90%; transform:translate(62px,245px);" />
 		<div class="new-exh">
@@ -729,7 +729,7 @@ function exhDetail(eno){
 		</div>
 		
 		<div id="div4" class="new-title" style="float: right; -webkit-transform:translate(-58px, 550px);">
-			<h2>종료예정 전시회</h2>
+			<h2 style="font-weight:bold;">종료예정 전시회</h2>
 		</div>
 		<hr color="black;" style="width:90%; transform:translate(64px,600px);" />
 		<div class="end-exh" style="transform:translate(0, 270px);">
@@ -741,10 +741,10 @@ function exhDetail(eno){
 	
 	
 	<div id="div5" class="event-title" style=" float: left; transform:translate(35px, 460px);">
-		<h2>EVENT</h2>
+		<h2 style="font-weight:bold;">EVENT</h2>
 	</div>
 	<div class="event-more" style="float: right; transform:translate(-35px, 700px);">
-		<a class="event-morebtn " href="<%= ctxPath%>/event.at">모두보기 +</a>
+		<a class="event-morebtn " href="<%= ctxPath%>/event.at" style="font-size:12pt; font-weight:bold;">모두보기 +</a>
 	</div>
 	<hr color="black;" style="width:94%; transform:translate(38px,725px);" />
        	<div class="event-div" style="transform:translate(0, 480px);">

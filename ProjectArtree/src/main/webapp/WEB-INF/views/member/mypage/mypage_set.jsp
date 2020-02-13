@@ -334,7 +334,7 @@
 				<col style="width: 20%;"/>
 				<col style="width: 80%;"/>
 			</colgroup>
-		
+		 
 				<tr class="favor_set">
 					<th>
 						<h2 style="margin-bottom: 30px;">취향분석 설정</h2>

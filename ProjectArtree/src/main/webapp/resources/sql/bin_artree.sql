@@ -237,6 +237,13 @@ select * from event a inner join exhibitionDetail b
         
 -- 환불 절차 reser status 0, reserstat 환불처리 status 0, ex status 0 
 select * from reser order by reserno desc
-select * from reserdetail order by reserdetailno desc
+select * from reserdetail order by dday desc
 select * from reserex order by reserexno desc
+select * from member
 commit;
+
+select to_char(reserdate,'dd') as reserdate, nvl(substr(sum(resertotal),1,length(sum(resertotal))-4),0) as dailySales from reser
+		where status = 1 and
+		reserdate like '20/' || '02' || '/%'
+		group by to_char(reserdate,'dd')
+		order by reserdate

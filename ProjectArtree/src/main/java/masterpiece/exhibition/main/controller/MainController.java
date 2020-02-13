@@ -36,7 +36,6 @@ public class MainController {
 	@ResponseBody
 	@RequestMapping(value="/getMostPolular.at", produces="text/plain;charset=UTF-8")
 	public String getMostPolular() {
-		
 		// ajax로 호출, 인기 전시회 top3를 가지고 옵니다.
 		JSONArray jsarr = new JSONArray();
 		List<HashMap<String,String>> exhibitionList =  null;
@@ -44,8 +43,7 @@ public class MainController {
 		
 		for(HashMap<String,String> single :exhibitionList) {
 			JSONObject jsobj = new JSONObject();
-			/*exhibitionno, fk_galleryno, exhibitionname, author, startdate, enddate, 
-			mainposter, galleryname, galleryno, location*/
+			
 			jsobj.put("exhibitionno",single.get("exhibitionno"));
 			jsobj.put("fk_galleryno",single.get("fk_galleryno"));
 			jsobj.put("exhibitionname",single.get("exhibitionname"));
@@ -75,8 +73,7 @@ public class MainController {
 		
 		for(HashMap<String,String> single :exhibitionList) {
 			JSONObject jsobj = new JSONObject();
-			/*exhibitionno, fk_galleryno, exhibitionname, author, startdate, enddate, 
-			mainposter, galleryname, galleryno, location*/
+			
 			jsobj.put("exhibitionno",single.get("exhibitionno"));
 			jsobj.put("fk_galleryno",single.get("fk_galleryno"));
 			jsobj.put("exhibitionname",single.get("exhibitionname"));
@@ -106,8 +103,7 @@ public class MainController {
 		
 		for(HashMap<String,String> single :exhibitionList) {
 			JSONObject jsobj = new JSONObject();
-			/*exhibitionno, fk_galleryno, exhibitionname, author, startdate, enddate, 
-			mainposter, galleryname, galleryno, location*/
+			
 			jsobj.put("exhibitionno",single.get("exhibitionno"));
 			jsobj.put("fk_galleryno",single.get("fk_galleryno"));
 			jsobj.put("exhibitionname",single.get("exhibitionname"));
@@ -160,8 +156,9 @@ public class MainController {
 			jsobj.put("location",single.get("location"));
 
 			jsarr.put(jsobj);
+			
 		}
-		
+		System.out.println(jsarr);
 		return jsarr.toString();
 	} // end of getPreference ---------------------------------------
 	

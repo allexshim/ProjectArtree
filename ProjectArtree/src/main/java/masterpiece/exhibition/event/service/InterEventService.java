@@ -28,5 +28,8 @@ public interface InterEventService {
 	
 	// 메일 보낼 회원 이메일 구하기
 	List<HashMap<String, String>> getMemberEmail();
+	
+	// 이벤트 이미지 알아오기
+	String getEventImg(String fk_exhibitionno);
 
 }

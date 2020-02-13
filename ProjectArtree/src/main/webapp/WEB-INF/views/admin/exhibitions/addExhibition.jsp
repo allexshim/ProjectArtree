@@ -380,8 +380,6 @@
 		});
 		
 		// datePicker
-	//	$("#startDate").datepicker();
-	//	$("#endDate").datepicker();
 		$("#startDate").datepicker({
 			dateFormat: "yy.mm.dd"
 		});
@@ -933,7 +931,7 @@
 			<h2 style="font-weight:bold">작품전경</h2> 
 			
 			<div style="margin: 20px;">
-				<label for="spinnerOqty">파일갯수 : </label>
+				<label for="spinnerOqty">파일개수 : </label>
 				<input id="spinnerOqty" value="0" style="width: 30px; height: 20px;">
 			</div>
 			
