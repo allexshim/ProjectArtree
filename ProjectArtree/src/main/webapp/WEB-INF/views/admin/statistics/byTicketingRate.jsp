@@ -174,6 +174,15 @@
 		border-radius: 5px;
 	}
 	
+	#btnPrint {
+		background-color: white;
+		font-weight: bold;
+		height: 50px;
+		border: 1px solid lightgrey;
+		box-shadow: 2px 2px 2px 2px grey;
+		border-radius: 5px;
+	}
+	
 	
 </style>
 
@@ -232,11 +241,6 @@
 					
 					$("#btnExcel").click(function(){
 						
-					//	let resultArrStr = resultArr.join();
-						
-					//	let frm = document.searchFrm;
-					//	frm.resultArrStr.value = resultArrStr;
-						
 						window.location.href = "downloadExcelFile.at";
 						
 					});
@@ -256,16 +260,11 @@
 							
 							resultArr.push(obj);
 							
-						//	console.log(json[i].name + ", " + json[i].cnt)
 						}
-					
-				//	console.log("resultArr.size : " + resultArr.size);
 					
 						// Add data
 						chart.data = resultArr;
 						
-					//	console.log(resultArr);
-				
 						// Create axes
 						let categoryAxis = chart.xAxes.push(new am4charts.CategoryAxis());
 						categoryAxis.dataFields.category = "name";
@@ -318,33 +317,6 @@
 		
 	}
 	
-	function goPrint(title){
-	     var sw=screen.width;
-	     var sh=screen.height;
-	     var popw=800; //팝업창 가로길이
-	     var poph=600; //세로길이
-	     var xpos=(sw-popw)/2; //화면중앙에띄우도록한다 
-	     var ypos=(sh-poph)/2; //화면중앙에띄우도록한다 
-	 
-	     var popHeader="<html><head><title>"+title+"</title></head><body>";
-	     
-	     var popContent=document.getElementById("printarea").innerHTML + "<br/>";
-	     //innerHTML을 이용하여 Div로 묶어준 부분을 가져온다.
-	     
-	     var popFooter="</body></html>";
-	     
-	     popContent=popHeader + popContent + popFooter; 
-	      
-	     var popWin=window.open("","print","width=" + popw +",height="+ poph +",top=" + ypos + ",left="+ xpos +",status=yes,scrollbars=yes"); 
-	     // 일단 내용이 없는 팝업윈도창을 만든다.
-	    
-	     popWin.document.open(); // 팝업윈도창에 내용을 넣을 수 있도록 오픈한다.
-	     popWin.document.write(popContent); // 새롭게 만든 html소스를 팝업윈도창에 문서에 쓴다.
-	     popWin.document.close(); // 팝업윈도창 문서를 클로즈
-	     popWin.print(); // 팝업윈도창에 대한 인쇄 창 띄우고
-	     popWin.close(); // 인쇄를 하던가 또는 취소를 누르면 팝업윈도창을 닫는다.
-	}
-
 </script>
 </head>
 <body>

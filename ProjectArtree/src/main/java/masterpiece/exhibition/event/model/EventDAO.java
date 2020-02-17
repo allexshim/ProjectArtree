@@ -67,4 +67,10 @@ public class EventDAO implements InterEventDAO {
 		return memberList;
 	}
 
+	@Override
+	public String getEventImg(String fk_exhibitionno) {
+		String addEventImg = sqlsession.selectOne("event.getEventImg", fk_exhibitionno);
+		return addEventImg;
+	}
+
 }

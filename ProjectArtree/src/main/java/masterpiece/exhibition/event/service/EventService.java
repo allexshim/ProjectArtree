@@ -69,4 +69,10 @@ public class EventService implements InterEventService {
 		return memberList;
 	}
 
+	@Override
+	public String getEventImg(String fk_exhibitionno) {
+		String addEventImg = dao.getEventImg(fk_exhibitionno);
+		return addEventImg;
+	}
+
 }

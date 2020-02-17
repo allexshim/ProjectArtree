@@ -383,11 +383,16 @@
 						<c:forEach items="${wantList}" var="want">
 						<tr>
 							<td>
+							<c:if test="${want.mainposter.contains('http://')}">
 								<img src="${want.mainposter}" onclick="javascript:location.href='/artree/exhDetail.at?eno=${want.exhibitionno}'" style="cursor: pointer;"/>
+							</c:if>
+							<c:if test="${!want.mainposter.contains('http://')}">
+								<img src="<%= ctxPath%>/resources/files/${want.mainposter}"/>
+							</c:if>
 							</td>
 							<td onclick="javascript:location.href='/artree/exhDetail.at?eno=${want.exhibitionno}'" style="cursor: pointer;">
 								<span>${want.exhibitionname}</span>
-								<span>${want.galleryname} }</span>
+								<span>${want.galleryname}</span>
 								<span>${want.startdate} - ${want.enddate}</span>
 							</td>
 							<td>
@@ -432,7 +437,12 @@
 				<c:forEach items="${favorAuthor}" var="author">
 					<li>
 						<div class="artist_list" onclick="javascript:location.href='/artree/exhDetail.at?eno=${author.exhibitionno}'">
+						<c:if test="${author.image1.contains('http://')}">
 							<img src="${author.image1}"/>
+						</c:if>
+						<c:if test="${!author.image1.contains('http://')}">
+							<img src="<%= ctxPath%>/resources/files/${author.image1}"/>
+						</c:if>
 							<span>${author.author}</span>
 						</div>
 					</li>

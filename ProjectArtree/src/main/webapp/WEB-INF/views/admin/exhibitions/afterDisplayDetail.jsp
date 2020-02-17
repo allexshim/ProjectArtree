@@ -309,7 +309,7 @@
 				<a class="left" style="display:inline-block;">
 					<i class='fa fa-angle-left arrow'></i>
 				</a>
-				<div class="carousel-inner" role="listbox" style="display:inline-block; width: 500px; overflow:hidden; vertical-align: middle;">
+				<div class="carousel-inner" role="listbox" style="display:inline-block; width: 500px; min-height: 505px; overflow:hidden; vertical-align: middle;">
 				
 					<c:if test="${ exhibitionInfo.image1 != '없음' }">
 					<c:if test="${ exhibitionInfo.image1.contains('http://') }">	<%-- 이미지가 url 일 때 --%>

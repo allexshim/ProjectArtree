@@ -3,7 +3,7 @@ package masterpiece.exhibition.mail;
 import javax.mail.Authenticator;
 import javax.mail.PasswordAuthentication;
 
-//===== #168. Google메일서버를 사용할 수 있도록 Google email 계정 및 암호 입력하기 =====
+//===== Google메일서버를 사용할 수 있도록 Google email 계정 및 암호 입력하기 =====
 public class MySMTPAuthenticator extends Authenticator {
 	
 	@Override

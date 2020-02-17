@@ -299,7 +299,7 @@
 			$(this).css('opacity','1.0');
 		});
 		
-		// 슬라이드 토글 이렇게 햇단말이죵
+		// 슬라이드 토글
 		var $noticeTitle = $(".noticeTitle");
 		$noticeTitle.click(function(){
 			var $this = $(this);

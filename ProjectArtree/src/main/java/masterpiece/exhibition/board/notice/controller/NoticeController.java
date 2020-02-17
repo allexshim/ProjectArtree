@@ -80,6 +80,8 @@ public class NoticeController {
       // === 페이징 바 만들기 ===
       int pageNo = 1;
       // pageNo 가 페이지바에서 보여지는 첫번째 페이지 번호이다.
+      
+      
       int blockSize = 3;
       // blockSize 는 블럭(토막) 당 보여지는 페이지 번호의 갯수이다.
       int loop = 1;
@@ -112,7 +114,7 @@ public class NoticeController {
 			loop++;
 			// 매번 loop 가 1씩 증가	
 		} // end of while() -------------------
-	
+		
 		// 다음 만들기
 		if(pageNo <= totalPage) {
 			pageBar += "&nbsp;<a href = '/artree/notice.at?currentShowPageNo="+pageNo+"'><i class='fa fa-angle-right' style='font-size:20px'></i></a>&nbsp;";
@@ -149,7 +151,10 @@ public class NoticeController {
 		// 크로스 사이트 공격 방지
 		notTitle = MyUtil.replaceParameter(notTitle);
 		notContent = MyUtil.replaceParameter(notContent);
+		
+		// 엔터 입력시 br태그로 변환
 		notContent = notContent.replace("\r\n", "<br/>");
+		
 		HashMap<String,String> addNotice = new HashMap<String,String>();
 		
 		addNotice.put("notTitle", notTitle);
@@ -206,8 +211,6 @@ public class NoticeController {
 		} 
 		
 	}
-	
-	// 공지 수정하기
 	
 	
 }
